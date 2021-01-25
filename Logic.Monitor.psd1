@@ -12,7 +12,7 @@
 # RootModule = ''
 
 # Version number of this module.
-ModuleVersion = '3.0.0.2'
+ModuleVersion = '3.0.0.4'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@ PowerShellVersion = '5.0'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = '*'
+FunctionsToExport = @('Connect-LMAccount','Disconnect-LMAccount','Get-LMWebsite','Get-LMDevice','Get-LMAlert','Get-LMAlertRule','Get-LMAPIToken','Get-LMAppliesToFunction','Get-LMAuditLogs','Get-LMCollector','Get-LMCollectorGroup','Get-LMCollectorVersions','Get-LMCollectorInstaller','Get-LMDashboard','Get-LMDashboardGroup','Get-LMDashboardWidget','Get-LMDatasource','Get-LMDatasourceAssociatedDevices','Get-LMDatasourceUpdateHistory','Get-LMDeviceGroup','Get-LMDeviceGroupProperty','Get-LMDeviceGroupAlerts','Get-LMDeviceGroupDevices','Get-LMDeviceGroupSDT','Get-LMDeviceGroupSDTHistory','Get-LMDevice','Get-LMDeviceAlertSettings','Get-LMDeviceDataSourceList','Get-LMDeviceProperty','Get-LMDeviceNetflowEndpoints','Get-LMDeviceNetflowFlows','Get-LMDeviceNetflowPorts','Get-LMDeviceSDTHistory','Get-LMDeviceSDT','Get-LMDeviceInstanceList','Get-LMUnmonitoredDevices','Get-LMEscalationChain','Get-LMEventSource','Get-LMConfigSource','Get-LMTopologySource','Get-LMUsageMetrics','Get-LMNetscan','Get-LMOpsNotes','Get-LMRecipientGroup','Get-LMReport','Get-LMReportGroup','Get-LMRole','Get-LMSDT','Get-LMUser','Get-LMWebsite','Get-LMWebsiteAlerts','Get-LMWebsiteProperty','Get-LMWebsiteSDT','Get-LMWebsiteSDTHistory','Get-LMWebsiteGroup','Get-LMWebsiteGroupSDTHistory','Get-LMWebsiteGroupSDT','Get-LMWebsiteGroupAlerts','Get-LMDeviceAlerts')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
@@ -107,7 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        # ReleaseNotes = 'Fix module exports issue with new folder structure'
 
         # Prerelease string of this module
         # Prerelease = ''
