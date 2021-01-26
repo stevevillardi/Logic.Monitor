@@ -9,10 +9,10 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-# RootModule = ''
+RootModule = 'Logic.Monitor.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.0.0.4'
+ModuleVersion = '3.0.0.5'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -107,7 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        # ReleaseNotes = 'Fix module exports issue with new folder structure'
+        ReleaseNotes = 'Fix module exports issue with new folder structure'
 
         # Prerelease string of this module
         # Prerelease = ''
