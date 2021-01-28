@@ -153,8 +153,6 @@ Function Set-LMUser
 
             $Data = ($Data | ConvertTo-Json)
 
-            $Data
-
             $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 

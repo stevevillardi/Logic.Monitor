@@ -1,33 +1,36 @@
-Function Remove-LMUser
+Function Remove-LMAPIToken
 {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
         [Parameter(Mandatory,ParameterSetName = 'Id')]
-        [Int]$Id,
+        [Int]$UserId,
 
         [Parameter(Mandatory,ParameterSetName = 'Name')]
-        [String]$Name
+        [String]$UserName,
+
+        [Parameter(Mandatory)]
+        [Int]$APITokenId
 
     )
     #Check if we are logged in and have valid api creds
     If($global:LMAuth.Valid){
 
         #Lookup Id if supplying username
-        If($Name){
+        If($UserName){
             If($Name -Match "\*"){
                 Write-Host "Wildcard values not supported for username." -ForegroundColor Yellow
                 return
             }
-            $Id = (Get-LMUser -Name $Name | Select-Object -First 1 ).Id
-            If(!$Id){
-                Write-Host "Unable to find username: $Name, please check spelling and try again." -ForegroundColor Yellow
+            $UserId = (Get-LMUser -Name $UserName | Select-Object -First 1 ).Id
+            If(!$UserId){
+                Write-Host "Unable to find username: $UserName, please check spelling and try again." -ForegroundColor Yellow
                 return
             }
         }
         
         #Build header and uri
-        $ResourcePath = "/setting/admins/$Id"
+        $ResourcePath = "/setting/admins/$UserId/apitokens/$APITokenId"
 
         #Loop through requests 
         Try{
@@ -39,10 +42,10 @@ Function Remove-LMUser
             $StatusCode = $Request.StatusCode
 
             If($StatusCode -eq "200"){
-                Write-Host "Successfully removed id ($Id) - Status Code: $StatusCode" -ForegroundColor Green
+                Write-Host "Successfully removed id ($APITokenId) - Status Code: $StatusCode" -ForegroundColor Green
             }
             Else{
-                Write-Error "Failed to removed id ($Id) - Status Code: $StatusCode"
+                Write-Error "Failed to removed id ($APITokenId) - Status Code: $StatusCode"
             }
         }
         Catch [Microsoft.PowerShell.Commands.HttpResponseException] {
