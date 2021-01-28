@@ -57,9 +57,14 @@ Function Get-LMCollectorInstaller
             Return $DownloadPath
 
         }
+        Catch [Microsoft.PowerShell.Commands.HttpResponseException] {
+            $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+            $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
+            Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
+        }
         Catch{
-            $LMError = $_.ErrorDetails | ConvertFrom-Json -ErrorAction SilentlyContinue
-            Write-Error "Failed to execute query: $($LMError.errorMessage) - $($LMError.errorCode)"
+            $LMError = $PSItem.ToString()
+            Write-Error "Failed to execute web request: $LMError"
         }
     }
     Else{

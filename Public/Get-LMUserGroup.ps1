@@ -1,35 +1,24 @@
-Function Get-LMDeviceAlertSettings
+Function Get-LMUserGroup
 {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
+        [Parameter(ParameterSetName = 'Id')]
         [Int]$Id,
 
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
+        [Parameter(ParameterSetName = 'Filter')]
         [String]$Filter,
 
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
     If($global:LMAuth.Valid){
-
-        If($Name){
-            If($Name -Match "\*"){
-                Write-Host "Wildcard values not supported for device name." -ForegroundColor Yellow
-                return
-            }
-            $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
-            If(!$Id){
-                Write-Host "Unable to find device with name: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
-        }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/alertsettings"
+        $ResourcePath = "/setting/admin/groups"
 
         #Initalize vars
         $QueryParams = ""
@@ -40,12 +29,12 @@ Function Get-LMDeviceAlertSettings
         #Loop through requests 
         While(!$Done){
             #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
-
-            If($Filter){
-                $QueryParams += "&filter=$Filter"
+            Switch($PSCmdlet.ParameterSetName){
+                "All" {$QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"}
+                "Id" {$resourcePath += "/$Id"}
+                "Name" {$QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id"}
+                "Filter" {$QueryParams = "?filter=$Filter&size=$BatchSize&offset=$Count&sort=+id"}
             }
-
             Try{
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
@@ -55,7 +44,7 @@ Function Get-LMDeviceAlertSettings
                 $Response = $Request.Content | ConvertFrom-Json
 
                 #Stop looping if single device, no need to continue
-                If(![bool]$Response.psobject.Properties["total"]){
+                If($PSCmdlet.ParameterSetName -eq "Id"){
                     $Done = $true
                     Return $Response
                 }

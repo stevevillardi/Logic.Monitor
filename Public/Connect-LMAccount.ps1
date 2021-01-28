@@ -38,9 +38,17 @@ Function Connect-LMAccount
         #Set valid flag so we dont prompt for auth details on future requests
         $global:LMAuth.Valid = $true
     }
-    Catch {
+    Catch [Microsoft.PowerShell.Commands.HttpResponseException] {
+        $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+        $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
+        Write-Error "Failed to authenticate account($($HttpStatusCode)): $HttpException"
+        Remove-Variable LMAuth -Scope Global
+
+    }
+    Catch{
         Write-Error "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
         #Clear credential object from environment
         Remove-Variable LMAuth -Scope Global
+
     }
 }

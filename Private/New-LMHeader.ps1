@@ -12,7 +12,9 @@ Function New-LMHeader
         [Parameter(Mandatory)]
         [String]$ResourcePath,
 
-        [Hashtable]$Data
+        $Data,
+
+        [Int]$Version = 3
     )
 
     # Use TLS 1.2
@@ -42,7 +44,7 @@ Function New-LMHeader
     $Header = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
     $Header.Add("Authorization",$LMAuth)
     $Header.Add("Content-Type",'application/json')
-    $Header.Add("X-Version",3)
+    $Header.Add("X-Version",$Version)
 
     Return $Header
 }
