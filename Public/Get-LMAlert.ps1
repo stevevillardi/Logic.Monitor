@@ -19,7 +19,7 @@ Function Get-LMAlert
         [String]$Type="*",
 
         [Parameter(ParameterSetName = 'Filter')]
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -57,8 +57,13 @@ Function Get-LMAlert
             Switch($PSCmdlet.ParameterSetName){
                 "Id" {$resourcePath += "/$Id"}
                 "Range" {$QueryParams = "?filter=startEpoch%3E%3A`"$StartDate`"%2CstartEpoch%3C%3A`"$EndDate`",rule:`"$Severity`",type:`"$Type`"&size=$BatchSize&offset=$Count&sort=+resourceId"}
-                "Filter" {$QueryParams = "?filter=$Filter&size=$BatchSize&offset=$Count&sort=+resourceId"}
                 "All" {$QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`"&size=$BatchSize&offset=$Count&sort=+resourceId"}
+                "Filter" {
+                    #List of allowed filter props
+                    $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+resourceId"
+                }
             }
             Try{
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath

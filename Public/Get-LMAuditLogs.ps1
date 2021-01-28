@@ -13,7 +13,7 @@ Function Get-LMAuditLogs
         [Datetime]$EndDate,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -50,7 +50,12 @@ Function Get-LMAuditLogs
             Switch($PSCmdlet.ParameterSetName){
                 "All" {$QueryParams = "?filter=happenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`",size=$BatchSize&offset=$Count&sort=+happenedOn"}
                 "Id" {$resourcePath += "/$Id"}
-                "Filter" {$QueryParams = "?filter=$Filter&size=$BatchSize&offset=$Count&sort=+happenedOn"}
+                "Filter" {
+                    #List of allowed filter props
+                    $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+happenedOn"
+                }
             }
             Try{
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath

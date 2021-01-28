@@ -16,7 +16,7 @@ Function Get-LMDashboard
         [String]$GroupName,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -42,7 +42,12 @@ Function Get-LMDashboard
                 "GroupId" {$QueryParams = "?filter=groupId:`"$GroupId`"&size=$BatchSize&offset=$Count&sort=+id"}
                 "GroupName" {$QueryParams = "?filter=groupName:`"$GroupName`"&size=$BatchSize&offset=$Count&sort=+id"}
                 "Name" {$QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id"}
-                "Filter" {$QueryParams = "?filter=$Filter&size=$BatchSize&offset=$Count&sort=+id"}
+                "Filter" {
+                    #List of allowed filter props
+                    $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
             }
             Try{
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath

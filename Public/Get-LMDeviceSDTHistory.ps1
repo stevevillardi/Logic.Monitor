@@ -9,7 +9,7 @@ Function Get-LMDeviceSDTHistory
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -43,7 +43,10 @@ Function Get-LMDeviceSDTHistory
             $QueryParams = "?size=$BatchSize&offset=$Count&sort=-approximateEndEpoch"
 
             If($Filter){
-                $QueryParams += "&filter=$Filter"
+                #List of allowed filter props
+                $PropList = @()
+                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=-approximateEndEpoch"
             }
 
             Try{

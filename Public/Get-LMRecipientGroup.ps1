@@ -10,7 +10,7 @@ Function Get-LMRecipientGroup
         [String]$Name,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -33,7 +33,12 @@ Function Get-LMRecipientGroup
                 "All" {$QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"}
                 "Id" {$resourcePath += "/$Id"}
                 "Name" {$QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id"}
-                "Filter" {$QueryParams = "?filter=$Filter&size=$BatchSize&offset=$Count&sort=+id"}
+                "Filter" {
+                    #List of allowed filter props
+                    $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
             }
             Try{
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath

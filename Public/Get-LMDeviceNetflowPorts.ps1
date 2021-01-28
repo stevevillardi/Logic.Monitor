@@ -9,7 +9,7 @@ Function Get-LMDeviceNetflowPorts
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Datetime]$StartDate,
 
@@ -62,7 +62,10 @@ Function Get-LMDeviceNetflowPorts
             $QueryParams = "?size=$BatchSize&offset=$Count&sort=-usage&start=$StartDate&end=$EndDate"
 
             If($Filter){
-                $QueryParams += "&filter=$Filter"
+                #List of allowed filter props
+                $PropList = @()
+                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=-usage"
             }
 
             Try{

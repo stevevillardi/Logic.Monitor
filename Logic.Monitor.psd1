@@ -69,7 +69,7 @@ PowerShellVersion = '5.0'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @('Get-LMv4Error','Connect-LMAccount','Disconnect-LMAccount','Get-LMWebsite','Get-LMDevice','Get-LMAlert','Get-LMAlertRule','Get-LMAPIToken','Get-LMAppliesToFunction','Get-LMAuditLogs','Get-LMCollector','Get-LMCollectorGroup','Get-LMCollectorVersions','Get-LMCollectorInstaller','Get-LMDashboard','Get-LMDashboardGroup','Get-LMDashboardWidget','Get-LMDatasource','Get-LMDatasourceAssociatedDevices','Get-LMDatasourceUpdateHistory','Get-LMDeviceGroup','Get-LMDeviceGroupProperty','Get-LMDeviceGroupAlerts','Get-LMDeviceGroupDevices','Get-LMDeviceGroupSDT','Get-LMDeviceGroupSDTHistory','Get-LMDevice','Get-LMDeviceAlertSettings','Get-LMDeviceDataSourceList','Get-LMDeviceProperty','Get-LMDeviceNetflowEndpoints','Get-LMDeviceNetflowFlows','Get-LMDeviceNetflowPorts','Get-LMDeviceSDTHistory','Get-LMDeviceSDT','Get-LMDeviceInstanceList','Get-LMUnmonitoredDevices','Get-LMEscalationChain','Get-LMEventSource','Get-LMConfigSource','Get-LMTopologySource','Get-LMUsageMetrics','Get-LMNetscan','Get-LMOpsNotes','Get-LMRecipientGroup','Get-LMReport','Get-LMReportGroup','Get-LMRole','Get-LMSDT','Get-LMUser','Get-LMWebsite','Get-LMWebsiteAlerts','Get-LMWebsiteProperty','Get-LMWebsiteSDT','Get-LMWebsiteSDTHistory','Get-LMWebsiteGroup','Get-LMWebsiteGroupSDTHistory','Get-LMUserGroup','Get-LMWebsiteGroupSDT','Get-LMWebsiteGroupAlerts','Get-LMDeviceAlerts','New-LMAlertAck','New-LMAlertNote','New-LMAPIToken','New-LMUser','Set-LMUser','Remove-LMUser')
+FunctionsToExport = @('Format-LMFilter','Get-LMv4Error','Connect-LMAccount','Disconnect-LMAccount','Get-LMWebsite','Get-LMDevice','Get-LMAlert','Get-LMAlertRule','Get-LMAPIToken','Get-LMAppliesToFunction','Get-LMAuditLogs','Get-LMCollector','Get-LMCollectorGroup','Get-LMCollectorVersions','Get-LMCollectorInstaller','Get-LMDashboard','Get-LMDashboardGroup','Get-LMDashboardWidget','Get-LMDatasource','Get-LMDatasourceAssociatedDevices','Get-LMDatasourceUpdateHistory','Get-LMDeviceGroup','Get-LMDeviceGroupProperty','Get-LMDeviceGroupAlerts','Get-LMDeviceGroupDevices','Get-LMDeviceGroupSDT','Get-LMDeviceGroupSDTHistory','Get-LMDevice','Get-LMDeviceAlertSettings','Get-LMDeviceDataSourceList','Get-LMDeviceProperty','Get-LMDeviceNetflowEndpoints','Get-LMDeviceNetflowFlows','Get-LMDeviceNetflowPorts','Get-LMDeviceSDTHistory','Get-LMDeviceSDT','Get-LMDeviceInstanceList','Get-LMUnmonitoredDevices','Get-LMEscalationChain','Get-LMEventSource','Get-LMConfigSource','Get-LMTopologySource','Get-LMUsageMetrics','Get-LMNetscan','Get-LMOpsNotes','Get-LMRecipientGroup','Get-LMReport','Get-LMReportGroup','Get-LMRole','Get-LMSDT','Get-LMUser','Get-LMWebsite','Get-LMWebsiteAlerts','Get-LMWebsiteProperty','Get-LMWebsiteSDT','Get-LMWebsiteSDTHistory','Get-LMWebsiteGroup','Get-LMWebsiteGroupSDTHistory','Get-LMUserGroup','Get-LMWebsiteGroupSDT','Get-LMWebsiteGroupAlerts','Get-LMDeviceAlerts','New-LMAlertAck','New-LMAlertNote','New-LMAPIToken','New-LMUser','Set-LMUser','Remove-LMUser')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
@@ -95,13 +95,13 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @("LogicMonitor")
 
         # A URL to the license for this module.
         # LicenseUri = ''
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/stevevillardi/Logic.Monitor'
 
         # A URL to an icon representing this module.
         # IconUri = ''

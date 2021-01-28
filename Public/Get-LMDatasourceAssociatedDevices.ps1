@@ -12,7 +12,7 @@ Function Get-LMDatasourceAssociatedDevices
         [Parameter(ParameterSetName = 'DisplayName')]
         [String]$DisplayName,
 
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -58,7 +58,10 @@ Function Get-LMDatasourceAssociatedDevices
             $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
 
             If($Filter){
-                $QueryParams += "&filter=$Filter"
+                #List of allowed filter props
+                $PropList = @()
+                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
             }
 
             Try{

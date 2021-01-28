@@ -14,7 +14,7 @@ Function Get-LMWebsite
         [String]$Type,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -38,7 +38,12 @@ Function Get-LMWebsite
                 "Id" {$resourcePath += "/$Id"}
                 "Type" {$QueryParams = "?filter=type:`"$Type`"&size=$BatchSize&offset=$Count&sort=+id"}
                 "Name" {$QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id"}
-                "Filter" {$QueryParams = "?filter=$Filter&size=$BatchSize&offset=$Count&sort=+id"}
+                "Filter" {
+                    #List of allowed filter props
+                    $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
             }
             Try{
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath

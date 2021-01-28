@@ -9,7 +9,7 @@ Function Get-LMDeviceProperty
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -43,7 +43,10 @@ Function Get-LMDeviceProperty
             $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
 
             If($Filter){
-                $QueryParams += "&filter=$Filter"
+                #List of allowed filter props
+                $PropList = @()
+                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
             }
 
             Try{

@@ -4,7 +4,7 @@ Function Get-LMCollectorVersions
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
         [Parameter(ParameterSetName = 'Filter')]
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -25,7 +25,12 @@ Function Get-LMCollectorVersions
             #Build query params
             Switch($PSCmdlet.ParameterSetName){
                 "All" {$QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"}
-                "Filter" {$QueryParams = "?$Filter&size=$BatchSize&offset=$Count"}
+                "Filter" {
+                    #List of allowed filter props
+                    $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
             }
             Try{
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath

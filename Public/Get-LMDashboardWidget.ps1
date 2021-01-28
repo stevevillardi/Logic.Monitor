@@ -16,7 +16,7 @@ Function Get-LMDashboardWidget
         [String]$DashboardName,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -53,7 +53,12 @@ Function Get-LMDashboardWidget
                 "Name" {$QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id"}
                 "DashboardId" {$QueryParams = "?filter=dashboardId:`"$DashboardId`"&size=$BatchSize&offset=$Count&sort=+id"}
                 "DashboardName" {$QueryParams = "?filter=dashboardId:`"$DashboardId`"&size=$BatchSize&offset=$Count&sort=+id"}
-                "Filter" {$QueryParams = "?filter=$Filter&size=$BatchSize&offset=$Count&sort=+id"}
+                "Filter" {
+                    #List of allowed filter props
+                    $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
             }
 
             Try{

@@ -9,7 +9,7 @@ Function Get-LMWebsiteAlerts
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
-        [String]$Filter,
+        [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -43,7 +43,10 @@ Function Get-LMWebsiteAlerts
             $QueryParams = "?size=$BatchSize&offset=$Count&sort=-endDateTime"
 
             If($Filter){
-                $QueryParams += "&filter=$Filter"
+                #List of allowed filter props
+                $PropList = @()
+                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=-endDateTime"
             }
 
             Try{
