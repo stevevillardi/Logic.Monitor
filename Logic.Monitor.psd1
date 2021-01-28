@@ -12,7 +12,7 @@
 RootModule = 'Logic.Monitor.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.0.0.5'
+ModuleVersion = '3.0.1.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -107,7 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Fix module exports issue with new folder structure'
+        ReleaseNotes = 'Added new user modules, improved error handling for web request, added API v4 error handler function'
 
         # Prerelease string of this module
         # Prerelease = ''
