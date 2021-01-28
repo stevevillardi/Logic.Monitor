@@ -12,7 +12,7 @@
 RootModule = 'Logic.Monitor.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.0.1.0'
+ModuleVersion = '3.0.1.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -107,7 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Added new user modules, improved error handling for web request, added API v4 error handler function'
+        ReleaseNotes = 'Changed filter params to hashtables and created filter url encode helper function'
 
         # Prerelease string of this module
         # Prerelease = ''
