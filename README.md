@@ -11,9 +11,12 @@ This project is also published in the PowerShell Gallery at https://www.powershe
 - Added New Commands
   - Added **Remove-LMAPIToken**
   - Added **Set-LMAPIToken**
+  - Added **New-LMDeviceGroup**
+  - Added **Remove-LMDeviceGroup**
+  - Added **Set-LMDeviceGroup**
 ## 3.0.1.1
 - Get-LM* Modules
-  - Changed the filter parameter in applicable Get-LM* commands to use a hashtable, also added a PropsList array and helper function for URL encoding the filter. Filters can now be formated as such: **-Filter @{name="Steve";staus="active"}**
+  - Changed the filter parameter in applicable Get-LM* commands to use a hashtable, also added a PropsList array and helper function for URL encoding the filter. Filters can now be formated as such: **-Filter @{name="Steve*";staus="active"}**
 ## 3.0.1.0
 - Added New LMUser Commands
   - Added **New-LMUser**
