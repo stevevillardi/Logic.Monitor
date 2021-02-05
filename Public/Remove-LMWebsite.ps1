@@ -1,4 +1,4 @@
-Function Remove-LMDeviceGroup
+Function Remove-LMWebsite
 {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
@@ -7,11 +7,7 @@ Function Remove-LMDeviceGroup
         [Int]$Id,
 
         [Parameter(Mandatory,ParameterSetName = 'Name')]
-        [String]$Name,
-
-        [Boolean]$DeleteHostsandChildren = $false,
-
-        [boolean]$HardDelete = $false
+        [String]$Name
 
     )
     #Check if we are logged in and have valid api creds
@@ -20,25 +16,23 @@ Function Remove-LMDeviceGroup
         #Lookup Id if supplying username
         If($Name){
             If($Name -Match "\*"){
-                Write-Host "Wildcard values not supported for device group name." -ForegroundColor Yellow
+                Write-Host "Wildcard values not supported for website name." -ForegroundColor Yellow
                 return
             }
-            $Id = (Get-LMDeviceGroup -Name $Name | Select-Object -First 1 ).Id
+            $Id = (Get-LMWebsite -Name $Name | Select-Object -First 1 ).Id
             If(!$Id){
-                Write-Host "Unable to find device group: $Name, please check spelling and try again." -ForegroundColor Yellow
+                Write-Host "Unable to find website: $Name, please check spelling and try again." -ForegroundColor Yellow
                 return
             }
         }
-        
-        #Build header and uri
-        $ResourcePath = "/device/groups/$Id"
 
-        $QueryParams = "?deleteChildren=$DeleteHostsandChildren&deleteHard=$HardDelete"
+        #Build header and uri
+        $ResourcePath = "/website/websites/$Id"
 
         #Loop through requests 
         Try{
             $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
             #Issue request
             $Request = Invoke-WebRequest -Uri $Uri -Method "DELETE" -Headers $Headers

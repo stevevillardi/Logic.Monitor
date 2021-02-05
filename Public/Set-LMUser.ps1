@@ -49,7 +49,7 @@ Function Set-LMUser
     If($global:LMAuth.Valid){
 
         #Lookup Id if supplying username
-        If($Username){
+        If($Username -and !$Id){
             If($Username -Match "\*"){
                 Write-Host "Wildcard values not supported for username." -ForegroundColor Yellow
                 return

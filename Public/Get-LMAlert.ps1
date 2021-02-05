@@ -101,6 +101,9 @@ Function Get-LMAlert
                 $Done = $true
             }
         }
+
+        # Return $Results
+        #$Results.PSObject.TypeNames.Insert(0,'LogicMonitor.Alert')
         Return $Results
     }
     Else{

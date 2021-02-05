@@ -1,58 +1,51 @@
-Function Set-LMDeviceGroup
+Function Set-LMDevice
 {
 
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'GroupId')]
-        [String]$GroupId,
+        [Parameter(Mandatory,ParameterSetName = 'Id')]
+        [String]$Id,
 
-        [Parameter(Mandatory,ParameterSetName = 'GroupName')]
-        [String]$GroupName,
+        [Parameter(Mandatory,ParameterSetName = 'Name')]
+        [String]$Name,
+
+        [String]$DisplayName,
 
         [String]$Description,
 
+        [String]$PreferredCollectorId,
+
+        [String]$PreferredCollectorGroupId,
+
         [Hashtable]$Properties,
+
+        [String[]]$HostGroupIds, #Dynamic group ids will be ignored, operation will replace all existing groups
 
         [ValidateSet("Add","Replace","Refresh")] # Add will append to existing prop, Replace will update existing props if specified and add new props, refresh will replace existing props with new
         [String]$PropertiesMethod = "Replace",
+
+        [String]$Link,
 
         [Nullable[boolean]]$DisableAlerting,
 
         [Nullable[boolean]]$EnableNetFlow,
 
-        [String]$AppliesTo,
+        [String]$NetflowCollectorGroupId,
 
-        [Parameter(ParameterSetName = 'ParentGroupId')]
-        [Int]$ParentGroupId,
-
-        [Parameter(ParameterSetName = 'ParentGroupName')]
-        [String]$ParentGroupName
+        [String]$NetflowCollectorId
     )
     #Check if we are logged in and have valid api creds
     If($global:LMAuth.Valid){
 
         #Lookup ParentGroupName
-        If($GroupName -and !$GroupId){
-            If($GroupName -Match "\*"){
-                Write-Host "Wildcard values not supported for groups names." -ForegroundColor Yellow
+        If($Name -and !$Id){
+            If($Name -Match "\*"){
+                Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
                 return
             }
-            $GroupId = (Get-LMDeviceGroup -Name $GroupName | Select-Object -First 1 ).Id
-            If(!$GroupId){
-                Write-Host "Unable to find group: $GroupName, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
-        }
-
-        #Lookup ParentGroupName
-        If($ParentGroupName){
-            If($ParentGroupName -Match "\*"){
-                Write-Host "Wildcard values not supported for groups names." -ForegroundColor Yellow
-                return
-            }
-            $ParentGroupId = (Get-LMDeviceGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
-            If(!$ParentGroupId){
-                Write-Host "Unable to find group: $ParentGroupName, please check spelling and try again." -ForegroundColor Yellow
+            $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
+            If(!$Id){
+                Write-Host "Unable to find device: $Name, please check spelling and try again." -ForegroundColor Yellow
                 return
             }
         }
@@ -66,18 +59,23 @@ Function Set-LMDeviceGroup
         }
                 
         #Build header and uri
-        $ResourcePath = "/device/groups/$GroupId"
+        $ResourcePath = "/device/devices/$Id"
 
         #Loop through requests 
         Try{
             $Data = @{
-                name = $GroupName
+                name = $Name
+                displayName = $DisplayName
                 description = $Description
-                appliesTo = $AppliesTo
                 disableAlerting = $DisableAlerting
                 enableNetflow = $EnableNetFlow
                 customProperties =  $customProperties
-                parentId = $ParentGroupId
+                preferredCollectorId = $PreferredCollectorId
+                preferredCollectorGroupId = $PreferredCollectorGroupId
+                link = $Link
+                netflowCollectorGroupId = $NetflowCollectorGroupId
+                netflowCollectorId = $NetflowCollectorId
+                hostGroupIds = $HostGroupIds -join ","
             }
 
             
@@ -86,7 +84,7 @@ Function Set-LMDeviceGroup
             
             $Data = ($Data | ConvertTo-Json)
 
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
             #Issue request

@@ -7,6 +7,15 @@ This project is also published in the PowerShell Gallery at https://www.powershe
 - From PowerShell Gallery: Install-Module -Name **Logic.Monitor**
 
 # Change List
+## 3.0.3.1
+- Added New Commands
+  - Added **Remove-LMDevice**
+  - Added **Remove-LMDashboard**
+  - Added **Remove-LMDashboardWidget**
+  - Added **Remove-LMDatasource**
+  - Added **Remove-LMWebsite**
+  - Added **Set-LMDevice**
+  - Added **Set-LMWebsite**
 ## 3.0.2.1
 - Added New Commands
   - Added **Remove-LMAPIToken**

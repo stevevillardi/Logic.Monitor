@@ -1,4 +1,4 @@
-Function Remove-LMDeviceGroup
+Function Remove-LMDatasource
 {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
@@ -9,9 +9,8 @@ Function Remove-LMDeviceGroup
         [Parameter(Mandatory,ParameterSetName = 'Name')]
         [String]$Name,
 
-        [Boolean]$DeleteHostsandChildren = $false,
-
-        [boolean]$HardDelete = $false
+        [Parameter(Mandatory,ParameterSetName = 'DisplayName')]
+        [String]$DisplayName
 
     )
     #Check if we are logged in and have valid api creds
@@ -20,25 +19,36 @@ Function Remove-LMDeviceGroup
         #Lookup Id if supplying username
         If($Name){
             If($Name -Match "\*"){
-                Write-Host "Wildcard values not supported for device group name." -ForegroundColor Yellow
+                Write-Host "Wildcard values not supported for datasource name." -ForegroundColor Yellow
                 return
             }
-            $Id = (Get-LMDeviceGroup -Name $Name | Select-Object -First 1 ).Id
+            $Id = (Get-LMDatasource -Name $Name | Select-Object -First 1 ).Id
             If(!$Id){
-                Write-Host "Unable to find device group: $Name, please check spelling and try again." -ForegroundColor Yellow
+                Write-Host "Unable to find datasource: $Name, please check spelling and try again." -ForegroundColor Yellow
+                return
+            }
+        }
+
+        #Lookup Id if supplying displayname
+        If($DisplayName){
+            If($DisplayName -Match "\*"){
+                Write-Host "Wildcard values not supported for datasource name." -ForegroundColor Yellow
+                return
+            }
+            $Id = (Get-LMDatasource -Name $DisplayName | Select-Object -First 1 ).Id
+            If(!$Id){
+                Write-Host "Unable to find datasource: $DisplayName, please check spelling and try again." -ForegroundColor Yellow
                 return
             }
         }
         
         #Build header and uri
-        $ResourcePath = "/device/groups/$Id"
-
-        $QueryParams = "?deleteChildren=$DeleteHostsandChildren&deleteHard=$HardDelete"
+        $ResourcePath = "/setting/datasources/$Id"
 
         #Loop through requests 
         Try{
             $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
             #Issue request
             $Request = Invoke-WebRequest -Uri $Uri -Method "DELETE" -Headers $Headers

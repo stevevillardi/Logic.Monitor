@@ -1,4 +1,4 @@
-Function Remove-LMDeviceGroup
+Function Remove-LMDevice
 {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
@@ -9,8 +9,6 @@ Function Remove-LMDeviceGroup
         [Parameter(Mandatory,ParameterSetName = 'Name')]
         [String]$Name,
 
-        [Boolean]$DeleteHostsandChildren = $false,
-
         [boolean]$HardDelete = $false
 
     )
@@ -20,20 +18,20 @@ Function Remove-LMDeviceGroup
         #Lookup Id if supplying username
         If($Name){
             If($Name -Match "\*"){
-                Write-Host "Wildcard values not supported for device group name." -ForegroundColor Yellow
+                Write-Host "Wildcard values not supported for device name." -ForegroundColor Yellow
                 return
             }
-            $Id = (Get-LMDeviceGroup -Name $Name | Select-Object -First 1 ).Id
+            $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
             If(!$Id){
-                Write-Host "Unable to find device group: $Name, please check spelling and try again." -ForegroundColor Yellow
+                Write-Host "Unable to find device: $Name, please check spelling and try again." -ForegroundColor Yellow
                 return
             }
         }
         
         #Build header and uri
-        $ResourcePath = "/device/groups/$Id"
+        $ResourcePath = "/device/devices/$Id"
 
-        $QueryParams = "?deleteChildren=$DeleteHostsandChildren&deleteHard=$HardDelete"
+        $QueryParams = "?deleteHard=$HardDelete"
 
         #Loop through requests 
         Try{
