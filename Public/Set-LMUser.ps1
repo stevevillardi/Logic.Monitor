@@ -3,7 +3,7 @@ Function Set-LMUser
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
+        [Parameter(Mandatory,ParameterSetName = 'Id',ValueFromPipelineByPropertyName)]
         [String]$Id,
 
         [Parameter(Mandatory,ParameterSetName = 'Username')]
@@ -46,133 +46,137 @@ Function Set-LMUser
         [String[]]$Views
     )
     #Check if we are logged in and have valid api creds
-    If($global:LMAuth.Valid){
+    Begin {}
+    Process {
+        If($global:LMAuth.Valid){
 
-        #Lookup Id if supplying username
-        If($Username -and !$Id){
-            If($Username -Match "\*"){
-                Write-Host "Wildcard values not supported for username." -ForegroundColor Yellow
-                return
-            }
-            $Id = (Get-LMUser -Name $Username | Select-Object -First 1 ).Id
-            If(!$Id){
-                Write-Host "Unable to find username: $Username, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
-        }
-
-        #Build admin group props to update user group
-        $AdminGroup = ""
-        $AdminGroupIds = ""
-        If($UserGroups){
-            $AdminGroup = @()
-            $AdminGroupIds = @()
-            Foreach($Group in $UserGroups){
-                If($Group -Match "\*"){
-                    Write-Host "Wildcard values not supported for groups." -ForegroundColor Yellow
+            #Lookup Id if supplying username
+            If($Username -and !$Id){
+                If($Username -Match "\*"){
+                    Write-Host "Wildcard values not supported for username." -ForegroundColor Yellow
                     return
                 }
-                $Group = (Get-LMUserGroup -Name $Group | Select-Object -First 1 )
-                If(!$Group){
+                $Id = (Get-LMUser -Name $Username | Select-Object -First 1 ).Id
+                If(!$Id){
                     Write-Host "Unable to find username: $Username, please check spelling and try again." -ForegroundColor Yellow
                     return
                 }
-                $AdminGroup += @{id=$Group.id;name=$Group.name}
-                $AdminGroupIds += $Group.id
             }
-        }
-
-        #Build role id list
-        $Roles = @()
-        Foreach($Role in $RoleNames){
-            $RoleId = (Get-LMRole -Name $Role | Select-Object -First 1 ).Id
-            If($RoleId){
-                $Roles += @{id=$RoleId}
-            }
-            Else{
-                Write-Host "Enable to locate user role named $Role, it will be skipped" -ForegroundColor Yellow
-            }
-        }
-
-        #Build view permissions hashtable
-        $ViewPermission = ""
-        If($Views){
-            $ViewPermission = @{
-                Alerts = $false
-                Dashboards = $false
-                Logs = $false
-                Maps = $false
-                Reports = $false
-                Resources = $false
-                Settings = $false
-                Websites = $false
-            }
-
-            Foreach($View in $Views){
-                If($View -eq "All"){
-                    Foreach($key in $($ViewPermission.keys)){
-                        $ViewPermission[$key] = $true
+    
+            #Build admin group props to update user group
+            $AdminGroup = ""
+            $AdminGroupIds = ""
+            If($UserGroups){
+                $AdminGroup = @()
+                $AdminGroupIds = @()
+                Foreach($Group in $UserGroups){
+                    If($Group -Match "\*"){
+                        Write-Host "Wildcard values not supported for groups." -ForegroundColor Yellow
+                        return
                     }
-                    break
-                }
-                ElseIf($ViewPermission.ContainsKey($View)){
-                    $ViewPermission[$View] = $true
+                    $Group = (Get-LMUserGroup -Name $Group | Select-Object -First 1 )
+                    If(!$Group){
+                        Write-Host "Unable to find username: $Username, please check spelling and try again." -ForegroundColor Yellow
+                        return
+                    }
+                    $AdminGroup += @{id=$Group.id;name=$Group.name}
+                    $AdminGroupIds += $Group.id
                 }
             }
-        }
-        
-        #Build header and uri
-        $ResourcePath = "/setting/admins/$Id"
-
-        #Loop through requests 
-        Try{
-            $Data = @{
-                username = $Username
-                email = $Email
-                acceptEULA = $AcceptEULA
-                password = $Password
-                firstName = $FirstName 
-                lastName = $LastName
-                forcePasswordChange = $ForcePasswordChange
-                phone = $(If($Phone){"+" + $Phone.Replace("-","")}Else{""})
-                note = $Note
-                roles = $Roles
-                smsEmail = $SmsEmail
-                smsEmailFormat = $SmsEmailFormat
-                status = $Status
-                timezone = $Timezone
-                twoFAEnabled = $TwoFAEnabled
-                viewPermission = $ViewPermission
-                adminGroup = $AdminGroup
-                adminGroupIds = $AdminGroupIds
-
+    
+            #Build role id list
+            $Roles = @()
+            Foreach($Role in $RoleNames){
+                $RoleId = (Get-LMRole -Name $Role | Select-Object -First 1 ).Id
+                If($RoleId){
+                    $Roles += @{id=$RoleId}
+                }
+                Else{
+                    Write-Host "Enable to locate user role named $Role, it will be skipped" -ForegroundColor Yellow
+                }
             }
-
-            #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if (-not $Data[$_]) { $Data.Remove($_) } }
-
-            $Data = ($Data | ConvertTo-Json)
-
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-
-            #Issue request
-            $Request = Invoke-WebRequest -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-            $Response = $Request.Content | ConvertFrom-Json
-
-            Return $Response
+    
+            #Build view permissions hashtable
+            $ViewPermission = ""
+            If($Views){
+                $ViewPermission = @{
+                    Alerts = $false
+                    Dashboards = $false
+                    Logs = $false
+                    Maps = $false
+                    Reports = $false
+                    Resources = $false
+                    Settings = $false
+                    Websites = $false
+                }
+    
+                Foreach($View in $Views){
+                    If($View -eq "All"){
+                        Foreach($key in $($ViewPermission.keys)){
+                            $ViewPermission[$key] = $true
+                        }
+                        break
+                    }
+                    ElseIf($ViewPermission.ContainsKey($View)){
+                        $ViewPermission[$View] = $true
+                    }
+                }
+            }
+            
+            #Build header and uri
+            $ResourcePath = "/setting/admins/$Id"
+    
+            #Loop through requests 
+            Try{
+                $Data = @{
+                    username = $Username
+                    email = $Email
+                    acceptEULA = $AcceptEULA
+                    password = $Password
+                    firstName = $FirstName 
+                    lastName = $LastName
+                    forcePasswordChange = $ForcePasswordChange
+                    phone = $(If($Phone){"+" + $Phone.Replace("-","")}Else{""})
+                    note = $Note
+                    roles = $Roles
+                    smsEmail = $SmsEmail
+                    smsEmailFormat = $SmsEmailFormat
+                    status = $Status
+                    timezone = $Timezone
+                    twoFAEnabled = $TwoFAEnabled
+                    viewPermission = $ViewPermission
+                    adminGroup = $AdminGroup
+                    adminGroupIds = $AdminGroupIds
+    
+                }
+    
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if (-not $Data[$_]) { $Data.Remove($_) } }
+    
+                $Data = ($Data | ConvertTo-Json)
+    
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+    
+                #Issue request
+                $Request = Invoke-WebRequest -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+                $Response = $Request.Content | ConvertFrom-Json
+    
+                Return $Response
+            }
+            Catch [Microsoft.PowerShell.Commands.HttpResponseException] {
+                $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+                $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
+                Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
+            }
+            Catch{
+                $LMError = $PSItem.ToString()
+                Write-Error "Failed to execute web request: $LMError"
+            }
         }
-        Catch [Microsoft.PowerShell.Commands.HttpResponseException] {
-            $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-            $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
-            Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-        }
-        Catch{
-            $LMError = $PSItem.ToString()
-            Write-Error "Failed to execute web request: $LMError"
+        Else{
+            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
         }
     }
-    Else{
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
-    }
+    End {}
 }

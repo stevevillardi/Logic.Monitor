@@ -7,6 +7,11 @@ This project is also published in the PowerShell Gallery at https://www.powershe
 - From PowerShell Gallery: Install-Module -Name **Logic.Monitor**
 
 # Change List
+## 3.0.4.1
+- Updated Commands to accept pipeline object (Get-LMx | Set-LMx)
+  - Updated **(Remove|Get|Set)-LMDevice**
+  - Updated **(Remove|Get|Set)-LMDeviceGroup**
+  - Updated **(Remove|Get|Set)-LMUser**
 ## 3.0.3.1
 - Added New Commands
   - Added **Remove-LMDevice**

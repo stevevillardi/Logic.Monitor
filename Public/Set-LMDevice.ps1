@@ -3,7 +3,7 @@ Function Set-LMDevice
 
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
+        [Parameter(Mandatory,ParameterSetName = 'Id',ValueFromPipelineByPropertyName)]
         [String]$Id,
 
         [Parameter(Mandatory,ParameterSetName = 'Name')]
@@ -35,75 +35,78 @@ Function Set-LMDevice
         [String]$NetflowCollectorId
     )
     #Check if we are logged in and have valid api creds
-    If($global:LMAuth.Valid){
+    Begin{}
+    Process{
+        If($global:LMAuth.Valid){
 
-        #Lookup ParentGroupName
-        If($Name -and !$Id){
-            If($Name -Match "\*"){
-                Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
-                return
+            #Lookup ParentGroupName
+            If($Name -and !$Id){
+                If($Name -Match "\*"){
+                    Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
+                    return
+                }
+                $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
+                If(!$Id){
+                    Write-Host "Unable to find device: $Name, please check spelling and try again." -ForegroundColor Yellow
+                    return
+                }
             }
-            $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
-            If(!$Id){
-                Write-Host "Unable to find device: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
-        }
 
-        #Build custom props hashtable
-        $customProperties = @()
-        If($Properties){
-            Foreach($Key in $Properties.Keys){
-                $customProperties += @{name=$Key;value=$Properties[$Key]}
+            #Build custom props hashtable
+            $customProperties = @()
+            If($Properties){
+                Foreach($Key in $Properties.Keys){
+                    $customProperties += @{name=$Key;value=$Properties[$Key]}
+                }
             }
-        }
+                    
+            #Build header and uri
+            $ResourcePath = "/device/devices/$Id"
+
+            #Loop through requests 
+            Try{
+                $Data = @{
+                    name = $Name
+                    displayName = $DisplayName
+                    description = $Description
+                    disableAlerting = $DisableAlerting
+                    enableNetflow = $EnableNetFlow
+                    customProperties =  $customProperties
+                    preferredCollectorId = $PreferredCollectorId
+                    preferredCollectorGroupId = $PreferredCollectorGroupId
+                    link = $Link
+                    netflowCollectorGroupId = $NetflowCollectorGroupId
+                    netflowCollectorId = $NetflowCollectorId
+                    hostGroupIds = $HostGroupIds -join ","
+                }
+
                 
-        #Build header and uri
-        $ResourcePath = "/device/devices/$Id"
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+                
+                $Data = ($Data | ConvertTo-Json)
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
-        #Loop through requests 
-        Try{
-            $Data = @{
-                name = $Name
-                displayName = $DisplayName
-                description = $Description
-                disableAlerting = $DisableAlerting
-                enableNetflow = $EnableNetFlow
-                customProperties =  $customProperties
-                preferredCollectorId = $PreferredCollectorId
-                preferredCollectorGroupId = $PreferredCollectorGroupId
-                link = $Link
-                netflowCollectorGroupId = $NetflowCollectorGroupId
-                netflowCollectorId = $NetflowCollectorId
-                hostGroupIds = $HostGroupIds -join ","
+                #Issue request
+                $Request = Invoke-WebRequest -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+                $Response = $Request.Content | ConvertFrom-Json
+
+                Return $Response
             }
-
-            
-            #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-            
-            $Data = ($Data | ConvertTo-Json)
-
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
-
-            #Issue request
-            $Request = Invoke-WebRequest -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-            $Response = $Request.Content | ConvertFrom-Json
-
-            Return $Response
+            Catch [Microsoft.PowerShell.Commands.HttpResponseException] {
+                $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+                $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
+                Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
+            }
+            Catch{
+                $LMError = $PSItem.ToString()
+                Write-Error "Failed to execute web request: $LMError"
+            }
         }
-        Catch [Microsoft.PowerShell.Commands.HttpResponseException] {
-            $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-            $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
-            Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-        }
-        Catch{
-            $LMError = $PSItem.ToString()
-            Write-Error "Failed to execute web request: $LMError"
+        Else{
+            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
         }
     }
-    Else{
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
-    }
+    End {}
 }
