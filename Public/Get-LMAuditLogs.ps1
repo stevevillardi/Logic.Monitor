@@ -28,6 +28,7 @@ Function Get-LMAuditLogs
         $Count = 0
         $Done = $false
         $Results = @()
+        $QueryLimit = 10000 #API limit to how many results can be returned
 
         #Convert to epoch, if not set use defaults
         If(!$StartDate){
@@ -48,7 +49,7 @@ Function Get-LMAuditLogs
         While(!$Done){
             #Build query params
             Switch($PSCmdlet.ParameterSetName){
-                "All" {$QueryParams = "?filter=happenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`",size=$BatchSize&offset=$Count&sort=+happenedOn"}
+                "All" {$QueryParams = "?filter=happenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`"&size=$BatchSize&offset=$Count&sort=+happenedOn"}
                 "Id" {$resourcePath += "/$Id"}
                 "Filter" {
                     #List of allowed filter props
@@ -75,7 +76,11 @@ Function Get-LMAuditLogs
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If($Count -ge $Total){
+                    If($Count -ge $QueryLimit){
+                        $Done = $true
+                        Write-Host "Reached $QueryLimit record query limitation for this endpoint" -ForegroundColor Yellow
+                    }
+                    ElseIf($Count -ge $Total -and $Total -ge 0){
                         $Done = $true
                     }
                 }

@@ -34,6 +34,7 @@ Function Get-LMAlert
         $Count = 0
         $Done = $false
         $Results = @()
+        $QueryLimit = 10000 #API limit to how many results can be returned
 
         #Convert to epoch, if not set use defaults
         If(!$StartDate){
@@ -82,9 +83,12 @@ Function Get-LMAlert
                 Else{
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
-                    
                     $Results += $Response.Items
-                    If($Count -ge $Total){
+                    If($Count -ge $QueryLimit){
+                        $Done = $true
+                        Write-Host "Reached $QueryLimit record query limitation for this endpoint" -ForegroundColor Yellow
+                    }
+                    ElseIf($Count -ge $Total -and $Total -ge 0){
                         $Done = $true
                     }
                 }
