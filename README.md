@@ -9,7 +9,6 @@ This project is also published in the PowerShell Gallery at https://www.powershe
 # Change List
 ## 3.0.5.1
 - Updated Get-LMAlert and Get-LMAuditLogs to work with large number of record returns
-  - Updated **(Remove|Get|Set)-LMDevice**
 ## 3.0.4.1
 - Updated Commands to accept pipeline object (Get-LMx | Set-LMx)
   - Updated **(Remove|Get|Set)-LMDevice**
