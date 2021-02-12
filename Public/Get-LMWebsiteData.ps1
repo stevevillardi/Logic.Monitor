@@ -46,7 +46,7 @@ Function Get-LMWebsiteData
 
         #Convert to epoch, if not set use defaults
         If(!$StartDate){
-            [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddMinutes(-1)).ToUnixTimeSeconds()
+            [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddMinutes(-10)).ToUnixTimeSeconds()
         }
         Else{
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
