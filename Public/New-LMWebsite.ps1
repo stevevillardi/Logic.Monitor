@@ -1,11 +1,9 @@
-Function Set-LMWebsite
+Function New-LMWebsite
 {
 
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory)]
-        [String]$Id,
-
         [String]$Name,
 
         [Nullable[boolean]]$IsInternal,
@@ -26,13 +24,14 @@ Function Set-LMWebsite
 
         [String]$GroupId,
 
+        [Parameter(Mandatory)]
         [String]$Hostname,
 
         [ValidateSet("http","https")]
         [String]$HttpType,
 
         [String[]]$SSLAlertThresholds,
-        
+
         [ValidateSet(5,10,15,20,30,60)]
         [Nullable[Int]]$PingCount,
 
@@ -58,25 +57,16 @@ Function Set-LMWebsite
         [String]$PropertiesMethod = "Replace",
 
         [ValidateSet(1,2,3,4,5,6,7,8,9,10)]
-        [Nullable[Int]]$PollingInterval
+        [Nullable[Int]]$PollingInterval,
+
+        [Parameter(Mandatory)]
+        [ValidateSet("pingcheck","webcheck")]
+        [String]$Type
 
 
     )
     #Check if we are logged in and have valid api creds
     If($global:LMAuth.Valid){
-
-        #Lookup Id by name
-        If($Name -and !$Id){
-            If($Name -Match "\*"){
-                Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
-                return
-            }
-            $Id = (Get-LMWebsite -Name $Name | Select-Object -First 1 ).Id
-            If(!$Id){
-                Write-Host "Unable to find device: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
-        }
 
         #Build custom props hashtable
         $customProperties = @()
@@ -87,7 +77,7 @@ Function Set-LMWebsite
         }
                 
         #Build header and uri
-        $ResourcePath = "/website/websites/$Id"
+        $ResourcePath = "/website/websites"
 
         #Loop through requests 
         Try{
@@ -115,6 +105,7 @@ Function Set-LMWebsite
                 alertExpr = "< " + $SSLAlertThresholds -join " "
                 schema = $HttpType
                 domain = $Hostname
+                type = $Type
 
             }
 
@@ -124,11 +115,11 @@ Function Set-LMWebsite
             
             $Data = ($Data | ConvertTo-Json)
 
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
             #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
 
             Return $Response
         }

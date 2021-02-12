@@ -131,8 +131,7 @@ Function New-LMUser
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
             #Issue request
-            $Request = Invoke-WebRequest -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
-            $Response = $Request.Content | ConvertFrom-Json
+            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
 
             Return $Response
         }

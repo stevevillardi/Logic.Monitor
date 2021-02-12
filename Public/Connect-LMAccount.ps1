@@ -31,8 +31,7 @@ Function Connect-LMAccount
         $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
         #Issue request
-        $Request = Invoke-WebRequest -Uri $Uri -Method "GET" -Headers $Headers
-        $Response = $Request.Content | ConvertFrom-Json
+        $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
         Write-Host "Connected to LM portal $($Response.companyDisplayName) using account $($Response.name) - ($($Response.numberOfDevices) devices)." -ForegroundColor Green
         
         #Set valid flag so we dont prompt for auth details on future requests

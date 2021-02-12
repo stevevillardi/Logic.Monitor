@@ -71,8 +71,7 @@ Function Get-LMAlert
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
                 #Issue request
-                $Request = Invoke-WebRequest -Uri $Uri -Method "GET" -Headers $Headers
-                $Response = $Request.Content | ConvertFrom-Json
+                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 
                 #Stop looping if single device, no need to continue
                 If($PSCmdlet.ParameterSetName -eq "Id"){
@@ -107,7 +106,7 @@ Function Get-LMAlert
         }
 
         # Return $Results
-        #$Results.PSObject.TypeNames.Insert(0,'LogicMonitor.Alert')
+        #Return (Format-LMObjects -Object $Results -ObjectType "LogicMonitor.Alert" -ObjectDisplayList @("id","internalId","monitoredObjectName","instanceName","dataPintName","alertValue"))
         Return $Results
     }
     Else{

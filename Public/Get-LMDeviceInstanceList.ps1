@@ -11,7 +11,9 @@ Function Get-LMDeviceInstanceList
 
         [Hashtable]$Filter,
 
-        [Int]$BatchSize = 1000
+        [Int]$BatchSize = 1000,
+
+        [Boolean]$CountOnly
     )
     #Check if we are logged in and have valid api creds
     If($global:LMAuth.Valid){
@@ -54,8 +56,13 @@ Function Get-LMDeviceInstanceList
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
                 #Issue request
-                $Request = Invoke-WebRequest -Uri $Uri -Method "GET" -Headers $Headers
-                $Response = $Request.Content | ConvertFrom-Json
+                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
+
+                #If looking for count only just return total
+                If($CountOnly){
+                    return $Response.Total
+                }
+
 
                 #Stop looping if single device, no need to continue
                 If(![bool]$Response.psobject.Properties["total"]){

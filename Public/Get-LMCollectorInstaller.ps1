@@ -52,7 +52,7 @@ Function Get-LMCollectorInstaller
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
             #Issue request
-            Invoke-WebRequest -Uri $Uri -Method "GET" -Headers $Headers -OutFile $DownloadPath
+            Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers -OutFile $DownloadPath
             
             Return $DownloadPath
 

@@ -14,8 +14,7 @@ Function Get-LMUsageMetrics
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
             #Issue request
-            $Request = Invoke-WebRequest -Uri $Uri -Method "GET" -Headers $Headers
-            $Response = $Request.Content | ConvertFrom-Json
+            $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 
             Return $Response
         }

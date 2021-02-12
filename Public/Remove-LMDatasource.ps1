@@ -51,8 +51,8 @@ Function Remove-LMDatasource
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
             #Issue request
-            $Request = Invoke-WebRequest -Uri $Uri -Method "DELETE" -Headers $Headers
-            $StatusCode = $Request.StatusCode
+            $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
+            $StatusCode = $Response.StatusCode
 
             If($StatusCode -eq "200"){
                 Write-Host "Successfully removed id ($Id) - Status Code: $StatusCode" -ForegroundColor Green

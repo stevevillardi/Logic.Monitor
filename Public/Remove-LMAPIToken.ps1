@@ -38,8 +38,8 @@ Function Remove-LMAPIToken
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
             #Issue request
-            $Request = Invoke-WebRequest -Uri $Uri -Method "DELETE" -Headers $Headers
-            $StatusCode = $Request.StatusCode
+            $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
+            $StatusCode = $Response.StatusCode
 
             If($StatusCode -eq "200"){
                 Write-Host "Successfully removed id ($APITokenId) - Status Code: $StatusCode" -ForegroundColor Green

@@ -37,8 +37,7 @@ Function Get-LMCollectorVersions
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
                 #Issue request
-                $Request = Invoke-WebRequest -Uri $Uri -Method "GET" -Headers $Headers
-                $Response = $Request.Content | ConvertFrom-Json
+                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 
                 #Stop looping if single device, no need to continue
                 If($PSCmdlet.ParameterSetName -eq "Id"){

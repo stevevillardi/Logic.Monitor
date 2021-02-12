@@ -158,9 +158,8 @@ Function Set-LMUser
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
     
-                #Issue request
-                $Request = Invoke-WebRequest -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-                $Response = $Request.Content | ConvertFrom-Json
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
     
                 Return $Response
             }
