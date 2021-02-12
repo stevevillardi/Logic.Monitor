@@ -33,7 +33,7 @@ Function New-LMHeader
 
     # Construct signature...
     $Hmac = New-Object System.Security.Cryptography.HMACSHA256
-    $Hmac.Key = [Text.Encoding]::UTF8.GetBytes($($Auth.Key | ConvertFrom-SecureString -AsPlainText))
+    $Hmac.Key = [Text.Encoding]::UTF8.GetBytes([System.Net.NetworkCredential]::new("", $Auth.Key).Password)
 
     $SignatureBytes = $Hmac.ComputeHash([Text.Encoding]::UTF8.GetBytes($RequestVars))
     $SignatureHex = [System.BitConverter]::ToString($SignatureBytes) -replace '-'

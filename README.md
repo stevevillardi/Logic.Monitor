@@ -7,6 +7,9 @@ This project is also published in the PowerShell Gallery at https://www.powershe
 - From PowerShell Gallery: Install-Module -Name **Logic.Monitor**
 
 # Change List
+## 3.0.6.1
+- Updated modules to be compatible with powershell version 5.1 an later
+- Simplified error handling between different versions of powershell
 ## 3.0.5.1
 - Updated Get-LMAlert and Get-LMAuditLogs to work with large number of record returns
 - Switched out Invoke-WebRequest for Invoke-RestMethod on all commandlets

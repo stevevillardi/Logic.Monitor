@@ -74,14 +74,18 @@ Function New-LMDeviceGroup
 
             Return $Response
         }
-        Catch [Microsoft.PowerShell.Commands.HttpResponseException] {
-            $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-            $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
-            Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-        }
-        Catch{
-            $LMError = $PSItem.ToString()
-            Write-Error "Failed to execute web request: $LMError"
+        Catch [Exception] {
+            Switch($PSItem.Exception.GetType().FullName){
+                {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
+                    $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+                    $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
+                    Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
+                }
+                default {
+                    $LMError = $PSItem.ToString()
+                    Write-Error "Failed to execute web request: $LMError"
+                }
+            }
         }
     }
     Else{

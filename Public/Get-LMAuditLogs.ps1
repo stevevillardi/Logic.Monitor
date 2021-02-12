@@ -84,16 +84,20 @@ Function Get-LMAuditLogs
                     }
                 }
             }
-            Catch [Microsoft.PowerShell.Commands.HttpResponseException] {
-                $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
-                Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-                $Done = $true
-            }
-            Catch{
-                $LMError = $PSItem.ToString()
-                Write-Error "Failed to execute web request: $LMError"
-                $Done = $true
+            Catch [Exception] {
+                Switch($PSItem.Exception.GetType().FullName){
+                    {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
+                        $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+                        $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
+                        Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
+                        $Done = $true
+                    }
+                    default {
+                        $LMError = $PSItem.ToString()
+                        Write-Error "Failed to execute web request: $LMError"
+                        $Done = $true
+                    }
+                }
             }
         }
         Return $Results
