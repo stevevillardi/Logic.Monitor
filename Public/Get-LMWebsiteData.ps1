@@ -11,7 +11,9 @@ Function Get-LMWebsiteData
 
         [Datetime]$StartDate,
 
-        [Datetime]$EndDate
+        [Datetime]$EndDate,
+
+        [String]$CheckpointId = 0
     )
     #Check if we are logged in and have valid api creds
     If($global:LMAuth.Valid){
@@ -24,29 +26,18 @@ Function Get-LMWebsiteData
             }
             $Website = Get-LMwebsite -Name $Name | Select-Object -First 1 
             $Id = $Website.Id
-            $Checkpoint = $Website.Checkpoints.Id[0]
-            If(!$Id -or !$Checkpoint){
+            If(!$Id){
                 Write-Host "Unable to find website: $Name, please check spelling and try again." -ForegroundColor Yellow
                 return
             }
         }
-        Else {
-            $Checkpoint = (Get-LMwebsite -Id $Id | Select-Object -First 1 )
-            If(!$Checkpoint){
-                Write-Host "Unable to find checkpoint for website id: $Id, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
-            Else{
-                $Checkpoint = $Checkpoint.Checkpoints.Id[0]
-            }
-        }
         
         #Build header and uri
-        $ResourcePath = "/website/websites/$Id/checkpoints/$Checkpoint/data"
+        $ResourcePath = "/website/websites/$Id/checkpoints/$CheckpointId/data"
 
         #Convert to epoch, if not set use defaults
         If(!$StartDate){
-            [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddMinutes(-10)).ToUnixTimeSeconds()
+            [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddMinutes(-60)).ToUnixTimeSeconds()
         }
         Else{
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
@@ -72,14 +63,15 @@ Function Get-LMWebsiteData
         
         }
         Catch [Exception] {
+            $Exception = $PSItem
             Switch($PSItem.Exception.GetType().FullName){
                 {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
-                    $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                    $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
+                    $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+                    $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
                     Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
                 }
                 default {
-                    $LMError = $PSItem.ToString()
+                    $LMError = $Exception.ToString()
                     Write-Error "Failed to execute web request: $LMError"
                 }
             }

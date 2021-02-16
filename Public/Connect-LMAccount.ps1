@@ -38,10 +38,11 @@ Function Connect-LMAccount
         $global:LMAuth.Valid = $true
     }
     Catch [Exception] {
-        Switch($PSItem.Exception.GetType().FullName){
+        $Exception = $PSItem
+        Switch($Exception.Exception.GetType().FullName){
             {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
-                $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json -ErrorAction SilentlyContinue).errorMessage
-                $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
+                $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json -ErrorAction SilentlyContinue).errorMessage
+                $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
                 Write-Error "Failed to authenticate account($($HttpStatusCode)): $HttpException"
             }
             default {

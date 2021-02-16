@@ -164,14 +164,15 @@ Function Set-LMUser
                 Return $Response
             }
             Catch [Exception] {
+                $Exception = $PSItem
                 Switch($PSItem.Exception.GetType().FullName){
                     {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
-                        $HttpException = ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                        $HttpStatusCode = $PSItem.Exception.Response.StatusCode.value__
+                        $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+                        $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
                         Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
                     }
                     default {
-                        $LMError = $PSItem.ToString()
+                        $LMError = $Exception.ToString()
                         Write-Error "Failed to execute web request: $LMError"
                     }
                 }

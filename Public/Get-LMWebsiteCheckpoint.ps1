@@ -1,35 +1,19 @@
-Function Get-LMDeviceProperty
+Function Get-LMWebsiteCheckpoint
 {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
-        [Int]$Id,
 
-        [Parameter(ParameterSetName = 'Name')]
-        [String]$Name,
-
+        [Parameter(ParameterSetName = 'Filter')]
         [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
     If($global:LMAuth.Valid){
-
-        If($Name){
-            If($Name -Match "\*"){
-                Write-Host "Wildcard values not supported for device name." -ForegroundColor Yellow
-                return
-            }
-            $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
-            If(!$Id){
-                Write-Host "Unable to find device with name: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
-        }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/properties"
+        $ResourcePath = "/website/smcheckpoints"
 
         #Initalize vars
         $QueryParams = ""
@@ -40,15 +24,16 @@ Function Get-LMDeviceProperty
         #Loop through requests 
         While(!$Done){
             #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
-
-            If($Filter){
-                #List of allowed filter props
-                $PropList = @()
-                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+            Switch($PSCmdlet.ParameterSetName){
+                "All" {$QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"}
+                "Name" {$QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id"}
+                "Filter" {
+                    #List of allowed filter props
+                    $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
             }
-
             Try{
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
@@ -57,7 +42,7 @@ Function Get-LMDeviceProperty
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 
                 #Stop looping if single device, no need to continue
-                If(![bool]$Response.psobject.Properties["total"]){
+                If($PSCmdlet.ParameterSetName -eq "Id"){
                     $Done = $true
                     Return $Response
                 }
