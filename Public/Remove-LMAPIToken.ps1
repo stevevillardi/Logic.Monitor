@@ -50,8 +50,8 @@ Function Remove-LMAPIToken
         }
         Catch [Exception] {
             $Exception = $PSItem
-            Switch($PSItem.Exception.GetType().FullName){
-                {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
+            Switch ($PSItem.Exception.GetType().FullName) {
+                { "System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException" } {
                     $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
                     $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
                     Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
@@ -61,6 +61,7 @@ Function Remove-LMAPIToken
                     Write-Error "Failed to execute web request: $LMError"
                 }
             }
+            Return
         }
     }
     Else{

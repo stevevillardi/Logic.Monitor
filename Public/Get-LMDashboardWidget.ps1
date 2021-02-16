@@ -96,6 +96,7 @@ Function Get-LMDashboardWidget
                         Write-Error "Failed to execute web request: $LMError"
                     }
                 }
+                Return
             }
         }
         Return $Results

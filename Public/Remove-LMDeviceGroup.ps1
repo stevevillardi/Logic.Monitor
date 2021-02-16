@@ -66,6 +66,7 @@ Function Remove-LMDeviceGroup
                         Write-Error "Failed to execute web request: $LMError"
                     }
                 }
+                Return
             }
         }
         Else{

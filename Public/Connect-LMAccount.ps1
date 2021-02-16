@@ -51,5 +51,6 @@ Function Connect-LMAccount
         }
         #Clear credential object from environment
         Remove-Variable LMAuth -Scope Global
+        Return
     }
 }

@@ -60,6 +60,7 @@ Function Remove-LMUser
                         Write-Error "Failed to execute web request: $LMError"
                     }
                 }
+                Return
             }
         }
         Else{

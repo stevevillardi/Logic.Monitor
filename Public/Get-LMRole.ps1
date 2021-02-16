@@ -75,6 +75,7 @@ Function Get-LMRole
                         Write-Error "Failed to execute web request: $LMError"
                     }
                 }
+                Return
             }
         }
         Return $Results

@@ -84,6 +84,7 @@ Function Get-LMDeviceGroupAlerts
                         Write-Error "Failed to execute web request: $LMError"
                     }
                 }
+                Return
             }
         }
         Return $Results
