@@ -7,6 +7,8 @@ This project is also published in the PowerShell Gallery at https://www.powershe
 - From PowerShell Gallery: Install-Module -Name **Logic.Monitor**
 
 # Change List
+## 3.0.7.2
+- Fixed incorrect error message on DELETE method commands
 ## 3.0.7.1
 - Fixed error handling issue with cross compability changes
 ## 3.0.6.1

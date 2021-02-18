@@ -36,14 +36,7 @@ Function Remove-LMDashboardWidget
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
-            $StatusCode = $Response.StatusCode
-
-            If($StatusCode -eq "200"){
-                Write-Host "Successfully removed id ($Id) - Status Code: $StatusCode" -ForegroundColor Green
-            }
-            Else{
-                Write-Error "Failed to removed id ($Id) - Status Code: $StatusCode"
-            }
+            Write-Host "Successfully removed id ($Id)" -ForegroundColor Green
         }
         Catch [Exception] {
             $Exception = $PSItem
