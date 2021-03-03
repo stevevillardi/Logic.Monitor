@@ -7,6 +7,22 @@ This project is also published in the PowerShell Gallery at https://www.powershe
 - From PowerShell Gallery: Install-Module -Name **Logic.Monitor**
 
 # Change List
+## 3.0.7.4
+- New Command **Invoke-LMActiveDiscovery**
+- New Command **Get-LMTopologyMap**
+- New Command **Get-LMTopologyMapData**
+- New Beta Command **Export-LMTopologyMap**
+- New Command **New-LMDeviceDatasourceInstance**
+- New Command **Set-LMDeviceDatasourceInstance**
+- New Command **Remove-LMDeviceDatasourceInstance**
+- New Command **Get-LMDeviceDatasourceInstance**
+- New Command **New-LMDeviceProperty**
+- New Command **Set-LMDeviceProperty**
+- New Command **Remove-LMDeviceProperty**
+
+-Added helper function Add-ObjectDetail as basis for type casting result objects to allow for eventually accepting pipeline object input for Set and Remove commands
+## 3.0.7.3
+- New Command **New-LMDeviceDatasourceInstance**
 ## 3.0.7.2
 - Fixed incorrect error message on DELETE method commands
 ## 3.0.7.1

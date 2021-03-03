@@ -24,8 +24,7 @@ Function Get-LMWebsiteData
                 Write-Host "Wildcard values not supported for website name." -ForegroundColor Yellow
                 return
             }
-            $Website = Get-LMwebsite -Name $Name | Select-Object -First 1 
-            $Id = $Website.Id
+            $Id = (Get-LMWebsite -Name $Name | Select-Object -First 1).Id
             If(!$Id){
                 Write-Host "Unable to find website: $Name, please check spelling and try again." -ForegroundColor Yellow
                 return

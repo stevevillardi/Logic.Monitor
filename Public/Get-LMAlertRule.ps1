@@ -77,7 +77,7 @@ Function Get-LMAlertRule {
                 Return
             }
         }
-        Return $Results
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.AlertRule")
     }
     Else {
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow

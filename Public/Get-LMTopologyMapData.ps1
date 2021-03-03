@@ -1,75 +1,43 @@
-Function Get-LMDeviceDatasourceList
+Function Get-LMTopologyMapData
 {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding()]
     Param (
         [Parameter(Mandatory,ParameterSetName = 'Id')]
         [Int]$Id,
 
-        [Parameter(ParameterSetName = 'Name')]
-        [String]$Name,
-
-        [Hashtable]$Filter,
-
-        [Int]$BatchSize = 1000
+        [Parameter(Mandatory,ParameterSetName = 'Name')]
+        [String]$Name
     )
     #Check if we are logged in and have valid api creds
     If($global:LMAuth.Valid){
 
+        #Lookup Id if supplying name
         If($Name){
             If($Name -Match "\*"){
-                Write-Host "Wildcard values not supported for device name." -ForegroundColor Yellow
+                Write-Host "Wildcard values not supported for topology map name." -ForegroundColor Yellow
                 return
             }
-            $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
+            $Id = (Get-LMTopologyMap -Name $Name | Select-Object -First 1).Id
+
             If(!$Id){
-                Write-Host "Unable to find device with name: $Name, please check spelling and try again." -ForegroundColor Yellow
+                Write-Host "Unable to find topology map: $Name, please check spelling and try again." -ForegroundColor Yellow
                 return
             }
         }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/devicedatasources"
-
-        #Initalize vars
-        $QueryParams = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
+        $ResourcePath = "/topology/topologies/$Id/data"
 
         #Loop through requests 
         While(!$Done){
-            #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
-
-            If($Filter){
-                #List of allowed filter props
-                $PropList = @()
-                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
-            }
-
             Try{
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
-
-                #Stop looping if single device, no need to continue
-                If(![bool]$Response.psobject.Properties["total"]){
-                    $Done = $true
-                    Return $Response
-                }
-                #Check result size and if needed loop again
-                Else{
-                    [Int]$Total = $Response.Total
-                    [Int]$Count += ($Response.Items | Measure-Object).Count
-                    $Results += $Response.Items
-                    If($Count -ge $Total){
-                        $Done = $true
-                    }
-                }
+                Return $Response
             }
             Catch [Exception] {
                 $Exception = $PSItem

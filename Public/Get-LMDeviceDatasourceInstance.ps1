@@ -1,35 +1,56 @@
-Function Get-LMDeviceDatasourceList
+Function Get-LMDeviceDatasourceInstance
 {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding()]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
-        [Int]$Id,
+        [Parameter(Mandatory,ParameterSetName = 'Name')]
+        [String]$Id,
 
-        [Parameter(ParameterSetName = 'Name')]
+        [Parameter(Mandatory,ParameterSetName = 'Id')]
         [String]$Name,
+
+        [String]$DatasourceName,
+        
+        [String]$DatasourceId,
+
+        [String]$HdsId,
 
         [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
+
     )
     #Check if we are logged in and have valid api creds
     If($global:LMAuth.Valid){
 
+        #Lookup Device Id
         If($Name){
             If($Name -Match "\*"){
-                Write-Host "Wildcard values not supported for device name." -ForegroundColor Yellow
+                Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
                 return
             }
             $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
             If(!$Id){
-                Write-Host "Unable to find device with name: $Name, please check spelling and try again." -ForegroundColor Yellow
+                Write-Host "Unable to find assocaited host device: $Name, please check spelling and try again." -ForegroundColor Yellow
+                return
+            }
+        }
+
+        #Lookup DatasourceId
+        If($DatasourceName -or $DatasourceId){
+            If($DatasourceName -Match "\*"){
+                Write-Host "Wildcard values not supported for datasource names." -ForegroundColor Yellow
+                return
+            }
+            $HdsId = (Get-LMDeviceDataSourceList -Id $Id | Where-Object {$_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId} | Select-Object -First 1).Id
+            If(!$HdsId){
+                Write-Host "Unable to find assocaited host datasource: $DatasourceId$DatasourceName, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device" -ForegroundColor Yellow
                 return
             }
         }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/devicedatasources"
+        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances"
 
         #Initalize vars
         $QueryParams = ""

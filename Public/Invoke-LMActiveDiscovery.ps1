@@ -1,0 +1,98 @@
+Function Invoke-LMActiveDiscovery
+{
+
+    [CmdletBinding()]
+    Param (
+        [Parameter(Mandatory,ParameterSetName = 'Id')]
+        [String]$Id,
+
+        [Parameter(Mandatory,ParameterSetName = 'Name')]
+        [String]$Name,
+
+        [Parameter(Mandatory,ParameterSetName = 'GroupId')]
+        [String]$GroupId,
+
+        [Parameter(Mandatory,ParameterSetName = 'GroupName')]
+        [String]$GroupName
+    )
+    #Check if we are logged in and have valid api creds
+    Begin{}
+    Process{
+        If($global:LMAuth.Valid){
+
+            $deviceList = @()
+
+            #Lookup device name
+            If($Name){
+                If($Name -Match "\*"){
+                    Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
+                    return
+                }
+                $deviceList = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
+                If(!$deviceList){
+                    Write-Host "Unable to find device: $Name, please check spelling and try again." -ForegroundColor Yellow
+                    return
+                }
+            }
+            ElseIf($Id){
+                $deviceList = $Id
+            }
+
+            #Look up devices by group
+            If($GroupName){
+                If($GroupName -Match "\*"){
+                    Write-Host "Wildcard values not supported for group names." -ForegroundColor Yellow
+                    return
+                }
+                $deviceList = (Get-LMDeviceGroupDevices -Name $GroupName).Id
+                If(!$deviceList){
+                    Write-Host "Unable to find devices for group: $GroupName, please check spelling and try again." -ForegroundColor Yellow
+                    return
+                }
+            }
+            ElseIf($GroupId){
+                $deviceList = (Get-LMDeviceGroupDevices -Id $GroupId).Id
+                If(!$deviceList){
+                    Write-Host "Unable to find devices for groupId: $GroupId, please check spelling and try again." -ForegroundColor Yellow
+                    return
+                }
+            }
+                    
+            
+            #Loop through requests 
+            Foreach($device in $deviceList){
+                
+                #Build header and uri
+                $ResourcePath = "/device/devices/$device/scheduleAutoDiscovery"
+
+                Try{
+    
+                    $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath
+                    $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+    
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers
+                    Write-Host "Scheduled Active Discovery task for device id: $device." -ForegroundColor green
+                }
+                Catch [Exception] {
+                    $Exception = $PSItem
+                    Switch($PSItem.Exception.GetType().FullName){
+                        {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
+                            $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+                            $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
+                            Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
+                        }
+                        default {
+                            $LMError = $Exception.ToString()
+                            Write-Error "Failed to execute web request: $LMError"
+                        }
+                    }
+                }
+            }
+        }
+        Else{
+            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        }
+    }
+    End {}
+}

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
    <ViewDefinitions>
+      <!-- New View LogicMonitor.Alert-->
       <View>
          <Name>LogicMonitorAlert</Name>
          <ViewSelectedBy>
@@ -9,27 +10,21 @@
          <TableControl>
             <TableHeaders>
                <TableColumnHeader>
-                  <Width>16</Width>
                   <Label>id</Label>
                </TableColumnHeader>
                <TableColumnHeader>
-                  <Width>16</Width>
-                  <Label>insternalId</Label>
+                  <Label>internalId</Label>
                </TableColumnHeader>
                <TableColumnHeader>
-                  <Width>16</Width>
                   <Label>monitorObjectName</Label>
                </TableColumnHeader>
                <TableColumnHeader>
-                  <Width>16</Width>
                   <Label>instanceName</Label>
                </TableColumnHeader>
                <TableColumnHeader>
-                  <Width>16</Width>
                   <Label>rule</Label>
                </TableColumnHeader>
                <TableColumnHeader>
-                  <Width>16</Width>
                   <Label>chain</Label>
                </TableColumnHeader>
             </TableHeaders>
@@ -40,7 +35,7 @@
                         <PropertyName>id</PropertyName>
                      </TableColumnItem>
                      <TableColumnItem>
-                        <PropertyName>insternalId</PropertyName>
+                        <PropertyName>internalId</PropertyName>
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>monitorObjectName</PropertyName>
@@ -53,6 +48,59 @@
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>chain</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.AlertRule-->
+      <View>
+         <Name>LogicMonitorAlertRule</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.AlertRule</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>priority</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>levelStr</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>escalatingChainId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>escalationInterval</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>priority</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>levelStr</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>escalatingChainId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>escalationInterval</PropertyName>
                      </TableColumnItem>
                   </TableColumnItems>
                </TableRowEntry>
