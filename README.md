@@ -12,7 +12,6 @@ This project is also published in the PowerShell Gallery at https://www.powershe
 - New Command **Get-LMTopologyMap**
 - New Command **Get-LMTopologyMapData**
 - New Beta Command **Export-LMTopologyMap**
-- New Command **New-LMDeviceDatasourceInstance**
 - New Command **Set-LMDeviceDatasourceInstance**
 - New Command **Remove-LMDeviceDatasourceInstance**
 - New Command **Get-LMDeviceDatasourceInstance**
