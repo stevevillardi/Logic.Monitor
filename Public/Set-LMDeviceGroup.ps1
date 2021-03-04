@@ -23,7 +23,7 @@ Function Set-LMDeviceGroup
         [String]$AppliesTo,
 
         [Parameter(ParameterSetName = 'ParentGroupId')]
-        [Int]$ParentGroupId,
+        [Nullable[Int]]$ParentGroupId,
 
         [Parameter(ParameterSetName = 'ParentGroupName')]
         [String]$ParentGroupName
@@ -82,7 +82,6 @@ Function Set-LMDeviceGroup
                     parentId = $ParentGroupId
                 }
 
-                
                 #Remove empty keys so we dont overwrite them
                 @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
                 

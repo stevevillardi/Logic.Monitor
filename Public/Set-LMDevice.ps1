@@ -9,6 +9,8 @@ Function Set-LMDevice
         [Parameter(Mandatory,ParameterSetName = 'Name')]
         [String]$Name,
 
+        [String]$NewName,
+
         [String]$DisplayName,
 
         [String]$Description,
@@ -66,7 +68,7 @@ Function Set-LMDevice
             #Loop through requests 
             Try{
                 $Data = @{
-                    name = $Name
+                    name = $NewName
                     displayName = $DisplayName
                     description = $Description
                     disableAlerting = $DisableAlerting
