@@ -7,6 +7,9 @@ This project is also published in the PowerShell Gallery at https://www.powershe
 - From PowerShell Gallery: Install-Module -Name **Logic.Monitor**
 
 # Change List
+## 3.0.7.5
+- Fixed issue with Set-LMDeviceGroup where parentid 0 was being sent is not specified instead of null.
+- Added NewName parameters for Set-LMDevice and Set-LMDeviceGroup commands to allow the rename of the Name field 
 ## 3.0.7.4
 - New Command **Invoke-LMActiveDiscovery**
 - New Command **Get-LMTopologyMap**
