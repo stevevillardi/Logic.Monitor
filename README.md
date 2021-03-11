@@ -1,5 +1,7 @@
 # General
-Windows PowerShell module for accessing the LogicMonitor REST API, using v3 and v4 endpoints.
+Windows PowerShell module for accessing the LogicMonitor REST API.
+
+NOTE:This is a personal project and is not an offically supported LogicMonitor integration.
 
 This project is also published in the PowerShell Gallery at https://www.powershellgallery.com/packages/Logic.Monitor/.
 
