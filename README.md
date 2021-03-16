@@ -71,7 +71,7 @@ Remove-LMDevice -Name "device.example.com" -HardDelete $false
 - New Command **Get-LMDeviceEventSourceList**: Returns hostEventSources attached to a particular resource. Takes device *Id* or *Name* as paramter
 - Added [bool]IncludeSubFolders parameter to Get-LMDeviceGroupDevices command to recusvively return all devices under the specified group including subgroups. Set to $false by default.
 ## 3.0.7.5
-- Fixed issue with Set-LMDeviceGroup where parentid 0 was being sent is not specified instead of null.
+- Fixed issue with Set-LMDeviceGroup where parentid 0 was being sent if not specified instead of null.
 - Added NewName parameters for Set-LMDevice and Set-LMDeviceGroup commands to allow the rename of the Name field 
 ## 3.0.7.4
 - New Command **Invoke-LMActiveDiscovery**
