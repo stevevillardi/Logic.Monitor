@@ -11,6 +11,8 @@ Function Get-LMDeviceGroupDevices
 
         [Hashtable]$Filter,
 
+        [Boolean]$IncludeSubGroups = $false,
+
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
@@ -27,67 +29,82 @@ Function Get-LMDeviceGroupDevices
                 return
             }
         }
-        
-        #Build header and uri
-        $ResourcePath = "/device/groups/$Id/devices"
-
-        #Initalize vars
-        $QueryParams = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
-
-        #Loop through requests 
-        While(!$Done){
-            #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
-
-            If($Filter){
-                #List of allowed filter props
-                $PropList = @()
-                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
-            }
-
-            Try{
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
-    
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
-
-                #Stop looping if single device, no need to continue
-                If(![bool]$Response.psobject.Properties["total"]){
-                    $Done = $true
-                    Return $Response
-                }
-                #Check result size and if needed loop again
-                Else{
-                    [Int]$Total = $Response.Total
-                    [Int]$Count += ($Response.Items | Measure-Object).Count
-                    $Results += $Response.Items
-                    If($Count -ge $Total){
-                        $Done = $true
-                    }
-                }
-            }
-            Catch [Exception] {
-                $Exception = $PSItem
-                Switch($PSItem.Exception.GetType().FullName){
-                    {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
-                        $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                        $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
-                        Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-                    }
-                    default {
-                        $LMError = $Exception.ToString()
-                        Write-Error "Failed to execute web request: $LMError"
-                    }
-                }
-                Return
+        $Ids =@()
+        If($IncludeSubGroups){
+            $Ids += (Get-LMDeviceGroupGroups -Id $Id).Id
+            If(!$Ids){
+                Write-Host "Unable to find device group with name: $Name, please check spelling and try again." -ForegroundColor Yellow
+                return
             }
         }
-        Return $Results
+        #Add in oringal Id to our list
+        $Ids += $Id
+
+        #Our return object
+        $Results = @()
+
+        Foreach($i in $Ids){
+            #Build header and uri
+            $ResourcePath = "/device/groups/$i/devices"
+
+            #Initalize vars
+            $QueryParams = ""
+            $Count = 0
+            $Done = $false
+
+            #Loop through requests 
+            While(!$Done){
+                #Build query params
+                $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
+
+                If($Filter){
+                    #List of allowed filter props
+                    $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+
+                Try{
+                    $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                    $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
+
+                    #Stop looping if single device, no need to continue
+                    If(![bool]$Response.psobject.Properties["total"]){
+                        $Done = $true
+                        $Results += $Response
+                    }
+                    #Check result size and if needed loop again
+                    Else{
+                        [Int]$Total = $Response.Total
+                        [Int]$Count += ($Response.Items | Measure-Object).Count
+                        $Results += $Response.Items
+                        If($Count -ge $Total){
+                            $Done = $true
+                        }
+                    }
+                }
+                Catch [Exception] {
+                    $Exception = $PSItem
+                    Switch($PSItem.Exception.GetType().FullName){
+                        {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
+                            $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+                            $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
+                            Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
+                        }
+                        default {
+                            $LMError = $Exception.ToString()
+                            Write-Error "Failed to execute web request: $LMError"
+                        }
+                    }
+                    Return
+                }
+            }
+            #Dedupe results
+        }
+        Return ($Results | Sort-Object -Property Id -Unique)
     }
     Else{
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow

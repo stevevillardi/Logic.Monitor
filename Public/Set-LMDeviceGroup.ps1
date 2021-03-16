@@ -9,6 +9,8 @@ Function Set-LMDeviceGroup
         [Parameter(Mandatory,ParameterSetName = 'Name')]
         [String]$Name,
 
+        [String]$NewName,
+
         [String]$Description,
 
         [Hashtable]$Properties,
@@ -73,7 +75,7 @@ Function Set-LMDeviceGroup
             #Loop through requests 
             Try{
                 $Data = @{
-                    name = $Name
+                    name = $NewName
                     description = $Description
                     appliesTo = $AppliesTo
                     disableAlerting = $DisableAlerting
