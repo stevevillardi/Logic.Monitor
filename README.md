@@ -64,7 +64,7 @@ Remove-LMDevice -Name "device.example.com" -HardDelete $false
 
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
 
-# Command Categories
+# Available Commands
 ### Account Connectivity
 - Connect-LMAccount
 - Disconnect-LMAccount
