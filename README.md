@@ -82,7 +82,7 @@ Remove-LMDevice -Name "device.example.com" -HardDelete $false
   * Get-LMWebsite
 
 - Fixed bug with Get-LMDeviceGroupDevices not properly reuturning all nested resources when using the IncludeSubFolders parameter
-- Added parameter sets for all *-LMDeviceDatasourceInstance commands to ensure a resource id/name and datasource id/name or specified when executing.
+- Added parameter sets for all *-LMDeviceDatasourceInstance commands to ensure a resource id/name and datasource id/name are specified when executing.
 - Added custom object types to *Get-LMAlert*, *Get-LMAlertRule* and *Get-LMCollector* to allow for better default output views. Will be expanding to other commands as time goes on.
 - Added custom object type LogicMontior.LogicModule for the *Get-**Source* commands to allow for better default output views.
 - Fixed default output path when using *Get-LMCollectorInstaller* to use Get-Location instead of $PSScriptRoot which was causing download to default to the module install path instead of the current directory for the PS session.
