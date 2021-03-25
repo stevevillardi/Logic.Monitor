@@ -62,6 +62,32 @@ Remove-LMDevice -Name "device.example.com" -HardDelete $false
 
 ```
 
+Code Snipets:
+```powershell
+#Get last 24 hours of alerts and group by resource and datapoint
+Get-LMAlert -StartDate $(Get-Date).AddDays(-1) -EndDate $(Get-Date) -ClearedAlerts $true | Group-Object -Property resourceTemplateName,datapointName | select count, @{N='Name';E={$_.Name.Split(",")[0]}}, @{N='Datapoint';E={$_.Name.Split(",")[1]}} | Sort-Object -Property count -Descending
+
+#Loop through all webchecks and list out SSL remaining days till expiration
+$Output = @()
+$Websites = Get-LMWebsite -Type Webcheck
+foreach($Website in $Websites){
+    $WebsiteData = Get-LMWebsiteData -Id $Website.Id
+    $SSLExpiration = $WebsiteData.datapoints.IndexOf("sslDaysUntilExpiration")
+
+    $Output += [PSCustomObject]@{
+        Id = $Website.Id
+        Name = $Website.Name
+        Domain = $Website.Domain
+        Group = $Website.GroupId
+        SSLExpiration = $WebsiteData.values[0][$SSLExpiration]
+
+    }
+}
+$Output
+
+
+```
+
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
 
 # Available Commands
