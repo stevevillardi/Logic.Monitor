@@ -215,6 +215,9 @@ $Output
 
 
 # Change List
+## 3.1.1
+- Fixed issues with Get-LMWebsiteData failing when not specifying a checkpoint id. Commands will now grab first assigned checkpoint if one is not specified
+- Added some code snippets to the updated readme
 ## 3.1
 - New Command **New-LMCollector**: This command will create a new collector resource that can be used with **Get-LMCollectorInstaller** to stand up a new collector.
 - New Command **Get-LMPortalInfo**: This command will return portal settings info including resource counts and datasource/instance counts
