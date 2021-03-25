@@ -64,9 +64,11 @@ Remove-LMDevice -Name "device.example.com" -HardDelete $false
 
 Code Snipets:
 ```powershell
+#Example 1:
 #Get last 24 hours of alerts and group by resource and datapoint
 Get-LMAlert -StartDate $(Get-Date).AddDays(-1) -EndDate $(Get-Date) -ClearedAlerts $true | Group-Object -Property resourceTemplateName,datapointName | select count, @{N='Name';E={$_.Name.Split(",")[0]}}, @{N='Datapoint';E={$_.Name.Split(",")[1]}} | Sort-Object -Property count -Descending
 
+#Example 2:
 #Loop through all webchecks and list out SSL remaining days till expiration
 $Output = @()
 $Websites = Get-LMWebsite -Type Webcheck
