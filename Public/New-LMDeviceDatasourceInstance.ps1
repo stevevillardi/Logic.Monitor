@@ -21,14 +21,20 @@ Function New-LMDeviceDatasourceInstance
 
         [String]$InstanceGroupId,
 
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsName')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsName')]
         [String]$DatasourceName,
-        
-        [String]$DatasourceId,
-
-        [Parameter(Mandatory,ParameterSetName = 'Name')]
-        [String]$Id,
-
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
+    
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsId')]
+        [Int]$DatasourceId,
+    
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsName')]
+        [Int]$Id,
+    
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsName')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsId')]
         [String]$Name
 
     )

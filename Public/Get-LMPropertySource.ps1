@@ -1,43 +1,4 @@
-<#
-.SYNOPSIS
-Get device group info from a connected LM portal
-
-.DESCRIPTION
-Get device group info from a connected LM portal
-
-.PARAMETER Id
-The device group id for a device group in LM.
-
-.PARAMETER Name
-The name value for a device group in LM. This value accepts wildcard input such as "* - Servers"
-
-.PARAMETER Filter
-A hashtable of additonal filter properties to include with request. All properies are treated as if using the equals ":" operator. When using multiple filters they are combined as AND conditions.
-
-An example Filter to get devices with alerting enabled and where the parent groud id equals 1:
-    @{parentId=1;disableAlerting=$false}
-
-.PARAMETER BatchSize
-The return size for each request, this value if not specified defaults to 1000. If a result would return 1001 and items, two requests would be made to return the full set.
-
-.EXAMPLE
-Get all device groups:
-    Get-LMDeviceGroup
-
-Get specific device group:
-    Get-LMDeviceGroup -Id 1
-    Get-LMDeviceGroup -Name "Locations"
-
-Get multiple device groups using wildcards:
-    Get-LMDeviceGroup -Name "* - Servers"
-
-Get device groups using a custom filter:
-    Get-LMDeviceGroup -Filter @{parentId=1;disableAlerting=$false}
-
-.NOTES
-Consult the LM API docs for a list of allowed fields when using filter parameter as all fields are not available for use with filtering.
-#>
-Function Get-LMDeviceGroup
+Function Get-LMPropertySource
 {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -57,7 +18,7 @@ Function Get-LMDeviceGroup
     If($global:LMAuth.Valid){
         
         #Build header and uri
-        $ResourcePath = "/device/groups"
+        $ResourcePath = "/setting/propertyrules"
 
         #Initalize vars
         $QueryParams = ""
@@ -89,7 +50,7 @@ Function Get-LMDeviceGroup
                 #Stop looping if single device, no need to continue
                 If($PSCmdlet.ParameterSetName -eq "Id"){
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogicModule")
                 }
                 #Check result size and if needed loop again
                 Else{
@@ -117,7 +78,7 @@ Function Get-LMDeviceGroup
                 Return
             }
         }
-        Return $Results
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LogicModule")
     }
     Else{
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow

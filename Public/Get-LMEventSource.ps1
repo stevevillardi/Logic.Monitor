@@ -50,7 +50,7 @@ Function Get-LMEventSource
                 #Stop looping if single device, no need to continue
                 If($PSCmdlet.ParameterSetName -eq "Id"){
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogicModule")
                 }
                 #Check result size and if needed loop again
                 Else{
@@ -78,7 +78,7 @@ Function Get-LMEventSource
                 Return
             }
         }
-        Return $Results
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LogicModule")
     }
     Else{
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow

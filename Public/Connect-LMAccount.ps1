@@ -1,3 +1,25 @@
+<#
+.SYNOPSIS
+Connect to a specified LM portal to run commands against
+
+.DESCRIPTION
+Connect to a specified LM portal which will allow you run the other LM commands assoicated with the Logic.Monitor PS module. Used in conjunction with Disconnect-LMAccount to close a session previously connected via Connect-LMAccount
+
+.PARAMETER AccessId
+Access ID from your API credential aquired from the LM Portal
+
+.PARAMETER AccessKey
+Access Key from your API credential aquired from the LM Portal
+
+.PARAMETER AccountName
+The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)
+
+.EXAMPLE
+Connect-LMAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
+
+.NOTES
+You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
+#>
 Function Connect-LMAccount
 {
 
@@ -25,30 +47,19 @@ Function Connect-LMAccount
     }
 
     Try {
-        #Build header and uri
-        $ResourcePath = "/setting/companySetting"
-        $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
-        $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-
-        #Issue request
-        $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
-        Write-Host "Connected to LM portal $($Response.companyDisplayName) using account $($Response.name) - ($($Response.numberOfDevices) devices)." -ForegroundColor Green
-        
         #Set valid flag so we dont prompt for auth details on future requests
         $global:LMAuth.Valid = $true
+
+        #Collect portal info and api username and roles
+        $ApiInfo = Get-LMAPIToken -Filter @{accessId=$AccessId} -ErrorAction Stop
+        $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
+
+        Write-Host "Connected to LM portal $($PortalInfo.companyDisplayName) using account $($ApiInfo.adminName) with assgined roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
+        
+        return $Response
     }
-    Catch [Exception] {
-        $Exception = $PSItem
-        Switch($Exception.Exception.GetType().FullName){
-            {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
-                $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json -ErrorAction SilentlyContinue).errorMessage
-                $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
-                Write-Error "Failed to authenticate account($($HttpStatusCode)): $HttpException"
-            }
-            default {
-                Write-Error "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
-            }
-        }
+    Catch {
+        Write-Error "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
         #Clear credential object from environment
         Remove-Variable LMAuth -Scope Global
         Return

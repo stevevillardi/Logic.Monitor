@@ -54,6 +54,53 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.LogicModule-->
+      <View>
+         <Name>LogicMonitorLogicModule</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.LogicModule</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>version</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>appliesTo</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>version</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>appliesTo</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.AlertRule-->
       <View>
          <Name>LogicMonitorAlertRule</Name>
@@ -101,6 +148,59 @@
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>escalationInterval</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.Collector-->
+      <View>
+         <Name>LogicMonitorAlert</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.Collector</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>hostname</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>collectorSize</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>arch</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>build</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>hostname</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>collectorSize</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>arch</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>build</PropertyName>
                      </TableColumnItem>
                   </TableColumnItems>
                </TableRowEntry>

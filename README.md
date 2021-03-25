@@ -65,6 +65,28 @@ Remove-LMDevice -Name "device.example.com" -HardDelete $false
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
 
 # Change List
+## 3.1
+- New Command **New-LMCollector**: This command will create a new collector resource that can be used with **Get-LMCollectorInstaller** to stand up a new collector.
+- New Command **Get-LMPortalInfo**: This command will return portal settings info including resource counts and datasource/instance counts
+- New Command **Invoke-LMCollectorDebugCommand**: This command will execute a collector debug command against a targeted collector
+- New Command **Get-LMCollectorDebugResult**: This command will retrieve the result of a collector debug command task
+- New Command **Import-LMLogicModule**: This command will import an xml/json file for an assoicated datasource, eventsource, propertysource or topologysource. Requires PS version 6.1.0 or later to use
+- New Command **Export-LMLogicModule**: This command will export an xml/json file for an assoicated datasource, eventsource, propertysource or topologysource
+- New Command **Get-LMPropertySource**: This command will get collect info about a property source/s
+
+- Added help documentation for the following commands:
+  * Connect-LMAccount
+  * Disconnect-LMAccount
+  * Get-LMDevice
+  * Get-LMDeviceGroup
+  * Get-LMWebsite
+
+- Fixed bug with Get-LMDeviceGroupDevices not properly reuturning all nested resources when using the IncludeSubFolders parameter
+- Added parameter sets for all *-LMDeviceDatasourceInstance commands to ensure a resource id/name and datasource id/name or specified when executing.
+- Added custom object types to *Get-LMAlert*, *Get-LMAlertRule* and *Get-LMCollector* to allow for better default output views. Will be expanding to other commands as time goes on.
+- Added custom object type LogicMontior.LogicModule for the *Get-**Source* commands to allow for better default output views.
+- Fixed default output path when using *Get-LMCollectorInstaller* to use Get-Location instead of $PSScriptRoot which was causing download to default to the module install path instead of the current directory for the PS session.
+- Fixed Connect-LMAccount returning the wrong user id associated with the API token being used. Added additional role and resource counts to logged in status response.
 ## 3.0.7.6
 - New Command **New-LMDevice**: This command will allow you to provision new devices into LM, has same options as the previous Set-LMDevice command. Properties can be specified via hastable @{name1="value1";name2="value2} and static group assignment can be set using HostGroupIds paramter as an array @(1,34,67,etc)
 - New Command **New-LMDeviceGroupGroups**: This command will return all groups witin the specified device group

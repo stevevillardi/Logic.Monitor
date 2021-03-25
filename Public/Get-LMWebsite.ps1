@@ -1,3 +1,45 @@
+<#
+.SYNOPSIS
+Get website info from a connected LM portal
+
+.DESCRIPTION
+Get website info from a connected LM portal
+
+.PARAMETER Id
+The website id for a website in LM.
+
+.PARAMETER Name
+The name value for a website in LM. This value accepts wildcard input such as "ServiceNow - *"
+
+.PARAMETER Type
+The type of websites to return. Possible values are: Webcheck or PingCheck
+
+.PARAMETER Filter
+A hashtable of additonal filter properties to include with request. All properies are treated as if using the equals ":" operator. When using multiple filters they are combined as AND conditions.
+
+An example Filter to get websites with type Webcheck that are internal:
+    @{type="webcheck";isInternal=$true}
+
+.PARAMETER BatchSize
+The return size for each request, this value if not specified defaults to 1000. If a result would return 1001 and items, two requests would be made to return the full set.
+
+.EXAMPLE
+Get all websites:
+    Get-LMWebsite
+
+Get specific website:
+    Get-LMWebsite -Id 1
+    Get-LMWebsite -Name "LogicMonitor"
+
+Get multiple websites using wildcards:
+    Get-LMWebsite -Name "ServiceNow - *"
+
+Get websites using a custom filter:
+    Get-LMWebsite -Filter @{type="webcheck";isInternal=$true}
+
+.NOTES
+Consult the LM API docs for a list of allowed fields when using filter parameter as all fields are not available for use with filtering.
+#>
 Function Get-LMWebsite
 {
 

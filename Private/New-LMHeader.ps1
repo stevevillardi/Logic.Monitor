@@ -14,7 +14,9 @@ Function New-LMHeader
 
         $Data,
 
-        [Int]$Version = 3
+        [Int]$Version = 3,
+
+        [String]$ContentType = "application/json"
     )
 
     # Use TLS 1.2
@@ -43,7 +45,7 @@ Function New-LMHeader
     $LMAuth = 'LMv1 ' + $Auth.Id + ':' + $Signature + ':' + $Epoch
     $Header = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
     $Header.Add("Authorization",$LMAuth)
-    $Header.Add("Content-Type",'application/json')
+    $Header.Add("Content-Type", $ContentType)
     $Header.Add("X-Version",$Version)
 
     Return $Header

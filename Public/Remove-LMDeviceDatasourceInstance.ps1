@@ -3,15 +3,21 @@ Function Remove-LMDeviceDatasourceInstance
 
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'Name')]
-        [String]$Id,
-
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
-        [String]$Name,
-
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsName')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsName')]
         [String]$DatasourceName,
-        
+    
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsId')]
         [String]$DatasourceId,
+    
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsName')]
+        [String]$Id,
+    
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsName')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsId')]
+        [String]$Name,
 
         [Parameter(Mandatory)]
         [String]$WildValue

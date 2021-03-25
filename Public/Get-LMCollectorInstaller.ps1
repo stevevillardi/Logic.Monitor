@@ -7,7 +7,7 @@ Function Get-LMCollectorInstaller
         [Parameter(Mandatory, ParameterSetName = "Id")]
         [int]$Id,
 
-        [Parameter(ParameterSetName = "Name")]
+        [Parameter(Mandatory,ParameterSetName = "Name")]
         [string]$Name,
 
         [ValidateSet("nano", "small", "medium", "large")]
@@ -18,7 +18,7 @@ Function Get-LMCollectorInstaller
 
         [boolean]$UseEA = $false,
 
-        [string]$DownloadPath = $PSScriptRoot
+        [string]$DownloadPath = (Get-Location).Path
     )
     
     #Check if we are logged in and have valid api creds
@@ -29,9 +29,8 @@ Function Get-LMCollectorInstaller
                 Write-Host "Wildcard values not supported for collector name." -ForegroundColor Yellow
                 return
             }
-            $Id = (Get-LMCollector -Name $Name | Select-Object -First 1 ).Id
-            If(!$Id){
-                Write-Host "Unable to find collector host with name: $Name, please check spelling and try again." -ForegroundColor Yellow
+            $Id = (Get-LMCollector -Name $Name).Id
+            If(Test-LookupResult -Result $Id -LookupString $Name){
                 return
             }
         }

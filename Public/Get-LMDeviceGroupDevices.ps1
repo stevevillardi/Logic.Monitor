@@ -31,11 +31,7 @@ Function Get-LMDeviceGroupDevices
         }
         $Ids =@()
         If($IncludeSubGroups){
-            $Ids += (Get-LMDeviceGroupGroups -Id $Id).Id
-            If(!$Ids){
-                Write-Host "Unable to find device group with name: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Ids += Get-NestedDeviceGroups -Ids @($Id)
         }
         #Add in oringal Id to our list
         $Ids += $Id
@@ -44,6 +40,7 @@ Function Get-LMDeviceGroupDevices
         $Results = @()
 
         Foreach($i in $Ids){
+
             #Build header and uri
             $ResourcePath = "/device/groups/$i/devices"
 

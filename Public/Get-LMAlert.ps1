@@ -17,6 +17,8 @@ Function Get-LMAlert {
         [ValidateSet("*", "WebsiteAlert", "DataSourceAlert", "EventSourceAlert")]
         [String]$Type = "*",
 
+        [Boolean]$ClearedAlerts = $false,
+
         [Parameter(ParameterSetName = 'Filter')]
         [Hashtable]$Filter,
 
@@ -56,8 +58,8 @@ Function Get-LMAlert {
 
             Switch ($PSCmdlet.ParameterSetName) {
                 "Id" { $resourcePath += "/$Id" }
-                "Range" { $QueryParams = "?filter=startEpoch%3E%3A`"$StartDate`"%2CstartEpoch%3C%3A`"$EndDate`",rule:`"$Severity`",type:`"$Type`"&size=$BatchSize&offset=$Count&sort=+resourceId" }
-                "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`"&size=$BatchSize&offset=$Count&sort=+resourceId" }
+                "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=+resourceId" }
+                "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=+resourceId" }
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
@@ -75,7 +77,7 @@ Function Get-LMAlert {
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Alert" )
                 }
                 #Check result size and if needed loop again
                 Else {
