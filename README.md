@@ -64,6 +64,128 @@ Remove-LMDevice -Name "device.example.com" -HardDelete $false
 
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
 
+# Command Categories
+### Account Connectivity
+- Connect-LMAccount
+- Disconnect-LMAccount
+### Actuve Discovery
+- Invoke-LMActiveDiscovery
+### Alerts
+- Get-LMAlert
+- New-LMAlertAck
+- New-LMAlertNote
+### Alert Rules
+- Get-LMAlertRule
+### API Tokens
+- Get-LMAPIToken
+- New-LMAPIToken
+- Set-LMAPIToken
+- Remove-LMAPIToken
+### AplliesTo
+- Get-LMAppliesToFunction
+### Audit Logs
+- Get-LMAuditLogs
+### Collector
+- Get-LMCollector
+- Get-LMCollectorGroup
+- Get-LMCollectorInstaller
+- Get-LMCollectorVersion
+- New-LMCollector
+### Collector Debug
+- Get-LMCollectorDebugResult
+- Invoke-LMCollectorDebugCommand
+### Dashboards
+- Get-LMDashboard
+- Get-LMDashboardGroup
+- Get-LMDashboardWidget
+- Remove-LMDashboard
+- Remove-LMDashboardWidget
+### Datasources/LogicModules
+- Get-LMDatasource
+- Get-LMDatasourceAssociatedDevices
+- Get-LMDatasourceUpdateHistory
+- Remove-LMDatasource
+- Get-LMEventSource
+- Get-LMPropertySource
+- Get-LMTopologySource
+- Get-LMConfigSource
+- Export-LMLogicModule
+- Import-LMLogicModule
+### Devices
+- Get-LMDevice
+- Get-LMDeviceSDT
+- Get-LMDeviceSDTHistory
+- Get-LMDeviceProperty
+- Get-LMDeviceAlerts
+- Get-LMDeviceDatasourceInstance
+- Get-LMDeviceDatasourceList
+- Get-LMDeviceEventsourceList
+- Get-LMDeviceInstanceList
+- New-LMDevice
+- New-LMDeviceDatasourceInstance
+- Set-LMDeviceDatasourceInstance
+- New-LMDeviceProperty
+- Set-LMDevice
+- Set-LMDeviceProperty
+- Remove-LMDevice
+- Remove-LMDeviceDatasourceInstance
+- Remove-DeviceProperty
+### Device Groups
+- Get-LMDeviceGroup
+- Get-LMDeviceGroupSDT
+- Get-LMDeviceGroupSDTHistory
+- Get-LMDeviceGroupAlerts
+- Get-LMDeviceGroupDevices
+- Get-LMDeviceGroupGroups
+- Get-LMDeviceGroupProperty
+- New-LMDeviceGroup
+- New-LMDeviceGroupProperty
+- Set-LMDeviceGroup
+- Remove-LMDeviceGroup
+### Escalation Chain
+- Get-LMEscalationChain
+### Netscan
+- Get-LMNetscan
+- Get-LMUnmonitoredDevices
+### Ops Notes
+- Get-LMOpsNotes
+### Portal Info
+- Get-LMPortalInfo
+- Get-LMUsageMetrics
+### Recipient Group
+- Get-LMRecipientGroup
+### Reports
+- Get-LMReport
+- Get-LMReportGroup
+### Topology (Beta)
+- Get-LMTopologyMap
+- Get-LMTopologyMapData
+- Export-LMTopologyMap
+### Users and Roles
+- Get-LMRole
+- Get-LMUser
+- Get-LMUserGroup
+- New-LMUser
+- Set-LMUser
+- Remove-LMUser
+### Websites
+- Get-LMWebsite
+- Get-LMWebsiteAlerts
+- Get-LMWebsiteCheckPoint
+- Get-LMWebsiteData
+- Get-LMWebsiteProperty
+- Get-LMWebsiteSDT
+- Get-LMWebsiteSDTHistory
+- New-LMWebsite
+- Set-LMWebsite
+- Remove-LMWebsite
+### Website Groups
+- Get-LMWebsiteGroup
+- Get-LMWebsiteGroupAlerts
+- Get-LMWebsiteGroupSDT
+- Get-LMWebsiteGroupSDTHistory
+
+
 # Change List
 ## 3.1
 - New Command **New-LMCollector**: This command will create a new collector resource that can be used with **Get-LMCollectorInstaller** to stand up a new collector.
