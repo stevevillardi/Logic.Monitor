@@ -75,14 +75,14 @@ $Websites = Get-LMWebsite -Type Webcheck
 foreach($Website in $Websites){
     $WebsiteData = Get-LMWebsiteData -Id $Website.Id
     $SSLExpiration = $WebsiteData.datapoints.IndexOf("sslDaysUntilExpiration")
-
-    $Output += [PSCustomObject]@{
-        Id = $Website.Id
-        Name = $Website.Name
-        Domain = $Website.Domain
-        Group = $Website.GroupId
-        SSLExpiration = $WebsiteData.values[0][$SSLExpiration]
-
+    If($WebsiteData.values){
+      $Output += [PSCustomObject]@{
+          Id = $Website.Id
+          Name = $Website.Name
+          Domain = $Website.Domain
+          Group = $Website.GroupId
+          SSLExpiration = $WebsiteData.values[0][$SSLExpiration]
+      }
     }
 }
 $Output
