@@ -11,6 +11,12 @@ This project is also published in the PowerShell Gallery at https://www.powershe
 Install-Module -Name "Logic.Monitor"
 ```
 
+# Upgrading
+- New releases are published often, to ensure you have the latest version you can run: 
+```powershell
+Update-Module -Name "Logic.Monitor"
+```
+
 # General Usage
 Before you can use on module commands you will need to be connected to a LM portal. To connect your LM portal use the **Connect-LMAccount** command:
 ```powershell
