@@ -93,7 +93,49 @@ foreach($Website in $Websites){
 }
 $Output
 
+#Example 3:
+#Import new devices from CSV including properties
+#
+#   Example CSV:
+#   id,displayname,description,properties,collector_id,group_ids
+#   "192.168.1.1","core-switch01","TX HQ switch","snmp.community=public,location=Austin TX","1","2,4,6"
+#   "192.168.2.1","core-switch02","FL HQ switch","snmp.community=public,location=Oralndo FL","2","7,8,9"
+#
+$csvPath = "path/to/import.csv"
+$devices = Import-Csv -Path $csvPath
+foreach($device in $devices){
+    #Break properties into hashtable
+    $properties = @{}
+    $device.properties.Split(",") | ConvertFrom-StringData | ForEach-Object {$properties += $_}
 
+    #Create array of group ids if adding to more than one static group
+    $hostGroups = @($device.group_ids -split ",")
+
+    #Create new device in LM
+    New-LMDevice -Name $device.ip -DisplayName $device.displayname -Description $device.description -properties $properties -PreferredCollectorId $device.collector_id -HostGroupIds $hostGroups
+}
+
+#Example 4:
+#Import new device groups from CSV including properties
+#Note:this assumes parent folder names being specified are unique in the portal since we are only using ParentGroupName to specify target group and not ParentGroupId
+#
+#   Example CSV:
+#   parent_folder,name,description,properties
+#   "portalname","Locations","All Resources",""
+#   "Locations","NA","North America Resources","snmp.community=na-snmp"
+#   "Locations","EURO","Europe Resources","snmp.community=euro-snmp"
+#   "Locations","APAC","Asia Pacific Resources","snmp.community=apac-snmp"
+#
+$csvPath = "path/to/import.csv"
+$groups = Import-Csv -Path $csvPath
+foreach($group in $groups){
+    #Break properties into hashtable
+    $properties = @{}
+    $groups.properties.Split(",") | ConvertFrom-StringData | ForEach-Object {$properties += $_}
+
+    #Create new device group in LM
+    New-LMDeviceGroup -GroupName $group.name -ParentGroupName $group.parent_folder -Description $group.description -properties $properties
+}
 ```
 
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
@@ -152,6 +194,7 @@ $Output
 - Get-LMDeviceProperty
 - Get-LMDeviceAlerts
 - Get-LMDeviceDatasourceInstance
+- Get-LMDeviceDatasourceInstanceAlertSettings
 - Get-LMDeviceDatasourceList
 - Get-LMDeviceEventsourceList
 - Get-LMDeviceInstanceList
@@ -191,6 +234,9 @@ $Output
 ### Reports
 - Get-LMReport
 - Get-LMReportGroup
+### Repository (LogicModules)
+- Get-LMRepositoryLogicModules
+- Import-LMRepositoryLogicModules
 ### Topology (Beta)
 - Get-LMTopologyMap
 - Get-LMTopologyMapData
@@ -221,6 +267,12 @@ $Output
 
 
 # Change List
+## 3.2
+- Fixed issue with null responses causing exception when using a custom object type
+- Added some additional code snippets to the readme
+- New Command **Import-LMRepositoryLogicModules**: This command will import one or more specified datasources, configsources, eventsources, propertysources or topologysources from the LM Repository (Not the LM Exchange)
+- New Command **Get-LMRepositoryLogicModules**: This command will list any avaiable datasources, configsources, eventsources, propertysources or topologysources from the LM Repository (Not the LM Exchange)
+- New Command **Get-LMDeviceDatasourceInstanceAlertSetting**: This command will list out alert settings for a given device/datasource/instance specified
 ## 3.1.1
 - Fixed issues with Get-LMWebsiteData failing when not specifying a checkpoint id. Commands will now grab first assigned checkpoint if one is not specified
 - Added some code snippets to the updated readme

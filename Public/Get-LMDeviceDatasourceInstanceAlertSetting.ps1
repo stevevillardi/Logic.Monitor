@@ -1,4 +1,4 @@
-Function Get-LMDeviceDatasourceInstance
+Function Get-LMDeviceDatasourceInstanceAlertSetting
 {
 
     [CmdletBinding()]
@@ -24,6 +24,14 @@ Function Get-LMDeviceDatasourceInstance
         [Parameter(Mandatory,ParameterSetName = 'Id-HdsId')]
         [Parameter(Mandatory,ParameterSetName = 'Name-HdsId')]
         [String]$HdsId,
+
+        [Parameter(Mandatory,ParameterSetName = 'Id-HdsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-HdsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsName')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsName')]
+        [String]$HdsiId,
 
         [Hashtable]$Filter,
 
@@ -60,7 +68,7 @@ Function Get-LMDeviceDatasourceInstance
         }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances"
+        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$HdsiId/alertsettings"
 
         #Initalize vars
         $QueryParams = ""

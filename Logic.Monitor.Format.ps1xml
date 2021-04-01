@@ -207,5 +207,52 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.RepositoryLogicModules-->
+      <View>
+         <Name>RepositoryLogicModules</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.RepositoryLogicModules</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>localId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>category</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>type</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>registryVersion</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>localId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>category</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>type</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>registryVersion</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
    </ViewDefinitions>
 </Configuration>

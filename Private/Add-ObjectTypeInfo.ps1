@@ -101,8 +101,8 @@ function Add-ObjectTypeInfo
            [Parameter( Mandatory = $true,
                        Position=0,
                        ValueFromPipeline=$true )]
-           [ValidateNotNullOrEmpty()]
-           [psobject[]]$InputObject,
+
+           $InputObject,
 
            [Parameter( Mandatory = $false,
                        Position=1)]
