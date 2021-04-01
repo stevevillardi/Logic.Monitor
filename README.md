@@ -271,7 +271,7 @@ foreach($group in $groups){
 - Fixed issue with null responses causing exception when using a custom object type
 - Added some additional code snippets to the readme
 - New Command **Import-LMRepositoryLogicModules**: This command will import one or more specified datasources, configsources, eventsources, propertysources or topologysources from the LM Repository (Not the LM Exchange)
-- New Command **Get-LMRepositoryLogicModules**: This command will list any avaiable datasources, configsources, eventsources, propertysources or topologysources from the LM Repository (Not the LM Exchange)
+- New Command **Get-LMRepositoryLogicModules**: This command will list any available datasources, configsources, eventsources, propertysources or topologysources from the LM Repository (Not the LM Exchange)
 - New Command **Get-LMDeviceDatasourceInstanceAlertSetting**: This command will list out alert settings for a given device/datasource/instance specified
 ## 3.1.1
 - Fixed issues with Get-LMWebsiteData failing when not specifying a checkpoint id. Commands will now grab first assigned checkpoint if one is not specified
