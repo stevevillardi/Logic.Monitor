@@ -267,6 +267,8 @@ foreach($group in $groups){
 
 
 # Change List
+## 3.2.1
+- Fixed issues with version 5.1 of powershell requiring System.Web assemblies to be loaded before importing LM module. If you are running version 5.1 of PS make sure you are using this version.
 ## 3.2
 - Fixed issue with null responses causing exception when using a custom object type
 - Added some additional code snippets to the readme

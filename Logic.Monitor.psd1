@@ -12,7 +12,7 @@
 RootModule = 'Logic.Monitor.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.2'
+ModuleVersion = '3.2.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -54,7 +54,7 @@ PowerShellVersion = '5.1'
 RequiredModules = @('PSWriteHTML')
 
 # Assemblies that must be loaded prior to importing this module
-# RequiredAssemblies = @()
+RequiredAssemblies = @('System.Web')
 
 # Script files (.ps1) that are run in the caller's environment prior to importing this module.
 # ScriptsToProcess = @()
