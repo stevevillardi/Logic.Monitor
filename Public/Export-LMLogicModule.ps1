@@ -1,12 +1,11 @@
-Function Export-LMLogicModule
-{
+Function Export-LMLogicModule {
 
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$LogicModuleId,
 
-        [Parameter(Mandatory,ParameterSetName = 'Name')]
+        [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$LogicModuleName,
 
         [Parameter(Mandatory)]
@@ -17,13 +16,13 @@ Function Export-LMLogicModule
     )
 
     #Check if we are logged in and have valid api creds
-    If($global:LMAuth.Valid){
+    If ($global:LMAuth.Valid) {
 
         $LogicModuleInfo = @()
         $QueryParams = ""
 
-        If($LogicModuleName){
-            Switch($Type){
+        If ($LogicModuleName) {
+            Switch ($Type) {
                 "datasources" {
                     $LogicModuleInfo = Get-LMDatasource -Name $LogicModuleName
                     $DownloadPath += "\$($LogicModuleInfo.name).xml"
@@ -52,13 +51,13 @@ Function Export-LMLogicModule
                 }
             }
             #Verify our query only returned one result
-            If(Test-LookupResult -Result $LogicModuleInfo.Id -LookupString $LogicModuleName){
+            If (Test-LookupResult -Result $LogicModuleInfo.Id -LookupString $LogicModuleName) {
                 return
             }
             $LogicModuleId = $LogicModuleInfo.Id
         }
-        Else{
-            Switch($Type){
+        Else {
+            Switch ($Type) {
                 "datasources" {
                     $LogicModuleInfo = Get-LMDatasource -Id $LogicModuleId
                     $DownloadPath += "\$($LogicModuleInfo.name).xml"
@@ -91,33 +90,27 @@ Function Export-LMLogicModule
         
         #Build header and uri
         $ResourcePath = "/setting/$Type/$LogicModuleId"
+        
+        $Done = $false
+        While (!$Done) {
+            Try {
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
-        Try{
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers -OutFile $DownloadPath
-
-        }
-        Catch [Exception] {
-            $Exception = $PSItem
-            Switch($PSItem.Exception.GetType().FullName){
-                {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
-                    $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                    $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
-                    Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-                }
-                default {
-                    $LMError = $Exception.ToString()
-                    Write-Error "Failed to execute web request: $LMError"
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers -OutFile $DownloadPath
+            
+                Return
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
                 }
             }
-            Return
         }
-        Return
     }
-    Else{
+    Else {
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
     }
 }

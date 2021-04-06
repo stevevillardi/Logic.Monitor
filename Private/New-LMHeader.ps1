@@ -1,5 +1,4 @@
-Function New-LMHeader
-{
+Function New-LMHeader {
 
     [CmdletBinding()]
     Param (
@@ -26,10 +25,10 @@ Function New-LMHeader
     $Epoch = [Math]::Round((New-TimeSpan -start (Get-Date -Date "1/1/1970") -end (Get-Date).ToUniversalTime()).TotalMilliseconds)
 
     # Concatenate general request details...
-    If($Method -eq "GET" -or $Method -eq "DELETE"){
+    If ($Method -eq "GET" -or $Method -eq "DELETE") {
         $RequestVars = $Method + $Epoch + $ResourcePath
     }
-    Else{
+    Else {
         $RequestVars = $Method + $Epoch + $Data + $ResourcePath
     }
 
@@ -44,9 +43,9 @@ Function New-LMHeader
     # Construct headers...
     $LMAuth = 'LMv1 ' + $Auth.Id + ':' + $Signature + ':' + $Epoch
     $Header = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-    $Header.Add("Authorization",$LMAuth)
+    $Header.Add("Authorization", $LMAuth)
     $Header.Add("Content-Type", $ContentType)
-    $Header.Add("X-Version",$Version)
+    $Header.Add("X-Version", $Version)
 
     Return $Header
 }

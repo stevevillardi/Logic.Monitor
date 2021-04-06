@@ -5,10 +5,10 @@ Function Get-LMIdType {
 
     Add-Type -Assembly Microsoft.VisualBasic
     #Check if the supplied input is a number, if so treat it as an Id vs a Name param
-    If([Microsoft.VisualBasic.Information]::IsNumeric($InputObject)){
+    If ([Microsoft.VisualBasic.Information]::IsNumeric($InputObject)) {
         $InputType = "Id"
     }
-    Else{
+    Else {
         $InputType = "Name"
     }
 

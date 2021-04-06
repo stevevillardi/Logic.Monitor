@@ -1,5 +1,4 @@
-Function Get-LMRepositoryLogicModules
-{
+Function Get-LMRepositoryLogicModules {
 
     [CmdletBinding()]
     Param (
@@ -10,7 +9,7 @@ Function Get-LMRepositoryLogicModules
 
     )
     #Check if we are logged in and have valid api creds
-    If($global:LMAuth.Valid){
+    If ($global:LMAuth.Valid) {
         
         #Build header and uri
         $ResourcePath = "/setting/logicmodules/listcore"
@@ -20,14 +19,14 @@ Function Get-LMRepositoryLogicModules
         $Results = @()
 
         $Data = @{
-            coreServer  = "v$CoreVersion.core.logicmonitor.com"
-            password = "logicmonitor"
-            username = "anonymouse"
+            coreServer = "v$CoreVersion.core.logicmonitor.com"
+            password   = "logicmonitor"
+            username   = "anonymouse"
         }
 
         $Data = ($Data | ConvertTo-Json)
 
-        Try{
+        Try {
             $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
@@ -36,23 +35,14 @@ Function Get-LMRepositoryLogicModules
             $Results = $Response.Items
         }
         Catch [Exception] {
-            $Exception = $PSItem
-            Switch($PSItem.Exception.GetType().FullName){
-                {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
-                    $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                    $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
-                    Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-                }
-                default {
-                    $LMError = $Exception.ToString()
-                    Write-Error "Failed to execute web request: $LMError"
-                }
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
+                Return
             }
-            Return
         }
         Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.RepositoryLogicModules" )
     }
-    Else{
+    Else {
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
     }
 }

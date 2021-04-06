@@ -1,5 +1,4 @@
-Function Get-LMLogAnomalies
-{
+Function Get-LMLogAnomalies {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
@@ -16,7 +15,7 @@ Function Get-LMLogAnomalies
         [Int]$BatchSize = 300
     )
     #Check if we are logged in and have valid api creds
-    If($global:LMAuth.Valid){
+    If ($global:LMAuth.Valid) {
         
         #Build header and uri
         $ResourcePath = "/log/anomalies/log"
@@ -26,17 +25,17 @@ Function Get-LMLogAnomalies
         $Results = @()
 
         #Convert to epoch, if not set use defaults 30 min search
-        If(!$StartDate){
+        If (!$StartDate) {
             [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddMinutes(-30)).ToUnixTimeSeconds()
         }
-        Else{
+        Else {
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
         }
 
-        If(!$EndDate){
+        If (!$EndDate) {
             [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
         }
-        Else{
+        Else {
             [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
         }
 
@@ -44,15 +43,15 @@ Function Get-LMLogAnomalies
         #Build query params
         $QueryParams = "?startTime=$StartDate&endTime=$EndDate&size=$BatchSize&range=custom"
 
-        If($AnomalyType){
+        If ($AnomalyType) {
             $QueryParams += "&anomalyType=$AnomalyType"
         }
 
-        If($DeviceIdList){
+        If ($DeviceIdList) {
             $QueryParams += "&devices=$($DeviceIdList -Join ",")"
         }
 
-        Try{
+        Try {
             $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
@@ -64,23 +63,14 @@ Function Get-LMLogAnomalies
             $Results = $Response.Items
         }
         Catch [Exception] {
-            $Exception = $PSItem
-            Switch ($PSItem.Exception.GetType().FullName) {
-                { "System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException" } {
-                    $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                    $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
-                    Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-                }
-                default {
-                    $LMError = $Exception.ToString()
-                    Write-Error "Failed to execute web request: $LMError"
-                }
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
+                Return
             }
-            Return
         }
         Return $Response
     }
-    Else{
+    Else {
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
     }
 }

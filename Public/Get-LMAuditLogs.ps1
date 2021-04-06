@@ -1,5 +1,4 @@
-Function Get-LMAuditLogs
-{
+Function Get-LMAuditLogs {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
@@ -18,7 +17,7 @@ Function Get-LMAuditLogs
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If($global:LMAuth.Valid){
+    If ($global:LMAuth.Valid) {
         
         #Build header and uri
         $ResourcePath = "/setting/accesslogs"
@@ -31,26 +30,26 @@ Function Get-LMAuditLogs
         $QueryLimit = 10000 #API limit to how many results can be returned
 
         #Convert to epoch, if not set use defaults
-        If(!$StartDate){
+        If (!$StartDate) {
             [int]$StartDate = 0
         }
-        Else{
+        Else {
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
         }
 
-        If(!$EndDate){
+        If (!$EndDate) {
             [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
         }
-        Else{
+        Else {
             [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
         }
 
         #Loop through requests 
-        While(!$Done){
+        While (!$Done) {
             #Build query params
-            Switch($PSCmdlet.ParameterSetName){
-                "All" {$QueryParams = "?filter=happenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`"&size=$BatchSize&offset=$Count&sort=+happenedOn"}
-                "Id" {$resourcePath += "/$Id"}
+            Switch ($PSCmdlet.ParameterSetName) {
+                "All" { $QueryParams = "?filter=happenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`"&size=$BatchSize&offset=$Count&sort=+happenedOn" }
+                "Id" { $resourcePath += "/$Id" }
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
@@ -58,7 +57,7 @@ Function Get-LMAuditLogs
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+happenedOn"
                 }
             }
-            Try{
+            Try {
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
@@ -66,43 +65,34 @@ Function Get-LMAuditLogs
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 
                 #Stop looping if single device, no need to continue
-                If($PSCmdlet.ParameterSetName -eq "Id"){
+                If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
                     Return $Response
                 }
                 #Check result size and if needed loop again
-                Else{
+                Else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If($Count -ge $QueryLimit){
+                    If ($Count -ge $QueryLimit) {
                         $Done = $true
                         Write-Host "Reached $QueryLimit record query limitation for this endpoint" -ForegroundColor Yellow
                     }
-                    ElseIf($Count -ge $Total -and $Total -ge 0){
+                    ElseIf ($Count -ge $Total -and $Total -ge 0) {
                         $Done = $true
                     }
                 }
             }
             Catch [Exception] {
-                $Exception = $PSItem
-                Switch($PSItem.Exception.GetType().FullName){
-                    {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
-                        $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                        $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
-                        Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-                    }
-                    default {
-                        $LMError = $Exception.ToString()
-                        Write-Error "Failed to execute web request: $LMError"
-                    }
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
                 }
-                Return
             }
         }
         Return $Results
     }
-    Else{
+    Else {
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
     }
 }

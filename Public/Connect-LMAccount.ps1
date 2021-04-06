@@ -20,8 +20,7 @@ Connect-LMAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
 .NOTES
 You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
 #>
-Function Connect-LMAccount
-{
+Function Connect-LMAccount {
 
     [CmdletBinding()]
     Param (
@@ -40,10 +39,10 @@ Function Connect-LMAccount
 
     #Create Credential Object for reuse in other functions
     $global:LMAuth = [PSCustomObject]@{
-        Id      = $AccessId
-        Key     = $AccessKey
-        Portal  = $AccountName
-        Valid   = $false
+        Id     = $AccessId
+        Key    = $AccessKey
+        Portal = $AccountName
+        Valid  = $false
     }
 
     Try {
@@ -51,7 +50,7 @@ Function Connect-LMAccount
         $global:LMAuth.Valid = $true
 
         #Collect portal info and api username and roles
-        $ApiInfo = Get-LMAPIToken -Filter @{accessId=$AccessId} -ErrorAction Stop
+        $ApiInfo = Get-LMAPIToken -Filter @{accessId = $AccessId } -ErrorAction Stop
         $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
 
         Write-Host "Connected to LM portal $($PortalInfo.companyDisplayName) using account $($ApiInfo.adminName) with assgined roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green

@@ -62,19 +62,10 @@ Function Get-LMAlertRule {
                 }
             }
             Catch [Exception] {
-                $Exception = $PSItem
-                Switch ($PSItem.Exception.GetType().FullName) {
-                    { "System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException" } {
-                        $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                        $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
-                        Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-                    }
-                    default {
-                        $LMError = $Exception.ToString()
-                        Write-Error "Failed to execute web request: $LMError"
-                    }
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
                 }
-                Return
             }
         }
         Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.AlertRule")

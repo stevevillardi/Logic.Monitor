@@ -4,16 +4,16 @@ Function Get-LMv4Error {
     )
 
     $ErrResults = @()
-    Try{
+    Try {
         $ErrType = (Get-Member -InputObject $InputObject.errors -Type NoteProperty).Name
-        Foreach($Type in $ErrType){
+        Foreach ($Type in $ErrType) {
             $AlertId = (Get-Member -InputObject $InputObject.errors.$Type.alerts -Type NoteProperty).Name
-            Foreach($Id in $InputObject.errors.$Type.alerts.$AlertId){
+            Foreach ($Id in $InputObject.errors.$Type.alerts.$AlertId) {
                 $ErrResults += $Id.message
             }
         }
     }
-    Catch{
+    Catch {
         Write-Error "Unable to parse error message, see response results for info."
     }
 
