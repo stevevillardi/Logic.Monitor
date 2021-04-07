@@ -51,11 +51,16 @@ Function Connect-LMAccount {
 
         #Collect portal info and api username and roles
         $ApiInfo = Get-LMAPIToken -Filter @{accessId = $AccessId } -ErrorAction Stop
-        $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
-
-        Write-Host "Connected to LM portal $($PortalInfo.companyDisplayName) using account $($ApiInfo.adminName) with assgined roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
-        
-        return $Response
+        If ($ApiInfo) {
+            $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
+            
+            Write-Host "Connected to LM portal $($PortalInfo.companyDisplayName) using account $($ApiInfo.adminName) with assgined roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
+            
+            Return $Response
+        }
+        Else {
+            throw "Unable to get API token info"
+        }
     }
     Catch {
         Write-Error "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
