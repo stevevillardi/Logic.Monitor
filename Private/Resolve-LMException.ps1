@@ -22,7 +22,6 @@ Function Resolve-LMException {
                 [Console]::ForegroundColor = 'red'
                 [Console]::Error.WriteLine("Failed to execute web request($($HttpStatusCode)): $HttpException")
                 [Console]::ResetColor()
-                
             }
             default {
                 $LMError = $LMException.ToString()
