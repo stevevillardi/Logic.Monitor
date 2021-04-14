@@ -8,11 +8,11 @@ Function Remove-LMDeviceDatasourceInstance {
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
-        [String]$DatasourceId,
+        [Int]$DatasourceId,
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
-        [String]$Id,
+        [Int]$Id,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]

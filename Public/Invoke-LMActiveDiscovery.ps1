@@ -3,7 +3,7 @@ Function Invoke-LMActiveDiscovery {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
-        [String]$Id,
+        [Int]$Id,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$Name,

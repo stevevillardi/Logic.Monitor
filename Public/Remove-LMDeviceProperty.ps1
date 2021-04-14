@@ -41,6 +41,8 @@ Function Remove-LMDeviceProperty {
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
                 Write-Host "Successfully removed property $PropertyName from deviceId $Id" -ForegroundColor Green
+
+                Return
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

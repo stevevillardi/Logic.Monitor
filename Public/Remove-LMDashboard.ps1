@@ -38,6 +38,8 @@ Function Remove-LMDashboard {
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
                 Write-Host "Successfully removed id ($Id)" -ForegroundColor Green
+
+                Return
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

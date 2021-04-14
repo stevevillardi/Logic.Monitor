@@ -6,10 +6,12 @@ Function New-LMDevice {
         [Parameter(Mandatory)]
         [String]$Name,
 
+        [Parameter(Mandatory)]
         [String]$DisplayName,
 
         [String]$Description,
-
+        
+        [Parameter(Mandatory)]
         [String]$PreferredCollectorId,
 
         [String]$PreferredCollectorGroupId,
