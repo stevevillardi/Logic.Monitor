@@ -5,7 +5,7 @@ Function New-LMWebsite {
         [Parameter(Mandatory)]
         [String]$Name,
 
-        [Nullable[boolean]]$IsInternal,
+        [Nullable[boolean]]$IsInternal = $false,
 
         [String]$Description,
 
@@ -13,9 +13,9 @@ Function New-LMWebsite {
 
         [Nullable[boolean]]$StopMonitoring,
 
-        [Nullable[boolean]]$UseDefaultAlertSetting,
+        [Nullable[boolean]]$UseDefaultAlertSetting = $true,
 
-        [Nullable[boolean]]$UseDefaultLocationSetting,
+        [Nullable[boolean]]$UseDefaultLocationSetting = $true,
 
         [Nullable[boolean]]$TriggerSSLStatusAlert,
         
