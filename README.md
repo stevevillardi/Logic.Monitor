@@ -42,6 +42,20 @@ To disconnect from an account simply run the Disconnect-LMAccount command:
 Disconnect-LMAccount
 ```
 
+To cache credentials for multiple account you can use the command New-LMCachedAccount, once a credential has been cached you can reference it when connecting to an lm portal using the -UserCachedCredentials switch in Connect-LMAccount.
+
+```powershell
+New-LMCachedAccount -AccessId "lm_access_id" -AccessKey "lm_access_key" -AccountName "lm_portal_prefix_name"
+Connect-LMAccount -UseCachedCredential
+
+#Example output when using cached credentials
+#Selection Number | Portal Name
+#0) portalname
+#1) portalnamesandbox
+#Enter the number for the cached credential you wish to use: 1
+#Connected to LM portal portalnamesandbox using account
+```
+
 # Examples
 
 Most Get commands can pull info by id or name to allow for easier retrevial without needing to know the specific resource id. The name paramters in get commands can also accept wildcard values. All responses will return objects in list view so for readablility you may want to pipe the output to **Format-Table**.
