@@ -11,9 +11,13 @@ Disconnect-LMAccount
 .NOTES
 Once disconnect you will need to reconnect to a portal before you will be allowed to run commands again.
 #>
-Function Disconnect-LMAccount
-{
+Function Disconnect-LMAccount {
     #Clear credential object from environment
-    Remove-Variable LMAuth -Scope Global
-    Write-Host "Successfully cleared login credentials for LM account." -ForegroundColor Green
+    If (Get-Variable -Name LMAuth -Scope Global -ErrorAction SilentlyContinue) {
+        Remove-Variable LMAuth -Scope Global -ErrorAction SilentlyContinue
+        Write-Host "Successfully cleared login credentials for LM account." -ForegroundColor Green
+    }
+    Else {
+        Write-Host "Not currently connected to any LM account."
+    }
 }

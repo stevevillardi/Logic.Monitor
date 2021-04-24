@@ -1,5 +1,4 @@
-Function Get-LMDashboardWidget
-{
+Function Get-LMDashboardWidget {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
@@ -21,15 +20,15 @@ Function Get-LMDashboardWidget
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If($global:LMAuth.Valid){
+    If ($global:LMAuth.Valid) {
 
-        If($DashboardName){
-            If($DashboardName -Match "\*"){
+        If ($DashboardName) {
+            If ($DashboardName -Match "\*") {
                 Write-Host "Wildcard values not supported for parent dashboard group name." -ForegroundColor Yellow
                 return
             }
             $DashboardId = (Get-LMDashboard -Name $DashboardName | Select-Object -First 1 ).Id
-            If(!$DashboardId){
+            If (!$DashboardId) {
                 Write-Host "Unable to find dashboard with name: $DashboardName, please check spelling and try again." -ForegroundColor Yellow
                 return
             }
@@ -45,14 +44,14 @@ Function Get-LMDashboardWidget
         $Results = @()
 
         #Loop through requests 
-        While(!$Done){
+        While (!$Done) {
             #Build query params
-            Switch($PSCmdlet.ParameterSetName){
-                "All" {$QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"}
-                "Id" {$resourcePath += "/$Id"}
-                "Name" {$QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id"}
-                "DashboardId" {$QueryParams = "?filter=dashboardId:`"$DashboardId`"&size=$BatchSize&offset=$Count&sort=+id"}
-                "DashboardName" {$QueryParams = "?filter=dashboardId:`"$DashboardId`"&size=$BatchSize&offset=$Count&sort=+id"}
+            Switch ($PSCmdlet.ParameterSetName) {
+                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
+                "Id" { $resourcePath += "/$Id" }
+                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
+                "DashboardId" { $QueryParams = "?filter=dashboardId:`"$DashboardId`"&size=$BatchSize&offset=$Count&sort=+id" }
+                "DashboardName" { $QueryParams = "?filter=dashboardId:`"$DashboardId`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
@@ -61,7 +60,7 @@ Function Get-LMDashboardWidget
                 }
             }
 
-            Try{
+            Try {
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
@@ -69,39 +68,30 @@ Function Get-LMDashboardWidget
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 
                 #Stop looping if single device, no need to continue
-                If($PSCmdlet.ParameterSetName -eq "Id"){
+                If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
                     Return $Response
                 }
                 #Check result size and if needed loop again
-                Else{
+                Else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If($Count -ge $Total){
+                    If ($Count -ge $Total) {
                         $Done = $true
                     }
                 }
             }
             Catch [Exception] {
-                $Exception = $PSItem
-                Switch($PSItem.Exception.GetType().FullName){
-                    {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
-                        $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                        $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
-                        Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-                    }
-                    default {
-                        $LMError = $Exception.ToString()
-                        Write-Error "Failed to execute web request: $LMError"
-                    }
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
                 }
-                Return
             }
         }
         Return $Results
     }
-    Else{
+    Else {
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
     }
 }

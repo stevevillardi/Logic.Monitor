@@ -10,7 +10,7 @@ Function Format-LMFilter {
     $FilterString = ""
 
     #Check if supplied properties are valid, if no prop list then just assume valid
-    If($PropList){
+    If ($PropList) {
         Foreach ($Key in $($Filter.keys)) {
             If ($Key -notin $PropList) {
                 #Remove key since its not a valid filter property

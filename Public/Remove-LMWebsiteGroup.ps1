@@ -1,4 +1,4 @@
-Function Remove-LMDeviceGroup {
+Function Remove-LMWebsiteGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
@@ -8,9 +8,7 @@ Function Remove-LMDeviceGroup {
         [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$Name,
 
-        [Boolean]$DeleteHostsandChildren = $false,
-
-        [boolean]$HardDelete = $false
+        [Boolean]$DeleteHostsandChildren = $false
 
     )
     Begin {}
@@ -24,17 +22,20 @@ Function Remove-LMDeviceGroup {
                     Write-Host "Wildcard values not supported for device group name." -ForegroundColor Yellow
                     return
                 }
-                $Id = (Get-LMDeviceGroup -Name $Name | Select-Object -First 1 ).Id
+                $Id = (Get-LMWebsiteGroup -Name $Name | Select-Object -First 1 ).Id
                 If (!$Id) {
                     Write-Host "Unable to find device group: $Name, please check spelling and try again." -ForegroundColor Yellow
                     return
                 }
             }
+
+            #Translate RecursiveDelete
+            $deleteChildren = If ($DeleteHostsandChildren) { 2 }Else { 1 }
             
             #Build header and uri
-            $ResourcePath = "/device/groups/$Id"
+            $ResourcePath = "/website/groups/$Id"
+            $QueryParams = "?deleteChildren=$deleteChildren"
 
-            $QueryParams = "?deleteChildren=$DeleteHostsandChildren&deleteHard=$HardDelete"
 
             #Loop through requests 
             $Done = $false

@@ -9,11 +9,11 @@ Function Format-LMObjects {
     )
 
     #Add custom type to response
-    $Object.PSObject.TypeNames.Insert(0,$ObjectType)
+    $Object.PSObject.TypeNames.Insert(0, $ObjectType)
 
     #Create our default display output
     $TypeData = @{
-        TypeName = $ObjectType
+        TypeName                  = $ObjectType
         DefaultDisplayPropertySet = $ObjectDisplayList
     }
 

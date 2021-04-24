@@ -1,4 +1,4 @@
-Function New-LMDeviceGroup {
+Function New-LMWebsiteGroup {
 
     [CmdletBinding()]
     Param (
@@ -11,7 +11,7 @@ Function New-LMDeviceGroup {
 
         [Boolean]$DisableAlerting = $false,
 
-        [Boolean]$EnableNetFlow = $false,
+        [boolean]$StopMonitoring = $false,
 
         [Parameter(Mandatory, ParameterSetName = 'GroupId')]
         [Int]$ParentGroupId,
@@ -30,7 +30,7 @@ Function New-LMDeviceGroup {
                 Write-Host "Wildcard values not supported for groups names." -ForegroundColor Yellow
                 return
             }
-            $ParentGroupId = (Get-LMDeviceGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
+            $ParentGroupId = (Get-LMWebsiteGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
             If (!$ParentGroupId) {
                 Write-Host "Unable to find group: $ParentGroupName, please check spelling and try again." -ForegroundColor Yellow
                 return
@@ -46,23 +46,19 @@ Function New-LMDeviceGroup {
         }
         
         #Build header and uri
-        $ResourcePath = "/device/groups"
+        $ResourcePath = "/website/groups"
 
         #Loop through requests 
         $Done = $false
         While (!$Done) {
             Try {
                 $Data = @{
-                    name                                = $Name
-                    description                         = $Description
-                    appliesTo                           = $AppliesTo
-                    disableAlerting                     = $DisableAlerting
-                    enableNetflow                       = $EnableNetFlow
-                    customProperties                    = $customProperties
-                    parentId                            = $ParentGroupId
-                    defaultAutoBalancedCollectorGroupId = 0
-                    defaultCollectorGroupId             = 0
-                    defaultCollectorId                  = 0
+                    name            = $Name
+                    description     = $Description
+                    disableAlerting = $DisableAlerting
+                    stopMonitoring  = $StopMonitoring
+                    properties      = $customProperties
+                    parentId        = $ParentGroupId
                 }
 
                 $Data = ($Data | ConvertTo-Json)

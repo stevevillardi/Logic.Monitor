@@ -42,8 +42,7 @@ Get device/s using a custom filter:
 .NOTES
 Consult the LM API docs for a list of allowed fields when using filter parameter as all fields are not available for use with filtering.
 #>
-Function Get-LMDevice
-{
+Function Get-LMDevice {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
@@ -62,7 +61,7 @@ Function Get-LMDevice
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If($global:LMAuth.Valid){
+    If ($global:LMAuth.Valid) {
         
         #Build header and uri
         $ResourcePath = "/device/devices"
@@ -74,13 +73,13 @@ Function Get-LMDevice
         $Results = @()
 
         #Loop through requests 
-        While(!$Done){
+        While (!$Done) {
             #Build query params
-            Switch($PSCmdlet.ParameterSetName){
-                "All" {$QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"}
-                "Id" {$resourcePath += "/$Id"}
-                "DisplayName" {$QueryParams = "?filter=displayName:`"$DisplayName`"&size=$BatchSize&offset=$Count&sort=+id"}
-                "Name" {$QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id"}
+            Switch ($PSCmdlet.ParameterSetName) {
+                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
+                "Id" { $resourcePath += "/$Id" }
+                "DisplayName" { $QueryParams = "?filter=displayName:`"$DisplayName`"&size=$BatchSize&offset=$Count&sort=+id" }
+                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
@@ -88,7 +87,7 @@ Function Get-LMDevice
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }
             }
-            Try{
+            Try {
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
@@ -96,39 +95,30 @@ Function Get-LMDevice
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 
                 #Stop looping if single device, no need to continue
-                If($PSCmdlet.ParameterSetName -eq "Id"){
+                If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
                     Return $Response
                 }
                 #Check result size and if needed loop again
-                Else{
+                Else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If($Count -ge $Total){
+                    If ($Count -ge $Total) {
                         $Done = $true
                     }
                 }
             }
             Catch [Exception] {
-                $Exception = $PSItem
-                Switch($PSItem.Exception.GetType().FullName){
-                    {"System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException"} {
-                        $HttpException = ($Exception.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                        $HttpStatusCode = $Exception.Exception.Response.StatusCode.value__
-                        Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException"
-                    }
-                    default {
-                        $LMError = $Exception.ToString()
-                        Write-Error "Failed to execute web request: $LMError"
-                    }
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
                 }
-                Return
             }
         }
         Return $Results
     }
-    Else{
+    Else {
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
     }
 }
