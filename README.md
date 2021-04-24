@@ -42,7 +42,7 @@ To disconnect from an account simply run the Disconnect-LMAccount command:
 Disconnect-LMAccount
 ```
 
-To cache credentials for multiple account you can use the command New-LMCachedAccount, once a credential has been cached you can reference it when connecting to an lm portal using the -UserCachedCredentials switch in Connect-LMAccount.
+To cache credentials for multiple portals you can use the command New-LMCachedAccount, once a credential has been cached you can reference it when connecting to an lm portal using the -UserCachedCredentials switch in Connect-LMAccount.
 
 ```powershell
 New-LMCachedAccount -AccessId "lm_access_id" -AccessKey "lm_access_key" -AccountName "lm_portal_prefix_name"
