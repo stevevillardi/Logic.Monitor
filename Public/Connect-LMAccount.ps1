@@ -24,19 +24,52 @@ Function Connect-LMAccount {
 
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'Manual')]
         [String]$AccessId,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'Manual')]
         [String]$AccessKey,
 
-        [Parameter(Mandatory)]
-        [String]$AccountName
-    )
-    
-    #Convert to secure string
-    [SecureString]$AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force
+        [Parameter(Mandatory, ParameterSetName = 'Manual')]
+        [String]$AccountName,
 
+        [Parameter(Mandatory, ParameterSetName = 'Cached')]
+        [Switch]$UseCachedCredential
+    )
+    If ($UseCachedCredential) {
+        $CredentialPath = Join-Path -Path $Home -ChildPath "Logic.Monitor.json"
+        If ((Test-Path -Path $CredentialPath)) {
+            $CredentialFile = Get-Content -Path $CredentialPath | ConvertFrom-Json | Sort-Object -Property Modified -Descending
+
+            #List out current portals with saved credentials and let users chose which to use
+            $i = 0
+            Write-Host "Selection Number | Portal Name"
+            Foreach ($Credential in $CredentialFile) {
+                Write-Host "$i)     $($Credential.Portal)"
+                $i++
+            }
+            $StoredCredentialIndex = Read-Host -Prompt "Enter the number for the cached credential you wish to use"
+            If ($CredentialFile[$StoredCredentialIndex]) {
+                $AccountName = $CredentialFile[$StoredCredentialIndex].Portal
+                [SecureString]$AccessKey = $CredentialFile[$StoredCredentialIndex].Key | ConvertTo-SecureString
+                $AccessId = $CredentialFile[$StoredCredentialIndex].Id
+            }
+            Else {
+                Write-Host "Entered value does not match one of the listed credentials, please check the selected entry and try again" -ForegroundColor Yellow
+                Return
+            }
+        }
+        Else {
+            Write-Host "No credential file could be located, use New-LMCachedAccount to cache a credential for use with -CachedAccountName or manually specify api credentials" -ForegroundColor Yellow
+            Return
+        }
+
+    }
+    Else {
+        #Convert to secure string
+        [SecureString]$AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force
+    }
+    
     #Create Credential Object for reuse in other functions
     $global:LMAuth = [PSCustomObject]@{
         Id     = $AccessId
@@ -65,7 +98,7 @@ Function Connect-LMAccount {
     Catch {
         Write-Error "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
         #Clear credential object from environment
-        Remove-Variable LMAuth -Scope Global
+        Remove-Variable LMAuth -Scope Global -ErrorAction SilentlyContinue
         Return
     }
 }
