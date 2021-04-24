@@ -161,6 +161,9 @@ foreach($group in $groups){
 
 - Connect-LMAccount
 - Disconnect-LMAccount
+- New-LMCachedAccount
+- Get-LMCachedAccount
+- Remove-LMCachedAccount
 
 ### Actuve Discovery
 
@@ -327,6 +330,9 @@ foreach($group in $groups){
 - Get-LMWebsiteGroupAlerts
 - Get-LMWebsiteGroupSDT
 - Get-LMWebsiteGroupSDTHistory
+- New-LMWebsiteGroup
+- Set-LMWebsiteGroup
+- Remove-LMWebsiteGroup
 
 # Change List
 
