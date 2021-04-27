@@ -92,6 +92,11 @@ Function Set-LMWebsite {
         $Done = $false
         While (!$Done) {
             Try {
+                $alertExpr = $null
+                If ($SSLAlertThresholds) {
+                    $alertExpr = "< " + $SSLAlertThresholds -join " "
+                }
+
                 $Data = @{
                     name                        = $Name
                     description                 = $Description
@@ -113,7 +118,7 @@ Function Set-LMWebsite {
                     timeoutInMSPktsNotReceive   = $PingTimeout
                     transition                  = $FailedCount
                     pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
-                    alertExpr                   = "< " + $SSLAlertThresholds -join " "
+                    alertExpr                   = $alertExpr
                     schema                      = $HttpType
                     domain                      = $Hostname
 

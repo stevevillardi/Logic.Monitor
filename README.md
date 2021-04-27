@@ -350,6 +350,10 @@ foreach($group in $groups){
 
 # Change List
 
+## 3.2.4
+
+- Fixed bug when using Set-LMWebsite if SSLThreshold is not specified as a parameter
+
 ## 3.2.3
 
 - Added in API throttling/rate limit logic to more gracefully handle API throttling when sending to many requests
