@@ -1,0 +1,136 @@
+Function Set-LMNetScan {
+
+    [CmdletBinding()]
+    Param (
+
+        [String]$CollectorId,
+
+        [String]$Name,
+
+        [Parameter(Mandatory)]
+        [String]$Id,
+
+        [String]$Description,
+        
+        [String]$ExcludeDuplicateType,
+
+        [Nullable[boolean]]$IgnoreSystemIpDuplpicates,
+
+        [String]$Method,
+
+        [String]$NextStart,
+
+        [String]$NextStartEpoch,
+
+        [String]$NetScanGroupId,
+
+        [String]$SubnetRange,
+
+        [String]$CredentialGroupId,
+
+        [String]$CredentialGroupName,
+
+        [String]$ChangeNameToken,
+
+        [String]$PortList
+    )
+    #Check if we are logged in and have valid api creds
+    Begin {}
+    Process {
+        If ($global:LMAuth.Valid) {
+
+            #Build header and uri
+            $ResourcePath = "/setting/netscans/$Id"
+
+            #Get cred group name
+            If ($CredentialGroupId -and !$CredentialGroupName) {
+                $CredentialGroupName = (Get-LMDeviceGroup -Id $CredentialGroupId).Name
+            }
+
+            #Get cred group name
+            If ($CredentialGroupName -and !$CredentialGroupId) {
+                $CredentialGroupName = (Get-LMDeviceGroup -Name $CredentialGroupName).Id
+            }
+
+            $Duplicates = $null
+            If ($ExcludeDuplicateType) {
+                $Duplicates = @{
+                    collectors = @()
+                    groups     = @()
+                    type       = $ExcludeDuplicateType
+                }
+            }
+
+            $DDR = $null
+            If ($ChangeNameToken) {
+                $DDR = @{
+                    assignment = @()
+                    changeName = $ChangeNameToken
+                }
+            }
+
+            $Creds = $null
+            If ($CredentialGroupId -or $CredentialGroupName) {
+                $Creds = @{
+                    custom          = @()
+                    deviceGroupId   = $CredentialGroupId
+                    deviceGroupName = $CredentialGroupName
+                }
+            }
+
+            $Ports = $null
+            If ($PortList) {
+                $Ports = @{
+                    isGlobalDefault = $true
+                    value           = $PortList
+                }
+            }
+
+            $Schedule = $null
+
+            Try {
+                $Data = @{
+                    id                        = $Id
+                    name                      = $Name
+                    collector                 = $CollectorId
+                    description               = $Description
+                    duplicate                 = $Duplicates
+                    ignoreSystemIPsDuplicates = $IgnoreSystemIpDuplpicates
+                    method                    = $Method
+                    nextStart                 = $NextStart
+                    nextStartEpoch            = $NextStartEpoch
+                    nsgId                     = $NetScanGroupId
+                    subnet                    = $SubnetRange
+                    ddr                       = $DDR
+                    credentials               = $Creds
+                    ports                     = $Ports
+                    schedule                  = $Schedule
+                }
+
+                
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+                
+                $Data = ($Data | ConvertTo-Json)
+                $Data
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+
+                Return $Response
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
+                }
+            }
+        }
+        Else {
+            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        }
+    }
+    End {}
+}
