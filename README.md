@@ -286,6 +286,9 @@ foreach($group in $groups){
 
 - Get-LMNetscan
 - Get-LMUnmonitoredDevices
+- New-LMNetscan
+- Set-LMNetscan
+- Invoke-LMNetscan
 
 ### Ops Notes
 
@@ -348,7 +351,19 @@ foreach($group in $groups){
 - Set-LMWebsiteGroup
 - Remove-LMWebsiteGroup
 
+### Utilities (Beta)
+
+- ConvertTo-LMDynamicGroupFromCategories
+- Export-LMDeviceConfigReport
+
 # Change List
+
+## 3.3
+
+- New Command Set (**New-LMNetScan** | **Set-LMNetScan** | **Invoke-LMNetScan**)
+- New Beta Utility Command (**ConvertTo-LMDynamicGroupFromCategories**): This command takes paramertes and simply creates a set of dynamic groups under devices by type based on active categories applied to devices in your portal
+- New Beta Utility Command (**Export-LMDeviceConfigReport**): This command takes a path and number of days in the past to pull a report of config changes for a given device group id
+- New Beta Command (**Get-LMDeviceConfigSourceDiff**) : This command will query the changed config data for a given device config instance.
 
 ## 3.2.4
 
