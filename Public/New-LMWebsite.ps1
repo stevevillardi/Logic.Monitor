@@ -67,6 +67,34 @@ Function New-LMWebsite {
     #Check if we are logged in and have valid api creds
     If ($global:LMAuth.Valid) {
 
+        $Steps = @()
+        If ($Type -eq "webcheck") {
+            $Steps += [PSCustomObject]@{
+                useDefaultRoot    = $true
+                url               = ""
+                HTTPVersion       = "1.1"
+                HTTPMethod        = "GET"
+                followRedirection = $true
+                fullpageLoad      = $false
+                requireAuth       = $false
+                matchType         = "plain"
+                path              = ""
+                keyword           = ""
+                invertMatch       = $false
+                statusCode        = ""
+                type              = "config"
+                HTTPBody          = ""
+                postDataEditType  = "raw"
+                HTTPHeaders       = ""
+                auth              = @{
+                    type     = "basic"
+                    domain   = ""
+                    userName = ""
+                    password = ""
+                }
+            }
+        }
+
         #Build custom props hashtable
         $customProperties = @()
         If ($Properties) {
@@ -82,6 +110,11 @@ Function New-LMWebsite {
         $Done = $false
         While (!$Done) {
             Try {
+                $AlertExp = ""
+                If ($SSLAlertThresholds) {
+                    $AlertExp = "< " + $SSLAlertThresholds -join " "
+                }
+
                 $Data = @{
                     name                        = $Name
                     description                 = $Description
@@ -103,18 +136,19 @@ Function New-LMWebsite {
                     timeoutInMSPktsNotReceive   = $PingTimeout
                     transition                  = $FailedCount
                     pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
-                    alertExpr                   = "< " + $SSLAlertThresholds -join " "
+                    alertExpr                   = $AlertExp
                     schema                      = $HttpType
                     domain                      = $Hostname
                     type                        = $Type
-
+                    steps                       = $Steps
                 }
 
-            
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "steps") { $Data.Remove($_) } }
             
-                $Data = ($Data | ConvertTo-Json)
+                $Data = ($Data | ConvertTo-Json -Depth 5)
+
+                $Data
 
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"

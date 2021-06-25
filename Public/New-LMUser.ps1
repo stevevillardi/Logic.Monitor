@@ -10,6 +10,7 @@ Function New-LMUser {
 
         [Boolean]$AcceptEULA = $false,
 
+        [Parameter(Mandatory)]
         [String]$Password,
 
         [String[]]$UserGroups,
@@ -24,7 +25,7 @@ Function New-LMUser {
 
         [String]$Note,
 
-        [String[]]$RoleNames,
+        [String[]]$RoleNames = @("readonly"),
 
         [String]$SmsEmail,
 
@@ -67,7 +68,7 @@ Function New-LMUser {
                 }
                 $Id = (Get-LMUserGroup -Name $Group | Select-Object -First 1 ).Id
                 If (!$Id) {
-                    Write-Host "Unable to find username: $Username, please check spelling and try again." -ForegroundColor Yellow
+                    Write-Host "Unable to find user group: $Group, please check spelling and try again." -ForegroundColor Yellow
                     return
                 }
                 $AdminGroupIds += $Id
@@ -125,6 +126,9 @@ Function New-LMUser {
                     adminGroupIds       = $AdminGroupIds
 
                 }
+
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
 
                 $Data = ($Data | ConvertTo-Json)
 

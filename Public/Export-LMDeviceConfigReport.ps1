@@ -5,7 +5,7 @@ Function Export-LMDeviceConfigReport {
         [Int]$DeviceGroupId,
 
         [String]$DaysBack = 30,
-
+        
         [Parameter(Mandatory)]
         [String]$Path
     )
@@ -92,8 +92,17 @@ Function Export-LMDeviceConfigReport {
             }
         }
 
-        #Export results to CSV
-        $output_list | Export-Csv -NoTypeInformation -Path $Path
+
+        #Generate HTML Report
+        New-HTML -TitleText "LogicMonitor - Config Report" -ShowHTML -Online -FilePath $Path {
+            New-HTMLPanel {
+                New-HTMLTable -DataTable $output_list -HideFooter -ScrollCollapse -PagingLength 1000 {
+                    New-TableHeader -Title "LogicMonitor - Config Report (Last $DaysBack days)" -Alignment center -BackGroundColor BuddhaGold -Color White -FontWeight bold
+                    New-TableRowGrouping -Name "deviceDisplayName"
+                }
+            }
+        }
+        
     }
     Else {
         Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
