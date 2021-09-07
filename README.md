@@ -96,6 +96,18 @@ Remove-LMDevice -Name "device.example.com" -HardDelete $false
 
 ```
 
+Send LM Log Message:
+
+```powershell
+Send-LMLogMessage -Message "Hello World!" -ResourceId @{"system.hostname"="LM-COLL01"} -Metadata @{"extra-data"="value";"extra-data2"="value2"}
+```
+
+Get LM Log Message:
+
+```powershell
+Get-LMLogMessage -Range 1month -Query "error text"
+```
+
 Code Snipets:
 
 ```powershell
@@ -282,6 +294,11 @@ foreach($group in $groups){
 
 - Get-LMEscalationChain
 
+### LM Logs
+
+- Send-LMLogMessage
+- Get-LMLogMessage
+
 ### Netscan
 
 - Get-LMNetscan
@@ -359,6 +376,15 @@ foreach($group in $groups){
 - Initialize-LMPOVSetup
 
 # Change List
+
+## 3.4
+
+- Bug Fixes:
+  - Fixed Error output for API endpoint returning LM API v4 responses.
+- New Command (**Send-LMLogMessage**): This command will submit a log message to LM Logs.
+- New Command (**Get-LMLogMessage**): This command will list available LM Logs messages for given time range and query.
+- Updated Beta Utility Command (**Initialize-LMPOVSetup**):
+  - You can now specify the api user name if needed using the parameter -APIUsername.
 
 ## 3.3
 

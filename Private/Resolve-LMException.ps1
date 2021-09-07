@@ -18,6 +18,9 @@ Function Resolve-LMException {
         Switch ($LMException.Exception.GetType().FullName) {
             { "System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException" } {
                 $HttpException = ($LMException.ErrorDetails.Message | ConvertFrom-Json).errorMessage
+                If (!$HttpException) {
+                    $HttpException = ($LMException.ErrorDetails.Message | ConvertFrom-Json).message
+                }
                 $HttpStatusCode = $LMException.Exception.Response.StatusCode.value__
                 [Console]::ForegroundColor = 'red'
                 [Console]::Error.WriteLine("Failed to execute web request($($HttpStatusCode)): $HttpException")

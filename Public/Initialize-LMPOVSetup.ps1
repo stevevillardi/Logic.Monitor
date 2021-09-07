@@ -1,3 +1,4 @@
+
 Function Initialize-LMPOVSetup {
 
     [CmdletBinding()]
@@ -6,14 +7,21 @@ Function Initialize-LMPOVSetup {
 
         [String]$WebsiteHttpType = "https",
 
+        [string]$APIUsername = "lm_api",
+
+        [Parameter(ParameterSetName = 'Individual')]
         [Switch]$SetupWebsite,
 
+        [Parameter(ParameterSetName = 'Individual')]
         [Switch]$SetupPortalMetrics,
 
+        [Parameter(ParameterSetName = 'Individual')]
         [Switch]$MoveMinimalMonitoring,
 
+        [Parameter(ParameterSetName = 'Individual')]
         [Switch]$CleanupDynamicGroups,
 
+        [Parameter(ParameterSetName = 'All')]
         [Switch]$RunAll
     )
     #Check if we are logged in and have valid api creds
@@ -22,18 +30,18 @@ Function Initialize-LMPOVSetup {
         If ($global:LMAuth.Valid) {
             #Create readonly API use for Portal Metrics
             If ($SetupPortalMetrics -or $RunAll) {
-                Write-Host "[INFO]: Setting up API user: lm_api"
-                $APIUser = New-LMAPIUser -Username "lm_api" -note "Auto provisioned for use with LM Portal Metrics Datasources" -RoleNames @("readonly")
+                Write-Host "[INFO]: Setting up API user: $APIUsername"
+                $APIUser = New-LMAPIUser -Username "$APIUsername" -note "Auto provisioned for use with LM Portal Metrics Datasources" -RoleNames @("readonly")
                 If ($APIUser) {
-                    Write-Host "[INFO]: Successfully setup API user: lm_api"
+                    Write-Host "[INFO]: Successfully setup API user: $APIUsername"
     
-                    Write-Host "[INFO]: Creating readonly API token for user: lm_api"
+                    Write-Host "[INFO]: Creating readonly API token for user: $APIUsername"
                     $APIInfo = New-LMAPIToken -id $APIUser.id -Note "Auto provisioned for use with LM Portal Metrics Datasource"
                 }
     
                 #Setup portal mertics device if we have a valid API token
                 If ($APIInfo) {
-                    Write-Host "[INFO]: Successfully created API token for user: lm_api"
+                    Write-Host "[INFO]: Successfully created API token for user: $APIUsername | $($APIInfo.accessId) | $($APIInfo.accessKey)"
                     $PortalName = (Get-LMPortalInfo).companydisplayname
     
                     If ($PortalName) {
@@ -54,8 +62,9 @@ Function Initialize-LMPOVSetup {
             }
 
             #Setup Company Website
-            If ($SetupWebsite -or $RunAll) {
+            If (($SetupWebsite -or $RunAll) -and $Website) {
                 Write-Host "[INFO]: Setting up external webcheck for: $Website"
+                $Website = $Website.split("//")[-1] #Make sure http/https is not in the entered site name
                 $WebsiteResult = New-LMWebsite -Type "webcheck" -Name $Website -HttpType $WebsiteHttpType -Hostname $Website
                 If ($WebsiteResult) {
                     Write-Host "[INFO]: Successfully setup external webcheck for: $Website"
