@@ -377,6 +377,12 @@ foreach($group in $groups){
 
 # Change List
 
+## 3.4.1
+
+- Added **DisplayName** parameter to **Get-LMDeviceProperty** command.
+- Fixed `hastable must contain hashtable` error with **Send-LMLogMessage** when not submiting metadata with your message payload
+- Added **MessageArray** parameter to **Send-LMLogMessage** to allow for passing an array of hashtables containing multiple messages to submit at once instead of having to send them one at a time. Bulk ingest limit is currently 8MB per request.
+
 ## 3.4
 
 - Bug Fixes:

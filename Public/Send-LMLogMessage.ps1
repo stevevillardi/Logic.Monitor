@@ -3,15 +3,20 @@ Function Send-LMLogMessage {
     [CmdletBinding()]
     Param (
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'SingleMessage')]
         [String]$Message,
 
+        [Parameter(ParameterSetName = 'SingleMessage')]
         [String]$Timestamp,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'SingleMessage')]
         [Hashtable]$resourceId,
         
-        [Hashtable]$Metadata
+        [Parameter(ParameterSetName = 'SingleMessage')]
+        [Hashtable]$Metadata,
+
+        [Parameter(Mandatory, ParameterSetName = 'MessageList')]
+        $MessageArray
     )
     #Check if we are logged in and have valid api creds
     Begin {}
@@ -27,19 +32,29 @@ Function Send-LMLogMessage {
 
             Try {
                 $Entries = @()
-                $Data = @{
-                    message          = $Message
-                    timestamp        = $Timestamp
-                    '_lm.resourceId' = $resourceId
+
+                #If sending single message, construct JSON object
+                If ($Message) {                    
+                    $Data = @{
+                        message          = $Message
+                        timestamp        = $Timestamp
+                        '_lm.resourceId' = $resourceId
+                    }
+    
+                    #Add additional hashtable of extra metadata
+                    If ($Metadata) {
+                        $Data += $Metadata
+                    }
+    
+                    #Remove empty keys so we dont overwrite them
+                    @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+                    $Entries += $Data
+                    $Entries = ConvertTo-Json -InputObject $Entries
                 }
-
-                #Add additional hashtable of extra metadata
-                $Data += $Metadata
-
-                #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-                $Entries += $Data
-                $Entries = ConvertTo-Json -InputObject $Entries
+                #We should have an array of messages so we need to add them to 
+                Else {
+                    $Entries = ConvertTo-Json -InputObject $MessageArray
+                }
 
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Entries
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath
