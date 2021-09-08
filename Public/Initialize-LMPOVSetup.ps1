@@ -81,6 +81,15 @@ Function Initialize-LMPOVSetup {
                     If ($MinimalFolderGroup) {
                         Write-Host "[INFO]: Successfully moved minimal monitoring folder into Devices by Type"
                     }
+                    $MinimalFolderAppliesTo = (Get-LMDeviceGroup -Name "Minimal Monitoring").appliesTo
+                    If ($MinimalFolderAppliesTo) {
+                        Write-Host "[INFO]: Updating Minimal Monitoring folder to exclude Meraki and Portal Metrics resources"
+                        $MinimalFolderAppliesTo = $MinimalFolderAppliesTo + " && !hasCategory(`"LogicMonitorPortal`")  && !hasCategory(`"MerakiAPIOrg`")  && !hasCategory(`"MerakiAPINetwork`")"
+                        $MinimalFolder = Set-LMDeviceGroup -Id $MinimalFolderId -AppliesTo $MinimalFolderAppliesTo
+                        If ($MinimalFolder) {
+                            Write-Host "[INFO]: Successfully updated minimal monitoring appliesTo query"
+                        }
+                    }
                 }
             }
 

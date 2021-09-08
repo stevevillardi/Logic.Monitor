@@ -175,7 +175,7 @@ foreach($group in $groups){
     $groups.properties.Split(",") | ConvertFrom-StringData | ForEach-Object {$properties += $_}
 
     #Create new device group in LM
-    New-LMDeviceGroup -GroupName $group.name -ParentGroupName $group.parent_folder -Description $group.description -properties $properties
+    New-LMDeviceGroup -Name $group.name -ParentGroupName $group.parent_folder -Description $group.description -properties $properties
 }
 ```
 

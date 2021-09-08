@@ -8,6 +8,9 @@ Function Get-LMDeviceProperty {
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
+        [Parameter(ParameterSetName = 'DisplayName')]
+        [String]$DisplayName,
+
         [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
@@ -23,6 +26,18 @@ Function Get-LMDeviceProperty {
             $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
             If (!$Id) {
                 Write-Host "Unable to find device with name: $Name, please check spelling and try again." -ForegroundColor Yellow
+                return
+            }
+        }
+
+        If ($DisplayName) {
+            If ($DisplayName -Match "\*") {
+                Write-Host "Wildcard values not supported for device name." -ForegroundColor Yellow
+                return
+            }
+            $Id = (Get-LMDevice -DisplayName $DisplayName | Select-Object -First 1 ).Id
+            If (!$Id) {
+                Write-Host "Unable to find device with name: $DisplayName, please check spelling and try again." -ForegroundColor Yellow
                 return
             }
         }
