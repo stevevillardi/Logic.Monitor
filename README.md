@@ -377,6 +377,14 @@ foreach($group in $groups){
 
 # Change List
 
+## 3.4.2
+
+- Fixed bug with **Initialize-LMPOVSetup** that could cause portal metrics resource creation to fail if company displayname is changed before running POV setp
+- Fixed issue with **Initialize-LMPOVSetup** where lm_api user or portal metrics resource will attemp to be provisioned if it already exists.
+- New Command (**New-LMOpsNote**): This command will create a new OpsNote within the LM Portal. If no resource/group scopes are use the note will be created for the entire portal.
+- New Command (**Remove-LMOpsNote**): This command will delete any specific OpsNote id from the LM Portal.
+- New Command (**Set-PortalInfo**): This command will change various portal settings (update whitelist settings,enable remote session, require 2fa, set user session timeout, portal displayname, etc)
+
 ## 3.4.1
 
 - Added **DisplayName** parameter to **Get-LMDeviceProperty** command.

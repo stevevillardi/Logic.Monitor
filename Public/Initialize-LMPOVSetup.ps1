@@ -28,36 +28,45 @@ Function Initialize-LMPOVSetup {
     Begin {}
     Process {
         If ($global:LMAuth.Valid) {
+            $PortalName = $global:LMAuth.Portal
+            $DeviceName = "$PortalName.logicmonitor.com"
+
             #Create readonly API use for Portal Metrics
             If ($SetupPortalMetrics -or $RunAll) {
-                Write-Host "[INFO]: Setting up API user: $APIUsername"
-                $APIUser = New-LMAPIUser -Username "$APIUsername" -note "Auto provisioned for use with LM Portal Metrics Datasources" -RoleNames @("readonly")
-                If ($APIUser) {
-                    Write-Host "[INFO]: Successfully setup API user: $APIUsername"
-    
-                    Write-Host "[INFO]: Creating readonly API token for user: $APIUsername"
-                    $APIInfo = New-LMAPIToken -id $APIUser.id -Note "Auto provisioned for use with LM Portal Metrics Datasource"
-                }
-    
-                #Setup portal mertics device if we have a valid API token
-                If ($APIInfo) {
-                    Write-Host "[INFO]: Successfully created API token for user: $APIUsername | $($APIInfo.accessId) | $($APIInfo.accessKey)"
-                    $PortalName = (Get-LMPortalInfo).companydisplayname
-    
-                    If ($PortalName) {
-                        $PortalDeviceGroup = New-LMDeviceGroup -Name "LogicMonitor Portal Metrics" -AppliesTo "hasCategory(`"LogicMonitorPortal`")" -ParentGroupName "Devices by Type"
-                        If ($PortalDeviceGroup) {
-                            Write-Host "[INFO]: Created Portal Metrics dynamic group in Devices by Type: $($PortalDeviceGroup.name)"
-                        }
+                $CheckAPIUser = Get-LMUser -Name "$APIUsername"
+                $CheckPortalDevice = Get-LMDevice -Name $DeviceName
 
-                        $DeviceName = "$PortalName.logicmonitor.com"
-                        $CollectorId = (Get-LMCollector | Select-Object -Last 1).id
-                        Write-Host "[INFO]: Creating Portal Metrics resource: $DeviceName"
-                        $PortalDevice = New-LMDevice -Name $DeviceName -DisplayName $DeviceName -Description "Auto provisioned resource to collect LM Portal Metrics" -Properties @{"lmaccess.id" = $APIInfo.accessId; "lmaccess.key" = $APIInfo.accessKey; "lmaccount" = $PortalName } -PreferredCollectorId  $CollectorId
-                        If ($PortalDevice) {
-                            Write-Host "[INFO]: Successfully created Portal Metrics resource: $DeviceName"
+                If(!$CheckAPIUser -and !$CheckPortalDevice){
+                    Write-Host "[INFO]: Setting up API user: $APIUsername"
+                    $APIUser = New-LMAPIUser -Username "$APIUsername" -note "Auto provisioned for use with LM Portal Metrics Datasources" -RoleNames @("readonly")
+                    If ($APIUser) {
+                        Write-Host "[INFO]: Successfully setup API user: $APIUsername"
+        
+                        Write-Host "[INFO]: Creating readonly API token for user: $APIUsername"
+                        $APIInfo = New-LMAPIToken -id $APIUser.id -Note "Auto provisioned for use with LM Portal Metrics Datasource"
+                    }
+        
+                    #Setup portal mertics device if we have a valid API token
+                    If ($APIInfo) {
+                        Write-Host "[INFO]: Successfully created API token for user: $APIUsername | $($APIInfo.accessId) | $($APIInfo.accessKey)"
+        
+                        If ($PortalName) {
+                            $PortalDeviceGroup = New-LMDeviceGroup -Name "LogicMonitor Portal Metrics" -AppliesTo "hasCategory(`"LogicMonitorPortal`")" -ParentGroupName "Devices by Type"
+                            If ($PortalDeviceGroup) {
+                                Write-Host "[INFO]: Created Portal Metrics dynamic group in Devices by Type: $($PortalDeviceGroup.name)"
+                            }
+    
+                            $CollectorId = (Get-LMCollector | Select-Object -Last 1).id
+                            Write-Host "[INFO]: Creating Portal Metrics resource: $DeviceName"
+                            $PortalDevice = New-LMDevice -Name $DeviceName -DisplayName $DeviceName -Description "Auto provisioned resource to collect LM Portal Metrics" -Properties @{"lmaccess.id" = $APIInfo.accessId; "lmaccess.key" = $APIInfo.accessKey; "lmaccount" = $PortalName } -PreferredCollectorId  $CollectorId
+                            If ($PortalDevice) {
+                                Write-Host "[INFO]: Successfully created Portal Metrics resource: $DeviceName"
+                            }
                         }
                     }
+                }
+                Else{
+                    Write-Host "[INFO]: API User ($APIUsername) or portal metrics device ($DeviceName) already exists in portal, skipping setup for portal metrics" -ForegroundColor Yellow
                 }
             }
 
