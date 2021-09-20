@@ -1,4 +1,4 @@
-Function Get-LMOpsNotes {
+Function Get-LMOpsNote {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (

@@ -24,29 +24,29 @@ Function Set-LMPortalLogo {
             }
 
             #Get file content
-            $File = Get-Content $LogoPath -Raw
+            $FileRaw = ([System.IO.File]::ReadAllBytes((Resolve-Path -Path $LogoPath).Path))
             
             Try {
                 #Build header and uri
                 $ResourcePath = "/setting/upload/loginLogo"
                 
                 #Set LoginLogo
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File 
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $FileRaw 
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{file = $File }
+                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{filename = $FileRaw;name="file" }
                 Write-Host "Successfully imported loginLogo $([IO.Path]::GetFileName($LogoPath)) of type: $($Response.items.type)"
 
                 #Build header and uri
                 $ResourcePath = "/setting/upload/companyLogo"
 
                 #Set CompanyLogo
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File 
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $FileRaw 
                 $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{file = $File }
+                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{filename = $FileRaw;name="file" }
                 Write-Host "Successfully imported companyLogo $([IO.Path]::GetFileName($LogoPath)) of type: $($Response.items.type)"
 
                 Return
