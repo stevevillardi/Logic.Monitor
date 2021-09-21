@@ -156,7 +156,7 @@
       </View>
       <!-- New View LogicMonitor.Collector-->
       <View>
-         <Name>LogicMonitorAlert</Name>
+         <Name>LogicMonitorCollector</Name>
          <ViewSelectedBy>
             <TypeName>LogicMonitor.Collector</TypeName>
          </ViewSelectedBy>
