@@ -24,14 +24,11 @@ Function Get-LMCollectorInstaller {
     If ($global:LMAuth.Valid) {
 
         If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for collector name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMCollector -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Id = (Get-LMCollector -Name $Name).Id
-            If (Test-LookupResult -Result $Id -LookupString $Name) {
-                return
-            }
+            $Id = $LookupResult
         }
         
         #Build header and uri

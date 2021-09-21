@@ -20,15 +20,11 @@ Function Get-LMDeviceNetflowEndpoints {
     If ($global:LMAuth.Valid) {
 
         If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for device name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMDevice -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Host "Unable to find device with name: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
 
         #Convert to epoch, if not set use defaults (24 hours ago)

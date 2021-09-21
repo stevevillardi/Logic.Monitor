@@ -16,15 +16,11 @@ Function Remove-LMUser {
 
             #Lookup Id if supplying username
             If ($Name) {
-                If ($Name -Match "\*") {
-                    Write-Host "Wildcard values not supported for username." -ForegroundColor Yellow
+                $LookupResult = (Get-LMUser -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
-                $Id = (Get-LMUser -Name $Name | Select-Object -First 1 ).Id
-                If (!$Id) {
-                    Write-Host "Unable to find username: $Name, please check spelling and try again." -ForegroundColor Yellow
-                    return
-                }
+                $Id = $LookupResult
             }
             
             #Build header and uri

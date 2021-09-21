@@ -102,49 +102,45 @@ Function New-LMUser {
         #Build header and uri
         $ResourcePath = "/setting/admins"
 
-        #Loop through requests 
-        $Done = $false
-        While (!$Done) {
-            Try {
-                $Data = @{
-                    username            = $Username
-                    email               = $Email
-                    acceptEULA          = $AcceptEULA
-                    password            = $Password
-                    firstName           = $FirstName 
-                    lastName            = $LastName
-                    forcePasswordChange = $ForcePasswordChange
-                    phone               = "+" + $Phone.Replace("-", "")
-                    note                = $Note
-                    roles               = $Roles
-                    smsEmail            = $SmsEmail
-                    smsEmailFormat      = $SmsEmailFormat
-                    status              = $Status
-                    timezone            = $Timezone
-                    twoFAEnabled        = $TwoFAEnabled
-                    viewPermission      = $ViewPermission
-                    adminGroupIds       = $AdminGroupIds
+        Try {
+            $Data = @{
+                username            = $Username
+                email               = $Email
+                acceptEULA          = $AcceptEULA
+                password            = $Password
+                firstName           = $FirstName 
+                lastName            = $LastName
+                forcePasswordChange = $ForcePasswordChange
+                phone               = "+" + $Phone.Replace("-", "")
+                note                = $Note
+                roles               = $Roles
+                smsEmail            = $SmsEmail
+                smsEmailFormat      = $SmsEmailFormat
+                status              = $Status
+                timezone            = $Timezone
+                twoFAEnabled        = $TwoFAEnabled
+                viewPermission      = $ViewPermission
+                adminGroupIds       = $AdminGroupIds
 
-                }
-
-                #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-
-                $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
-
-                Return $Response
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+
+            #Remove empty keys so we dont overwrite them
+            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+
+            $Data = ($Data | ConvertTo-Json)
+
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
+
+            Return $Response
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
+                Return
             }
         }
     }

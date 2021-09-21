@@ -23,15 +23,11 @@ Function Get-LMDashboardWidget {
     If ($global:LMAuth.Valid) {
 
         If ($DashboardName) {
-            If ($DashboardName -Match "\*") {
-                Write-Host "Wildcard values not supported for parent dashboard group name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMDashboard -Name $DashboardName).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $DashboardName) {
                 return
             }
-            $DashboardId = (Get-LMDashboard -Name $DashboardName | Select-Object -First 1 ).Id
-            If (!$DashboardId) {
-                Write-Host "Unable to find dashboard with name: $DashboardName, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $DashboardId = $LookupResult
         }
         
         #Build header and uri

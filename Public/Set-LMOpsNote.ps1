@@ -80,8 +80,6 @@ Function Set-LMOpsNote {
 
             $Data = ($Data | ConvertTo-Json)
 
-            $data
-
             $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 

@@ -41,16 +41,12 @@ Function Set-LMDevice {
         If ($global:LMAuth.Valid) {
 
             #Lookup ParentGroupName
-            If ($Name -and !$Id) {
-                If ($Name -Match "\*") {
-                    Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
+            If ($Name) {
+                $LookupResult = (Get-LMDevice -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
-                $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
-                If (!$Id) {
-                    Write-Host "Unable to find device: $Name, please check spelling and try again." -ForegroundColor Yellow
-                    return
-                }
+                $Id = $LookupResult
             }
 
             #Build custom props hashtable
@@ -64,43 +60,39 @@ Function Set-LMDevice {
             #Build header and uri
             $ResourcePath = "/device/devices/$Id"
 
-            #Loop through requests 
-            $Done = $false
-            While (!$Done) {
-                Try {
-                    $Data = @{
-                        name                      = $NewName
-                        displayName               = $DisplayName
-                        description               = $Description
-                        disableAlerting           = $DisableAlerting
-                        enableNetflow             = $EnableNetFlow
-                        customProperties          = $customProperties
-                        preferredCollectorId      = $PreferredCollectorId
-                        preferredCollectorGroupId = $PreferredCollectorGroupId
-                        link                      = $Link
-                        netflowCollectorGroupId   = $NetflowCollectorGroupId
-                        netflowCollectorId        = $NetflowCollectorId
-                        hostGroupIds              = $HostGroupIds -join ","
-                    }
-
-                
-                    #Remove empty keys so we dont overwrite them
-                    @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-                
-                    $Data = ($Data | ConvertTo-Json)
-                    $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
-
-                    #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-
-                    Return $Response
+            Try {
+                $Data = @{
+                    name                      = $NewName
+                    displayName               = $DisplayName
+                    description               = $Description
+                    disableAlerting           = $DisableAlerting
+                    enableNetflow             = $EnableNetFlow
+                    customProperties          = $customProperties
+                    preferredCollectorId      = $PreferredCollectorId
+                    preferredCollectorGroupId = $PreferredCollectorGroupId
+                    link                      = $Link
+                    netflowCollectorGroupId   = $NetflowCollectorGroupId
+                    netflowCollectorId        = $NetflowCollectorId
+                    hostGroupIds              = $HostGroupIds -join ","
                 }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
+
+            
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+            
+                $Data = ($Data | ConvertTo-Json)
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+
+                Return $Response
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
                 }
             }
         }

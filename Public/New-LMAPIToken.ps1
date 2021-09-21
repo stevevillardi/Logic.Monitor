@@ -27,30 +27,26 @@ Function New-LMAPIToken {
         #Build header and uri
         $ResourcePath = "/setting/admins/$Id/apitokens"
 
-        #Loop through requests 
-        $Done = $false
-        While (!$Done) {
-            Try {
-                $Data = @{
-                    note   = $Note
-                    status = $(If ($CreateDisabled) { 1 }Else { 2 })
-                }
-
-                $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
-
-                Return $Response
+        Try {
+            $Data = @{
+                note   = $Note
+                status = $(If ($CreateDisabled) { 1 }Else { 2 })
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+
+            $Data = ($Data | ConvertTo-Json)
+
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
+
+            Return $Response
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
+                Return
             }
         }
     }

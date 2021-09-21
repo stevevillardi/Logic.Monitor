@@ -14,38 +14,30 @@ Function Remove-LMWebsite {
 
         #Lookup Id if supplying username
         If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for website name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMWebsite -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Id = (Get-LMWebsite -Name $Name | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Host "Unable to find website: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
 
         #Build header and uri
         $ResourcePath = "/website/websites/$Id"
 
-        #Loop through requests 
-        $Done = $false
-        While (!$Done) {
-            Try {
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+        Try {
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
-                Write-Host "Successfully removed id ($Id)" -ForegroundColor Green
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
+            Write-Host "Successfully removed id ($Id)" -ForegroundColor Green
 
+            Return
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
                 Return
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
             }
         }
     }

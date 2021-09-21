@@ -35,16 +35,12 @@ Function Set-LMWebsiteGroup {
         If ($global:LMAuth.Valid) {
 
             #Lookup ParentGroupName
-            If ($Name -and !$Id) {
-                If ($Name -Match "\*") {
-                    Write-Host "Wildcard values not supported for groups names." -ForegroundColor Yellow
+            If ($Name) {
+                $LookupResult = (Get-LMWebsiteGroup -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
-                $Id = (Get-LMWebsiteGroup -Name $Name | Select-Object -First 1 ).Id
-                If (!$Id) {
-                    Write-Host "Unable to find group: $Name, please check spelling and try again." -ForegroundColor Yellow
-                    return
-                }
+                $Id = $LookupResult
             }
 
             #Lookup ParentGroupName
@@ -71,37 +67,33 @@ Function Set-LMWebsiteGroup {
             #Build header and uri
             $ResourcePath = "/website/groups/$Id"
 
-            #Loop through requests 
-            $Done = $false
-            While (!$Done) {
-                Try {
-                    $Data = @{
-                        name            = $NewName
-                        description     = $Description
-                        disableAlerting = $DisableAlerting
-                        stopMonitoring  = $StopMonitoring
-                        properties      = $customProperties
-                        parentId        = $ParentGroupId
-                    }
-
-                    #Remove empty keys so we dont overwrite them
-                    @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-                
-                    $Data = ($Data | ConvertTo-Json)
-
-                    $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                    $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
-
-                    #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-
-                    Return $Response
+            Try {
+                $Data = @{
+                    name            = $NewName
+                    description     = $Description
+                    disableAlerting = $DisableAlerting
+                    stopMonitoring  = $StopMonitoring
+                    properties      = $customProperties
+                    parentId        = $ParentGroupId
                 }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
+
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+            
+                $Data = ($Data | ConvertTo-Json)
+
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+
+                Return $Response
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
                 }
             }
         }

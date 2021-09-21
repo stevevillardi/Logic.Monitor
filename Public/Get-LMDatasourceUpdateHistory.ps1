@@ -19,27 +19,19 @@ Function Get-LMDatasourceUpdateHistory {
     If ($global:LMAuth.Valid) {
 
         If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for datsource name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMDatasource -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Id = (Get-LMDatasource -Name $Name | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Host "Unable to find datasource with name: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
 
         If ($DisplayName) {
-            If ($DisplayName -Match "\*") {
-                Write-Host "Wildcard values not supported for datsource name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMDatasource -DisplayName $DisplayName).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $DisplayName) {
                 return
             }
-            $Id = (Get-LMDatasource -DisplayName $DisplayName | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Host "Unable to find datasource with display name: $DisplayName, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
         
         #Build header and uri

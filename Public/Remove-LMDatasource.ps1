@@ -17,51 +17,39 @@ Function Remove-LMDatasource {
 
         #Lookup Id if supplying username
         If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for datasource name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMDatasource -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Id = (Get-LMDatasource -Name $Name | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Host "Unable to find datasource: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
 
         #Lookup Id if supplying displayname
         If ($DisplayName) {
-            If ($DisplayName -Match "\*") {
-                Write-Host "Wildcard values not supported for datasource name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMDatasource -Name $DisplayName).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $DisplayName) {
                 return
             }
-            $Id = (Get-LMDatasource -Name $DisplayName | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Host "Unable to find datasource: $DisplayName, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
         
         #Build header and uri
         $ResourcePath = "/setting/datasources/$Id"
 
-        #Loop through requests 
-        $Done = $false
-        While (!$Done) {
-            Try {
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+        Try {
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
-                Write-Host "Successfully removed id ($Id)" -ForegroundColor Green
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
+            Write-Host "Successfully removed id ($Id)" -ForegroundColor Green
 
+            Return
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
                 Return
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
             }
         }
     }

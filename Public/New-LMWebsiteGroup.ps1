@@ -48,34 +48,30 @@ Function New-LMWebsiteGroup {
         #Build header and uri
         $ResourcePath = "/website/groups"
 
-        #Loop through requests 
-        $Done = $false
-        While (!$Done) {
-            Try {
-                $Data = @{
-                    name            = $Name
-                    description     = $Description
-                    disableAlerting = $DisableAlerting
-                    stopMonitoring  = $StopMonitoring
-                    properties      = $customProperties
-                    parentId        = $ParentGroupId
-                }
-
-                $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
-
-                Return $Response
+        Try {
+            $Data = @{
+                name            = $Name
+                description     = $Description
+                disableAlerting = $DisableAlerting
+                stopMonitoring  = $StopMonitoring
+                properties      = $customProperties
+                parentId        = $ParentGroupId
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+
+            $Data = ($Data | ConvertTo-Json)
+
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
+
+            Return $Response
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
+                Return
             }
         }
     }

@@ -106,63 +106,59 @@ Function New-LMWebsite {
         #Build header and uri
         $ResourcePath = "/website/websites"
 
-        #Loop through requests 
-        $Done = $false
-        While (!$Done) {
-            Try {
-                $AlertExp = ""
-                If ($SSLAlertThresholds) {
-                    $AlertExp = "< " + $SSLAlertThresholds -join " "
-                }
-
-                $Data = @{
-                    name                        = $Name
-                    description                 = $Description
-                    disableAlerting             = $DisableAlerting
-                    isInternal                  = $IsInternal
-                    properties                  = $customProperties
-                    stopMonitoring              = $StopMonitoring
-                    groupId                     = $GroupId
-                    pollingInterval             = $PollingInterval
-                    overallAlertLevel           = $OverallAlertLevel
-                    individualAlertLevel        = $IndividualAlertLevel
-                    useDefaultAlertSetting      = $UseDefaultAlertSetting
-                    useDefaultLocationSetting   = $UseDefaultLocationSetting
-                    host                        = $Hostname
-                    triggerSSLStatusAlert       = $TriggerSSLStatusAlert
-                    triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
-                    count                       = $PingCount
-                    percentPktsNotReceiveInTime = $PingPercentNotReceived
-                    timeoutInMSPktsNotReceive   = $PingTimeout
-                    transition                  = $FailedCount
-                    pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
-                    alertExpr                   = $AlertExp
-                    schema                      = $HttpType
-                    domain                      = $Hostname
-                    type                        = $Type
-                    steps                       = $Steps
-                }
-
-                #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "steps") { $Data.Remove($_) } }
-            
-                $Data = ($Data | ConvertTo-Json -Depth 5)
-
-                $Data
-
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
-
-                Return $Response
+        Try {
+            $AlertExp = ""
+            If ($SSLAlertThresholds) {
+                $AlertExp = "< " + $SSLAlertThresholds -join " "
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+
+            $Data = @{
+                name                        = $Name
+                description                 = $Description
+                disableAlerting             = $DisableAlerting
+                isInternal                  = $IsInternal
+                properties                  = $customProperties
+                stopMonitoring              = $StopMonitoring
+                groupId                     = $GroupId
+                pollingInterval             = $PollingInterval
+                overallAlertLevel           = $OverallAlertLevel
+                individualAlertLevel        = $IndividualAlertLevel
+                useDefaultAlertSetting      = $UseDefaultAlertSetting
+                useDefaultLocationSetting   = $UseDefaultLocationSetting
+                host                        = $Hostname
+                triggerSSLStatusAlert       = $TriggerSSLStatusAlert
+                triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
+                count                       = $PingCount
+                percentPktsNotReceiveInTime = $PingPercentNotReceived
+                timeoutInMSPktsNotReceive   = $PingTimeout
+                transition                  = $FailedCount
+                pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
+                alertExpr                   = $AlertExp
+                schema                      = $HttpType
+                domain                      = $Hostname
+                type                        = $Type
+                steps                       = $Steps
+            }
+
+            #Remove empty keys so we dont overwrite them
+            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "steps") { $Data.Remove($_) } }
+        
+            $Data = ($Data | ConvertTo-Json -Depth 5)
+
+            $Data
+
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
+
+            Return $Response
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
+                Return
             }
         }
     }

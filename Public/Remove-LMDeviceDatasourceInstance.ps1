@@ -27,28 +27,20 @@ Function Remove-LMDeviceDatasourceInstance {
 
         #Lookup Device Id
         If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
+            $LookupResult = (Get-LMDevice -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Host "Unable to find assocaited host device: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
 
         #Lookup DatasourceId
         If ($DatasourceName -or $DatasourceId) {
-            If ($DatasourceName -Match "\*") {
-                Write-Host "Wildcard values not supported for datasource names." -ForegroundColor Yellow
+            $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId } ).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                 return
             }
-            $HdsId = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId } | Select-Object -First 1).Id
-            If (!$HdsId) {
-                Write-Host "Unable to find assocaited host datasource: $DatasourceId$DatasourceName, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device" -ForegroundColor Yellow
-                return
-            }
+            $HdsId = $LookupResult
         }
 
         #Lookup Wildcard Id
@@ -61,24 +53,20 @@ Function Remove-LMDeviceDatasourceInstance {
         #Build header and uri
         $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$InstanceId"
 
-        #Loop through requests 
-        $Done = $false
-        While (!$Done) {
-            Try {
+        Try {
 
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
 
-                Return $Response
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            Return $Response
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
+                Return
             }
         }
     }

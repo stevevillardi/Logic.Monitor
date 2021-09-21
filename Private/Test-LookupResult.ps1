@@ -1,9 +1,9 @@
-#Function to validate output when using -Name param instead of specifying Id, ensures a valid response and on one result returned
+#Function to validate output when using -Name param instead of specifying Id, ensures a valid response and only one result returned
 Function Test-LookupResult {
     Param (
         $Result,
     
-        [String]$LookupString
+        $LookupString
     )
     #If mutiple resources are returned stop processing
     If (($Result | Measure-Object).Count -gt 1) {

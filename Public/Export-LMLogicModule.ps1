@@ -91,22 +91,19 @@ Function Export-LMLogicModule {
         #Build header and uri
         $ResourcePath = "/setting/$Type/$LogicModuleId"
         
-        $Done = $false
-        While (!$Done) {
-            Try {
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+        Try {
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers -OutFile $DownloadPath
-            
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers -OutFile $DownloadPath
+        
+            Return
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
                 Return
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
             }
         }
     }

@@ -48,38 +48,34 @@ Function New-LMDeviceGroup {
         #Build header and uri
         $ResourcePath = "/device/groups"
 
-        #Loop through requests 
-        $Done = $false
-        While (!$Done) {
-            Try {
-                $Data = @{
-                    name                                = $Name
-                    description                         = $Description
-                    appliesTo                           = $AppliesTo
-                    disableAlerting                     = $DisableAlerting
-                    enableNetflow                       = $EnableNetFlow
-                    customProperties                    = $customProperties
-                    parentId                            = $ParentGroupId
-                    defaultAutoBalancedCollectorGroupId = 0
-                    defaultCollectorGroupId             = 0
-                    defaultCollectorId                  = 0
-                }
-
-                $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
-
-                Return $Response
+        Try {
+            $Data = @{
+                name                                = $Name
+                description                         = $Description
+                appliesTo                           = $AppliesTo
+                disableAlerting                     = $DisableAlerting
+                enableNetflow                       = $EnableNetFlow
+                customProperties                    = $customProperties
+                parentId                            = $ParentGroupId
+                defaultAutoBalancedCollectorGroupId = 0
+                defaultCollectorGroupId             = 0
+                defaultCollectorId                  = 0
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+
+            $Data = ($Data | ConvertTo-Json)
+
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
+
+            Return $Response
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
+                Return
             }
         }
     }

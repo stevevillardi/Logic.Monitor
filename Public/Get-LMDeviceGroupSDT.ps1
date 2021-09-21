@@ -16,15 +16,11 @@ Function Get-LMDeviceGroupSDT {
     If ($global:LMAuth.Valid) {
 
         If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for device group name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Id = (Get-LMDeviceGroup -Name $Name | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Host "Unable to find device group with name: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
         
         #Build header and uri

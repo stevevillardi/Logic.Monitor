@@ -13,16 +13,11 @@ Function Get-LMTopologyMapData {
 
         #Lookup Id if supplying name
         If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for topology map name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMTopologyMap -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Id = (Get-LMTopologyMap -Name $Name | Select-Object -First 1).Id
-
-            If (!$Id) {
-                Write-Host "Unable to find topology map: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
         
         #Build header and uri

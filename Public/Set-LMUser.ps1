@@ -50,16 +50,12 @@ Function Set-LMUser {
         If ($global:LMAuth.Valid) {
 
             #Lookup Id if supplying username
-            If ($Username -and !$Id) {
-                If ($Username -Match "\*") {
-                    Write-Host "Wildcard values not supported for username." -ForegroundColor Yellow
+            If ($Username) {
+                $LookupResult = (Get-LMUser -Name $Username).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Username) {
                     return
                 }
-                $Id = (Get-LMUser -Name $Username | Select-Object -First 1 ).Id
-                If (!$Id) {
-                    Write-Host "Unable to find username: $Username, please check spelling and try again." -ForegroundColor Yellow
-                    return
-                }
+                $Id = $LookupResult
             }
     
             #Build admin group props to update user group
@@ -125,50 +121,46 @@ Function Set-LMUser {
             #Build header and uri
             $ResourcePath = "/setting/admins/$Id"
     
-            #Loop through requests 
-            $Done = $false
-            While (!$Done) {
-                Try {
-                    $Data = @{
-                        username            = $Username
-                        email               = $Email
-                        acceptEULA          = $AcceptEULA
-                        password            = $Password
-                        firstName           = $FirstName 
-                        lastName            = $LastName
-                        forcePasswordChange = $ForcePasswordChange
-                        phone               = $(If ($Phone) { "+" + $Phone.Replace("-", "") }Else { "" })
-                        note                = $Note
-                        roles               = $Roles
-                        smsEmail            = $SmsEmail
-                        smsEmailFormat      = $SmsEmailFormat
-                        status              = $Status
-                        timezone            = $Timezone
-                        twoFAEnabled        = $TwoFAEnabled
-                        viewPermission      = $ViewPermission
-                        adminGroup          = $AdminGroup
-                        adminGroupIds       = $AdminGroupIds
-    
-                    }
-    
-                    #Remove empty keys so we dont overwrite them
-                    @($Data.keys) | ForEach-Object { if (-not $Data[$_]) { $Data.Remove($_) } }
-    
-                    $Data = ($Data | ConvertTo-Json)
-    
-                    $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                    $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-    
-                    #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-    
-                    Return $Response
+            Try {
+                $Data = @{
+                    username            = $Username
+                    email               = $Email
+                    acceptEULA          = $AcceptEULA
+                    password            = $Password
+                    firstName           = $FirstName 
+                    lastName            = $LastName
+                    forcePasswordChange = $ForcePasswordChange
+                    phone               = $(If ($Phone) { "+" + $Phone.Replace("-", "") }Else { "" })
+                    note                = $Note
+                    roles               = $Roles
+                    smsEmail            = $SmsEmail
+                    smsEmailFormat      = $SmsEmailFormat
+                    status              = $Status
+                    timezone            = $Timezone
+                    twoFAEnabled        = $TwoFAEnabled
+                    viewPermission      = $ViewPermission
+                    adminGroup          = $AdminGroup
+                    adminGroupIds       = $AdminGroupIds
+
                 }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
+
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if (-not $Data[$_]) { $Data.Remove($_) } }
+
+                $Data = ($Data | ConvertTo-Json)
+
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+
+                Return $Response
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
                 }
             }
         }

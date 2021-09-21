@@ -23,15 +23,11 @@ Function Get-LMDashboardGroup {
     If ($global:LMAuth.Valid) {
 
         If ($ParentGroupName) {
-            If ($ParentGroupName -Match "\*") {
-                Write-Host "Wildcard values not supported for parent dashboard group name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMDashboardGroup -Name $ParentGroupName).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $ParentGroupName) {
                 return
             }
-            $ParentGroupId = (Get-LMDashboardGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
-            If (!$ParentGroupId) {
-                Write-Host "Unable to find dashboard group with name: $ParentGroupName, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $ParentGroupId = $LookupResult
         }
         
         #Build header and uri

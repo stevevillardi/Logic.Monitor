@@ -20,15 +20,11 @@ Function Remove-LMDeviceGroup {
 
             #Lookup Id if supplying username
             If ($Name) {
-                If ($Name -Match "\*") {
-                    Write-Host "Wildcard values not supported for device group name." -ForegroundColor Yellow
+                $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
-                $Id = (Get-LMDeviceGroup -Name $Name | Select-Object -First 1 ).Id
-                If (!$Id) {
-                    Write-Host "Unable to find device group: $Name, please check spelling and try again." -ForegroundColor Yellow
-                    return
-                }
+                $Id = $LookupResult
             }
             
             #Build header and uri
@@ -36,24 +32,20 @@ Function Remove-LMDeviceGroup {
 
             $QueryParams = "?deleteChildren=$DeleteHostsandChildren&deleteHard=$HardDelete"
 
-            #Loop through requests 
-            $Done = $false
-            While (!$Done) {
-                Try {
-                    $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                    $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+            Try {
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
-                    #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
-                    Write-Host "Successfully removed id ($Id)" -ForegroundColor Green
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
+                Write-Host "Successfully removed id ($Id)" -ForegroundColor Green
 
+                Return
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
                     Return
-                }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
                 }
             }
         }

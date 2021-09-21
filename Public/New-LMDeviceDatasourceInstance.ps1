@@ -79,36 +79,32 @@ Function New-LMDeviceDatasourceInstance {
         #Build header and uri
         $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances"
 
-        #Loop through requests 
-        $Done = $false
-        While (!$Done) {
-            Try {
-                $Data = @{
-                    displayName      = $DisplayName
-                    description      = $Description
-                    wildValue        = $WildValue
-                    wildValue2       = $WildValue2
-                    stopMonitoring   = $StopMonitoring
-                    disableAlerting  = $DisableAlerting
-                    customProperties = $customProperties
-                    groupId          = $InstanceGroupId
-                }
-
-                $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
-
-                Return $Response
+        Try {
+            $Data = @{
+                displayName      = $DisplayName
+                description      = $Description
+                wildValue        = $WildValue
+                wildValue2       = $WildValue2
+                stopMonitoring   = $StopMonitoring
+                disableAlerting  = $DisableAlerting
+                customProperties = $customProperties
+                groupId          = $InstanceGroupId
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+
+            $Data = ($Data | ConvertTo-Json)
+
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
+
+            Return $Response
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
+                Return
             }
         }
     }

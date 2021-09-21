@@ -65,16 +65,12 @@ Function Set-LMWebsite {
     If ($global:LMAuth.Valid) {
 
         #Lookup Id by name
-        If ($Name -and !$Id) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
+        If ($Name) {
+            $LookupResult = (Get-LMWebsite -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Id = (Get-LMWebsite -Name $Name | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Host "Unable to find device: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
 
         #Build custom props hashtable
@@ -88,61 +84,57 @@ Function Set-LMWebsite {
         #Build header and uri
         $ResourcePath = "/website/websites/$Id"
 
-        #Loop through requests 
-        $Done = $false
-        While (!$Done) {
-            Try {
-                $alertExpr = $null
-                If ($SSLAlertThresholds) {
-                    $alertExpr = "< " + $SSLAlertThresholds -join " "
-                }
-
-                $Data = @{
-                    name                        = $Name
-                    description                 = $Description
-                    disableAlerting             = $DisableAlerting
-                    isInternal                  = $IsInternal
-                    properties                  = $customProperties
-                    stopMonitoring              = $StopMonitoring
-                    groupId                     = $GroupId
-                    pollingInterval             = $PollingInterval
-                    overallAlertLevel           = $OverallAlertLevel
-                    individualAlertLevel        = $IndividualAlertLevel
-                    useDefaultAlertSetting      = $UseDefaultAlertSetting
-                    useDefaultLocationSetting   = $UseDefaultLocationSetting
-                    host                        = $Hostname
-                    triggerSSLStatusAlert       = $TriggerSSLStatusAlert
-                    triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
-                    count                       = $PingCount
-                    percentPktsNotReceiveInTime = $PingPercentNotReceived
-                    timeoutInMSPktsNotReceive   = $PingTimeout
-                    transition                  = $FailedCount
-                    pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
-                    alertExpr                   = $alertExpr
-                    schema                      = $HttpType
-                    domain                      = $Hostname
-
-                }
-
-            
-                #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-            
-                $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-
-                Return $Response
+        Try {
+            $alertExpr = $null
+            If ($SSLAlertThresholds) {
+                $alertExpr = "< " + $SSLAlertThresholds -join " "
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+
+            $Data = @{
+                name                        = $Name
+                description                 = $Description
+                disableAlerting             = $DisableAlerting
+                isInternal                  = $IsInternal
+                properties                  = $customProperties
+                stopMonitoring              = $StopMonitoring
+                groupId                     = $GroupId
+                pollingInterval             = $PollingInterval
+                overallAlertLevel           = $OverallAlertLevel
+                individualAlertLevel        = $IndividualAlertLevel
+                useDefaultAlertSetting      = $UseDefaultAlertSetting
+                useDefaultLocationSetting   = $UseDefaultLocationSetting
+                host                        = $Hostname
+                triggerSSLStatusAlert       = $TriggerSSLStatusAlert
+                triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
+                count                       = $PingCount
+                percentPktsNotReceiveInTime = $PingPercentNotReceived
+                timeoutInMSPktsNotReceive   = $PingTimeout
+                transition                  = $FailedCount
+                pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
+                alertExpr                   = $alertExpr
+                schema                      = $HttpType
+                domain                      = $Hostname
+
+            }
+
+        
+            #Remove empty keys so we dont overwrite them
+            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+        
+            $Data = ($Data | ConvertTo-Json)
+
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+
+            #Issue request
+            $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+
+            Return $Response
+        }
+        Catch [Exception] {
+            $Proceed = Resolve-LMException -LMException $PSItem
+            If (!$Proceed) {
+                Return
             }
         }
     }

@@ -14,15 +14,11 @@ Function Remove-LMNetscan {
 
         #Lookup Id if supplying username
         If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for website name." -ForegroundColor Yellow
+            $LookupResult = (Get-LMNetscan -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Id = (Get-LMNetscan -Name $Name | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Host "Unable to find website: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult
         }
 
         #Build header and uri

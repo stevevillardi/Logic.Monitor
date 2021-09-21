@@ -38,30 +38,22 @@ Function Set-LMDeviceGroup {
         #Check if we are logged in and have valid api creds
         If ($global:LMAuth.Valid) {
 
-            #Lookup ParentGroupName
-            If ($Name -and !$Id) {
-                If ($Name -Match "\*") {
-                    Write-Host "Wildcard values not supported for groups names." -ForegroundColor Yellow
+            #Lookup Group Id
+            If ($Name) {
+                $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
-                $Id = (Get-LMDeviceGroup -Name $Name | Select-Object -First 1 ).Id
-                If (!$Id) {
-                    Write-Host "Unable to find group: $Name, please check spelling and try again." -ForegroundColor Yellow
-                    return
-                }
+                $Id = $LookupResult
             }
 
-            #Lookup ParentGroupName
+            #Lookup ParentGroupId
             If ($ParentGroupName) {
-                If ($ParentGroupName -Match "\*") {
-                    Write-Host "Wildcard values not supported for groups names." -ForegroundColor Yellow
+                $LookupResult = (Get-LMDeviceGroup -Name $ParentGroupName).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $ParentGroupName) {
                     return
                 }
-                $ParentGroupId = (Get-LMDeviceGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
-                If (!$ParentGroupId) {
-                    Write-Host "Unable to find group: $ParentGroupName, please check spelling and try again." -ForegroundColor Yellow
-                    return
-                }
+                $ParentGroupId = $LookupResult
             }
 
             #Build custom props hashtable
@@ -75,38 +67,34 @@ Function Set-LMDeviceGroup {
             #Build header and uri
             $ResourcePath = "/device/groups/$Id"
 
-            #Loop through requests 
-            $Done = $false
-            While (!$Done) {
-                Try {
-                    $Data = @{
-                        name             = $NewName
-                        description      = $Description
-                        appliesTo        = $AppliesTo
-                        disableAlerting  = $DisableAlerting
-                        enableNetflow    = $EnableNetFlow
-                        customProperties = $customProperties
-                        parentId         = $ParentGroupId
-                    }
-
-                    #Remove empty keys so we dont overwrite them
-                    @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-                
-                    $Data = ($Data | ConvertTo-Json)
-
-                    $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                    $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
-
-                    #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-
-                    Return $Response
+            Try {
+                $Data = @{
+                    name             = $NewName
+                    description      = $Description
+                    appliesTo        = $AppliesTo
+                    disableAlerting  = $DisableAlerting
+                    enableNetflow    = $EnableNetFlow
+                    customProperties = $customProperties
+                    parentId         = $ParentGroupId
                 }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
+
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+            
+                $Data = ($Data | ConvertTo-Json)
+
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+
+                Return $Response
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
                 }
             }
         }

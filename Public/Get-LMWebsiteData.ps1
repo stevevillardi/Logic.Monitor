@@ -18,23 +18,18 @@ Function Get-LMWebsiteData {
     If ($global:LMAuth.Valid) {
         #If using id we still need to grab a checkpoint is not specified
         If ($Id) {
-            $Website = (Get-LMWebsite -Id $Id | Select-Object -First 1)
+            $Website = Get-LMWebsite -Id $Id
             $CheckpointId = $Website.Checkpoints[0].id
         }
 
         #Lookup Id and checkpoint if supplying username
         If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for website name." -ForegroundColor Yellow
+            $LookupResult = Get-LMWebsite -Name $Name
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $Website = (Get-LMWebsite -Name $Name | Select-Object -First 1)
-            $Id = $Website.Id
-            $CheckpointId = $Website.Checkpoints[0].id
-            If (!$Id) {
-                Write-Host "Unable to find website: $Name, please check spelling and try again." -ForegroundColor Yellow
-                return
-            }
+            $Id = $LookupResult.Id
+            $Id = $LookupResult.Checkpoints[0].id
         }
         
         #Build header and uri

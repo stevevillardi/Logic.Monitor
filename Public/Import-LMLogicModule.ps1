@@ -35,28 +35,22 @@ Function Import-LMLogicModule {
             #Get file content
             $File = Get-Content $FilePath -Raw
             
-            #Add flag to handle API retry throttling
-            $Done = $false
+            Try {
 
-            #Loop through requests 
-            While (!$Done) {
-                Try {
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
-                    $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File
-                    $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{file = $File }
+                Write-Host "Successfully imported $([IO.Path]::GetFileName($FilePath)) of type: $($Response.items.type)"
 
-                    #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{file = $File }
-                    Write-Host "Successfully imported $([IO.Path]::GetFileName($FilePath)) of type: $($Response.items.type)"
+                Return
 
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
                     Return
-
-                }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
                 }
             }
         }

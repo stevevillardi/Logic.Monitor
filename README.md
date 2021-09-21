@@ -382,6 +382,12 @@ foreach($group in $groups){
 
 # Change List
 
+## 3.5
+
+- Remove all unused request loops when expecting a single API response.
+- Fix erroneous output when using Set-LMOptsNote and New-LMOpsNote, leftover from debug testing.
+- Moved all non id parameter lookups into private function called **Test-LookupResult** for easier support in the future.
+
 ## 3.4.2
 
 - Fixed bug with **Initialize-LMPOVSetup** that could cause portal metrics resource creation to fail if company displayname is changed before running POV setp
