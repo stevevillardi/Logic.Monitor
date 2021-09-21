@@ -20,15 +20,11 @@ Function Invoke-LMCollectorDebugCommand {
 
             #Lookup device name
             If ($Name) {
-                If ($Name -Match "\*") {
-                    Write-Host "Wildcard values not supported for collector names." -ForegroundColor Yellow
+                $LookupResult = (Get-LMCollector -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
-                $Id = (Get-LMCollector -Name $Name | Select-Object -First 1 ).Id
-                If (!$Id) {
-                    Write-Host "Unable to find collector: $Name, please check spelling and try again." -ForegroundColor Yellow
-                    return
-                }
+                $Id = $LookupResult
             }
             
             #Build header and uri

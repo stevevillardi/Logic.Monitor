@@ -23,15 +23,11 @@ Function Invoke-LMActiveDiscovery {
 
             #Lookup device name
             If ($Name) {
-                If ($Name -Match "\*") {
-                    Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
+                $LookupResult = (Get-LMDevice -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
-                $deviceList = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
-                If (!$deviceList) {
-                    Write-Host "Unable to find device: $Name, please check spelling and try again." -ForegroundColor Yellow
-                    return
-                }
+                $deviceList = $LookupResult
             }
             ElseIf ($Id) {
                 $deviceList = $Id
