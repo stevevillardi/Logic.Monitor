@@ -1,3 +1,25 @@
+<#
+.SYNOPSIS
+Create a series of dynamic groups based off of active system.catgeories applied to your portal
+
+.DESCRIPTION
+Created dynamic groups based on in use device categories
+
+.EXAMPLE
+ConvertTo-LMDynamicGroupFromCategories
+
+.NOTES
+Created groups will be placed in devices by type default resource group
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.LINK
+Module repo: https://github.com/stevevillardi/Logic.Monitor
+
+.LINK
+PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
+#>
 Function ConvertTo-LMDynamicGroupFromCategories {
 
     $device_list = @()

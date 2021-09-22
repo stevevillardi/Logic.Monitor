@@ -15,7 +15,7 @@ Access Key from your API credential aquired from the LM Portal
 The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)
 
 .PARAMETER UseCachedCredential
-Used a cached account that has been added using New-LMCachedAccount instead of explicitly providing credentials,
+Used a cached account that has been added using New-LMCachedAccount instead of explicitly providing credentials.
 
 .EXAMPLE
 Connect-LMAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
@@ -25,6 +25,15 @@ Connect-LMAccount -UseCachedCredential
 
 .NOTES
 You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.LINK
+Module repo: https://github.com/stevevillardi/Logic.Monitor
+
+.LINK
+PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
 #>
 Function Connect-LMAccount {
 

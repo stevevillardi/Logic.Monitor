@@ -1,3 +1,46 @@
+<#
+.SYNOPSIS
+Exports a topology map to a standalone HTML file. 
+
+.DESCRIPTION
+Exports a topology map to a standalone HTML file.
+
+.PARAMETER Id
+Id of the topology map you want to export
+
+.PARAMETER Name
+Name of the topology map you are looking to export, used as an alternative to Id
+
+.PARAMETER IncludeUndiscoveredDevices
+Include undiscovered devices in topology export
+
+.PARAMETER IncludeDataTable
+Include a data table alongside the exported map
+
+.PARAMETER EnablePhysics
+Enable physics interaction on the generated topology map
+
+.PARAMETER BackgroundImage
+Add a background image to the exported topology map
+
+.EXAMPLE
+Export-LMTopologyMap -Id 12 -IncludeUndiscoveredDevices $false
+
+.EXAMPLE
+Export-LMTopologyMap Name "VMware Environment" -IncludeDataTable $true
+
+.NOTES
+Currently a beta command, topology map export is still under developement, please report any bugs you encounter while using this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.LINK
+Module repo: https://github.com/stevevillardi/Logic.Monitor
+
+.LINK
+PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
+#>
 Function Export-LMTopologyMap {
     [CmdletBinding()]
     Param (
@@ -12,8 +55,6 @@ Function Export-LMTopologyMap {
         [Boolean]$IncludeDataTable = $false,
 
         [Boolean]$EnablePhysics = $false,
-
-        [Boolean]$FixedLMMapLocation = $false,
 
         [String]$BackgroundImage = ""
     )

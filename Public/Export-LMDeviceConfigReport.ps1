@@ -1,26 +1,75 @@
+<#
+.SYNOPSIS
+Exports an HTML report containing changed network configs
+
+.DESCRIPTION
+Export device config change report based on the number of days specified, defaults to using the Devices by Type/Network folder
+
+.PARAMETER DeviceGroupId
+Device group id for the group to use as the source of running the report, defaults to Devices by Type/Network folder if not specified
+
+.PARAMETER DaysBack
+Number of days back to run the report, defaults to 7 if not specified
+
+.PARAMETER Path
+Path to export the HTML report to
+
+.PARAMETER OpenOnCompletetion
+Open the output htmml report automatically once completed
+
+.EXAMPLE
+Export-LMDeviceConfigReport -DaysBack 30 -DeviceGroupId 2 -Path export-report.html
+
+.EXAMPLE
+Export-LMDeviceConfigReport -Path export-report.html -OpenOnCompletetion
+
+.NOTES
+You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.LINK
+Module repo: https://github.com/stevevillardi/Logic.Monitor
+
+.LINK
+PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
+#>
+
 Function Export-LMDeviceConfigReport {
 
     [CmdletBinding()]
     Param (
         [Int]$DeviceGroupId,
 
-        [String]$DaysBack = 30,
+        [String]$DaysBack = 7,
         
         [Parameter(Mandatory)]
-        [String]$Path
+        [String]$Path,
+
+        [Switch]$OpenOnCompletetion
     )
 
     #Check if we are logged in and have valid api creds
     If ($global:LMAuth.Valid) {
+        $ShowHtml = $false
+        If($OpenOnCompletetion){
+            $ShowHtml = $true
+        }
+
         If (!$DeviceGroupId) {
             #Grab Devices by Type folder
-            $devices_by_type_id = (Get-LMDeviceGroup -Name "Devices by Type").id
-    
-            #Grab Network group to focus on
-            $network_group_id = (Get-LMDeviceGroupGroups -Id $devices_by_type_id | ? { $_.fullPath -eq "Devices by Type/Network" }).id
-    
-            #Grab devices inside Network group
-            $network_devices = Get-LMDeviceGroupDevices -id $network_group_id
+            $devices_by_type_id = (Get-LMDeviceGroup -Name "Devices by Type" | Sort-Object -Property Id | Select-Object -First 1).id
+            If($devices_by_type_id){
+                #Grab Network group to focus on
+                $network_group_id = (Get-LMDeviceGroupGroups -Id $devices_by_type_id | ? { $_.fullPath -eq "Devices by Type/Network" }).id
+        
+                #Grab devices inside Network group
+                $network_devices = Get-LMDeviceGroupDevices -id $network_group_id
+            }
+            Else{
+                Write-Host "Default report device group Devices by Type could not be located, please specify a DeviceGroupId to use for running this export" -ForegroundColor red
+            }
         }
         Else {
             $network_devices = Get-LMDeviceGroupDevices -id $DeviceGroupId
@@ -94,7 +143,7 @@ Function Export-LMDeviceConfigReport {
 
 
         #Generate HTML Report
-        New-HTML -TitleText "LogicMonitor - Config Report" -ShowHTML -Online -FilePath $Path {
+        New-HTML -TitleText "LogicMonitor - Config Report" -ShowHTML:$ShowHtml -Online -FilePath $Path {
             New-HTMLPanel {
                 New-HTMLTable -DataTable $output_list -HideFooter -ScrollCollapse -PagingLength 1000 {
                     New-TableHeader -Title "LogicMonitor - Config Report (Last $DaysBack days)" -Alignment center -BackGroundColor BuddhaGold -Color White -FontWeight bold

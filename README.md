@@ -181,6 +181,8 @@ foreach($group in $groups){
 
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
 
+**Additional Note:** Currently cmdlets do not support reciving input directly from the pipeline (**Get-LMDevice | Set-LMDevice**). If you need to make modifications use Foreach-Object to loop through the pipeline input (**Get-LMDevice | Foreach-Object {Set-LMDevice $\_.Id}**). I am working on building out custom PSObject types to enable this ability in the future.
+
 # Available Commands
 
 ### Account Connectivity
@@ -379,6 +381,7 @@ foreach($group in $groups){
 - ConvertTo-LMDynamicGroupFromCategories
 - Export-LMDeviceConfigReport
 - Initialize-LMPOVSetup
+- Import-LMMerakiCloud
 
 # Change List
 
@@ -387,6 +390,8 @@ foreach($group in $groups){
 - Remove all unused request loops when expecting a single API response.
 - Fix erroneous output when using Set-LMOptsNote and New-LMOpsNote, leftover from debug testing.
 - Moved all non id parameter lookups into private function called **Test-LookupResult** for easier support in the future.
+- Updated Command (**Export-LMDeviceConfigReport**): This command will not default to 7 days back if not specified and a Switch has been added (-OpenOnCompletetion) that if set will auto open the report in the browser once completed. This use to be the default behavior but is now an optional setting.
+- New Beta Command (**Import-LMMerakiCloud**): This command will connect to a meraki cloud portal and import all orgs and networks into logic monitor. Replaces the need to use the LM Netscan script for Meraki device import.
 
 ## 3.4.2
 

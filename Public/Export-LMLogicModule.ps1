@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Exports a specified logicmodule
+
+.DESCRIPTION
+Exports logic module for backup/import into another portal
+
+.PARAMETER LogicModuleId
+Id of the logic module you are looking to export
+
+.PARAMETER LogicModuleName
+Name of the logic module you are looking to export, used as an alternative to LogicModuleId
+
+.PARAMETER Type
+Type of logic module to export
+
+.PARAMETER DownloadPath
+Path to export the logic module to, defaults to current directory if not specified
+
+.EXAMPLE
+Export-LMLogicModule -LogicModuleId 1907 -Type "eventsources"
+
+.EXAMPLE
+Export-LMLogicModule -LogicModuleName "SNMP_Network_Interfaces" -Type "datasources"
+
+.NOTES
+You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.LINK
+Module repo: https://github.com/stevevillardi/Logic.Monitor
+
+.LINK
+PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
+#>
 Function Export-LMLogicModule {
 
     [CmdletBinding()]
@@ -24,7 +61,7 @@ Function Export-LMLogicModule {
         If ($LogicModuleName) {
             Switch ($Type) {
                 "datasources" {
-                    $LogicModuleInfo = Get-LMDatasource -Name $LogicModuleName
+                    $LogicModuleInfo = Get-LMDataSource -Name $LogicModuleName
                     $DownloadPath += "\$($LogicModuleInfo.name).xml"
                     $QueryParams = "?format=xml&v=3"
                 }

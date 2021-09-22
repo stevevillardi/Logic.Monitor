@@ -10,6 +10,15 @@ Disconnect-LMAccount
 
 .NOTES
 Once disconnect you will need to reconnect to a portal before you will be allowed to run commands again.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.LINK
+Module repo: https://github.com/stevevillardi/Logic.Monitor
+
+.LINK
+PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
 #>
 Function Disconnect-LMAccount {
     #Clear credential object from environment
