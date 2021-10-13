@@ -10,7 +10,7 @@ Function Send-LMLogMessage {
         [String]$Timestamp,
 
         [Parameter(Mandatory, ParameterSetName = 'SingleMessage')]
-        [Hashtable]$resourceId,
+        [Hashtable]$resourceMapping,
         
         [Parameter(ParameterSetName = 'SingleMessage')]
         [Hashtable]$Metadata,
@@ -38,7 +38,7 @@ Function Send-LMLogMessage {
                     $Data = @{
                         message          = $Message
                         timestamp        = $Timestamp
-                        '_lm.resourceId' = $resourceId
+                        '_lm.resourceId' = $resourceMapping
                     }
     
                     #Add additional hashtable of extra metadata

@@ -63,16 +63,16 @@ Most Get commands can pull info by id or name to allow for easier retrevial with
 Get list of devices:
 
 ```powershell
-#all devices
+#Get all devices
 Get-LMDevice
 
-#via device id
+#Get device via id
 Get-LMDevice -Id 1
 
-#via device hostname
+#Get device via hostname
 Get-LMDevice -Name device.example.com
 
-#via device displayname/wildcard
+#Get device via displayname/wildcard
 Get-LMDevice -DisplayName "corp*"
 ```
 
@@ -108,15 +108,17 @@ Get LM Log Message:
 Get-LMLogMessage -Range 1month -Query "error text"
 ```
 
-Code Snipets:
+# Code Snipets:
+
+#### Get last 24 hours of alerts and group by resource and datapoint
 
 ```powershell
-#Example 1:
-#Get last 24 hours of alerts and group by resource and datapoint
 Get-LMAlert -StartDate $(Get-Date).AddDays(-1) -EndDate $(Get-Date) -ClearedAlerts $true | Group-Object -Property resourceTemplateName,datapointName | select count, @{N='Name';E={$_.Name.Split(",")[0]}}, @{N='Datapoint';E={$_.Name.Split(",")[1]}} | Sort-Object -Property count -Descending
+```
 
-#Example 2:
-#Loop through all webchecks and list out SSL remaining days till expiration
+#### Loop through all webchecks and list out SSL remaining days till expiration
+
+```powershell
 $Output = @()
 $Websites = Get-LMWebsite -Type Webcheck
 foreach($Website in $Websites){
@@ -133,10 +135,11 @@ foreach($Website in $Websites){
     }
 }
 $Output
+```
 
-#Example 3:
-#Import new devices from CSV including properties
-#
+#### Import new devices from CSV including properties
+
+```powershell
 #   Example CSV:
 #   id,displayname,description,properties,collector_id,group_ids
 #   "192.168.1.1","core-switch01","TX HQ switch","snmp.community=public,location=Austin TX","1","2,4,6"
@@ -155,9 +158,11 @@ foreach($device in $devices){
     #Create new device in LM
     New-LMDevice -Name $device.ip -DisplayName $device.displayname -Description $device.description -properties $properties -PreferredCollectorId $device.collector_id -HostGroupIds $hostGroups
 }
+```
 
-#Example 4:
-#Import new device groups from CSV including properties
+#### Import new device groups from CSV including properties
+
+```powershell
 #Note:this assumes parent folder names being specified are unique in the portal since we are only using ParentGroupName to specify target group and not ParentGroupId
 #
 #   Example CSV:
@@ -179,13 +184,66 @@ foreach($group in $groups){
 }
 ```
 
+#### Remove a group of devices from a device group but do not delete them from LM
+
+```powershell
+#Id of group you want to purge devices from
+$groupId = (Get-LMDeviceGroup -Name "Group Name").id
+
+If($groupId){
+    #Get list of devices inside group we are clearing out
+    $devices = Get-LMDeviceGroupDevices -Id $groupId
+
+    #Loop through device list and remove device from $groupId
+    foreach($device in $devices){
+        #Take existing HostGroupId list and filter out the group we wish to remove the device from
+        $newHostGroupIdList = ($device.hostGroupIds -split (",") | ? {$_ -ne "$groupId"}) -join ","
+
+        #Update our device with the new HostGroupId list
+        Set-LMDevice -Id $device.id -HostGroupIds $newHostGroupIdList
+    }
+}
+```
+
+#### Bulk trigger Active Discovery for a group of devices
+
+```powershell
+#Method One
+#Using Get-LMDeviceGroupDevices to trigger AD on a folder called Eastbridge
+$deviceGroupId = (Get-LMDeviceGroup -Name "Eastbridge").id
+Get-LMDeviceGroupDevices -Id $deviceGroupId | Foreach-Object {Invoke-LMActiveDiscovery -Id $_.id}
+
+#Method Two
+#Using Get-LMDevice to get a filtered list of devices to trigger AD against
+Get-LMDevice -Name "lm*" | Foreach-Object {Invoke-LMActiveDiscovery -Id $_.id}
+
+#Method Three
+#Using the parameter in the Invoke-LMActiveDiscovery to trigger AD on a folder called Eastbridge
+Invoke-LMActiveDiscovery -GroupName "Eastbridge"
+```
+
+#### Rename devices based on value of a given property
+
+```powershell
+#Method One
+#Using Get-LMDeviceProperty to retrieve the value for sysname and Set-LMDevice to set the new displayName for it
+$deviceProperty = (Get-LMDeviceProperty -Name "192.168.1.1" -Filter @{name="system.sysname"}).value
+Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
+
+#Method Two
+#Using Get-LMDevice to retrieve the value for sysname and Set-LMDevice to set the new displayName
+$device = Get-LMDevice -Name "192.168.1.1"
+$deviceProperty = ($device.systemProperties[$device.systemProperties.name.IndexOf("system.sysname")].value)
+Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
+```
+
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
 
 **Additional Note:** Currently cmdlets do not support reciving input directly from the pipeline (**Get-LMDevice | Set-LMDevice**). If you need to make modifications use Foreach-Object to loop through the pipeline input (**Get-LMDevice | Foreach-Object {Set-LMDevice $\_.Id}**). I am working on building out custom PSObject types to enable this ability in the future.
 
 # Available Commands
 
-### Account Connectivity
+#### Account Connectivity
 
 - Connect-LMAccount
 - Disconnect-LMAccount
@@ -193,36 +251,36 @@ foreach($group in $groups){
 - Get-LMCachedAccount
 - Remove-LMCachedAccount
 
-### Actuve Discovery
+#### Actuve Discovery
 
 - Invoke-LMActiveDiscovery
 
-### Alerts
+#### Alerts
 
 - Get-LMAlert
 - New-LMAlertAck
 - New-LMAlertNote
 
-### Alert Rules
+#### Alert Rules
 
 - Get-LMAlertRule
 
-### API Tokens
+#### API Tokens
 
 - Get-LMAPIToken
 - New-LMAPIToken
 - Set-LMAPIToken
 - Remove-LMAPIToken
 
-### AplliesTo
+#### AplliesTo
 
 - Get-LMAppliesToFunction
 
-### Audit Logs
+#### Audit Logs
 
 - Get-LMAuditLogs
 
-### Collector
+#### Collector
 
 - Get-LMCollector
 - Get-LMCollectorGroup
@@ -230,12 +288,12 @@ foreach($group in $groups){
 - Get-LMCollectorVersion
 - New-LMCollector
 
-### Collector Debug
+#### Collector Debug
 
 - Get-LMCollectorDebugResult
 - Invoke-LMCollectorDebugCommand
 
-### Dashboards
+#### Dashboards
 
 - Get-LMDashboard
 - Get-LMDashboardGroup
@@ -243,11 +301,12 @@ foreach($group in $groups){
 - Remove-LMDashboard
 - Remove-LMDashboardWidget
 
-### Datasources/LogicModules
+#### Datasources/LogicModules
 
 - Get-LMDatasource
 - Get-LMDatasourceAssociatedDevices
 - Get-LMDatasourceUpdateHistory
+- Get-LMDatasourceMetadata
 - Remove-LMDatasource
 - Get-LMEventSource
 - Get-LMPropertySource
@@ -255,8 +314,9 @@ foreach($group in $groups){
 - Get-LMConfigSource
 - Export-LMLogicModule
 - Import-LMLogicModule
+- Import-LMExchangeModule
 
-### Devices
+#### Devices
 
 - Get-LMDevice
 - Get-LMDeviceSDT
@@ -278,7 +338,7 @@ foreach($group in $groups){
 - Remove-LMDeviceDatasourceInstance
 - Remove-DeviceProperty
 
-### Device Groups
+#### Device Groups
 
 - Get-LMDeviceGroup
 - Get-LMDeviceGroupSDT
@@ -292,16 +352,16 @@ foreach($group in $groups){
 - Set-LMDeviceGroup
 - Remove-LMDeviceGroup
 
-### Escalation Chain
+#### Escalation Chain
 
 - Get-LMEscalationChain
 
-### LM Logs
+#### LM Logs
 
 - Send-LMLogMessage
 - Get-LMLogMessage
 
-### Netscan
+#### Netscan
 
 - Get-LMNetscan
 - New-LMNetscan
@@ -310,40 +370,40 @@ foreach($group in $groups){
 - Invoke-LMNetscan
 - Get-LMUnmonitoredDevices
 
-### Ops Notes
+#### Ops Notes
 
 - Get-LMOpsNote
 - New-LMOpsNote
 - Set-LMOpsNote
 - Remove-LMOpsNote
 
-### Portal Info
+#### Portal Info
 
 - Get-LMPortalInfo
 - Get-LMUsageMetrics
 - Set-LMPortalInfo
 
-### Recipient Group
+#### Recipient Group
 
 - Get-LMRecipientGroup
 
-### Reports
+#### Reports
 
 - Get-LMReport
 - Get-LMReportGroup
 
-### Repository (LogicModules)
+#### Repository (LogicModules)
 
 - Get-LMRepositoryLogicModules
 - Import-LMRepositoryLogicModules
 
-### Topology (Beta)
+#### Topology (Beta)
 
 - Get-LMTopologyMap
 - Get-LMTopologyMapData
 - Export-LMTopologyMap
 
-### Users and Roles
+#### Users and Roles
 
 - Get-LMRole
 - Get-LMUser
@@ -353,7 +413,7 @@ foreach($group in $groups){
 - Set-LMUser
 - Remove-LMUser
 
-### Websites
+#### Websites
 
 - Get-LMWebsite
 - Get-LMWebsiteAlerts
@@ -366,7 +426,7 @@ foreach($group in $groups){
 - Set-LMWebsite
 - Remove-LMWebsite
 
-### Website Groups
+#### Website Groups
 
 - Get-LMWebsiteGroup
 - Get-LMWebsiteGroupAlerts
@@ -376,7 +436,7 @@ foreach($group in $groups){
 - Set-LMWebsiteGroup
 - Remove-LMWebsiteGroup
 
-### Utilities (Beta)
+#### Utilities (Beta)
 
 - ConvertTo-LMDynamicGroupFromCategories
 - Export-LMDeviceConfigReport
@@ -384,6 +444,15 @@ foreach($group in $groups){
 - Import-LMMerakiCloud
 
 # Change List
+
+## 3.5.1
+
+- Update Beta Command (**Import-LMMerakiCloud**): added system.categories NoPing and NoHTTPS to network and org devices to reduce false positive alerts when adding large networks. Also sanatised names of org and network devices to ensure invalid names are not added to the portal. Added additonal parameters for **-AllowedNetworkIds** and **-ListNetworkIds** to allow for futher import filtering.
+- New Command (**Get-LMDatasourceMetadata**): This command will pull locator info for datasources that are published.
+- New Command (**Import-LMExchangeModule**): This command will import a given LM exchange module via provided exchange module guid.
+- Updated Command (**Initialize-LMPOVSetup**): Add support to allow automatic setup of LM Logs datasource for automated windows event logs ingestion.
+- Updated Command (**Invoke-LMCollectorDebugCommand**): Add support for groovy and posh command types in addition the default collector debug commands. Also added parameters to specfiy wildcard and hostname values when test groovy/ps scripts
+- Added a new **Documentation** section to provide additonal usage info on specific utility modules.
 
 ## 3.5
 

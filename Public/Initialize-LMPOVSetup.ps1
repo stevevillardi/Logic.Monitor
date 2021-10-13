@@ -7,7 +7,9 @@ Function Initialize-LMPOVSetup {
 
         [String]$WebsiteHttpType = "https",
 
-        [string]$APIUsername = "lm_api",
+        [string]$PortalMetricsAPIUsername = "lm_api",
+
+        [string]$LogsAPIUsername = "lm_logs",
 
         [Parameter(ParameterSetName = 'Individual')]
         [Switch]$SetupWebsite,
@@ -21,6 +23,9 @@ Function Initialize-LMPOVSetup {
         [Parameter(ParameterSetName = 'Individual')]
         [Switch]$CleanupDynamicGroups,
 
+        [Parameter(ParameterSetName = 'Individual')]
+        [Switch]$SetupWindowsLMLogs,
+
         [Parameter(ParameterSetName = 'All')]
         [Switch]$RunAll
     )
@@ -33,22 +38,22 @@ Function Initialize-LMPOVSetup {
 
             #Create readonly API use for Portal Metrics
             If ($SetupPortalMetrics -or $RunAll) {
-                $CheckAPIUser = Get-LMUser -Name "$APIUsername"
+                $CheckAPIUser = Get-LMUser -Name "$PortalMetricsAPIUsername"
                 $CheckPortalDevice = Get-LMDevice -Name $DeviceName
 
                 If(!$CheckAPIUser -and !$CheckPortalDevice){
-                    Write-Host "[INFO]: Setting up API user: $APIUsername"
-                    $APIUser = New-LMAPIUser -Username "$APIUsername" -note "Auto provisioned for use with LM Portal Metrics Datasources" -RoleNames @("readonly")
+                    Write-Host "[INFO]: Setting up API user: $PortalMetricsAPIUsername"
+                    $APIUser = New-LMAPIUser -Username "$PortalMetricsAPIUsername" -note "Auto provisioned for use with LM Portal Metrics Datasources" -RoleNames @("readonly")
                     If ($APIUser) {
-                        Write-Host "[INFO]: Successfully setup API user: $APIUsername"
+                        Write-Host "[INFO]: Successfully setup API user: $PortalMetricsAPIUsername"
         
-                        Write-Host "[INFO]: Creating readonly API token for user: $APIUsername"
+                        Write-Host "[INFO]: Creating readonly API token for user: $PortalMetricsAPIUsername"
                         $APIInfo = New-LMAPIToken -id $APIUser.id -Note "Auto provisioned for use with LM Portal Metrics Datasource"
                     }
         
                     #Setup portal mertics device if we have a valid API token
                     If ($APIInfo) {
-                        Write-Host "[INFO]: Successfully created API token for user: $APIUsername | $($APIInfo.accessId) | $($APIInfo.accessKey)"
+                        Write-Host "[INFO]: Successfully created API token for user: $PortalMetricsAPIUsername | $($APIInfo.accessId) | $($APIInfo.accessKey)"
         
                         If ($PortalName) {
                             $PortalDeviceGroup = New-LMDeviceGroup -Name "LogicMonitor Portal Metrics" -AppliesTo "hasCategory(`"LogicMonitorPortal`")" -ParentGroupName "Devices by Type"
@@ -66,7 +71,7 @@ Function Initialize-LMPOVSetup {
                     }
                 }
                 Else{
-                    Write-Host "[INFO]: API User ($APIUsername) or portal metrics device ($DeviceName) already exists in portal, skipping setup for portal metrics" -ForegroundColor Yellow
+                    Write-Host "[INFO]: API User ($PortalMetricsAPIUsername) or portal metrics device ($DeviceName) already exists in portal, skipping setup for portal metrics" -ForegroundColor Yellow
                 }
             }
 
@@ -120,6 +125,43 @@ Function Initialize-LMPOVSetup {
                         Write-Host "[INFO]: Removed Misc devices group from Devices by Type"
                     }
 
+                }
+            }
+
+            If($SetupWindowsLMLogs -or $RunAll){
+                $LogsAPIUser = Get-LMUser -Name "$LogsAPIUsername"
+
+                If(!$LogsAPIUser){
+                    Write-Host "[INFO]: Setting up LM Logs API user: $LogsAPIUsername"
+                    $LogsAPIUser = New-LMAPIUser -Username "$LogsAPIUsername" -note "Auto provisioned for use with Windows LM Logs Datasource" -RoleNames @("administrator")
+                    If ($LogsAPIUser) {
+                        Write-Host "[INFO]: Successfully setup API user: $LogsAPIUsername"
+        
+                        Write-Host "[INFO]: Creating administrator API token for user: $LogsAPIUsername"
+                        $LMLogsAPIINfo = New-LMAPIToken -id $LogsAPIUser.id -Note "Auto provisioned for use with Windows LM Logs Datasource"
+                    }
+        
+                    #Import Datasource and apply properties to windows server group
+                    If ($LMLogsAPIINfo) {
+                        Write-Host "[INFO]: Successfully created API token for user: $LogsAPIUsername | $($LMLogsAPIINfo.accessId) | $($LMLogsAPIINfo.accessKey)"
+        
+                        $WindowsServerDeviceGroup = Get-LMDeviceGroup -Name "Windows Servers"
+
+                        If ($WindowsServerDeviceGroup) {
+                            Write-Host "[INFO]: Adding API properties to Windows Server device group"
+                            $UpdatedWindowsServerDeviceGroup = Set-LMDeviceGroup -Id $WindowsServerDeviceGroup.Id -Properties @{"lmaccess.id" = $LMLogsAPIINfo.accessId; "lmaccess.key" = $LMLogsAPIINfo.accessKey; "lmaccount" = $PortalName }
+                            If ($UpdatedWindowsServerDeviceGroup) {
+                                Write-Host "[INFO]: Successfully updated Windows Server device group for LM Logs"
+                            }
+                        }
+
+
+                    }
+                    #Import LM Logs Datasource
+                    Import-LMExchangeModule -LMExchangeId "ed2eaf02-8c48-4e41-a7f9-8fd3d96c8e5a"
+                }
+                Else{
+                    Write-Host "[INFO]: LM Logs API User ($LogsAPIUsername) already exists in portal, skipping setup" -ForegroundColor Yellow
                 }
             }
             

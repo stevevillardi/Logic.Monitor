@@ -1,22 +1,63 @@
 Function Invoke-LMCollectorDebugCommand {
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-Debug')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-Posh')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-Groovy')]
         [Int]$Id,
 
-        [Parameter(Mandatory, ParameterSetName = 'Name')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-Debug')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-Posh')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-Groovy')]
         [String]$Name,
 
-        [Parameter(Mandatory)]
-        [String]$Command,
+        [Parameter(Mandatory, ParameterSetName = 'Id-Debug')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-Debug')]
+        [String]$DebugCommand,
 
-        [Boolean]$IncludeResult = $false
+        [Parameter(Mandatory, ParameterSetName = 'Id-Posh')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-Posh')]
+        [String]$PoshCommand,
+
+        [Parameter(Mandatory, ParameterSetName = 'Id-Groovy')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-Groovy')]
+        [String]$GroovyCommand,
+
+        [String]$CommandHostName,
+
+        [String]$CommandWildValue,
+
+        [Switch]$IncludeResult
     )
 
     #Check if we are logged in and have valid api creds
     Begin {}
     Process {
         If ($global:LMAuth.Valid) {
+
+#Cannot indent or it breaks here-string format
+$DefaultGroovy =@"
+!groovy 
+import com.santaba.agent.collector3.CollectorDb;
+def hostProps = [:];
+def instanceProps = [:];
+try {
+    hostProps = CollectorDb.getInstance().getHost("$CommandHostName").getProperties();
+    instanceProps["wildvalue"] = "$CommandWildValue";
+    }
+catch(Exception e) {
+
+};
+
+$GroovyCommand
+"@
+
+#Cannot indent or it breaks here-string format
+$DefaultPosh =@"
+!posh 
+
+$PoshCommand
+"@
 
             #Lookup device name
             If ($Name) {
@@ -34,8 +75,10 @@ Function Invoke-LMCollectorDebugCommand {
             $QueryParams = "?collectorId=$Id"
 
             #Construct Body
-            $Data = @{
-                cmdline = $Command
+            Switch -Wildcard ($PSCmdlet.ParameterSetName) {
+                "*Debug" { $Data = @{ cmdline = $DebugCommand } }
+                "*Posh" { $Data = @{ cmdline = $DefaultPosh } }
+                "*Groovy" { $Data = @{ cmdline = $DefaultGroovy } }
             }
 
             $Data = ($Data | ConvertTo-Json)

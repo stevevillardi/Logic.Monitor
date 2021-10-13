@@ -52,6 +52,9 @@ Function Import-LMMerakiCloud {
         [String[]]$AllowedOrgIds = $null,
 
         [Parameter(ParameterSetName = 'Import')]
+        [String[]]$AllowedNetworkIds = $null,
+
+        [Parameter(ParameterSetName = 'Import')]
         [String]$MerakiRootFolderName = "Meraki",
 
         [Parameter(ParameterSetName = 'Import')]
@@ -61,7 +64,10 @@ Function Import-LMMerakiCloud {
         [String]$CollectorId,
 
         [Parameter(ParameterSetName = 'List')]
-        [Switch]$ListOrgIds
+        [Switch]$ListOrgIds,
+
+        [Parameter(ParameterSetName = 'List')]
+        [Switch]$ListNetworkIds
     )
 
     #Check if we are logged in and have valid api creds
@@ -69,18 +75,34 @@ Function Import-LMMerakiCloud {
     Process {
         If ($global:LMAuth.Valid) {
             #List out org devices
-            If($ListOrgIds){
+            If($ListOrgIds -or $ListNetworkIds){
                 Try{
                     $Orgs = Invoke-RestMethod -Uri "https://api.meraki.com/api/v1/organizations" -Headers @{"X-Cisco-Meraki-API-Key"=$MerakiAPIToken}
-                    $OrgInfo = @()
+                    $MerkaiInfo = @()
                     Foreach($Org in $Orgs){
-                        $OrgInfo += [PSCustomObject]@{
-                            org_id = $Org.id
-                            org_name = $Org.name
-                            api_dashboard_enabled = $Org.api.enabled
+                        If($ListNetworkIds){
+                            $Networks = Invoke-RestMethod -Uri "https://api.meraki.com/api/v1/organizations/$($Org.id)/networks" -Headers @{"X-Cisco-Meraki-API-Key"=$MerakiAPIToken}
+                            Foreach($Net in $Networks){
+                                $MerkaiInfo += [PSCustomObject]@{
+                                    org_id = $Org.id
+                                    org_name = $Org.name
+                                    network_id = $Net.id
+                                    network_name = $Net.name
+                                    api_dashboard_enabled = $Org.api.enabled
+                                }
+                            }
+                        }
+                        Else{
+                            $MerkaiInfo += [PSCustomObject]@{
+                                org_id = $Org.id
+                                org_name = $Org.name
+                                network_id = "N/A"
+                                network_name = "N/A"
+                                api_dashboard_enabled = $Org.api.enabled
+                            }
                         }
                     }
-                    $OrgInfo
+                    $MerkaiInfo
                 }
                 Catch [Exception] {
                     If($_.Exception.Response.StatusCode.value__ -eq "401"){
@@ -137,7 +159,7 @@ Function Import-LMMerakiCloud {
             Catch [Exception] {
                 If($_.Exception.Response.StatusCode.value__ -eq "401"){
                     Write-Host "Unathorized request, check API token and try again." -ForegroundColor Red
-                    return
+                    Return
                 }
                 Else{
                     Write-Host $_.Exception.Response.StatusDescription -ForegroundColor Red
@@ -145,14 +167,14 @@ Function Import-LMMerakiCloud {
             }
             Foreach($Org in $Orgs){
                 $OrgId = $Org.id
-                $OrgName = $Org.name
+                $OrgName = $Org.name -replace "[/\\\*\<\>\,\`\(\)\|\']" , ""
                 $Networks = @()
                 $Devices = @()
 
                 If ($AllowedOrgIds -ne $null) {
                     If (!$AllowedOrgIds.Contains($OrgId)) {
                         Write-Host "[INFO]: Skipping Meraki OrgId ($OrgId), not found in AllowedOrgIds list" -ForegroundColor Gray
-                        Return
+                        Continue
                     }
                 }
 
@@ -162,7 +184,7 @@ Function Import-LMMerakiCloud {
                 }
                 Catch [Exception] {
                     Write-Host $_.Exception.Response.StatusDescription -ForegroundColor Red
-                    Return
+                    Continue
                 }
 
                 #Only add orgs if they have networks.
@@ -184,11 +206,12 @@ Function Import-LMMerakiCloud {
                                 "snmp.port" = $SNMPInfo.port
                                 "snmp.security" = $SNMPInfo.v3User
                                 "snmp.version" = "v3"
+                                "system.categories" = "NoHTTPS,NoPing"
                             }
                             $OrgGroup = New-LMDeviceGroup -Name $OrgName -Properties $OrgGroupProps -ParentGroupId $MerakiDeviceGroup.id
                             If(!$OrgGroup){
                                 Write-Host "Failed to create Meraki org device group ($OrgName)" -ForegroundColor Red
-                                Return
+                                Continue
                             }
                             Else{
                                 Write-Host "[INFO]: Created Meraki Org device group ($OrgName). This Org is using SNMPv3 to poll network devices, you must update device group properties (snmp.authToken & snmp.privToken) with the correct values." -ForegroundColor Yellow
@@ -199,11 +222,12 @@ Function Import-LMMerakiCloud {
                                 "snmp.port" = $SNMPInfo.port
                                 "snmp.community" = $SNMPInfo.v2CommunityString
                                 "snmp.version" = "v2c"
+                                "system.categories" = "NoHTTPS,NoPing"
                             }
                             $OrgGroup = New-LMDeviceGroup -Name $OrgName -Properties $OrgGroupProps -ParentGroupId $MerakiDeviceGroup.id -AppliesTo "meraki.org.id == `"$OrgId`""
                             If(!$OrgGroup){
                                 Write-Host "Failed to create Meraki org device group ($OrgName)" -ForegroundColor Red
-                                Return
+                                Continue
                             }
                             Else{
                                 Write-Host "[INFO]: Created Meraki Org device group ($OrgName). This Org is using SNMPv2c to poll network devices, an appropriate snmp.community ($($SNMPInfo.v2CommunityString)) property has been set for this device group."
@@ -234,14 +258,21 @@ Function Import-LMMerakiCloud {
                 Foreach($Network in $Networks) {
 
                     $NetworkId = $Network.id
+
+                    If ($AllowedNetworkIds -ne $null) {
+                        If (!$AllowedNetworkIds.Contains($NetworkId)) {
+                            Write-Host "[INFO]: Skipping Meraki NetworkId ($NetworkId), not found in AllowedNetworkIds list" -ForegroundColor Gray
+                            Continue
+                        }
+                    }
             
                     #Check if this network has any devices and avoid reporting deviceless networks.
                     $NetworkDevices  = $Devices.networkId.Contains($Network.id)
                     If (($NetworkDevices | Measure-Object).Count -eq 0) {
-                        Return
+                        Continue
                     }
             
-                    $NetworkName = $Network.name
+                    $NetworkName = $Network.name -replace "[/\\\*\<\>\,\`\(\)\|\']" , ""
                     $NetworkTags = $Network.tags
                     $NetworkType = $Network.productTypes
                     $NetworkHostName = "$($OrgName.Replace(' ','')).$($NetworkName.Replace(' ','')).invalid"
@@ -286,5 +317,4 @@ Function Import-LMMerakiCloud {
         }
     }
     End {}
-    
 }

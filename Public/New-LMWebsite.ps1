@@ -145,8 +145,6 @@ Function New-LMWebsite {
         
             $Data = ($Data | ConvertTo-Json -Depth 5)
 
-            $Data
-
             $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
