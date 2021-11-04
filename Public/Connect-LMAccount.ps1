@@ -104,7 +104,7 @@ Function Connect-LMAccount {
             
             Write-Host "Connected to LM portal $($PortalInfo.companyDisplayName) using account $($ApiInfo.adminName) with assgined roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
             
-            Return $Response
+            Return
         }
         Else {
             throw "Unable to get API token info"

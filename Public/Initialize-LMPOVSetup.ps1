@@ -26,6 +26,8 @@ Function Initialize-LMPOVSetup {
         [Parameter(ParameterSetName = 'Individual')]
         [Switch]$SetupWindowsLMLogs,
 
+        [String]$WindowsLMLogsEventChannels = "Application,System",
+
         [Parameter(ParameterSetName = 'All')]
         [Switch]$RunAll
     )
@@ -149,7 +151,7 @@ Function Initialize-LMPOVSetup {
 
                         If ($WindowsServerDeviceGroup) {
                             Write-Host "[INFO]: Adding API properties to Windows Server device group"
-                            $UpdatedWindowsServerDeviceGroup = Set-LMDeviceGroup -Id $WindowsServerDeviceGroup.Id -Properties @{"lmaccess.id" = $LMLogsAPIINfo.accessId; "lmaccess.key" = $LMLogsAPIINfo.accessKey; "lmaccount" = $PortalName }
+                            $UpdatedWindowsServerDeviceGroup = Set-LMDeviceGroup -Id $WindowsServerDeviceGroup.Id -Properties @{"lmaccess.id" = $LMLogsAPIINfo.accessId; "lmaccess.key" = $LMLogsAPIINfo.accessKey; "lmaccount" = $PortalName; "lmlogs.winevent.channels" = $WindowsLMLogsEventChannels }
                             If ($UpdatedWindowsServerDeviceGroup) {
                                 Write-Host "[INFO]: Successfully updated Windows Server device group for LM Logs"
                             }

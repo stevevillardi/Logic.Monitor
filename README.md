@@ -287,6 +287,7 @@ Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
 - Get-LMCollectorInstaller
 - Get-LMCollectorVersion
 - New-LMCollector
+- Set-LMCollector
 
 #### Collector Debug
 
@@ -442,8 +443,15 @@ Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
 - Export-LMDeviceConfigReport
 - Initialize-LMPOVSetup
 - Import-LMMerakiCloud
+- Invoke-LMDeviceDedupe
 
 # Change List
+
+## 3.6
+
+- New Beta Command (**Invoke-LMDeviceDedupe**): List and Remove potential device duplicates based on matching system.ips and system.sysname values. Useful for clearing up NetScans ran with improper credentials
+- Fixed erroneous return output with **Connect-LMAccount** in certain situations
+- New Command (**Set-LMCollector**): Modify collector settings typically available under the collector manage UI menu.
 
 ## 3.5.1
 

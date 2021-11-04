@@ -1,4 +1,4 @@
-## Invoke-LMPOVSetup
+## Initialize-LMPOVSetup
 
 When starting a new POV there is often a checklist of items that need to be done on everyone. Since these steps often are the same amongst POVs it makes sense to try and automate the process as much as possible. The Initialize-LMPOVSetup command is used to do just that. Below is a list of options you have when running the utility and what is actually done behind the scenes:
 
@@ -29,14 +29,14 @@ This utility is an ongoing devlopment. If you have things you would like added t
 
 ```powershell
 #Run all setup steps and add https://example.com as the web check
-Invoke-LMPOVSetup -RunAll -Website "example.com"
+Initialize-LMPOVSetup -RunAll -Website "example.com"
 
 #Setup just a webcheck for http://example.com
-Invoke-LMPOVSetup -SetupWebsite -Website "example.com" -WebstieHttpType "http"
+Initialize-LMPOVSetup -SetupWebsite -Website "example.com" -WebstieHttpType "http"
 
 #Setup portal metrics with custom api username
-Invoke-LMPOVSetup -SetupPortalMetrics -PortalMetricsAPIUsername "custom_name"
+Initialize-LMPOVSetup -SetupPortalMetrics -PortalMetricsAPIUsername "custom_name"
 
 #Setup LM Logs with custom api username
-Invoke-LMPOVSetup -SetupWindowsLMLogs -LogsAPIUsername "custom_logs_name"
+Initialize-LMPOVSetup -SetupWindowsLMLogs -LogsAPIUsername "custom_logs_name"
 ```
