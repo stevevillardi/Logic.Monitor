@@ -1,0 +1,108 @@
+Function Get-LMDeviceDatasourceInstanceGroup {
+
+    [CmdletBinding()]
+    Param (
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
+        [String]$DatasourceName,
+    
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+        [Int]$DatasourceId,
+    
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-HdsId')]
+        [Int]$Id,
+    
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-HdsId')]
+        [String]$Name,
+
+        [Parameter(Mandatory, ParameterSetName = 'Id-HdsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-HdsId')]
+        [String]$HdsId,
+
+        [Hashtable]$Filter,
+
+        [Int]$BatchSize = 1000
+
+    )
+    #Check if we are logged in and have valid api creds
+    If ($global:LMAuth.Valid) {
+
+        #Lookup Device Id
+        If ($Name) {
+            $LookupResult = (Get-LMDevice -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                return
+            }
+            $Id = $LookupResult
+        }
+
+        #Lookup DatasourceId
+        If ($DatasourceName -or $DatasourceId) {
+            $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
+                return
+            }
+            $HdsId = $LookupResult
+        }
+        
+        #Build header and uri
+        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/groups"
+
+        #Initalize vars
+        $QueryParams = ""
+        $Count = 0
+        $Done = $false
+        $Results = @()
+
+        #Loop through requests 
+        While (!$Done) {
+            #Build query params
+            $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
+
+            If ($Filter) {
+                #List of allowed filter props
+                $PropList = @()
+                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+            }
+
+            Try {
+                $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+    
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
+
+                #Stop looping if single device, no need to continue
+                If (![bool]$Response.psobject.Properties["total"]) {
+                    $Done = $true
+                    Return $Response
+                }
+                #Check result size and if needed loop again
+                Else {
+                    [Int]$Total = $Response.Total
+                    [Int]$Count += ($Response.Items | Measure-Object).Count
+                    $Results += $Response.Items
+                    If ($Count -ge $Total) {
+                        $Done = $true
+                    }
+                }
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
+                }
+            }
+        }
+        Return $Results
+    }
+    Else {
+        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+    }
+}

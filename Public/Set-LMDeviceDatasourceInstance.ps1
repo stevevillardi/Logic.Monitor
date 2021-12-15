@@ -17,6 +17,9 @@ Function Set-LMDeviceDatasourceInstance {
         [Nullable[boolean]]$DisableAlerting,
 
         [String]$InstanceGroupId,
+        
+        [Parameter(Mandatory)]
+        [String]$InstanceId,
 
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
@@ -67,7 +70,7 @@ Function Set-LMDeviceDatasourceInstance {
         }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances"
+        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$instanceId"
 
         Try {
             $Data = @{

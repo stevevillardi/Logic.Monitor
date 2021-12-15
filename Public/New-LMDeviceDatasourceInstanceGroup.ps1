@@ -1,24 +1,11 @@
-Function New-LMDeviceDatasourceInstance {
+Function New-LMDeviceDatasourceInstanceGroup {
 
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory)]
-        [String]$DisplayName,
-        
-        [Parameter(Mandatory)]
-        [String]$WildValue,
-
-        [String]$WildValue2,
+        [String]$InstanceGroupName,
 
         [String]$Description,
-
-        [Hashtable]$Properties,
-
-        [Boolean]$StopMonitoring = $false,
-
-        [Boolean]$DisableAlerting = $false,
-
-        [String]$InstanceGroupId,
 
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
@@ -61,50 +48,25 @@ Function New-LMDeviceDatasourceInstance {
             }
             $HdsId = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId } | Select-Object -First 1).Id
             If (!$HdsId) {
-                #If no existing instance is found lookup datasource Id so we can add a new instance
-                If ($DatasourceId){
-                    $HdsId = (Get-LMDatasource -Filter @{id=$DatasourceId} | Select-Object -First 1).Id
-                }
-                If ($DatasourceName){
-                    $HdsId = (Get-LMDatasource -Filter @{name=$DatasourceName} | Select-Object -First 1).Id
-                }
-                If (!$HdsId) {
                 Write-Host "Unable to find assocaited host datasource: $DatasourceId$DatasourceName, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device" -ForegroundColor Yellow
                 return
-                }
-            }
-        }
-
-
-
-        #Build custom props hashtable
-        $customProperties = @()
-        If ($Properties) {
-            Foreach ($Key in $Properties.Keys) {
-                $customProperties += @{name = $Key; value = $Properties[$Key] }
             }
         }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances"
+        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/groups"
 
         Try {
             $Data = @{
-                displayName      = $DisplayName
-                description      = $Description
-                wildValue        = $WildValue
-                wildValue2       = $WildValue2
-                stopMonitoring   = $StopMonitoring
-                disableAlerting  = $DisableAlerting
-                customProperties = $customProperties
-                groupId          = $InstanceGroupId
+                name        = $InstanceGroupName
+                description = $Description
             }
 
             #Remove empty keys so we dont overwrite them
             @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-
+            
             $Data = ($Data | ConvertTo-Json)
- 
+
             $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 

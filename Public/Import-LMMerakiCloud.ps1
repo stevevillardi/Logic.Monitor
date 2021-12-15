@@ -102,7 +102,6 @@ Function Import-LMMerakiCloud {
                             }
                         }
                     }
-                    $MerkaiInfo
                 }
                 Catch [Exception] {
                     If($_.Exception.Response.StatusCode.value__ -eq "401"){
@@ -110,10 +109,10 @@ Function Import-LMMerakiCloud {
                         return
                     }
                     Else{
-                        Write-Host $_.Exception.Response.StatusDescription -ForegroundColor Red
+                        Write-Host "$($_.TargetObject.RequestUri.OriginalString): $(($_.ErrorDetails.Message | ConvertFrom-Json).errors)" -ForegroundColor Red
                     }
                 }
-                Return
+                Return $MerkaiInfo
             }
 
             #Validate CollectorId
@@ -176,6 +175,11 @@ Function Import-LMMerakiCloud {
                         Write-Host "[INFO]: Skipping Meraki OrgId ($OrgId), not found in AllowedOrgIds list" -ForegroundColor Gray
                         Continue
                     }
+                }
+
+                If ($Org.api.enabled -eq $false) {
+                    Write-Host "[INFO]: Skipping Meraki OrgId ($OrgId), dashbaord API access not enabled" -ForegroundColor Gray
+                    Continue
                 }
 
                 Try {

@@ -235,6 +235,29 @@ Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
 $device = Get-LMDevice -Name "192.168.1.1"
 $deviceProperty = ($device.systemProperties[$device.systemProperties.name.IndexOf("system.sysname")].value)
 Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
+
+#Method Three
+#Using Get-LMDeviceGroupDevices to retrieve a list of devices and loop through each and set the sysname value to the displayname
+$device = Get-LMDeviceGroupDevices -Name "Cambium Wireless"
+foreach ($dev in $devices) {
+    $deviceProperty = ($dev.systemProperties[$dev.systemProperties.name.IndexOf("system.sysname")].value)
+    if($deviceProperty -and $dev.systemProperties.name.IndexOf("system.sysname") -ne -1){
+        Set-LMDevice -Id $dev.id -DisplayName $deviceProperty
+    }
+}
+```
+
+#### Export LM Device Metric Data to JSON/CSV
+
+```powershell
+#Method One: Export all datasources and instances by deviceId
+Export-LMDeviceData -DeviceId 3 -ExportPath "../../../Desktop" -ExportFormat json
+
+#Method Two: Export only datasources starting with Collector to CSV
+Export-LMDeviceData -DeviceId 3 -ExportPath "../../../Desktop" -ExportFormat csv -DatasourceIncludeFilter "Collector*"
+
+#Method Three: Get HTTPS-443 instance metric data for the past 8 hours
+Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Get-Date).AddHours(-8) -EndDate (Get-Date)
 ```
 
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
@@ -324,13 +347,16 @@ Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
 - Get-LMDeviceSDTHistory
 - Get-LMDeviceProperty
 - Get-LMDeviceAlerts
+- Get-LMDeviceData
 - Get-LMDeviceDatasourceInstance
+- Get-LMDeviceDatasourceInstanceGroup
 - Get-LMDeviceDatasourceInstanceAlertSettings
 - Get-LMDeviceDatasourceList
 - Get-LMDeviceEventsourceList
 - Get-LMDeviceInstanceList
 - New-LMDevice
 - New-LMDeviceDatasourceInstance
+- New-LMDeviceDatasourceInstanceGroup
 - Set-LMDeviceDatasourceInstance
 - New-LMDeviceProperty
 - Set-LMDevice
@@ -338,6 +364,7 @@ Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
 - Remove-LMDevice
 - Remove-LMDeviceDatasourceInstance
 - Remove-DeviceProperty
+- Export-LMDeviceData
 
 #### Device Groups
 
@@ -446,6 +473,15 @@ Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
 - Invoke-LMDeviceDedupe
 
 # Change List
+
+## 3.6.1
+
+- New Command (**Get-LMDeviceData**): List an instances metric data for a given time range.
+- New Beta Command (**Export-LMDeviceData**): Exports a device/device group's datasource metric data for a given range. Can be exported to JSON/CSV or directly to console as a PSCustomObject. Due to the nature of the LM API depending on how many instances/datasources you have to export this process could take quite a bit of time since each instance has to be pulled seperately. If you want to track the progress of the export use the **-Debug** parameter when running otherwise no output will be display will executing.
+- New Commands (**Get/New-LMDeviceDatasourceInstanceGroup**): List and Create datasource instance groups for datasources applied to resources.
+- Updated Command: (**Set-LMDeviceDatasourceInstance**): Updated command to allow for setting instance group membership.
+- Updated Command: (**Initialize-LMPOVSetup**): Switched imported LM Exchange datasource to use Kevin Ford's imporved metadata LM Logs datasource and set to appropriate lm logs device properties
+- Updated Command: (**Import-LMMerakiCloud**): Added logic checks to skip trying to add meraki orgs/networks where dashboard api access has not been enabled. Fixed a bug that would result in no output when trying to list Network/Org ids with and invalid API key.
 
 ## 3.6
 

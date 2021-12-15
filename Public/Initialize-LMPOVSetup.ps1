@@ -151,7 +151,7 @@ Function Initialize-LMPOVSetup {
 
                         If ($WindowsServerDeviceGroup) {
                             Write-Host "[INFO]: Adding API properties to Windows Server device group"
-                            $UpdatedWindowsServerDeviceGroup = Set-LMDeviceGroup -Id $WindowsServerDeviceGroup.Id -Properties @{"lmaccess.id" = $LMLogsAPIINfo.accessId; "lmaccess.key" = $LMLogsAPIINfo.accessKey; "lmaccount" = $PortalName; "lmlogs.winevent.channels" = $WindowsLMLogsEventChannels }
+                            $UpdatedWindowsServerDeviceGroup = Set-LMDeviceGroup -Id $WindowsServerDeviceGroup.Id -Properties @{"lmaccess.id" = $LMLogsAPIINfo.accessId; "lmaccess.key" = $LMLogsAPIINfo.accessKey; "lmaccount" = $PortalName; "lmlogs.winevent.channels" = $WindowsLMLogsEventChannels; "lmlogs.winevent.detailed_message" = "false" }
                             If ($UpdatedWindowsServerDeviceGroup) {
                                 Write-Host "[INFO]: Successfully updated Windows Server device group for LM Logs"
                             }
@@ -160,7 +160,9 @@ Function Initialize-LMPOVSetup {
 
                     }
                     #Import LM Logs Datasource
-                    Import-LMExchangeModule -LMExchangeId "ed2eaf02-8c48-4e41-a7f9-8fd3d96c8e5a"
+                    #Import-LMExchangeModule -LMExchangeId "ed2eaf02-8c48-4e41-a7f9-8fd3d96c8e5a"
+                    #Use Kevin Fords imporved version with metadata over the orginal version
+                    Import-LMExchangeModule -LMExchangeId "896d0c2c-a993-4f0b-8db2-2bb29947cb52"
                 }
                 Else{
                     Write-Host "[INFO]: LM Logs API User ($LogsAPIUsername) already exists in portal, skipping setup" -ForegroundColor Yellow
