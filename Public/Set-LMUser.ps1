@@ -66,12 +66,12 @@ Function Set-LMUser {
                 $AdminGroupIds = @()
                 Foreach ($Group in $UserGroups) {
                     If ($Group -Match "\*") {
-                        Write-Host "Wildcard values not supported for groups." -ForegroundColor Yellow
+                        Write-Error "Wildcard values not supported for groups."
                         return
                     }
                     $Group = (Get-LMUserGroup -Name $Group | Select-Object -First 1 )
                     If (!$Group) {
-                        Write-Host "Unable to find username: $Username, please check spelling and try again." -ForegroundColor Yellow
+                        Write-Error "Unable to find username: $Username, please check spelling and try again."
                         return
                     }
                     $AdminGroup += @{id = $Group.id; name = $Group.name }
@@ -87,7 +87,7 @@ Function Set-LMUser {
                     $Roles += @{id = $RoleId }
                 }
                 Else {
-                    Write-Host "Enable to locate user role named $Role, it will be skipped" -ForegroundColor Yellow
+                    Write-LMHost "Enable to locate user role named $Role, it will be skipped" -ForegroundColor Yellow
                 }
             }
     
@@ -165,7 +165,7 @@ Function Set-LMUser {
             }
         }
         Else {
-            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

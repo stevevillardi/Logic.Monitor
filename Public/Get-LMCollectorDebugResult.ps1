@@ -19,12 +19,12 @@ Function Get-LMCollectorDebugResult {
             #Lookup device name
             If ($Name) {
                 If ($Name -Match "\*") {
-                    Write-Host "Wildcard values not supported for collector names." -ForegroundColor Yellow
+                    Write-Error "Wildcard values not supported for collector names."
                     return
                 }
                 $Id = (Get-LMCollector -Name $Name | Select-Object -First 1 ).Id
                 If (!$Id) {
-                    Write-Host "Unable to find collector: $Name, please check spelling and try again." -ForegroundColor Yellow
+                    Write-Error "Unable to find collector: $Name, please check spelling and try again."
                     return
                 }
             }
@@ -52,7 +52,7 @@ Function Get-LMCollectorDebugResult {
             Return $Response
         }
         Else {
-            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

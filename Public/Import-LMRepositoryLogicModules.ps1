@@ -36,7 +36,7 @@ Function Import-LMRepositoryLogicModules {
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
-            Write-Host "Modules imported successfully: $LogicModuleNames"
+            Write-LMHost "Modules imported successfully: $LogicModuleNames"
         }
         Catch [Exception] {
             $Proceed = Resolve-LMException -LMException $PSItem
@@ -47,6 +47,6 @@ Function Import-LMRepositoryLogicModules {
         Return 
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

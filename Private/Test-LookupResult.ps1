@@ -7,12 +7,16 @@ Function Test-LookupResult {
     )
     #If mutiple resources are returned stop processing
     If (($Result | Measure-Object).Count -gt 1) {
-        Write-Host "Mutiple resources returned for the specified name value: $LookupString. Please ensure value is unique and try again" -ForegroundColor Yellow
+        [Console]::ForegroundColor = 'red'
+        [Console]::Error.WriteLine("Mutiple resources returned for the specified name value: $LookupString. Please ensure value is unique and try again")
+        [Console]::ResetColor()
         return $true
     }
     #If empty stop processing since we have no Id to use
     ElseIf (!$Result) {
-        Write-Host "Unable to find resource for the specified name value: $LookupString. Please check spelling and try again." -ForegroundColor Yellow
+        [Console]::ForegroundColor = 'red'
+        [Console]::Error.WriteLine("Unable to find resource for the specified name value: $LookupString. Please check spelling and try again.")
+        [Console]::ResetColor()
         return $true
     }
     return $false

@@ -27,12 +27,12 @@ Function New-LMDeviceGroup {
         #Lookup ParentGroupName
         If ($ParentGroupName) {
             If ($ParentGroupName -Match "\*") {
-                Write-Host "Wildcard values not supported for groups names." -ForegroundColor Yellow
+                Write-Error "Wildcard values not supported for groups names." Write-Error
                 return
             }
             $ParentGroupId = (Get-LMDeviceGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
             If (!$ParentGroupId) {
-                Write-Host "Unable to find group: $ParentGroupName, please check spelling and try again." -ForegroundColor Yellow
+                Write-Error "Unable to find group: $ParentGroupName, please check spelling and try again." Write-Error
                 return
             }
         }
@@ -80,6 +80,6 @@ Function New-LMDeviceGroup {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

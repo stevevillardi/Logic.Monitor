@@ -95,7 +95,7 @@ $PoshCommand
                     While (!$CommandCompleted) {
                         $CommandResult = Get-LMCollectorDebugResult -SessionId $Response.sessionId -Id $Id
                         If ($CommandResult.errorMessage -eq "Agent has fetched the task, waiting for response") {
-                            Write-Host "Agent has fetched the task, waiting for response..." -ForegroundColor green
+                            Write-LMHost "Agent has fetched the task, waiting for response..." -ForegroundColor green
                             Start-Sleep -Seconds 5
                         }
                         Else {
@@ -105,7 +105,7 @@ $PoshCommand
                     }
                 }
                 Else {
-                    Write-Host "Submitted debug command task ($Command) for device id: $($Response.sessionId). Use Get-LMCollectorDebugResult to retrieve response or resubmit request with -IncludeResult" -ForegroundColor green
+                    Write-LMHost "Submitted debug command task ($Command) for device id: $($Response.sessionId). Use Get-LMCollectorDebugResult to retrieve response or resubmit request with -IncludeResult" -ForegroundColor green
                 }
             }
             Catch [Exception] {
@@ -117,7 +117,7 @@ $PoshCommand
             Return
         }
         Else {
-            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

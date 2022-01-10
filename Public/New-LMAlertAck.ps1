@@ -32,7 +32,7 @@ Function New-LMAlertAck {
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
 
             If ($Response.status -eq 200) {
-                Write-Host "Successfully acknowledged alert id(s): $Ids" -ForegroundColor Green
+                Write-LMHost "Successfully acknowledged alert id(s): $Ids" -ForegroundColor Green
             }
             Else {
                 $ResponseErrors = Get-LMv4Error -InputObject $Response
@@ -50,6 +50,6 @@ Function New-LMAlertAck {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

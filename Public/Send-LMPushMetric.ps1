@@ -1,30 +1,52 @@
-#WORK IN PROGRESS, NOT WORKING
 Function Send-LMPushMetric {
     
     [CmdletBinding()]
     Param (
 
-        [Parameter(Mandatory)]
-        [String]$Name,
-
-        [String]$Description,
+        [Parameter(Mandatory, ParameterSetName = 'Create-DatasourceId')]
+        [Parameter(Mandatory, ParameterSetName = 'Create-DatasourceName')]
+        [String]$ResourceName,
+        
+        [Parameter(ParameterSetName = 'Create-DatasourceId')]
+        [Parameter(ParameterSetName = 'Create-DatasourceName')]
+        [String]$ResourceDescription,
         
         [Parameter(Mandatory)]
         [Hashtable]$ResourceIds,
 
         [Hashtable]$ResourceProperties,
 
-        [Parameter(Mandatory)]
-        [String]$DatasourceName,
-
+        [Parameter(Mandatory, ParameterSetName = 'Create-DatasourceId')]
         [String]$DatasourceId, #Needed if Datasource name is not specified
 
-        [String]$DatasourceDisplayName = "dataSource",
+        [Parameter(Mandatory, ParameterSetName = 'Create-DatasourceName')]
+        [String]$DatasourceName,
 
-        [String]$DatasourceGroup = "PushModules",
+        [String]$DatasourceDisplayName, #Optional defaults to datasourceName if not specified
+
+        [String]$DatasourceGroup, #Optional defaults to PushModules
 
         [Parameter(Mandatory)]
-        [String[]]$Instances
+        [String[]]$Instances,
+
+        [Parameter(Mandatory)]
+        [String]$InstanceName,
+
+        [String]$InstanceDisplayName, #Optional defaults to InstanceName,
+
+        [Hashtable]$InstanceProperties,
+
+        [Parameter(Mandatory)]
+        [String]$DatapointName,
+
+        [String]$DatapointDescription, #Optional defaults to datapointName
+
+        [ValidateSet("min", "max", "non", "avg","sum", "none")]
+        [String]$DatapointAggregationType = "none",
+
+        [Hashtable]$Values,
+
+        [Switch]$CreateResourceIfNotFound
 
     )
     #Check if we are logged in and have valid api creds
@@ -38,6 +60,11 @@ Function Send-LMPushMetric {
                 Foreach ($Key in $Properties.Keys) {
                     $customProperties += @{name = $Key; value = $Properties[$Key] }
                 }
+            }
+
+            $QueryParams = $null
+            If($CreateResourceIfNotFound){
+                $QueryParams = "?create=true"
             }
                     
             #Build header and uri
@@ -65,7 +92,7 @@ Function Send-LMPushMetric {
             
                 $Data = ($Data | ConvertTo-Json)
                 $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
@@ -80,7 +107,7 @@ Function Send-LMPushMetric {
             }
         }
         Else {
-            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

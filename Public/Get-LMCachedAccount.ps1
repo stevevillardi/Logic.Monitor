@@ -7,6 +7,6 @@ Function Get-LMCachedAccount {
         Get-Content -Path $CredentialPath | ConvertFrom-Json
     }
     Else {
-        Write-Host "No credential file found, use Import-LMCachedAccount to setup a cached credential file" -ForegroundColor Yelow
+        Write-Error "No credential file found, use Import-LMCachedAccount to setup a cached credential file"
     }
 }

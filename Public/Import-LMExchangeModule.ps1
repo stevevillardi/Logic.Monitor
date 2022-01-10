@@ -28,7 +28,7 @@ Function Import-LMExchangeModule {
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
-                Write-Host "Successfully imported LM Exchange module id: $LMExchangeId"
+                Write-LMHost "Successfully imported LM Exchange module id: $LMExchangeId"
 
                 Return
 
@@ -41,7 +41,7 @@ Function Import-LMExchangeModule {
             }
         }
         Else {
-            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

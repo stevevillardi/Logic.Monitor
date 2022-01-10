@@ -68,7 +68,7 @@ Function Export-LMDeviceConfigReport {
                 $network_devices = Get-LMDeviceGroupDevices -id $network_group_id
             }
             Else{
-                Write-Host "Default report device group Devices by Type could not be located, please specify a DeviceGroupId to use for running this export" -ForegroundColor red
+                Write-Error "Default report device group Devices by Type could not be located, please specify a DeviceGroupId to use for running this export"
             }
         }
         Else {
@@ -154,6 +154,6 @@ Function Export-LMDeviceConfigReport {
         
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

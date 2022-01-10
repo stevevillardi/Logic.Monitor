@@ -40,25 +40,25 @@ Function Export-LMDeviceData {
         }
 
         If($DeviceList){
-            Write-Debug "[INFO]: $(($DeviceList | Measure-Object).count) resource(s) selected for data export"
+            Write-LMHost "[INFO]: $(($DeviceList | Measure-Object).count) resource(s) selected for data export"
             Foreach($Device in $DeviceList){
                 $DatasourceList = @()
-                Write-Debug "[INFO]: Starting data collection for resource: $($Device.displayName)"
+                Write-LMHost "[INFO]: Starting data collection for resource: $($Device.displayName)"
                 $DatasourceList = Get-LMDeviceDatasourceList -Id $Device.id | Where-Object { $_.monitoringInstanceNumber -gt 0 -and $_.dataSourceName -like $DatasourceIncludeFilter -and $_.datasourceName -notlike $DatasourceExcludeFilter}
                 If($DatasourceList){
-                    Write-Debug "[INFO]: Found ($(($DatasourceList | Measure-Object).count)) datasource(s) with 1 or more active instances for resource: $($Device.displayName) using datasource filter (Include:$DatasourceIncludeFilter | Exclude:$DatasourceExcludeFilter)"
+                    Write-LMHost "[INFO]: Found ($(($DatasourceList | Measure-Object).count)) datasource(s) with 1 or more active instances for resource: $($Device.displayName) using datasource filter (Include:$DatasourceIncludeFilter | Exclude:$DatasourceExcludeFilter)"
                     Foreach($Datasource in $DatasourceList){
-                        Write-Debug "[INFO]: Starting instance discovery for datasource $($Datasource.dataSourceName) for resource: $($Device.displayName)"
+                        Write-LMHost "[INFO]: Starting instance discovery for datasource $($Datasource.dataSourceName) for resource: $($Device.displayName)"
                         $InstanceList = @()
                         $InstanceList = Get-LMDeviceDatasourceInstance -Id $Device.id -DatasourceId $Datasource.dataSourceId | Where-Object { $_.stopMonitoring -eq $false}
                         If($InstanceList){
-                            Write-Debug "[INFO]: Found ($(($InstanceList | Measure-Object).count)) instance(s) for resource: $($Device.displayName)"
+                            Write-LMHost "[INFO]: Found ($(($InstanceList | Measure-Object).count)) instance(s) for resource: $($Device.displayName)"
                             Foreach($Instance in $InstanceList){
-                                Write-Debug "[INFO]: Starting datapoint collection for instance $($Instance.name) for resource: $($Device.displayName)"
+                                Write-LMHost "[INFO]: Starting datapoint collection for instance $($Instance.name) for resource: $($Device.displayName)"
                                 $Datapoints = @()
                                 $Datapoints = Get-LMDeviceData -DeviceId $Device.id -DatasourceId $Datasource.dataSourceId -InstanceId $Instance.id -StartDate $StartDate -EndDate $EndDate
                                 If($Datapoints){
-                                    Write-Debug "[INFO]: Finished datapoint collection for instance $($Instance.name) for resource: $($Device.displayName)"
+                                    Write-LMHost "[INFO]: Finished datapoint collection for instance $($Instance.name) for resource: $($Device.displayName)"
                                     $DataExportList += [PSCustomObject]@{
                                         deviceId = $Device.id
                                         deviceName = $Device.displayName
@@ -81,11 +81,11 @@ Function Export-LMDeviceData {
             }
         }
         Else{
-            Write-Host "No resources found using supplied parameters, please check you settings and try again." -ForegroundColor Yellow
+            Write-Error "No resources found using supplied parameters, please check you settings and try again."
         }
         
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

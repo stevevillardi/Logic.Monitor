@@ -56,7 +56,7 @@ Function New-LMCachedAccount {
             New-Item -ItemType File -Path $CredentialPath | Out-Null
             $AccountCredentials
             $AccountCredentials | ConvertTo-Json | Set-Content -Path $CredentialPath
-            Write-Host "Credential for $AccountName has been saved to: $CredentialPath"
+            Write-LMHost "Credential for $AccountName has been saved to: $CredentialPath"
         }
         Else {
             $CredentialFile = Get-Content -Path $CredentialPath | ConvertFrom-Json
@@ -75,7 +75,7 @@ Function New-LMCachedAccount {
                 #Export new credentials for json file
                 $AccountCredentials
                 $AccountCredentials | ConvertTo-Json | Set-Content -Path $CredentialPath
-                Write-Host "Credential for $AccountName has been saved to: $CredentialPath"
+                Write-LMHost "Credential for $AccountName has been saved to: $CredentialPath"
             }
             Else {
                 If ($OverwriteExisting) {
@@ -89,15 +89,15 @@ Function New-LMCachedAccount {
                     #Export new credentials for json file
                     $CredentialFile
                     $CredentialFile | ConvertTo-Json | Set-Content -Path $CredentialPath
-                    Write-Host "Credential for $AccountName has been updated in: $CredentialPath"
+                    Write-LMHost "Credential for $AccountName has been updated in: $CredentialPath"
                 }
                 Else {
-                    Write-Host "A credential for portal $AccountName already exists, use overwrite switch to update existing entry"
+                    Write-LMHost "A credential for portal $AccountName already exists, use overwrite switch to update existing entry"
                 }
             }
         }
     }
     Catch {
-        Write-Host "Unable to store credentials, check that you have the correct api info and try again" -ForegroundColor Yellow
+        Write-Error "Unable to store credentials, check that you have the correct api info and try again"
     }
 }

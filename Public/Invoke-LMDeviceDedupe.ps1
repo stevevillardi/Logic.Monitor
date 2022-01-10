@@ -173,14 +173,14 @@ Function Invoke-LMDeviceDedupe {
                 ElseIf($RemoveDuplicates){
                     Foreach($Device in $OutputList){
                         #Remove duplicate devices
-                        Write-Host "Removing device ($($Device.duplicate_deviceId)) $($Device.duplicate_displayName) for reason: $($Device.duplicate_reason)"
+                        Write-LMHost "Removing device ($($Device.duplicate_deviceId)) $($Device.duplicate_displayName) for reason: $($Device.duplicate_reason)"
                         Remove-LMDevice -Id $Device.duplicate_deviceId
                     }
                 }
             }
         }
         Else {
-            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

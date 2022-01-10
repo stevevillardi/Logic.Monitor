@@ -14,12 +14,12 @@ Function Set-LMPortalLogo {
 
             #Check for PS version 6.1 +
             If (($PSVersionTable.PSVersion.Major -le 5) -or ($PSVersionTable.PSVersion.Major -eq 6 -and $PSVersionTable.PSVersion.Minor -lt 1)) {
-                Write-Host "This command requires PS version 6.1 or higher to run."
+                Write-Error "This command requires PS version 6.1 or higher to run."
                 return
             }
 
             If (!(Test-Path -Path $LogoPath) -and ((!($Extension -ieq 'jpeg')) -or (!($Extension -ieq 'jpg')) -or (!($Extension -ieq 'png')) -or (!($Extension -ieq 'gif')))) {
-                Write-Host "File not found or is not a valid jpeg/jpg/gif/png file, check file path and try again" -ForegroundColor Yellow
+                Write-Error "File not found or is not a valid jpeg/jpg/gif/png file, check file path and try again"
                 Return
             }
 
@@ -36,7 +36,7 @@ Function Set-LMPortalLogo {
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{filename = $FileRaw;name="file" }
-                Write-Host "Successfully imported loginLogo $([IO.Path]::GetFileName($LogoPath)) of type: $($Response.items.type)"
+                Write-LMHost "Successfully imported loginLogo $([IO.Path]::GetFileName($LogoPath)) of type: $($Response.items.type)"
 
                 #Build header and uri
                 $ResourcePath = "/setting/upload/companyLogo"
@@ -47,7 +47,7 @@ Function Set-LMPortalLogo {
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{filename = $FileRaw;name="file" }
-                Write-Host "Successfully imported companyLogo $([IO.Path]::GetFileName($LogoPath)) of type: $($Response.items.type)"
+                Write-LMHost "Successfully imported companyLogo $([IO.Path]::GetFileName($LogoPath)) of type: $($Response.items.type)"
 
                 Return
 
@@ -60,7 +60,7 @@ Function Set-LMPortalLogo {
             }
         }
         Else {
-            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

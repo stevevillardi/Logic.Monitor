@@ -134,10 +134,10 @@ Function Export-LMTopologyMap {
                                 Foreach ($to in $group.Group) {
 
                                     New-DiagramNode -Id $to.toId -Label $to.toName -Image $(If ($NodeIcons.$($to.toType)) { $NodeIcons.$($to.toType) }Else { $NodeIcons.Unknown }) -X $to.toX -Y $to.toY -FixedX $useCoordinatesFromLM -FixedY $useCoordinatesFromLM
-                                    #Write-Host "Id:$($to.toId) | Label: $($to.toName)"
+
                                 }
                                 New-DiagramNode -Id $group.Group[0].fromId -Label $group.Group[0].fromName -To $($group.Group.toId -Join ",").Split(",") -Image $(If ($NodeIcons.$($group.Group[0].fromType)) { $NodeIcons.$($group.Group[0].fromType) }Else { $NodeIcons.Unknown }) -X $group.Group[0].fromX -Y $group.Group[0].fromY -FixedX $useCoordinatesFromLM -FixedY $useCoordinatesFromLM
-                                #Write-Host "Id:$($group.Group[0].fromId) | Label: $($group.Group[0].fromName) | To: $($group.Group.toId -Join ",")"
+                                
                             }
                         } -BackGroundImage $BackgroundImage
                     }
@@ -150,11 +150,11 @@ Function Export-LMTopologyMap {
             } -ShowHTML -Online
         }
         Else {
-            Write-Host "Unable to retrieve topology data for give id/name, please check spelling and try again" -ForegroundColor Yellow
+            Write-Error "Unable to retrieve topology data for give id/name, please check spelling and try again"
             Return
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

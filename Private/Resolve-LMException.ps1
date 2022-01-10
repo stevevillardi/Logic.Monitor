@@ -9,7 +9,7 @@ Function Resolve-LMException {
         $RateLimitSize = $LMException.Exception.Response.Headers.Value[$LMException.Exception.Response.Headers.Key.IndexOf("x-rate-limit-limit")]
         #$RateLimitRemaining = $LMException.Exception.Response.Headers.Value[$LMException.Exception.Response.Headers.Key.IndexOf("x-rate-limit-remaining")]
 
-        Write-Host "Request exceeded rate limit window of $RateLimitSize requests over $RateLimitWindow seconds, retrying operation in $RateLimitWindow seconds" -ForegroundColor Yellow
+        Write-LMHost "Request exceeded rate limit window of $RateLimitSize requests over $RateLimitWindow seconds, retrying operation in $RateLimitWindow seconds" -ForegroundColor Yellow
         Start-Sleep -Seconds $RateLimitWindow
         return $true
     }

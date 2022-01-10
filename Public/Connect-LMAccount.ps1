@@ -49,7 +49,9 @@ Function Connect-LMAccount {
         [String]$AccountName,
 
         [Parameter(Mandatory, ParameterSetName = 'Cached')]
-        [Switch]$UseCachedCredential
+        [Switch]$UseCachedCredential,
+
+        [Switch]$DisableConsoleLogging
     )
     If ($UseCachedCredential) {
         $CredentialPath = Join-Path -Path $Home -ChildPath "Logic.Monitor.json"
@@ -70,12 +72,12 @@ Function Connect-LMAccount {
                 $AccessId = $CredentialFile[$StoredCredentialIndex].Id
             }
             Else {
-                Write-Host "Entered value does not match one of the listed credentials, please check the selected entry and try again" -ForegroundColor Yellow
+                Write-Error "Entered value does not match one of the listed credentials, please check the selected entry and try again"
                 Return
             }
         }
         Else {
-            Write-Host "No credential file could be located, use New-LMCachedAccount to cache a credential for use with -CachedAccountName or manually specify api credentials" -ForegroundColor Yellow
+            Write-Error "No credential file could be located, use New-LMCachedAccount to cache a credential for use with -CachedAccountName or manually specify api credentials"
             Return
         }
 
@@ -91,6 +93,7 @@ Function Connect-LMAccount {
         Key    = $AccessKey
         Portal = $AccountName
         Valid  = $false
+        Logging = !$DisableConsoleLogging.IsPresent
     }
 
     Try {
@@ -102,7 +105,7 @@ Function Connect-LMAccount {
         If ($ApiInfo) {
             $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
             
-            Write-Host "Connected to LM portal $($PortalInfo.companyDisplayName) using account $($ApiInfo.adminName) with assgined roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
+            Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) using account $($ApiInfo.adminName) with assgined roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
             
             Return
         }

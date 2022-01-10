@@ -25,7 +25,7 @@ Function New-LMAPIUser {
                 $Roles += @{id = $RoleId }
             }
             Else {
-                Write-Host "Unable to locate user role named $Role, it will be skipped" -ForegroundColor Yellow
+                Write-LMHost "Unable to locate user role named $Role, it will be skipped" -ForegroundColor Yellow
             }
         }
 
@@ -34,12 +34,12 @@ Function New-LMAPIUser {
             $AdminGroupIds = @()
             Foreach ($Group in $UserGroups) {
                 If ($Group -Match "\*") {
-                    Write-Host "Wildcard values not supported for groups." -ForegroundColor Yellow
+                    Write-Error "Wildcard values not supported for groups." 
                     return
                 }
                 $Id = (Get-LMUserGroup -Name $Group | Select-Object -First 1 ).Id
                 If (!$Id) {
-                    Write-Host "Unable to find user group: $Group, please check spelling and try again." -ForegroundColor Yellow
+                    Write-Error "Unable to find user group: $Group, please check spelling and try again." 
                     return
                 }
                 $AdminGroupIds += $Id
@@ -86,6 +86,6 @@ Function New-LMAPIUser {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

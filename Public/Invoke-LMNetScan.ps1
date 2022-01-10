@@ -20,7 +20,7 @@ Function Invoke-LMNetScan {
     
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
-                Write-Host "Scheduled NetScan task for NetScan id: $Id." -ForegroundColor green
+                Write-LMHost "Scheduled NetScan task for NetScan id: $Id." -ForegroundColor green
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem
@@ -30,7 +30,7 @@ Function Invoke-LMNetScan {
             }
         }
         Else {
-            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

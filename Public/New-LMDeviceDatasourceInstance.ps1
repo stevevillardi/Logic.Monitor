@@ -26,7 +26,7 @@ Function New-LMDeviceDatasourceInstance {
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
-        [Int]$DatasourceId,
+        [Nullable[Int]]$DatasourceId,
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
@@ -43,12 +43,12 @@ Function New-LMDeviceDatasourceInstance {
         #Lookup Device Id
         If ($Name) {
             If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
+                Write-Error "Wildcard values not supported for device names."
                 return
             }
-            $Id = (Get-LMDeviceDataSourceList -Name $Name | Select-Object -First 1 ).Id
+            $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
             If (!$Id) {
-                Write-Host "Unable to find assocaited host device: $Name, please check spelling and try again." -ForegroundColor Yellow
+                Write-Error "Unable to find assocaited host device: $Name, please check spelling and try again."
                 return
             }
         }
@@ -56,22 +56,13 @@ Function New-LMDeviceDatasourceInstance {
         #Lookup DatasourceId
         If ($DatasourceName -or $DatasourceId) {
             If ($DatasourceName -Match "\*") {
-                Write-Host "Wildcard values not supported for datasource names." -ForegroundColor Yellow
+                Write-Error "Wildcard values not supported for datasource names."
                 return
             }
             $HdsId = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId } | Select-Object -First 1).Id
             If (!$HdsId) {
-                #If no existing instance is found lookup datasource Id so we can add a new instance
-                If ($DatasourceId){
-                    $HdsId = (Get-LMDatasource -Filter @{id=$DatasourceId} | Select-Object -First 1).Id
-                }
-                If ($DatasourceName){
-                    $HdsId = (Get-LMDatasource -Filter @{name=$DatasourceName} | Select-Object -First 1).Id
-                }
-                If (!$HdsId) {
-                Write-Host "Unable to find assocaited host datasource: $DatasourceId$DatasourceName, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device" -ForegroundColor Yellow
+                Write-Error "Unable to find assocaited host datasource: $DatasourceId$DatasourceName, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device"
                 return
-                }
             }
         }
 
@@ -104,7 +95,7 @@ Function New-LMDeviceDatasourceInstance {
             @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
 
             $Data = ($Data | ConvertTo-Json)
- 
+
             $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
@@ -121,6 +112,6 @@ Function New-LMDeviceDatasourceInstance {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

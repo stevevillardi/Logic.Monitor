@@ -19,12 +19,12 @@ Function New-LMDeviceProperty {
 
         If ($Name) {
             If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for device name." -ForegroundColor Yellow
+                Write-Error "Wildcard values not supported for device name." 
                 return
             }
             $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
             If (!$Id) {
-                Write-Host "Unable to find device with name: $Name, please check spelling and try again." -ForegroundColor Yellow
+                Write-Error "Unable to find device with name: $Name, please check spelling and try again." 
                 return
             }
         }
@@ -56,6 +56,6 @@ Function New-LMDeviceProperty {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

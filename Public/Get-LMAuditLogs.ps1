@@ -76,7 +76,7 @@ Function Get-LMAuditLogs {
                     $Results += $Response.Items
                     If ($Count -ge $QueryLimit) {
                         $Done = $true
-                        Write-Host "Reached $QueryLimit record query limitation for this endpoint" -ForegroundColor Yellow
+                        Write-LMHost "Reached $QueryLimit record query limitation for this endpoint" -ForegroundColor Yellow
                     }
                     ElseIf ($Count -ge $Total -and $Total -ge 0) {
                         $Done = $true
@@ -93,6 +93,6 @@ Function Get-LMAuditLogs {
         Return $Results
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

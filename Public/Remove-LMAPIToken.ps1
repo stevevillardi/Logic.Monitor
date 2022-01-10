@@ -33,7 +33,7 @@ Function Remove-LMAPIToken {
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
-            Write-Host "Successfully removed id ($APITokenId)" -ForegroundColor Green
+            Write-LMHost "Successfully removed id ($APITokenId)" -ForegroundColor Green
             
             Return
         }
@@ -45,6 +45,6 @@ Function Remove-LMAPIToken {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

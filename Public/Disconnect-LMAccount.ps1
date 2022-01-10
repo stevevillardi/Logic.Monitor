@@ -24,9 +24,9 @@ Function Disconnect-LMAccount {
     #Clear credential object from environment
     If (Get-Variable -Name LMAuth -Scope Global -ErrorAction SilentlyContinue) {
         Remove-Variable LMAuth -Scope Global -ErrorAction SilentlyContinue
-        Write-Host "Successfully cleared login credentials for LM account." -ForegroundColor Green
+        Write-LMHost "Successfully cleared login credentials for LM account." -ForegroundColor Green
     }
     Else {
-        Write-Host "Not currently connected to any LM account."
+        Write-LMHost "Not currently connected to any LM account." -ForegroundColor Gray
     }
 }

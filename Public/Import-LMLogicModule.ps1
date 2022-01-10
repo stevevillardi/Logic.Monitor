@@ -17,12 +17,12 @@ Function Import-LMLogicModule {
 
             #Check for PS version 6.1 +
             If (($PSVersionTable.PSVersion.Major -le 5) -or ($PSVersionTable.PSVersion.Major -eq 6 -and $PSVersionTable.PSVersion.Minor -lt 1)) {
-                Write-Host "This command requires PS version 6.1 or higher to run."
+                Write-Error "This command requires PS version 6.1 or higher to run."
                 return
             }
 
             If (!(Test-Path -Path $FilePath) -and ((!([IO.Path]::GetExtension($FilePath) -eq '.xml')) -or (!([IO.Path]::GetExtension($FilePath) -eq '.json')))) {
-                Write-Host "File not found or is not a valid xml/json file, check file path and try again" -ForegroundColor Yellow
+                Write-Error "File not found or is not a valid xml/json file, check file path and try again"
                 Return
             }
 
@@ -42,7 +42,7 @@ Function Import-LMLogicModule {
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{file = $File }
-                Write-Host "Successfully imported $([IO.Path]::GetFileName($FilePath)) of type: $($Response.items.type)"
+                Write-LMHost "Successfully imported $([IO.Path]::GetFileName($FilePath)) of type: $($Response.items.type)"
 
                 Return
 
@@ -55,7 +55,7 @@ Function Import-LMLogicModule {
             }
         }
         Else {
-            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

@@ -46,7 +46,7 @@ Function Remove-LMDeviceDatasourceInstance {
         #Lookup Wildcard Id
         $InstanceId = (Get-LMDeviceDataSourceInstance -Id $Id -HdsId $HdsId | Where-Object { $_.wildValue -eq $WildValue } | Select-Object -First 1).Id
         If (!$InstanceId) {
-            Write-Host "Unable to find assocaited datasource instance with wildcard value: $WildValue, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device" -ForegroundColor Yellow
+            Write-Error "Unable to find assocaited datasource instance with wildcard value: $WildValue, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device"
             return
         }
         
@@ -71,6 +71,6 @@ Function Remove-LMDeviceDatasourceInstance {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

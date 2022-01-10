@@ -36,19 +36,19 @@ Function Invoke-LMActiveDiscovery {
             #Look up devices by group
             If ($GroupName) {
                 If ($GroupName -Match "\*") {
-                    Write-Host "Wildcard values not supported for group names." -ForegroundColor Yellow
+                    Write-Error "Wildcard values not supported for group names." 
                     return
                 }
                 $deviceList = (Get-LMDeviceGroupDevices -Name $GroupName).Id
                 If (!$deviceList) {
-                    Write-Host "Unable to find devices for group: $GroupName, please check spelling and try again." -ForegroundColor Yellow
+                    Write-Error "Unable to find devices for group: $GroupName, please check spelling and try again." 
                     return
                 }
             }
             ElseIf ($GroupId) {
                 $deviceList = (Get-LMDeviceGroupDevices -Id $GroupId).Id
                 If (!$deviceList) {
-                    Write-Host "Unable to find devices for groupId: $GroupId, please check spelling and try again." -ForegroundColor Yellow
+                    Write-Error "Unable to find devices for groupId: $GroupId, please check spelling and try again." 
                     return
                 }
             }
@@ -67,7 +67,7 @@ Function Invoke-LMActiveDiscovery {
     
                     #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers
-                    Write-Host "Scheduled Active Discovery task for device id: $device." -ForegroundColor green
+                    Write-LMHost "Scheduled Active Discovery task for device id: $device." -ForegroundColor green
                 }
                 Catch [Exception] {
                     $Proceed = Resolve-LMException -LMException $PSItem
@@ -78,7 +78,7 @@ Function Invoke-LMActiveDiscovery {
             }
         }
         Else {
-            Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

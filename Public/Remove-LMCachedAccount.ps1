@@ -14,7 +14,7 @@ Function Remove-LMCachedAccount {
     If (Test-Path -Path $CredentialPath) {
         If ($RemoveAllEntries) {
             $null | Set-Content -Path $CredentialPath
-            Write-Host "Removed all entries from credential file"
+            Write-LMHost "Removed all entries from credential file"
         }
         Else {
             $CredentialFile = Get-Content -Path $CredentialPath | ConvertFrom-Json
@@ -26,14 +26,14 @@ Function Remove-LMCachedAccount {
                 Else {
                     $CredentialFile | Where-Object { $_.Portal -notin $AccountName } | ConvertTo-Json | Set-Content -Path $CredentialPath
                 }
-                Write-Host "Removed $AccountName from credential file"
+                Write-LMHost "Removed $AccountName from credential file"
             }
             Else {
-                Write-Host "No cached entry found for $AccountName in credential file" -ForegroundColor Yellow
+                Write-LMHost "No cached entry found for $AccountName in credential file" -ForegroundColor Yellow
             }
         }
     }
     Else {
-        Write-Host "No credential file found, use Import-LMCachedAccount to setup a cached credential file" -ForegroundColor Yelow
+        Write-Error "No credential file found, use Import-LMCachedAccount to setup a cached credential file"
     }
 }

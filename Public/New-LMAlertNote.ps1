@@ -32,7 +32,7 @@ Function New-LMAlertNote {
             $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
 
             If ($Response.status -eq 200) {
-                Write-Host "Successfully updated note for alert id(s): $Ids" -ForegroundColor Green
+                Write-LMHost "Successfully updated note for alert id(s): $Ids" -ForegroundColor Green
             }
             Else {
                 $ResponseErrors = Get-LMv4Error -InputObject $Response
@@ -50,6 +50,6 @@ Function New-LMAlertNote {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

@@ -27,12 +27,12 @@ Function New-LMWebsiteGroup {
         #Lookup ParentGroupName
         If ($ParentGroupName) {
             If ($ParentGroupName -Match "\*") {
-                Write-Host "Wildcard values not supported for groups names." -ForegroundColor Yellow
+                Write-Error "Wildcard values not supported for groups names." 
                 return
             }
             $ParentGroupId = (Get-LMWebsiteGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
             If (!$ParentGroupId) {
-                Write-Host "Unable to find group: $ParentGroupName, please check spelling and try again." -ForegroundColor Yellow
+                Write-Error "Unable to find group: $ParentGroupName, please check spelling and try again." 
                 return
             }
         }
@@ -76,6 +76,6 @@ Function New-LMWebsiteGroup {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

@@ -30,12 +30,12 @@ Function New-LMDeviceDatasourceInstanceGroup {
         #Lookup Device Id
         If ($Name) {
             If ($Name -Match "\*") {
-                Write-Host "Wildcard values not supported for device names." -ForegroundColor Yellow
+                Write-Error "Wildcard values not supported for device names." 
                 return
             }
             $Id = (Get-LMDeviceDataSourceList -Name $Name | Select-Object -First 1 ).Id
             If (!$Id) {
-                Write-Host "Unable to find assocaited host device: $Name, please check spelling and try again." -ForegroundColor Yellow
+                Write-Error "Unable to find assocaited host device: $Name, please check spelling and try again." 
                 return
             }
         }
@@ -43,12 +43,12 @@ Function New-LMDeviceDatasourceInstanceGroup {
         #Lookup DatasourceId
         If ($DatasourceName -or $DatasourceId) {
             If ($DatasourceName -Match "\*") {
-                Write-Host "Wildcard values not supported for datasource names." -ForegroundColor Yellow
+                Write-Error "Wildcard values not supported for datasource names." 
                 return
             }
             $HdsId = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId } | Select-Object -First 1).Id
             If (!$HdsId) {
-                Write-Host "Unable to find assocaited host datasource: $DatasourceId$DatasourceName, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device" -ForegroundColor Yellow
+                Write-Error "Unable to find assocaited host datasource: $DatasourceId$DatasourceName, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device" 
                 return
             }
         }
@@ -83,6 +83,6 @@ Function New-LMDeviceDatasourceInstanceGroup {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }

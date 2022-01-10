@@ -14,12 +14,12 @@ Function New-LMAPIToken {
 
         If ($Username) {
             If ($Username -Match "\*") {
-                Write-Host "Wildcard values not supported for device group name." -ForegroundColor Yellow
+                Write-Error "Wildcard values not supported for device group name." 
                 return
             }
             $Id = (Get-LMUser -Name $Username | Select-Object -First 1 ).Id
             If (!$Id) {
-                Write-Host "Unable to find device group with name: $Username, please check spelling and try again." -ForegroundColor Yellow
+                Write-Error "Unable to find device group with name: $Username, please check spelling and try again." 
                 return
             }
         }
@@ -51,6 +51,6 @@ Function New-LMAPIToken {
         }
     }
     Else {
-        Write-Host "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again." -ForegroundColor Yellow
+        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
     }
 }
