@@ -474,6 +474,11 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 
 # Change List
 
+## 3.6.3
+
+- Fixed issue with Import-LMMerakiCloud command that caused meraki org device groups to be created without an applies to statement when using snmp v3
+- Minor bug fixes to Send-LMLogMessage and Initialize-LMPOVSetup
+
 ## 3.6.2
 
 - Update console logging behavior. When connecting to an LM account through **Connect-LMAccount** you can now set a switch parameter **-DisableConsoleLogging** to disable any informational console messages. This is useful if you are using the LM PS module inside of an LM datasource and you want to limit what is written to console. By default the module will still log to console for informational messages which was the previous behavior.
