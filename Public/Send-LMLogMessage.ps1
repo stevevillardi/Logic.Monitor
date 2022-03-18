@@ -63,7 +63,7 @@ Function Send-LMLogMessage {
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Entries
 
                 If ($Response.success -eq $true) {
-                    Write-Verbose "Message accepted successfully"
+                    Write-LMHost "Message accepted successfully"
                 }
                 Else {
                     Write-Error -Message "$($Response.errors.code): $($Response.errors.error)"

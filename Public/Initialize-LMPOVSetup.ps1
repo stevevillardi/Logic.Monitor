@@ -63,7 +63,7 @@ Function Initialize-LMPOVSetup {
                                 Write-Host "[INFO]: Created Portal Metrics dynamic group in Devices by Type: $($PortalDeviceGroup.name)"
                             }
     
-                            $CollectorId = (Get-LMCollector | Select-Object -Last 1).id
+                            $CollectorId = (Get-LMCollector | Where-Object {$_.collectorSize -ne "n/a"} | Select-Object -Last 1).id
                             Write-Host "[INFO]: Creating Portal Metrics resource: $DeviceName"
                             $PortalDevice = New-LMDevice -Name $DeviceName -DisplayName $DeviceName -Description "Auto provisioned resource to collect LM Portal Metrics" -Properties @{"lmaccess.id" = $APIInfo.accessId; "lmaccess.key" = $APIInfo.accessKey; "lmaccount" = $PortalName } -PreferredCollectorId  $CollectorId
                             If ($PortalDevice) {

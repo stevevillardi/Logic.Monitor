@@ -11,6 +11,9 @@ Meraki Dashboard API Token
 .PARAMETER AllowedOrgIds
 Array of Org Ids that you would like to import, if omitted all Org Ids will be imported
 
+.PARAMETER AllowedNetworkIds
+Array of Network Ids that you would like to import, if omitted all NetworkIds Ids will be imported
+
 .PARAMETER MerakiRootFolderName
 The main folder name for the Meraki import, if omitted the default name is Meraki
 
@@ -212,7 +215,7 @@ Function Import-LMMerakiCloud {
                                 "snmp.version" = "v3"
                                 "system.categories" = "NoHTTPS,NoPing"
                             }
-                            $OrgGroup = New-LMDeviceGroup -Name $OrgName -Properties $OrgGroupProps -ParentGroupId $MerakiDeviceGroup.id
+                            $OrgGroup = New-LMDeviceGroup -Name $OrgName -Properties $OrgGroupProps -ParentGroupId $MerakiDeviceGroup.id -AppliesTo "meraki.org.id == `"$OrgId`""
                             If(!$OrgGroup){
                                 Write-Host "Failed to create Meraki org device group ($OrgName)" -ForegroundColor Red
                                 Continue
