@@ -136,7 +136,7 @@ Function Import-LMMerakiCloud {
             }
 
             #Check if Meraki device group exists, if not create it
-            $MerakiDeviceGroup = Get-LMDeviceGroup -Name $MerakiRootFolderName
+            $MerakiDeviceGroup = Get-LMDeviceGroupGroups -Id $MerakiFolderParentGroupId | Where-Object {$_.Name -eq $MerakiRootFolderName}
             If(!$MerakiDeviceGroup){
                 $GroupProps = @{
                     "meraki.api.key" = $MerakiAPIToken
@@ -197,7 +197,7 @@ Function Import-LMMerakiCloud {
                 #Only add orgs if they have networks.
                 If (($Networks | Measure-Object).Count -gt 0) {
                     #Create Dynamic Group for Meraki Org if it does not exists, adding in required SNMP info and props for proper collection
-                    $OrgGroup = Get-LMDeviceGroup -Name $OrgName
+                    $OrgGroup = Get-LMDeviceGroupGroups -Id $MerakiDeviceGroup.Id | Where-Object {$_.Name -eq "$OrgName"}
                     If($OrgGroup){
                         Write-Host "[INFO]: Existing Meraki Org device group ($OrgName) already added to LogicMonitor, skipping creation" -ForegroundColor Gray
                     }
