@@ -365,6 +365,7 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 - Remove-LMDeviceDatasourceInstance
 - Remove-DeviceProperty
 - Export-LMDeviceData
+- Invoke-LMDeviceConfigSourceCollection
 
 #### Device Groups
 
@@ -388,6 +389,7 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 
 - Send-LMLogMessage
 - Get-LMLogMessage
+- Get-LMLogsAlertPipeline
 
 #### Netscan
 
@@ -473,6 +475,12 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 - Invoke-LMDeviceDedupe
 
 # Change List
+
+## 3.6.4
+
+- Fixed issue with Import-LMMerakiCloud command that caused meraki org device group creation to fail if meraki org name matched lm portal name
+- New Command (**Invoke-LMDeviceConfigSourceCollection**): Trigger a collection for a specified instance of a ConfigSource
+- New Command (**Get-LMLogsAlertPipeline**): Get list of configured alert pipelines and associated alert definitions
 
 ## 3.6.3
 
