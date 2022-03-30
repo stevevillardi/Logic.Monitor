@@ -14,33 +14,41 @@ Function New-LMAlertNote {
         $ResourcePath = "/alerts/notes"
 
         Try {
-            $Data = @{
-                notes  = $Note
-                allIds = @()
-            }
+            $allIds = @()
 
             Foreach ($Id in $Ids) {
-                $Data.allIds += @{model = "alerts"; id = $Id }
+                $allIds += @{model = "alerts"; id = $Id }
             }
 
-            $Data = ($Data | ConvertTo-Json)
+            $Data = @{
+                data = @{allIds = $allIds}
+                meta  = @{notes = $Note}
+            }
 
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data -Version 4
+            $Data = ($Data | ConvertTo-Json -Depth 3)
+
+            $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data -Version 4
             $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
             #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
 
-            If ($Response.status -eq 200) {
-                Write-LMHost "Successfully updated note for alert id(s): $Ids" -ForegroundColor Green
+            If(!$Response.data -and !$Response.errors){
+                Write-Error "Unable to acknowledge alerts. Verify your parameters and try again"
             }
-            Else {
-                $ResponseErrors = Get-LMv4Error -InputObject $Response
-                Foreach ($Err in $ResponseErrors) {
-                    Write-Error $Err
+            Else{
+                If($Response.data){
+                    Foreach($item in $Response.data.allIds){
+                        Write-LMHost "Successfully added note for alert id: $($item.id)" -ForegroundColor Green
+                    }
+                }
+                If($Response.errors){
+                    $ResponseErrors = Get-LMv4AlertError -InputObject $Response.errors
+                    Foreach ($Err in $ResponseErrors) {
+                        Write-Error $Err
+                    }
                 }
             }
-            Return $Response
         }
         Catch [Exception] {
             $Proceed = Resolve-LMException -LMException $PSItem

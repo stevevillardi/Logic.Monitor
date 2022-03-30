@@ -476,6 +476,10 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 
 # Change List
 
+## 3.6.5
+
+- Updated commands (**New-LMAlertAck** & **New-LMAlertNote**) due to LM APIv4 endpoint changes to the data model for alerts. You must be on module 3.6.5 or later in order to properly use these commands.
+
 ## 3.6.4
 
 - Fixed issue with Import-LMMerakiCloud command that caused meraki org device group creation to fail if meraki org name matched lm portal name
