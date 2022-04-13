@@ -76,7 +76,7 @@ Function Import-LMMerakiCloud {
     #Check if we are logged in and have valid api creds
     Begin {}
     Process {
-        If ($global:LMAuth.Valid) {
+        If ($Script:LMAuth.Valid) {
             #List out org devices
             If($ListOrgIds -or $ListNetworkIds){
                 Try{

@@ -59,7 +59,7 @@ Function Export-LMTopologyMap {
         [String]$BackgroundImage = ""
     )
     #Check if we are logged in and have valid api creds
-    If ($global:LMAuth.Valid) {
+    If ($Script:LMAuth.Valid) {
         #Grab Topology Map data so we can build our HTML map
         If ($Name) {
             $TopoData = Get-LMTopologyMapData -Name $Name

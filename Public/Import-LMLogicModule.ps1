@@ -13,7 +13,7 @@ Function Import-LMLogicModule {
     #Check if we are logged in and have valid api creds
     Begin {}
     Process {
-        If ($global:LMAuth.Valid) {
+        If ($Script:LMAuth.Valid) {
 
             #Check for PS version 6.1 +
             If (($PSVersionTable.PSVersion.Major -le 5) -or ($PSVersionTable.PSVersion.Major -eq 6 -and $PSVersionTable.PSVersion.Minor -lt 1)) {
@@ -37,8 +37,8 @@ Function Import-LMLogicModule {
             
             Try {
 
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{file = $File }

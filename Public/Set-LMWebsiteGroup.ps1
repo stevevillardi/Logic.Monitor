@@ -32,7 +32,7 @@ Function Set-LMWebsiteGroup {
     Begin {}
     Process {
         #Check if we are logged in and have valid api creds
-        If ($global:LMAuth.Valid) {
+        If ($Script:LMAuth.Valid) {
 
             #Lookup ParentGroupName
             If ($Name) {
@@ -82,8 +82,8 @@ Function Set-LMWebsiteGroup {
             
                 $Data = ($Data | ConvertTo-Json)
 
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data

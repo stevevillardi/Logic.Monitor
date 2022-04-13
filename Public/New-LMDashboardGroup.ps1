@@ -1,4 +1,4 @@
-Function New-LMDeviceGroup {
+Function New-LMDashboardGroup {
 
     [CmdletBinding()]
     Param (
@@ -7,19 +7,13 @@ Function New-LMDeviceGroup {
 
         [String]$Description,
 
-        [Hashtable]$Properties,
-
-        [Boolean]$DisableAlerting = $false,
-
-        [Boolean]$EnableNetFlow = $false,
+        [Hashtable]$WidgetTokens,
 
         [Parameter(Mandatory, ParameterSetName = 'GroupId')]
         [Int]$ParentGroupId,
 
         [Parameter(Mandatory, ParameterSetName = 'GroupName')]
-        [String]$ParentGroupName,
-
-        [String]$AppliesTo
+        [String]$ParentGroupName
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
@@ -30,36 +24,30 @@ Function New-LMDeviceGroup {
                 Write-Error "Wildcard values not supported for groups names."
                 return
             }
-            $ParentGroupId = (Get-LMDeviceGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
+            $ParentGroupId = (Get-LMDashboardGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
             If (!$ParentGroupId) {
-                Write-Error "Unable to find group: $ParentGroupName, please check spelling and try again."
+                Write-Error "Unable to find dashboard group: $ParentGroupName, please check spelling and try again." 
                 return
             }
         }
 
         #Build custom props hashtable
-        $customProperties = @()
-        If ($Properties) {
-            Foreach ($Key in $Properties.Keys) {
-                $customProperties += @{name = $Key; value = $Properties[$Key] }
+        $WidgetTokensArray = @()
+        If ($WidgetTokens) {
+            Foreach ($Key in $WidgetTokens.Keys) {
+                $WidgetTokensArray += @{name = $Key; value = $WidgetTokens[$Key] }
             }
         }
         
         #Build header and uri
-        $ResourcePath = "/device/groups"
+        $ResourcePath = "/dashboard/groups"
 
         Try {
             $Data = @{
                 name                                = $Name
                 description                         = $Description
-                appliesTo                           = $AppliesTo
-                disableAlerting                     = $DisableAlerting
-                enableNetflow                       = $EnableNetFlow
-                customProperties                    = $customProperties
                 parentId                            = $ParentGroupId
-                defaultAutoBalancedCollectorGroupId = 0
-                defaultCollectorGroupId             = 0
-                defaultCollectorId                  = 0
+                widgetTokens                        = $WidgetTokensArray
             }
 
             $Data = ($Data | ConvertTo-Json)

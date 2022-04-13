@@ -42,7 +42,7 @@ Function Set-LMCollector {
             $Id = $LookupResult
         }
 
-        If ($global:LMAuth.Valid) {
+        If ($Script:LMAuth.Valid) {
 
             #Build custom props hashtable
             $customProperties = @()
@@ -77,8 +77,8 @@ Function Set-LMCollector {
             
                 $Data = ($Data | ConvertTo-Json)
 
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "PUT" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PUT" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "PUT" -Headers $Headers -Body $Data

@@ -8,13 +8,13 @@ Function Get-LMAlert {
         [Parameter(ParameterSetName = 'Range')]
         [Datetime]$EndDate,
 
-        [Parameter(ParameterSetName = 'Id')]
+        [Parameter(Mandatory,ParameterSetName = 'Id')]
         [String]$Id,
 
         [ValidateSet("*", "Warning", "Error", "Critical")]
         [String]$Severity = "*",
 
-        [ValidateSet("*", "WebsiteAlert", "DataSourceAlert", "EventSourceAlert")]
+        [ValidateSet("*", "websiteAlert", "dataSourceAlert", "eventSourceAlert","logAlert")]
         [String]$Type = "*",
 
         [Boolean]$ClearedAlerts = $false,
@@ -22,10 +22,13 @@ Function Get-LMAlert {
         [Parameter(ParameterSetName = 'Filter')]
         [Hashtable]$Filter,
 
+        [Parameter(ParameterSetName = 'Id')]
+        [String[]]$CustomColumns,
+
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If ($global:LMAuth.Valid) {
+    If ($Script:LMAuth.Valid) {
         
         #Build header and uri
         $ResourcePath = "/alert/alerts"
@@ -36,6 +39,7 @@ Function Get-LMAlert {
         $Done = $false
         $Results = @()
         $QueryLimit = 10000 #API limit to how many results can be returned
+
 
         #Convert to epoch, if not set use defaults
         If (!$StartDate) {
@@ -57,7 +61,24 @@ Function Get-LMAlert {
             #Build query params
 
             Switch ($PSCmdlet.ParameterSetName) {
-                "Id" { $resourcePath += "/$Id" }
+                "Id" { 
+                    $resourcePath += "/$Id" 
+                
+                    #Check if we need to add customColumns
+                    If($CustomColumns){
+                        $FormatedColumns = @()
+                        Foreach($Column in $CustomColumns){
+                            $FormatedColumns += [System.Web.HTTPUtility]::UrlEncode($Column)
+                        }
+
+                        If($QueryParams){
+                            $QueryParams += "&customColumns=$($FormatedColumns -join ",")"
+                        }
+                        Else{
+                            $QueryParams = "?customColumns=$($FormatedColumns -join",")"
+                        }
+                    }
+                }
                 "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=+resourceId" }
                 "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=+resourceId" }
                 "Filter" {
@@ -67,10 +88,11 @@ Function Get-LMAlert {
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+resourceId"
                 }
             }
+            
             Try {
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
-    
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 

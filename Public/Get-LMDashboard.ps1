@@ -21,7 +21,7 @@ Function Get-LMDashboard {
     )
 
     #Check if we are logged in and have valid api creds
-    If ($global:LMAuth.Valid) {
+    If ($Script:LMAuth.Valid) {
         
         #Build header and uri
         $ResourcePath = "/dashboard/dashboards"
@@ -49,8 +49,8 @@ Function Get-LMDashboard {
                 }
             }
             Try {
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers

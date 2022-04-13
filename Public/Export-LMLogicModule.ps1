@@ -53,7 +53,7 @@ Function Export-LMLogicModule {
     )
 
     #Check if we are logged in and have valid api creds
-    If ($global:LMAuth.Valid) {
+    If ($Script:LMAuth.Valid) {
 
         $LogicModuleInfo = @()
         $QueryParams = ""
@@ -129,8 +129,8 @@ Function Export-LMLogicModule {
         $ResourcePath = "/setting/$Type/$LogicModuleId"
         
         Try {
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers -OutFile $DownloadPath

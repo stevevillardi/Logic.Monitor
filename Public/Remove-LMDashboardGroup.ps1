@@ -1,40 +1,37 @@
-Function Remove-LMAPIToken {
+Function Remove-LMDashboardGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
-        [Int]$UserId,
+        [Int]$Id,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
-        [String]$UserName,
-
-        [Parameter(Mandatory)]
-        [Int]$APITokenId
+        [String]$Name
 
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
-        #Lookup UserName Id if supplying username
-        If ($UserName) {
-            $LookupResult = (Get-LMUser -Name $UserName).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $UserName) {
+        #Lookup Id if supplying dashboard name
+        If ($Name) {
+            $LookupResult = (Get-LMDashboardGroup -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $UserId = $LookupResult
+            $Id = $LookupResult
         }
-        
+
         #Build header and uri
-        $ResourcePath = "/setting/admins/$UserId/apitokens/$APITokenId"
+        $ResourcePath = "/dashboard/groups/$Id"
 
         Try {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
-            Write-LMHost "Successfully removed id ($APITokenId)" -ForegroundColor Green
-            
+            Write-LMHost "Successfully removed dashboard group id ($Id)" -ForegroundColor Green
+
             Return
         }
         Catch [Exception] {

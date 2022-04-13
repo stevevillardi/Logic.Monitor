@@ -323,7 +323,10 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 - Get-LMDashboardGroup
 - Get-LMDashboardWidget
 - Remove-LMDashboard
+- Remove-LMDashboardGroup
 - Remove-LMDashboardWidget
+- Import-LMDashboard
+- New-LMDashboardGroup
 
 #### Datasources/LogicModules
 
@@ -413,6 +416,11 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 - Get-LMUsageMetrics
 - Set-LMPortalInfo
 
+#### Push Metrics (Ingest API)
+- New-LMPushMetricDataPoint
+- New-LMPushMetricInstance
+- Send-LMPushMetric
+
 #### Recipient Group
 
 - Get-LMRecipientGroup
@@ -442,6 +450,7 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 - New-LMApiUser
 - Set-LMUser
 - Remove-LMUser
+- Remove-LMRole
 
 #### Websites
 
@@ -476,6 +485,24 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 
 # Change List
 
+## 3.7
+
+###### New Commands:
+- **New-LMDashboardGroup**: You can now create dashboard groups along with setting any appropriate widget tokens
+- **Remove-LMRole**: You can now remove roles by name or id.
+- **Remove-LMDashboardGroup**: You can now remove dashboard groups by name or id.
+- **Import-LMDashboard**: You can now import dashboards from a number of sources (.json file, file directory or github repo). If using a github repo or file directory and folder structure detected will be replicated as Dashboard Groups within LM. You can also optionally replace any api id/key widget tokens with the use of the *-ReplaceAPITokensOnImport* parameter. This is useful when importing dynmaic dashboards that expect apiID and apiKey tokens set on them.
+- **New-LMPushMetricDataPoint**: You can now create datapoint objects easily for use with the *Send-LMPushMetric* command. This command can be used to build a single datapoint or supplied an existing datapoint object to add additional datapoints to. See the Documentaiton section for list of parameters and examples.
+- **New-LMPushMetricInstance**: You can now create instance objects easily for use with the *Send-LMPushMetric* command. This command can be used to build a single instance or supplied an existing instance object to add additional instances to. See the Documentaiton section for list of parameters and examples.
+- **Send-LMPushMetric**: You can now send push metrics directly to LM. This command takes in an instances object created by the *New-LMPushMetricInstance* command. See the Documentaiton section for list of parameters and examples.
+###### Updated Commands:
+- **Get-LMAlert**: Added *-CustomColumns* parameter to allow custom/system properties to be returned in the GET response. This parameter can only be used when specifying a specific *-Id* as the the parameter is not supported by the LM APIv3 when querying for multiple alerts. *-CustomColumns* takes an array of properties.
+- **Connect-LMAccount**: Added *-CachedAccountName* parameter to allow bypassing the displaying of all cached accounts when using the *-UseCachedAccount* parameter.
+###### Bug Fixes:
+- **Get-LMDeviceConfigSourceDiff**: Reduced the default batch size from 1000 to 100 which was causing issues in certain circumstances. *-BatchSize* can still be specified if a custom batch size is required.
+- **Get-LMDeviceGroup**: Fixed error handling when unable to find a matching parentId/parentName
+- **Disconnect-LMAccount**: Fixed bug introduced by Write-LMHost that caused successful logouts to not produce any confirmation output.
+- **All Commands**: Previously LMAuth tokens where stored as Global scoped variables. In version 3.7 and later all LMAuth tokens are now stored as Module scoped to prevent access outside of the Logic.Monitor module.
 ## 3.6.5
 
 - Updated commands (**New-LMAlertAck** & **New-LMAlertNote**) due to LM APIv4 endpoint changes to the data model for alerts. You must be on module 3.6.5 or later in order to properly use these commands.

@@ -21,7 +21,7 @@ Function Send-LMLogMessage {
     #Check if we are logged in and have valid api creds
     Begin {}
     Process {
-        If ($global:LMAuth.Valid) {
+        If ($Script:LMAuth.Valid) {
                     
             #Build header and uri
             $ResourcePath = "/log/ingest"
@@ -56,8 +56,8 @@ Function Send-LMLogMessage {
                     $Entries = ConvertTo-Json -InputObject $MessageArray
                 }
 
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Entries
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Entries
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Entries

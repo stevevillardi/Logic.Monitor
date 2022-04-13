@@ -17,7 +17,7 @@ Function Invoke-LMDeviceDedupe {
     #Check if we are logged in and have valid api creds
     Begin {}
     Process {
-        If ($global:LMAuth.Valid) {
+        If ($Script:LMAuth.Valid) {
             $DeviceList = @()
 
             $IpExclusionList += @("127.0.0.1","::1")

@@ -10,7 +10,7 @@ Function Remove-LMDashboardWidget {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($global:LMAuth.Valid) {
+    If ($Script:LMAuth.Valid) {
 
         #Lookup Id if supplying widget name
         If ($Name) {
@@ -25,8 +25,8 @@ Function Remove-LMDashboardWidget {
         $ResourcePath = "/dashboard/widgets/$Id"
 
         Try {
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers

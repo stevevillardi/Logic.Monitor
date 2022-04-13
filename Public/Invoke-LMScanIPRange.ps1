@@ -17,15 +17,15 @@ function Invoke-LMScanIPRange {
     .PARAMETER TimeOut
     Time (in MilliSeconds) before TimeOut, Default set to 100
     .EXAMPLE
-    Invoke-TSPingSweep -StartAddress 192.168.0.1 -EndAddress 192.168.0.254
+    Invoke-LMScanIPRange -StartAddress 192.168.0.1 -EndAddress 192.168.0.254
     .EXAMPLE
-    Invoke-TSPingSweep -StartAddress 192.168.0.1 -EndAddress 192.168.0.254 -ResolveHost
+    Invoke-LMScanIPRange -StartAddress 192.168.0.1 -EndAddress 192.168.0.254 -ResolveHost
     .EXAMPLE
-    Invoke-TSPingSweep -StartAddress 192.168.0.1 -EndAddress 192.168.0.254 -ResolveHost -ScanPort
+    Invoke-LMScanIPRange -StartAddress 192.168.0.1 -EndAddress 192.168.0.254 -ResolveHost -ScanPort
     .EXAMPLE
-    Invoke-TSPingSweep -StartAddress 192.168.0.1 -EndAddress 192.168.0.254 -ResolveHost -ScanPort -TimeOut 500
+    Invoke-LMScanIPRange -StartAddress 192.168.0.1 -EndAddress 192.168.0.254 -ResolveHost -ScanPort -TimeOut 500
     .EXAMPLE
-    Invoke-TSPingSweep -StartAddress 192.168.0.1 -EndAddress 192.168.10.254 -ResolveHost -ScanPort -Port 80
+    Invoke-LMScanIPRange -StartAddress 192.168.0.1 -EndAddress 192.168.10.254 -ResolveHost -ScanPort -Port 80
     #>
     Param(
         [Parameter(Mandatory = $true,Position = 0,ParameterSetName = 'Address')]

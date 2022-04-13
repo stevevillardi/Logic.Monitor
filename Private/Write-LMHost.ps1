@@ -7,7 +7,7 @@ Function Write-LMHost {
         [Nullable[ConsoleColor]]$BackgroundColor
     )
     #Only log message content if switch is set to true during connect lm account
-    If($global:LMAuth.Logging){
+    If($Script:LMAuth.Logging){
         If($ForegroundColor -and !$BackgroundColor){
             Write-Host $Message -ForegroundColor $ForegroundColor
         }

@@ -16,7 +16,7 @@ Function Remove-LMDeviceGroup {
     Begin {}
     Process {
         #Check if we are logged in and have valid api creds
-        If ($global:LMAuth.Valid) {
+        If ($Script:LMAuth.Valid) {
 
             #Lookup Id if supplying username
             If ($Name) {
@@ -33,8 +33,8 @@ Function Remove-LMDeviceGroup {
             $QueryParams = "?deleteChildren=$DeleteHostsandChildren&deleteHard=$HardDelete"
 
             Try {
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers

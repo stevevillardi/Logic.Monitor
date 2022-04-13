@@ -15,7 +15,7 @@ Function Get-LMWebsiteData {
         [String]$CheckpointId = 0
     )
     #Check if we are logged in and have valid api creds
-    If ($global:LMAuth.Valid) {
+    If ($Script:LMAuth.Valid) {
         #If using id we still need to grab a checkpoint is not specified
         If ($Id) {
             $Website = Get-LMWebsite -Id $Id
@@ -54,8 +54,8 @@ Function Get-LMWebsiteData {
         $QueryParams = "?size=$BatchSize&start=$StartDate&end=$EndDate"
 
         Try {
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers

@@ -34,8 +34,8 @@ Function Initialize-LMPOVSetup {
     #Check if we are logged in and have valid api creds
     Begin {}
     Process {
-        If ($global:LMAuth.Valid) {
-            $PortalName = $global:LMAuth.Portal
+        If ($Script:LMAuth.Valid) {
+            $PortalName = $Script:LMAuth.Portal
             $DeviceName = "$PortalName.logicmonitor.com"
 
             #Create readonly API use for Portal Metrics

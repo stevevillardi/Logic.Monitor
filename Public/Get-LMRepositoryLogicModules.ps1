@@ -9,7 +9,7 @@ Function Get-LMRepositoryLogicModules {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($global:LMAuth.Valid) {
+    If ($Script:LMAuth.Valid) {
         
         #Build header and uri
         $ResourcePath = "/setting/logicmodules/listcore"
@@ -27,8 +27,8 @@ Function Get-LMRepositoryLogicModules {
         $Data = ($Data | ConvertTo-Json)
 
         Try {
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data

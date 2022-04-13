@@ -9,7 +9,7 @@ Function Set-LMPortalLogo {
     #Check if we are logged in and have valid api creds
     Begin {}
     Process {
-        If ($global:LMAuth.Valid) {
+        If ($Script:LMAuth.Valid) {
             $Extension = $([IO.Path]::GetExtension($LogoPath)).Replace(".","")
 
             #Check for PS version 6.1 +
@@ -31,8 +31,8 @@ Function Set-LMPortalLogo {
                 $ResourcePath = "/setting/upload/loginLogo"
                 
                 #Set LoginLogo
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $FileRaw 
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $FileRaw 
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{filename = $FileRaw;name="file" }
@@ -42,8 +42,8 @@ Function Set-LMPortalLogo {
                 $ResourcePath = "/setting/upload/companyLogo"
 
                 #Set CompanyLogo
-                $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $FileRaw 
-                $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $FileRaw 
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{filename = $FileRaw;name="file" }

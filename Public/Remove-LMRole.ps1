@@ -1,4 +1,4 @@
-Function Remove-LMDevice {
+Function Remove-LMRole {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
@@ -6,19 +6,17 @@ Function Remove-LMDevice {
         [Int]$Id,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
-        [String]$Name,
-
-        [boolean]$HardDelete = $false
+        [String]$Name
 
     )
-    #Check if we are logged in and have valid api creds
     Begin {}
     Process {
+        #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
             #Lookup Id if supplying username
             If ($Name) {
-                $LookupResult = (Get-LMDevice -Name $Name).Id
+                $LookupResult = (Get-LMRole -Name $Name).Id
                 If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
@@ -26,10 +24,9 @@ Function Remove-LMDevice {
             }
             
             #Build header and uri
-            $ResourcePath = "/device/devices/$Id"
-    
-            $QueryParams = "?deleteHard=$HardDelete"
-    
+            $ResourcePath = "/setting/roles/$Id"
+
+            #Loop through requests 
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
@@ -37,7 +34,7 @@ Function Remove-LMDevice {
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
                 Write-LMHost "Successfully removed id ($Id)" -ForegroundColor Green
-                
+
                 Return
             }
             Catch [Exception] {

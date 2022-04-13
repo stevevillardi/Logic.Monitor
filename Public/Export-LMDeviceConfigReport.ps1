@@ -51,7 +51,7 @@ Function Export-LMDeviceConfigReport {
     )
 
     #Check if we are logged in and have valid api creds
-    If ($global:LMAuth.Valid) {
+    If ($Script:LMAuth.Valid) {
         $ShowHtml = $false
         If($OpenOnCompletetion){
             $ShowHtml = $true

@@ -65,7 +65,7 @@ Function New-LMWebsite {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($global:LMAuth.Valid) {
+    If ($Script:LMAuth.Valid) {
 
         $Steps = @()
         If ($Type -eq "webcheck") {
@@ -145,8 +145,8 @@ Function New-LMWebsite {
         
             $Data = ($Data | ConvertTo-Json -Depth 5)
 
-            $Headers = New-LMHeader -Auth $global:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-            $Uri = "https://$($global:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
