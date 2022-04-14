@@ -5,23 +5,41 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# Get-LMDashboardWidget
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### All (Default)
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Get-LMDashboardWidget [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
-### Remove
+### Id
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Get-LMDashboardWidget [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Name
+```
+Get-LMDashboardWidget [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### DashboardId
+```
+Get-LMDashboardWidget [-DashboardId <String>] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### DashboardName
+```
+Get-LMDashboardWidget [-DashboardName <String>] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Filter
+```
+Get-LMDashboardWidget [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,12 +56,27 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -BatchSize
+{{ Fill BatchSize Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DashboardId
+{{ Fill DashboardId Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: DashboardId
 Aliases:
 
 Required: False
@@ -53,12 +86,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
+### -DashboardName
+{{ Fill DashboardName Description }}
 
 ```yaml
-Type: String[]
-Parameter Sets: (All)
+Type: String
+Parameter Sets: DashboardName
 Aliases:
 
 Required: False
@@ -68,42 +101,42 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
+### -Filter
+{{ Fill Filter Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: List
+Type: Hashtable
+Parameter Sets: Filter
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
+### -Id
+{{ Fill Id Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
+Type: Int32
+Parameter Sets: Id
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
+### -Name
+{{ Fill Name Description }}
 
 ```yaml
-Type: String[]
-Parameter Sets: (All)
+Type: String
+Parameter Sets: Name
 Aliases:
 
 Required: False

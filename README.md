@@ -485,6 +485,12 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 
 # Change List
 
+## 3.7.1
+###### Updated Documentation:
+-  [Module Documentation](https://github.com/stevevillardi/Logic.Monitor/tree/main/Documentation) is now available for all cmdlets. This section will continue to be enhanced through future releases along with more examples
+
+###### Bug Fixes:
+- **New-LMPushMetricDataPoint**: Fixed an issue that was caused when providing a PSCustomObject instead of a hashtable as the input parameter for *-DataPoints*. The command now requires a hashtable which is inline with the rest of the module.
 ## 3.7
 
 ###### New Commands:
@@ -503,6 +509,8 @@ Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Ge
 - **Get-LMDeviceGroup**: Fixed error handling when unable to find a matching parentId/parentName
 - **Disconnect-LMAccount**: Fixed bug introduced by Write-LMHost that caused successful logouts to not produce any confirmation output.
 - **All Commands**: Previously LMAuth tokens where stored as Global scoped variables. In version 3.7 and later all LMAuth tokens are now stored as Module scoped to prevent access outside of the Logic.Monitor module.
+###### Updated Documentation:
+- All publsihed modules are now packaged as releases in Github
 ## 3.6.5
 
 - Updated commands (**New-LMAlertAck** & **New-LMAlertNote**) due to LM APIv4 endpoint changes to the data model for alerts. You must be on module 3.6.5 or later in order to properly use these commands.

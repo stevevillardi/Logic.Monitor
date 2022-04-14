@@ -5,23 +5,23 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# Remove-LMDeviceGroup
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### Id (Default)
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Remove-LMDeviceGroup -Id <Int32> [-DeleteHostsandChildren <Boolean>] [-HardDelete <Boolean>]
+ [<CommonParameters>]
 ```
 
-### Remove
+### Name
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Remove-LMDeviceGroup -Name <String> [-DeleteHostsandChildren <Boolean>] [-HardDelete <Boolean>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,75 +38,60 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -DeleteHostsandChildren
+{{ Fill DeleteHostsandChildren Description }}
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HardDelete
+{{ Fill HardDelete Description }}
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+{{ Fill Id Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: Id
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Name
+{{ Fill Name Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: Name
 Aliases:
 
 Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -118,7 +103,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### System.Int32
 ## OUTPUTS
 
 ### System.Object

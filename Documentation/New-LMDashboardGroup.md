@@ -5,23 +5,23 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# New-LMDashboardGroup
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### GroupId
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+New-LMDashboardGroup -Name <String> [-Description <String>] [-WidgetTokens <Hashtable>] -ParentGroupId <Int32>
+ [<CommonParameters>]
 ```
 
-### Remove
+### GroupName
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+New-LMDashboardGroup -Name <String> [-Description <String>] [-WidgetTokens <Hashtable>]
+ -ParentGroupName <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,8 +38,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -Description
+{{ Fill Description Description }}
 
 ```yaml
 Type: String
@@ -53,27 +53,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
+### -Name
+{{ Fill Name Description }}
 
 ```yaml
-Type: String[]
+Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
+### -ParentGroupId
+{{ Fill ParentGroupId Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: List
+Type: Int32
+Parameter Sets: GroupId
 Aliases:
 
 Required: True
@@ -83,12 +83,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
+### -ParentGroupName
+{{ Fill ParentGroupName Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
+Type: String
+Parameter Sets: GroupName
 Aliases:
 
 Required: True
@@ -98,11 +98,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
+### -WidgetTokens
+{{ Fill WidgetTokens Description }}
 
 ```yaml
-Type: String[]
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 

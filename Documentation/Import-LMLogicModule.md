@@ -5,23 +5,15 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# Import-LMLogicModule
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
-```
-
-### Remove
-```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Import-LMLogicModule [-FilePath] <String> [[-Type] <String>] [[-ForceOverwrite] <Boolean>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,76 +30,47 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -FilePath
+{{ Fill FilePath Description }}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
+### -ForceOverwrite
+{{ Fill ForceOverwrite Description }}
 
 ```yaml
-Type: String[]
+Type: Boolean
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
+### -Type
+{{ Fill Type Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: List
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
-
-```yaml
-Type: String[]
+Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: datasource, propertyrules, eventsource, topologysource, configsource
 
 Required: False
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

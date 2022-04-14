@@ -5,23 +5,22 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# Send-LMLogMessage
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### SingleMessage
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Send-LMLogMessage -Message <String> [-Timestamp <String>] -resourceMapping <Hashtable> [-Metadata <Hashtable>]
+ [<CommonParameters>]
 ```
 
-### Remove
+### MessageList
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Send-LMLogMessage -MessageArray <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,42 +37,12 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -Message
+{{ Fill Message Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: SingleMessage
 Aliases:
 
 Required: True
@@ -83,12 +52,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
+### -MessageArray
+{{ Fill MessageArray Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
+Type: Object
+Parameter Sets: MessageList
 Aliases:
 
 Required: True
@@ -98,15 +67,45 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
+### -Metadata
+{{ Fill Metadata Description }}
 
 ```yaml
-Type: String[]
-Parameter Sets: (All)
+Type: Hashtable
+Parameter Sets: SingleMessage
 Aliases:
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timestamp
+{{ Fill Timestamp Description }}
+
+```yaml
+Type: String
+Parameter Sets: SingleMessage
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -resourceMapping
+{{ Fill resourceMapping Description }}
+
+```yaml
+Type: Hashtable
+Parameter Sets: SingleMessage
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

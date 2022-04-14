@@ -5,23 +5,17 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# New-LMPushMetricInstance
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
-```
-
-### Remove
-```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+New-LMPushMetricInstance [[-InstancesArrary] <Array>] [-InstanceName] <String>
+ [[-InstanceDisplayName] <String>] [[-InstanceProperties] <Hashtable>] [-Datapoints] <Array>
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,8 +32,23 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -Datapoints
+{{ Fill Datapoints Description }}
+
+```yaml
+Type: Array
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 4
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceDisplayName
+{{ Fill InstanceDisplayName Description }}
 
 ```yaml
 Type: String
@@ -47,67 +56,52 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
+### -InstanceName
+{{ Fill InstanceName Description }}
 
 ```yaml
-Type: String[]
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceProperties
+{{ Fill InstanceProperties Description }}
+
+```yaml
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
+### -InstancesArrary
+{{ Fill InstancesArrary Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: List
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
-
-```yaml
-Type: String[]
+Type: Array
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

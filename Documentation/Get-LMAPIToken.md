@@ -5,23 +5,26 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# Get-LMAPIToken
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### All (Default)
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Get-LMAPIToken [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
-### Remove
+### AdminId
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Get-LMAPIToken [-AdminId <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Filter
+```
+Get-LMAPIToken [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,11 +41,26 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -AdminId
+{{ Fill AdminId Description }}
 
 ```yaml
-Type: String
+Type: Int32
+Parameter Sets: AdminId
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+{{ Fill BatchSize Description }}
+
+```yaml
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
@@ -53,57 +71,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
+### -Filter
+{{ Fill Filter Description }}
 
 ```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: List
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
+Type: Hashtable
+Parameter Sets: Filter
 Aliases:
 
 Required: False

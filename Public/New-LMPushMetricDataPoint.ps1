@@ -6,7 +6,7 @@ Function New-LMPushMetricDataPoint {
         [Array]$DataPointsArray,
 
         [Parameter(Mandatory)]
-        [PSCustomObject]$DataPoints, # object with datapoint name and value
+        [Hashtable]$DataPoints, # hashtable with datapoint name and value
 
         [ValidateSet("counter", "derive", "gauge")]
         [String]$DataPointType = "gauge",
@@ -19,19 +19,20 @@ Function New-LMPushMetricDataPoint {
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
-
-        #Add new datapoint to new datapoint array
-        Foreach ($DataPoint in $DataPoints.PsObject.Properties){
-
-            $DataPointsArray += [PSCustomObject]@{
-                dataPointName = $($DataPoint.Name)
-                dataPointType = $DataPointType
-                dataPointAggregationType = $DataPointAggregationType
-                percentileValue = $PercentileValue
-                values = @{$(Get-Date -UFormat %s)=$($DataPoint.Value)}
+        
+        #Add each datapoint to new datapoint array
+        Foreach($Hash in $DataPoints.GetEnumerator()){
+            $DataPointsArray += $DataPointsObject.PsObject.Properties | ForEach-Object {
+                [PSCustomObject]@{
+                    dataPointName = $($Hash.Name)
+                    dataPointType = $DataPointType
+                    dataPointAggregationType = $DataPointAggregationType
+                    percentileValue = $PercentileValue
+                    values = @{$(Get-Date -UFormat %s)=$($Hash.Value)}
+                }
             }
         }
-
+            
         Return $DataPointsArray
     }
     Else {

@@ -5,23 +5,31 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# Invoke-LMActiveDiscovery
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### Id
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Invoke-LMActiveDiscovery -Id <Int32> [<CommonParameters>]
 ```
 
-### Remove
+### Name
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Invoke-LMActiveDiscovery -Name <String> [<CommonParameters>]
+```
+
+### GroupId
+```
+Invoke-LMActiveDiscovery -GroupId <String> [<CommonParameters>]
+```
+
+### GroupName
+```
+Invoke-LMActiveDiscovery -GroupName <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,42 +46,12 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -GroupId
+{{ Fill GroupId Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: GroupId
 Aliases:
 
 Required: True
@@ -83,12 +61,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
+### -GroupName
+{{ Fill GroupName Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
+Type: String
+Parameter Sets: GroupName
 Aliases:
 
 Required: True
@@ -98,15 +76,30 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
+### -Id
+{{ Fill Id Description }}
 
 ```yaml
-Type: String[]
-Parameter Sets: (All)
+Type: Int32
+Parameter Sets: Id
 Aliases:
 
-Required: False
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+{{ Fill Name Description }}
+
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

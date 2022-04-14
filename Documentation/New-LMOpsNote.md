@@ -5,23 +5,28 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# New-LMOpsNote
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### All (Default)
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+New-LMOpsNote -Note <String> [-NoteDate <DateTime>] [-Tags <String[]>] [<CommonParameters>]
 ```
 
-### Remove
+### Group
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+New-LMOpsNote -Note <String> [-NoteDate <DateTime>] [-Tags <String[]>] [-DeviceGroupIds <String[]>]
+ [<CommonParameters>]
+```
+
+### Resource
+```
+New-LMOpsNote -Note <String> [-NoteDate <DateTime>] [-Tags <String[]>] [-WebsiteIds <String[]>]
+ [-DeviceIds <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,14 +43,59 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -DeviceGroupIds
+{{ Fill DeviceGroupIds Description }}
+
+```yaml
+Type: String[]
+Parameter Sets: Group
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceIds
+{{ Fill DeviceIds Description }}
+
+```yaml
+Type: String[]
+Parameter Sets: Resource
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Note
+{{ Fill Note Description }}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NoteDate
+{{ Fill NoteDate Description }}
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
 Required: False
 Position: Named
 Default value: None
@@ -53,8 +103,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
+### -Tags
+{{ Fill Tags Description }}
 
 ```yaml
 Type: String[]
@@ -68,42 +118,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: List
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
+### -WebsiteIds
+{{ Fill WebsiteIds Description }}
 
 ```yaml
 Type: String[]
-Parameter Sets: (All)
+Parameter Sets: Resource
 Aliases:
 
 Required: False

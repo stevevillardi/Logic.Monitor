@@ -5,23 +5,26 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# Remove-LMDatasource
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### Id (Default)
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Remove-LMDatasource -Id <Int32> [<CommonParameters>]
 ```
 
-### Remove
+### Name
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Remove-LMDatasource -Name <String> [<CommonParameters>]
+```
+
+### DisplayName
+```
+Remove-LMDatasource -DisplayName <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,42 +41,12 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -DisplayName
+{{ Fill DisplayName Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: List
+Parameter Sets: DisplayName
 Aliases:
 
 Required: True
@@ -83,12 +56,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
+### -Id
+{{ Fill Id Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
+Type: Int32
+Parameter Sets: Id
 Aliases:
 
 Required: True
@@ -98,15 +71,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
+### -Name
+{{ Fill Name Description }}
 
 ```yaml
-Type: String[]
-Parameter Sets: (All)
+Type: String
+Parameter Sets: Name
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

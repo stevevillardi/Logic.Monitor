@@ -5,23 +5,25 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# New-LMWebsiteGroup
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### GroupId
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+New-LMWebsiteGroup -Name <String> [-Description <String>] [-Properties <Hashtable>]
+ [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] -ParentGroupId <Int32> [-AppliesTo <String>]
+ [<CommonParameters>]
 ```
 
-### Remove
+### GroupName
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+New-LMWebsiteGroup -Name <String> [-Description <String>] [-Properties <Hashtable>]
+ [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] -ParentGroupName <String> [-AppliesTo <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,8 +40,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -AppliesTo
+{{ Fill AppliesTo Description }}
 
 ```yaml
 Type: String
@@ -53,11 +55,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
+### -Description
+{{ Fill Description Description }}
 
 ```yaml
-Type: String[]
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -68,12 +70,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
+### -DisableAlerting
+{{ Fill DisableAlerting Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: List
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+{{ Fill Name Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -83,12 +100,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
+### -ParentGroupId
+{{ Fill ParentGroupId Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
+Type: Int32
+Parameter Sets: GroupId
 Aliases:
 
 Required: True
@@ -98,11 +115,41 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
+### -ParentGroupName
+{{ Fill ParentGroupName Description }}
 
 ```yaml
-Type: String[]
+Type: String
+Parameter Sets: GroupName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Properties
+{{ Fill Properties Description }}
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StopMonitoring
+{{ Fill StopMonitoring Description }}
+
+```yaml
+Type: Boolean
 Parameter Sets: (All)
 Aliases:
 

@@ -1,56 +1,181 @@
-## Import-LMMerakiCloud
+---
+external help file: Logic.Monitor-help.xml
+Module Name: Logic.Monitor
+online version:
+schema: 2.0.0
+---
 
-The existing NetScan script that we provide today does an ok job at importing Meraki resources but fails to address a number of issues when it comes to setup, multi org support and other quality of life improvements. This import command addresses a number of these shortcomings in addition to streamlining the process of adding in a meraki portal into LM.
+# Import-LMMerakiCloud
 
-Enhancemnts over the existing Netscan process today:
+## SYNOPSIS
+Imports a Meraki Cloud portal into LM.
 
-- Auto creates the Meraki root folder in the LM portal.
+## SYNTAX
 
-- Ability to list out OrgIds if you need to gather a set of OrgIds to limit import of Meraki Organizations.
-
-- For each Meraki Org it will create a dynamic group set to all networks and org devices with the same meraki.org.id property value.
-
-- Set all existing meraki props needed for device discovery.
-
-- Collect SNMP settings directly from the Meraki API and auto apply them to the Meraki Org dynamic groups.
-
-**Note:** For SNMP v3 the customer will still need to specify the auth and priv token property values as those are not returned via API.
-
-## Parameters
-
-- **MerakiAPIToken:** Merkai API token to use for import.
-
-- **AllowedOrgIds:** Array of OrgIds to limit import to.
-
-- **AllowedNetworkIds:** Array of NetworkIds to limit import to. Can be unsed with AllowedOrdIds
-
-- **MerakiRootFolderName:** Name of the Meraki Root folder in LM. Will default to Meraki if not specified.
-
-- **MerakiFolderParentGroupId:** The folder id to create the meraki device group in. If not specified, the root of the resource tree is used.
-
-- **CollectorId:** The collector id to assign to the network and org devices created during import. If not specified the first collector detected will be used.
-
-- **ListOrgIds:** List out available orgIds and orgNames. Useful if you want to see what organizations are present so you can limit import.
-
-- **ListNetworkIds:** List out available networkIds and networkNames. Useful if you want to see what networks/organizations are present so you can limit import.
-
-This import utility is an ongoing devlopment. If you have things you would like added to this utility let me know.
-
-### Examples:
-
-```powershell
-#Import meraki under resource group called Meraki SaaS
-Import-LMMerakiCloud -MerakiAPIToken "xxxxxxxx" -MerakiRootFolderName "Meraki SaaS"
-
-#Connect to Meraki and dump list of Orgs
-Import-LMMerakiCloud -MerakiAPIToken "xxxxxxxx" -ListOrgIds
-
-#Import Meraki orgId 12345678 and ignore any other org detected
-Import-LMMerakiCloud -MerakiAPIToken "xxxxxxxx" -AllowedOrgIds @(12345678)
-
-#Connect to Meraki and dump list of Networks along with thier associated Org
-Import-LMMerakiCloud -MerakiAPIToken "xxxxxxxx" -ListNetworkIds
-
-#Import Meraki networkId N_12345678 from orgId 12345678 and ignore any other networks detected
-Import-LMMerakiCloud -MerakiAPIToken "xxxxxxxx" -AllowedNetworkIds @("N_12345678") -AllowedOrgIds @(12345678)
+### Import (Default)
 ```
+Import-LMMerakiCloud -MerakiAPIToken <String> [-AllowedOrgIds <String[]>] [-AllowedNetworkIds <String[]>]
+ [-MerakiRootFolderName <String>] [-MerakiFolderParentGroupId <Int32>] [-CollectorId <String>]
+ [<CommonParameters>]
+```
+
+### List
+```
+Import-LMMerakiCloud -MerakiAPIToken <String> [-ListOrgIds] [-ListNetworkIds] [<CommonParameters>]
+```
+
+## DESCRIPTION
+Imports a Meraki Cloud portal into LM along with creating any required groups and device properties.
+
+## EXAMPLES
+
+### EXAMPLE 1
+```
+Import-LMMerakiCloud -MerakiAPIToken "xxxxxxxxxxxxxxxxxxxxx" -MerakiRootFolderName "Meraki Devices" -CollectorId 1 -MerakiFolderParentGroupId 1
+```
+
+### EXAMPLE 2
+```
+Import-LMMerakiCloud -MerakiAPIToken "xxxxxxxxxxxxxxxxxxxxx" -AllowedOrgIds @(1235,6234)
+```
+
+## PARAMETERS
+
+### -MerakiAPIToken
+Meraki Dashboard API Token
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AllowedOrgIds
+Array of Org Ids that you would like to import, if omitted all Org Ids will be imported
+
+```yaml
+Type: String[]
+Parameter Sets: Import
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AllowedNetworkIds
+Array of Network Ids that you would like to import, if omitted all NetworkIds Ids will be imported
+
+```yaml
+Type: String[]
+Parameter Sets: Import
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MerakiRootFolderName
+The main folder name for the Meraki import, if omitted the default name is Meraki
+
+```yaml
+Type: String
+Parameter Sets: Import
+Aliases:
+
+Required: False
+Position: Named
+Default value: Meraki
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MerakiFolderParentGroupId
+The parent group id that the root meraki device group should exist under, if omitted will default to root of resource tree
+
+```yaml
+Type: Int32
+Parameter Sets: Import
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CollectorId
+The collector id number to assign to created devices, if omitted devices will be assigned the first collector returned from Get-LMCollector
+
+```yaml
+Type: String
+Parameter Sets: Import
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ListOrgIds
+List out the available org ids for a given Meraki Portal.
+Useful if you want to use the AllowedOrgIds filter but dont know the id/names of the orgs
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: List
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ListNetworkIds
+{{ Fill ListNetworkIds Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: List
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+## INPUTS
+
+### None. You cannot pipe objects to this command.
+## OUTPUTS
+
+## NOTES
+Currently a beta command, meraki cloud import is still under developement, please report any bugs you encounter while using this command.
+
+## RELATED LINKS
+
+[Module repo: https://github.com/stevevillardi/Logic.Monitor]()
+
+[PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor]()
+

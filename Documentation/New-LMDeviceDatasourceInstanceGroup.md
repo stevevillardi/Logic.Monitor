@@ -5,23 +5,35 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# New-LMDeviceDatasourceInstanceGroup
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### Name-dsName
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+New-LMDeviceDatasourceInstanceGroup -InstanceGroupName <String> [-Description <String>]
+ -DatasourceName <String> -Name <String> [<CommonParameters>]
 ```
 
-### Remove
+### Id-dsName
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+New-LMDeviceDatasourceInstanceGroup -InstanceGroupName <String> [-Description <String>]
+ -DatasourceName <String> -Id <Int32> [<CommonParameters>]
+```
+
+### Name-dsId
+```
+New-LMDeviceDatasourceInstanceGroup -InstanceGroupName <String> [-Description <String>] -DatasourceId <Int32>
+ -Name <String> [<CommonParameters>]
+```
+
+### Id-dsId
+```
+New-LMDeviceDatasourceInstanceGroup -InstanceGroupName <String> [-Description <String>] -DatasourceId <Int32>
+ -Id <Int32> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,8 +50,38 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -DatasourceId
+{{ Fill DatasourceId Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: Name-dsId, Id-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DatasourceName
+{{ Fill DatasourceName Description }}
+
+```yaml
+Type: String
+Parameter Sets: Name-dsName, Id-dsName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+{{ Fill Description Description }}
 
 ```yaml
 Type: String
@@ -53,27 +95,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
+### -Id
+{{ Fill Id Description }}
 
 ```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: List
+Type: Int32
+Parameter Sets: Id-dsName, Id-dsId
 Aliases:
 
 Required: True
@@ -83,12 +110,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
+### -InstanceGroupName
+{{ Fill InstanceGroupName Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -98,15 +125,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
+### -Name
+{{ Fill Name Description }}
 
 ```yaml
-Type: String[]
-Parameter Sets: (All)
+Type: String
+Parameter Sets: Name-dsName, Name-dsId
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

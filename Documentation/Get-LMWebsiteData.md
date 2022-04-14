@@ -5,23 +5,23 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMDeviceDedupe
+# Get-LMWebsiteData
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### List
+### Id (Default)
 ```
-Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Get-LMWebsiteData -Id <Int32> [-StartDate <DateTime>] [-EndDate <DateTime>] [-CheckpointId <String>]
+ [<CommonParameters>]
 ```
 
-### Remove
+### Name
 ```
-Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+Get-LMWebsiteData -Name <String> [-StartDate <DateTime>] [-EndDate <DateTime>] [-CheckpointId <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,8 +38,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+### -CheckpointId
+{{ Fill CheckpointId Description }}
 
 ```yaml
 Type: String
@@ -53,11 +53,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IpExclusionList
-{{ Fill IpExclusionList Description }}
+### -EndDate
+{{ Fill EndDate Description }}
 
 ```yaml
-Type: String[]
+Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
@@ -68,12 +68,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ListDuplicates
-{{ Fill ListDuplicates Description }}
+### -Id
+{{ Fill Id Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: List
+Type: Int32
+Parameter Sets: Id
 Aliases:
 
 Required: True
@@ -83,12 +83,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
+### -Name
+{{ Fill Name Description }}
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
+Type: String
+Parameter Sets: Name
 Aliases:
 
 Required: True
@@ -98,11 +98,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
+### -StartDate
+{{ Fill StartDate Description }}
 
 ```yaml
-Type: String[]
+Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
