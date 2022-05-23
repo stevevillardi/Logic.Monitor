@@ -108,6 +108,16 @@ Get LM Log Message:
 Get-LMLogMessage -Range 1month -Query "error text"
 ```
 
+Add a new user to LogicMonitor:
+```powershell
+New-LMUser -RoleNames @("administrator") -Password "changeme" -FirstName John -LastName Doe -Email jdoe@example.com -Username jdoe@example.com -ForcePasswordChange $true -Phone "5558675309"
+```
+
+Generate new API Token:
+```powershell
+New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
+```
+
 # Code Snipets:
 
 #### Get last 24 hours of alerts and group by resource and datapoint
@@ -158,16 +168,6 @@ foreach($device in $devices){
     #Create new device in LM
     New-LMDevice -Name $device.ip -DisplayName $device.displayname -Description $device.description -properties $properties -PreferredCollectorId $device.collector_id -HostGroupIds $hostGroups
 }
-```
-
-#### Add a new user to LogicMonitor
-```powershell
-New-LMUser -RoleNames @("administrator") -Password "changeme" -FirstName John -LastName Doe -Email jdoe@example.com -Username jdoe@example.com -ForcePasswordChange $true -Phone "5558675309"
-```
-
-#### Generate new API Token
-```powershell
-New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 ```
 
 #### Import new device groups from CSV including properties
