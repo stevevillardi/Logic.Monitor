@@ -160,6 +160,16 @@ foreach($device in $devices){
 }
 ```
 
+#### Add a new user to LogicMonitor
+```powershell
+New-LMUser -RoleNames @("administrator") -Password "changeme" -FirstName John -LastName Doe -Email jdoe@example.com -Username jdoe@example.com -ForcePasswordChange $true -Phone "5558675309"
+```
+
+#### Generate new API Token
+```powershell
+New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
+```
+
 #### Import new device groups from CSV including properties
 
 ```powershell
@@ -258,6 +268,30 @@ Export-LMDeviceData -DeviceId 3 -ExportPath "../../../Desktop" -ExportFormat csv
 
 #Method Three: Get HTTPS-443 instance metric data for the past 8 hours
 Get-LMDeviceData -DeviceId 3 -DatasourceId 72 -InstanceName "443" -StartDate (Get-Date).AddHours(-8) -EndDate (Get-Date)
+```
+
+#### Import list of PingMulti instances
+``` powershell
+#Example adding ping multi via csv with headers DisplayName,Wildvalue,Description
+$pingList = Import-CSV ../../../Desktop/test.csv
+$device = Get-LMDevice -DisplayName "lmstevenvillardi-wincol02"
+$pingMultiId = (Get-LMDeviceDatasourceList -Id $device.Id | Where-Object {$_.dataSourceName -eq "PingMulti-"}).dataSourceId
+
+Foreach($line in $pingList){
+    New-LMDeviceDatasourceInstance -DisplayName $line.DisplayName -WildValue $line.Wildvalue -Description $line.Description -DatasourceId $pingMultiId -Id $device.id
+}
+```
+
+#### Import list of UNC path instances
+``` powershell
+#Example adding UNC Path monitoring via csv with headers DisplayName,Wildvalue,Description
+$uncPathList = Import-CSV ../../../Desktop/test.csv
+$device = Get-LMDevice -DisplayName "lmstevenvillardi-wincol02"
+$uncMonitorId = (Get-LMDeviceDatasourceList -Id $device.Id | Where-Object {$_.dataSourceName -eq "UNC Monitor-"}).dataSourceId
+
+Foreach($line in $uncPathList){
+    New-LMDeviceDatasourceInstance -DisplayName $line.DisplayName -WildValue $line.Wildvalue -Description $line.Description -DatasourceId $uncMonitorId -Id $device.id
+}
 ```
 
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
