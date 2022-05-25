@@ -99,7 +99,7 @@ Remove-LMDevice -Name "device.example.com" -HardDelete $false
 Send LM Log Message:
 
 ```powershell
-Send-LMLogMessage -Message "Hello World!" -ResourceId @{"system.hostname"="LM-COLL01"} -Metadata @{"extra-data"="value";"extra-data2"="value2"}
+Send-LMLogMessage -Message "Hello World!" -resourceMapping @{"system.displayname"="LM-COLL"} -Metadata @{"extra-data"="value";"extra-data2"="value2"}
 ```
 
 Get LM Log Message:
@@ -248,7 +248,7 @@ Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
 
 #Method Three
 #Using Get-LMDeviceGroupDevices to retrieve a list of devices and loop through each and set the sysname value to the displayname
-$device = Get-LMDeviceGroupDevices -Name "Cambium Wireless"
+$devices = Get-LMDeviceGroupDevices -Name "Cambium Wireless"
 foreach ($dev in $devices) {
     $deviceProperty = ($dev.systemProperties[$dev.systemProperties.name.IndexOf("system.sysname")].value)
     if($deviceProperty -and $dev.systemProperties.name.IndexOf("system.sysname") -ne -1){
