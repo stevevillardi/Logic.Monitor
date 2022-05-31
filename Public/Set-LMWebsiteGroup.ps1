@@ -2,10 +2,12 @@ Function Set-LMWebsiteGroup {
 
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupId', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupName', ValueFromPipelineByPropertyName)]
         [String]$Id,
 
-        [Parameter(Mandatory, ParameterSetName = 'Name')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-ParentGroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-ParentGroupName')]
         [String]$Name,
 
         [String]$NewName,
@@ -23,10 +25,12 @@ Function Set-LMWebsiteGroup {
 
         #Need to implement testLocation
 
-        [Parameter(ParameterSetName = 'ParentGroupId')]
+        [Parameter(ParameterSetName = 'Id-ParentGroupId')]
+        [Parameter(ParameterSetName = 'Name-ParentGroupId')]
         [Nullable[Int]]$ParentGroupId,
-
-        [Parameter(ParameterSetName = 'ParentGroupName')]
+        
+        [Parameter(ParameterSetName = 'Id-ParentGroupName')]
+        [Parameter(ParameterSetName = 'Name-ParentGroupName')]
         [String]$ParentGroupName
     )
     Begin {}

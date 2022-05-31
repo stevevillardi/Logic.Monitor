@@ -126,22 +126,41 @@ Function Connect-LMAccount {
         $Script:LMAuth.Valid = $true
 
         #Collect portal info and api username and roles
-        $ApiInfo = Get-LMAPIToken -Filter @{accessId = $AccessId } -ErrorAction Stop
+        $ApiInfo = Get-LMAPIToken -Filter @{accessId = $AccessId } -ErrorAction SilentlyContinue
         If ($ApiInfo) {
             $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
-            
-            Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) using account $($ApiInfo.adminName) with assgined roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
-            
+            Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) using account $($ApiInfo.adminName) with assigned roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
             Return
         }
         Else {
-            throw "Unable to get API token info"
+            Try{
+                $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
+                Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) using access id $AccessId - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
+                Return
+            }
+            Catch {
+                throw "Unable to validate API token info"
+            }
         }
     }
     Catch {
-        Write-Error "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
-        #Clear credential object from environment
-        Remove-Variable LMAuth -Scope Global -ErrorAction SilentlyContinue
+        Try{
+            $DeviceInfo = Get-LMDevice -ErrorAction Stop
+
+            If($DeviceInfo){
+                Write-LMHost "Connected to LM portal $AccountName with limited permissions, ensure your api token has the necessary rights needed to run desired commands." -ForegroundColor Yellow
+                Return
+            }
+            Else{
+                throw "Unable to verify api token permission levels, ensure api token has rights to view all/select resources or at minimum view access for Account Information"
+            }
+        }
+        Catch{
+
+            Write-Error "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
+            #Clear credential object from environment
+            Remove-Variable LMAuth -Scope Global -ErrorAction SilentlyContinue
+        }
         Return
     }
 }

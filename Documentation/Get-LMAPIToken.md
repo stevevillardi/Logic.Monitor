@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMAPIToken
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Get list of a specifc or list of available API tokens
 
 ## SYNTAX
 

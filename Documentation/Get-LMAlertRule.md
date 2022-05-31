@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMAlertRule
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Get list of alert rules in bulk or by id.
 
 ## SYNTAX
 
@@ -33,21 +33,28 @@ Get-LMAlertRule [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Get list of alert rules in bulk or by id.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-LMAlertRule -Id 1
 ```
 
-{{ Add example description here }}
+Get alert rule detail for all alerts that start with "Test*".
+
+### Example 2
+```powershell
+PS C:\> Get-LMAlertRule -Name "Test*"
+```
+
+Get alert rule detail for alert rule id 1.
 
 ## PARAMETERS
 
 ### -BatchSize
-{{ Fill BatchSize Description }}
+Set batch size for the number of results return per api request. Default value is 1000.
 
 ```yaml
 Type: Int32
@@ -62,7 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+Apply a custom filter to query for alerts rules. Filters are currently treated as exact matches.
 
 ```yaml
 Type: Hashtable
@@ -77,7 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-{{ Fill Id Description }}
+Id of the alert rule to return.
 
 ```yaml
 Type: Int32
@@ -92,7 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Name of the alert rule to return. Name field accepts wildcards to return multiple rules matching a specified string.
 
 ```yaml
 Type: String

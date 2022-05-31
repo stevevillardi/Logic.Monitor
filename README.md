@@ -257,6 +257,42 @@ foreach ($dev in $devices) {
 }
 ```
 
+#### Update/Add device property if out of date or missing
+```powershell
+#Array to store returned objects
+$processedDeviceList = @()
+
+#Get list of devices in a device group for device group id 23
+$devices = Get-LMDeviceGroupDevices -Id "23"
+
+#Loop through each device and check for presence of property
+foreach ($dev in $devices) {
+    $propName = "test.prop"
+    $propValue = "1234"
+    $currentPropValue = ($dev.customProperties[$dev.customProperties.name.IndexOf($propName)].value)
+    if($currentPropValue -and $dev.customProperties.name.IndexOf($propName) -ne -1){
+
+        If($currentPropValue -ne $propValue){
+            #Update the property value since it does not match desired value
+            $processedDeviceList += Set-LMDevice -Id $dev.id -Properties @{$propName=$propValue}
+            Write-Host "Successfully processed $($dev.displayName), updated property $propName value from $currentPropValue -> $propValue"
+        }
+        Else{
+            #Skip device since it already has desired value:
+            Write-Host "Skipped processing $($dev.displayName) since property $propName is already present with the desired value $propValue"
+        }
+    }
+    else{
+        #Add property and value since it does not exist on device currently
+        $processedDeviceList += Set-LMDevice -Id $dev.id -Properties @{$propName=$propValue}
+        Write-Host "Successfully processed $($dev.displayName), added property $propName with value $propValue"
+    }
+}
+
+#Print out results
+$processedDeviceList | Select-Object id,displayname,customproperties | Format-List
+```
+
 #### Export LM Device Metric Data to JSON/CSV
 
 ```powershell
@@ -292,6 +328,32 @@ $uncMonitorId = (Get-LMDeviceDatasourceList -Id $device.Id | Where-Object {$_.da
 Foreach($line in $uncPathList){
     New-LMDeviceDatasourceInstance -DisplayName $line.DisplayName -WildValue $line.Wildvalue -Description $line.Description -DatasourceId $uncMonitorId -Id $device.id
 }
+```
+
+#### Ingest PushMetrics 
+###### Note: PushMetrics must be enabled for the LM Portal
+```powershell
+#Example hashtable format for datapoints
+$Datapoints =@{
+    ErrorCount = 0
+    NewUsersCreated = 0
+    NewUsersCreatedAsDisabled = 0
+    UsersRemovedFromGroups = 0
+    UsersWithGroupMembershipChanges = 0
+    DomainUsersUpdatedSinceLastSynchronization = 0
+    DisabledUsers = 0
+    StartDateError = 0
+    NextSynchronizationDateTimeError = 0
+}
+#Create PushMetric datapoint object using hashtable
+$DatapointsObject = New-LMPushMetricDataPoint -DataPoints $Datapoints
+
+#Create instance object using datapoint object from previous command
+$InstanceObj = New-LMPushMetricInstance -Datapoints $DatapointsObject -InstanceName "Test" -InstanceDisplayName "Test Description"
+
+#Send PushMetric to LM using the instance object created in the previous command along with the specified datasource and resource mapping parameters
+Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric" -DatasourceDisplayName "My First Push Metric" -ResourceIds @{"system.displayname"="LM-COLL"}
+
 ```
 
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
@@ -518,6 +580,12 @@ Foreach($line in $uncPathList){
 - Invoke-LMDeviceDedupe
 
 # Change List
+
+## 3.7.2
+###### Bug Fixes:
+- **Connect-LMAccount**: Fixed issue that prevented api tokens with limited access permissions from connecting successfully.
+- Re-factored exception handling that prevented default -ErrorAction parameters from working as expected
+- **Set-LMWebsiteGroup**: Fixed an issue with the defined parameter sets that prevented the command from being used in certain parameter combinations
 
 ## 3.7.1
 ###### Updated Documentation:

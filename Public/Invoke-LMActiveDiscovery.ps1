@@ -59,12 +59,12 @@ Function Invoke-LMActiveDiscovery {
                 
                 #Build header and uri
                 $ResourcePath = "/device/devices/$device/scheduleAutoDiscovery"
-
+               
                 Try {
     
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-    
+
                     #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers
                     Write-LMHost "Scheduled Active Discovery task for device id: $device." -ForegroundColor green

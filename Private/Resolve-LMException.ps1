@@ -22,15 +22,29 @@ Function Resolve-LMException {
                     $HttpException = ($LMException.ErrorDetails.Message | ConvertFrom-Json).message
                 }
                 $HttpStatusCode = $LMException.Exception.Response.StatusCode.value__
-                [Console]::ForegroundColor = 'red'
-                [Console]::Error.WriteLine("Failed to execute web request($($HttpStatusCode)): $HttpException")
-                [Console]::ResetColor()
+                #Output to null so ErrorAction works as expected
+                Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException" 2>$null
+                #Write to $Error object but supress so stack trace is not displayed
+                Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException" -ErrorAction SilentlyContinue
+                #Pretty print error to console
+                If($ErrorActionPreference -ne "SilentlyContinue"){
+                    [Console]::ForegroundColor = 'red'
+                    [Console]::Error.WriteLine("Failed to execute web request($($HttpStatusCode)): $HttpException")
+                    [Console]::ResetColor()
+                }
             }
             default {
                 $LMError = $LMException.ToString()
+                #Output to null so ErrorAction works as expected
+                Write-Error "Failed to execute web request: $LMError" 2>$null
+                #Write to $Error object but supress so stack trace is not displayed
+                Write-Error "Failed to execute web request: $LMError" -ErrorAction SilentlyContinue
+                #Pretty print error to console
+                If($ErrorActionPreference -ne "SilentlyContinue"){
                 [Console]::ForegroundColor = 'red'
                 [Console]::Error.WriteLine("Failed to execute web request: $LMError")
                 [Console]::ResetColor()
+                }
             }
         }
         Return $false

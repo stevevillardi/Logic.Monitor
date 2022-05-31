@@ -12,30 +12,32 @@ schema: 2.0.0
 
 ## SYNTAX
 
-### Id
+### Id-ParentGroupName
 ```
 Set-LMWebsiteGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
- [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [<CommonParameters>]
+ [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>]
+ [-ParentGroupName <String>] [<CommonParameters>]
 ```
 
-### Name
+### Id-ParentGroupId
 ```
-Set-LMWebsiteGroup -Name <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
- [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [<CommonParameters>]
-```
-
-### ParentGroupId
-```
-Set-LMWebsiteGroup [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
+Set-LMWebsiteGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [-ParentGroupId <Int32>]
  [<CommonParameters>]
 ```
 
-### ParentGroupName
+### Name-ParentGroupName
 ```
-Set-LMWebsiteGroup [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
+Set-LMWebsiteGroup -Name <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>]
  [-ParentGroupName <String>] [<CommonParameters>]
+```
+
+### Name-ParentGroupId
+```
+Set-LMWebsiteGroup -Name <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
+ [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [-ParentGroupId <Int32>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -87,7 +89,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: Id
+Parameter Sets: Id-ParentGroupName, Id-ParentGroupId
 Aliases:
 
 Required: True
@@ -102,7 +104,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: Name
+Parameter Sets: Name-ParentGroupName, Name-ParentGroupId
 Aliases:
 
 Required: True
@@ -132,7 +134,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Int32
-Parameter Sets: ParentGroupId
+Parameter Sets: Id-ParentGroupId, Name-ParentGroupId
 Aliases:
 
 Required: False
@@ -147,7 +149,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: ParentGroupName
+Parameter Sets: Id-ParentGroupName, Name-ParentGroupName
 Aliases:
 
 Required: False

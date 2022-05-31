@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMAlert
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Get LM Alert in bulk or by id.
 
 ## SYNTAX
 
@@ -37,21 +37,28 @@ Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-F
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Get LM Alert in bulk or by id.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-PS C:\> {{ Add example code here }}
+PS C:\> Get-LMAlert -StartDate $(Get-Date).AddDays(-1) -EndDate $(Get-Date) -ClearedAlerts $true | Group-Object -Property resourceTemplateName,datapointName | select count, @{N='Name';E={$_.Name.Split(",")[0]}}, @{N='Datapoint';E={$_.Name.Split(",")[1]}} | Sort-Object -Property count -Descending
 ```
 
-{{ Add example description here }}
+Get all alerts from the last 24 hours.
+
+### Example 2
+```powershell
+PS C:\> Get-LMAlert -Id DS67152170
+```
+
+Get all details for alert id DS67152170.
 
 ## PARAMETERS
 
 ### -BatchSize
-{{ Fill BatchSize Description }}
+Set batch size for the number of results return per api request. Default value is 1000.
 
 ```yaml
 Type: Int32
@@ -66,7 +73,7 @@ Accept wildcard characters: False
 ```
 
 ### -ClearedAlerts
-{{ Fill ClearedAlerts Description }}
+Include cleared alerts in the response.
 
 ```yaml
 Type: Boolean
@@ -81,7 +88,7 @@ Accept wildcard characters: False
 ```
 
 ### -CustomColumns
-{{ Fill CustomColumns Description }}
+When get an alert by id, you can optionally include custom properties as part of the response
 
 ```yaml
 Type: String[]
@@ -96,7 +103,7 @@ Accept wildcard characters: False
 ```
 
 ### -EndDate
-{{ Fill EndDate Description }}
+End date for filtered alert range
 
 ```yaml
 Type: DateTime
@@ -111,7 +118,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+Apply a custom filter to query the alerts list. Filters are currently treated as exact matches.
 
 ```yaml
 Type: Hashtable
@@ -126,7 +133,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-{{ Fill Id Description }}
+Alert Id for the alert you wish the lookup.
 
 ```yaml
 Type: String
@@ -141,7 +148,7 @@ Accept wildcard characters: False
 ```
 
 ### -Severity
-{{ Fill Severity Description }}
+Severity of the alerts to return. By default will search all alerts.
 
 ```yaml
 Type: String
@@ -157,7 +164,7 @@ Accept wildcard characters: False
 ```
 
 ### -StartDate
-{{ Fill StartDate Description }}
+Start date for filtered alert range
 
 ```yaml
 Type: DateTime
@@ -172,7 +179,7 @@ Accept wildcard characters: False
 ```
 
 ### -Type
-{{ Fill Type Description }}
+Type of alerts to return. By default will return alerts for all types.
 
 ```yaml
 Type: String

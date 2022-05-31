@@ -1,5 +1,6 @@
 Function Get-LMPortalInfo {
-
+    [CmdletBinding()]
+    Param ()
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
         
@@ -19,7 +20,6 @@ Function Get-LMPortalInfo {
                 Return
             }
         }
-
         Return $Response
     }
     Else {
