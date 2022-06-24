@@ -5,7 +5,7 @@ Function Get-LMRepositoryLogicModules {
         [ValidateSet("datasource", "propertyrules", "eventsource", "topologysource", "configsource")]
         [String]$Type = "datasource",
 
-        [Int]$CoreVersion = 150
+        [Int]$CoreVersion = 171
 
     )
     #Check if we are logged in and have valid api creds
