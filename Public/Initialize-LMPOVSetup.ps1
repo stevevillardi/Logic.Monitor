@@ -91,11 +91,17 @@ Function Initialize-LMPOVSetup {
             If ($MoveMinimalMonitoring -or $RunAll) {
                 $DeviceFolderId = (Get-LMDeviceGroup -Name "Devices by Type").id
                 $MinimalFolderId = (Get-LMDeviceGroup -Name "Minimal Monitoring").id
+                $LogTrackedFolderId = (Get-LMDeviceGroup -Name "Log Tracked Queries").id
                 If ($DeviceFolderId -and $MinimalFolderId) {
                     Write-Host "[INFO]: Moving minimal monitoring folder into Devices by Type"
-                    $MinimalFolderGroup = Set-LMDeviceGroup -id 15 -ParentGroupId 2
+                    $MinimalFolderGroup = Set-LMDeviceGroup -id $MinimalFolderId -ParentGroupId $DeviceFolderId
                     If ($MinimalFolderGroup) {
                         Write-Host "[INFO]: Successfully moved minimal monitoring folder into Devices by Type"
+                    }
+                    Write-Host "[INFO]: Moving log tracked queries folder into Devices by Type"
+                    $LogTrackedFoldeGroup = Set-LMDeviceGroup -id $LogTrackedFolderId -ParentGroupId $DeviceFolderId
+                    If ($LogTrackedFoldeGroup) {
+                        Write-Host "[INFO]: Successfully log tracked queries folder into Devices by Type"
                     }
                     $MinimalFolderAppliesTo = (Get-LMDeviceGroup -Name "Minimal Monitoring").appliesTo
                     If ($MinimalFolderAppliesTo) {

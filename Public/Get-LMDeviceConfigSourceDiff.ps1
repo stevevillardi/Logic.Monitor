@@ -1,6 +1,6 @@
 Function Get-LMDeviceConfigSourceDiff {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ListDiffs')]
     Param (
         [Parameter(Mandatory)]
         [Int]$Id,
@@ -11,8 +11,10 @@ Function Get-LMDeviceConfigSourceDiff {
         [Parameter(Mandatory)]
         [String]$HdsInsId,
 
-        [Hashtable]$Filter,
+        [Parameter(ParameterSetName = 'ConfigId')]
+        [String]$ConfigId,
 
+        [Parameter(ParameterSetName = 'ListDiffs')]
         [Int]$BatchSize = 100
 
     )
@@ -31,19 +33,19 @@ Function Get-LMDeviceConfigSourceDiff {
         #Loop through requests 
         While (!$Done) {
             #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&fields=!config"
-
-            If ($Filter) {
-                #List of allowed filter props
-                $PropList = @()
-                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+            If($ConfigId){
+                $StartEpoch = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+                $ResourcePath = $ResourcePath + "/$ConfigId"
+                $QueryParams = "?deviceId=$Id&deviceDataSourceId=$HdsId&instanceId=$HdsInsId&fields=!deltaconfig&startEpoch=$StartEpoch"
+            }
+            Else{
+                $QueryParams = "?size=$BatchSize&offset=$Count&fields=!config"
             }
 
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
-    
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 

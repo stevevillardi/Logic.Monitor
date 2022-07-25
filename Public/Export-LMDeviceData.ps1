@@ -5,8 +5,11 @@ Function Export-LMDeviceData {
         [Parameter(Mandatory, ParameterSetName = 'DeviceId')]
         [Int]$DeviceId,
 
-        [Parameter(Mandatory, ParameterSetName = 'DeviceName')]
-        [String]$DeviceName,
+        [Parameter(Mandatory, ParameterSetName = 'DeviceDisplayName')]
+        [String]$DeviceDisplayName,
+
+        [Parameter(Mandatory, ParameterSetName = 'DeviceHostName')]
+        [String]$DeviceHostName,
 
         [Parameter(Mandatory, ParameterSetName = 'DeviceGroupId')]
         [String]$DeviceGroupId,
@@ -34,7 +37,8 @@ Function Export-LMDeviceData {
         $DataExportList = @()
         Switch($PSCmdlet.ParameterSetName){
             "DeviceId" { $DeviceList = Get-LMDevice -Id $DeviceId }
-            "DeviceName" { $DeviceList = Get-LMDevice -Name $DeviceName }
+            "DeviceName" { $DeviceList = Get-LMDevice -DisplayName $DeviceName }
+            "DeviceHostName" { $DeviceList = Get-LMDevice -Name $DeviceHostName }
             "DeviceGroupId" { $DeviceList = Get-LMDeviceGroupDevices -Id $DeviceGroupId }
             "DeviceGroupName" { $DeviceList = Get-LMDeviceGroupDevices -Name $DeviceGroupName }
         }

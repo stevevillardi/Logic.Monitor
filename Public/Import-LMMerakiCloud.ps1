@@ -290,7 +290,7 @@ Function Import-LMMerakiCloud {
                         "meraki.org.id" = $OrgId
                         "meraki.network.id" = $NetworkId
                         "meraki.network.name" = $NetworkName
-                        "meraki.network.tags" = $(If(!$NetworkTags){"[]"})
+                        "meraki.network.tags" = $(If(!$NetworkTags){"[]"}Else{$NetworkTags -join ","})
                         "meraki.network.type" = $NetworkType -Join ", "
                     }
 

@@ -14,7 +14,7 @@ schema: 2.0.0
 
 ```
 New-LMNetScan [-CollectorId] <String> [-Name] <String> [[-Description] <String>]
- [[-ExcludeDuplicateType] <String>] [[-IgnoreSystemIpDuplpicates] <Boolean>] [[-Method] <String>]
+ [[-ExcludeDuplicateType] <String>] [-IgnoreSystemIpDuplicates <Boolean>] [[-Method] <String>]
  [[-NextStart] <String>] [[-NextStartEpoch] <String>] [[-NetScanGroupId] <String>] [-SubnetRange] <String>
  [[-CredentialGroupId] <String>] [[-CredentialGroupName] <String>] [[-ChangeNameToken] <String>]
  [<CommonParameters>]
@@ -124,21 +124,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IgnoreSystemIpDuplpicates
-{{ Fill IgnoreSystemIpDuplpicates Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Method
 {{ Fill Method Description }}
 
@@ -224,6 +209,21 @@ Aliases:
 
 Required: True
 Position: 9
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IgnoreSystemIpDuplicates
+{{ Fill IgnoreSystemIpDuplicates Description }}
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

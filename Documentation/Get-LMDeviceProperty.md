@@ -14,17 +14,20 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMDeviceProperty -Id <Int32> [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceProperty -Id <Int32> [-PropertyName <String>] [-Filter <Hashtable>] [-BatchSize <Int32>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceProperty [-Name <String>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceProperty [-Name <String>] [-PropertyName <String>] [-Filter <Hashtable>] [-BatchSize <Int32>]
+ [<CommonParameters>]
 ```
 
 ### DisplayName
 ```
-Get-LMDeviceProperty [-DisplayName <String>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceProperty [-DisplayName <String>] [-PropertyName <String>] [-Filter <Hashtable>]
+ [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -107,6 +110,21 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: Name
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PropertyName
+{{ Fill PropertyName Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: False

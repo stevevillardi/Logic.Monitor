@@ -11,6 +11,8 @@ Function Get-LMDeviceProperty {
         [Parameter(ParameterSetName = 'DisplayName')]
         [String]$DisplayName,
 
+        [String]$PropertyName,
+
         [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
@@ -39,7 +41,12 @@ Function Get-LMDeviceProperty {
         }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/properties"
+        If($PropertyName){
+            $ResourcePath = "/device/devices/$Id/properties/$PropertyName"
+        }
+        Else{
+            $ResourcePath = "/device/devices/$Id/properties"
+        }
 
         #Initalize vars
         $QueryParams = ""

@@ -19,9 +19,16 @@ Export-LMDeviceData -DeviceId <Int32> [-StartDate <DateTime>] [-EndDate <DateTim
  [-ExportPath <String>] [<CommonParameters>]
 ```
 
-### DeviceName
+### DeviceDisplayName
 ```
-Export-LMDeviceData -DeviceName <String> [-StartDate <DateTime>] [-EndDate <DateTime>]
+Export-LMDeviceData -DeviceDisplayName <String> [-StartDate <DateTime>] [-EndDate <DateTime>]
+ [-DatasourceIncludeFilter <String>] [-DatasourceExcludeFilter <String>] [-ExportFormat <String>]
+ [-ExportPath <String>] [<CommonParameters>]
+```
+
+### DeviceHostName
+```
+Export-LMDeviceData -DeviceHostName <String> [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-DatasourceIncludeFilter <String>] [-DatasourceExcludeFilter <String>] [-ExportFormat <String>]
  [-ExportPath <String>] [<CommonParameters>]
 ```
@@ -129,21 +136,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DeviceName
-{{ Fill DeviceName Description }}
-
-```yaml
-Type: String
-Parameter Sets: DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -EndDate
 {{ Fill EndDate Description }}
 
@@ -199,6 +191,36 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceDisplayName
+{{ Fill DeviceDisplayName Description }}
+
+```yaml
+Type: String
+Parameter Sets: DeviceDisplayName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceHostName
+{{ Fill DeviceHostName Description }}
+
+```yaml
+Type: String
+Parameter Sets: DeviceHostName
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

@@ -12,9 +12,16 @@ schema: 2.0.0
 
 ## SYNTAX
 
+### ListDiffs (Default)
 ```
-Get-LMDeviceConfigSourceDiff [-Id] <Int32> [-HdsId] <String> [-HdsInsId] <String> [[-Filter] <Hashtable>]
- [[-BatchSize] <Int32>] [<CommonParameters>]
+Get-LMDeviceConfigSourceDiff [-Id] <Int32> [-HdsId] <String> [-HdsInsId] <String> [[-BatchSize] <Int32>]
+ [<CommonParameters>]
+```
+
+### ConfigId
+```
+Get-LMDeviceConfigSourceDiff [-Id] <Int32> [-HdsId] <String> [-HdsInsId] <String> [-ConfigId <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,26 +43,11 @@ PS C:\> {{ Add example code here }}
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: ListDiffs
 Aliases:
 
 Required: False
 Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-{{ Fill Filter Description }}
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -101,6 +93,21 @@ Aliases:
 
 Required: True
 Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ConfigId
+{{ Fill ConfigId Description }}
+
+```yaml
+Type: String
+Parameter Sets: ConfigId
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

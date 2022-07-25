@@ -13,8 +13,9 @@ Function New-LMNetScan {
         
         [String]$ExcludeDuplicateType = "1",
 
-        [Nullable[boolean]]$IgnoreSystemIpDuplpicates = $false,
+        [Nullable[boolean]]$IgnoreSystemIpDuplicates = $false,
 
+        [ValidateSet("nmap")]
         [String]$Method = "nmap",
 
         [String]$NextStart = "manual",
@@ -86,7 +87,7 @@ Function New-LMNetScan {
                     collector                 = $CollectorId
                     description               = $Description
                     duplicate                 = $Duplicates
-                    ignoreSystemIPsDuplicates = $IgnoreSystemIpDuplpicates
+                    ignoreSystemIPsDuplicates = $IgnoreSystemIpDuplicates
                     method                    = $Method
                     nextStart                 = $NextStart
                     nextStartEpoch            = $NextStartEpoch

@@ -581,6 +581,15 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 # Change List
 
+## 3.7.3
+###### Bug Fixes:
+- **Import-LMMerakiCloud**: Fixed issue that prevented networks with tags applied from getting created during import
+- **New-LMNetScan**: Fixed typo in parameter IgnoreSystemIpDuplicates
+- **Initialize-LMPOVSetup**: Fixed LogTrackedQuery error when attemping to move Log Tracked Query folder to devices by type
+- **Get-LMDeviceProperty**: Added parameter **PropertyName** to allow for querying a single device property for a device
+- **Export-LMDeviceData**: Added parameter **DeviceDisplayName** and **DeviceHostName** to allow either field to be specific for export. Removed previous parameter DeviceName
+- **Get-LMDeviceConfigSourceDiff**: Added parameter **ConfigId** to allow a specific config id to be returned vs a list of available configs
+
 ## 3.7.2
 ###### Bug Fixes:
 - **Connect-LMAccount**: Fixed issue that prevented api tokens with limited access permissions from connecting successfully.

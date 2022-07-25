@@ -1478,11 +1478,11 @@
       <command:verb>Get</command:verb>
       <command:noun>LMAlert</command:noun>
       <maml:description>
-        <maml:para>{{ Fill in the Synopsis }}</maml:para>
+        <maml:para>Get LM Alert in bulk or by id.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{ Fill in the Description }}</maml:para>
+      <maml:para>Get LM Alert in bulk or by id.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1490,7 +1490,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>BatchSize</maml:name>
           <maml:description>
-            <maml:para>{{ Fill BatchSize Description }}</maml:para>
+            <maml:para>Set batch size for the number of results return per api request. Default value is 1000.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -1502,7 +1502,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ClearedAlerts</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ClearedAlerts Description }}</maml:para>
+            <maml:para>Include cleared alerts in the response.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
           <dev:type>
@@ -1514,7 +1514,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CustomColumns</maml:name>
           <maml:description>
-            <maml:para>{{ Fill CustomColumns Description }}</maml:para>
+            <maml:para>When get an alert by id, you can optionally include custom properties as part of the response</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -1526,7 +1526,7 @@
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Id</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Id Description }}</maml:para>
+            <maml:para>Alert Id for the alert you wish the lookup.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1538,7 +1538,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Severity</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Severity Description }}</maml:para>
+            <maml:para>Severity of the alerts to return. By default will search all alerts.</maml:para>
           </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">*</command:parameterValue>
@@ -1556,7 +1556,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Type</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Type Description }}</maml:para>
+            <maml:para>Type of alerts to return. By default will return alerts for all types.</maml:para>
           </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">*</command:parameterValue>
@@ -1578,7 +1578,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>BatchSize</maml:name>
           <maml:description>
-            <maml:para>{{ Fill BatchSize Description }}</maml:para>
+            <maml:para>Set batch size for the number of results return per api request. Default value is 1000.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -1590,7 +1590,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ClearedAlerts</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ClearedAlerts Description }}</maml:para>
+            <maml:para>Include cleared alerts in the response.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
           <dev:type>
@@ -1602,7 +1602,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>EndDate</maml:name>
           <maml:description>
-            <maml:para>{{ Fill EndDate Description }}</maml:para>
+            <maml:para>End date for filtered alert range</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
           <dev:type>
@@ -1614,7 +1614,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Severity</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Severity Description }}</maml:para>
+            <maml:para>Severity of the alerts to return. By default will search all alerts.</maml:para>
           </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">*</command:parameterValue>
@@ -1632,7 +1632,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>StartDate</maml:name>
           <maml:description>
-            <maml:para>{{ Fill StartDate Description }}</maml:para>
+            <maml:para>Start date for filtered alert range</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
           <dev:type>
@@ -1644,7 +1644,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Type</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Type Description }}</maml:para>
+            <maml:para>Type of alerts to return. By default will return alerts for all types.</maml:para>
           </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">*</command:parameterValue>
@@ -1666,7 +1666,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>BatchSize</maml:name>
           <maml:description>
-            <maml:para>{{ Fill BatchSize Description }}</maml:para>
+            <maml:para>Set batch size for the number of results return per api request. Default value is 1000.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -1678,7 +1678,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ClearedAlerts</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ClearedAlerts Description }}</maml:para>
+            <maml:para>Include cleared alerts in the response.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
           <dev:type>
@@ -1690,7 +1690,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Filter</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Filter Description }}</maml:para>
+            <maml:para>Apply a custom filter to query the alerts list. Filters are currently treated as exact matches.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
           <dev:type>
@@ -1702,7 +1702,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Severity</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Severity Description }}</maml:para>
+            <maml:para>Severity of the alerts to return. By default will search all alerts.</maml:para>
           </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">*</command:parameterValue>
@@ -1720,7 +1720,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Type</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Type Description }}</maml:para>
+            <maml:para>Type of alerts to return. By default will return alerts for all types.</maml:para>
           </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">*</command:parameterValue>
@@ -1742,7 +1742,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>BatchSize</maml:name>
         <maml:description>
-          <maml:para>{{ Fill BatchSize Description }}</maml:para>
+          <maml:para>Set batch size for the number of results return per api request. Default value is 1000.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
@@ -1754,7 +1754,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ClearedAlerts</maml:name>
         <maml:description>
-          <maml:para>{{ Fill ClearedAlerts Description }}</maml:para>
+          <maml:para>Include cleared alerts in the response.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
         <dev:type>
@@ -1766,7 +1766,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CustomColumns</maml:name>
         <maml:description>
-          <maml:para>{{ Fill CustomColumns Description }}</maml:para>
+          <maml:para>When get an alert by id, you can optionally include custom properties as part of the response</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
@@ -1778,7 +1778,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>EndDate</maml:name>
         <maml:description>
-          <maml:para>{{ Fill EndDate Description }}</maml:para>
+          <maml:para>End date for filtered alert range</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
         <dev:type>
@@ -1790,7 +1790,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Filter</maml:name>
         <maml:description>
-          <maml:para>{{ Fill Filter Description }}</maml:para>
+          <maml:para>Apply a custom filter to query the alerts list. Filters are currently treated as exact matches.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
         <dev:type>
@@ -1802,7 +1802,7 @@
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Id</maml:name>
         <maml:description>
-          <maml:para>{{ Fill Id Description }}</maml:para>
+          <maml:para>Alert Id for the alert you wish the lookup.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1814,7 +1814,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Severity</maml:name>
         <maml:description>
-          <maml:para>{{ Fill Severity Description }}</maml:para>
+          <maml:para>Severity of the alerts to return. By default will search all alerts.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1826,7 +1826,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>StartDate</maml:name>
         <maml:description>
-          <maml:para>{{ Fill StartDate Description }}</maml:para>
+          <maml:para>Start date for filtered alert range</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
         <dev:type>
@@ -1838,7 +1838,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Type</maml:name>
         <maml:description>
-          <maml:para>{{ Fill Type Description }}</maml:para>
+          <maml:para>Type of alerts to return. By default will return alerts for all types.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1876,9 +1876,16 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-LMAlert -StartDate $(Get-Date).AddDays(-1) -EndDate $(Get-Date) -ClearedAlerts $true | Group-Object -Property resourceTemplateName,datapointName | select count, @{N='Name';E={$_.Name.Split(",")[0]}}, @{N='Datapoint';E={$_.Name.Split(",")[1]}} | Sort-Object -Property count -Descending</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Get all alerts from the last 24 hours.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-LMAlert -Id DS67152170</dev:code>
+        <dev:remarks>
+          <maml:para>Get all details for alert id DS67152170.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1890,11 +1897,11 @@
       <command:verb>Get</command:verb>
       <command:noun>LMAlertRule</command:noun>
       <maml:description>
-        <maml:para>{{ Fill in the Synopsis }}</maml:para>
+        <maml:para>Get list of alert rules in bulk or by id.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>{{ Fill in the Description }}</maml:para>
+      <maml:para>Get list of alert rules in bulk or by id.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -1902,7 +1909,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>BatchSize</maml:name>
           <maml:description>
-            <maml:para>{{ Fill BatchSize Description }}</maml:para>
+            <maml:para>Set batch size for the number of results return per api request. Default value is 1000.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -1914,7 +1921,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Filter</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Filter Description }}</maml:para>
+            <maml:para>Apply a custom filter to query for alerts rules. Filters are currently treated as exact matches.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
           <dev:type>
@@ -1929,7 +1936,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>BatchSize</maml:name>
           <maml:description>
-            <maml:para>{{ Fill BatchSize Description }}</maml:para>
+            <maml:para>Set batch size for the number of results return per api request. Default value is 1000.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -1941,7 +1948,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Id</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Id Description }}</maml:para>
+            <maml:para>Id of the alert rule to return.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -1956,7 +1963,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>BatchSize</maml:name>
           <maml:description>
-            <maml:para>{{ Fill BatchSize Description }}</maml:para>
+            <maml:para>Set batch size for the number of results return per api request. Default value is 1000.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -1968,7 +1975,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Name</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Name Description }}</maml:para>
+            <maml:para>Name of the alert rule to return. Name field accepts wildcards to return multiple rules matching a specified string.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -1983,7 +1990,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>BatchSize</maml:name>
         <maml:description>
-          <maml:para>{{ Fill BatchSize Description }}</maml:para>
+          <maml:para>Set batch size for the number of results return per api request. Default value is 1000.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
@@ -1995,7 +2002,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Filter</maml:name>
         <maml:description>
-          <maml:para>{{ Fill Filter Description }}</maml:para>
+          <maml:para>Apply a custom filter to query for alerts rules. Filters are currently treated as exact matches.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
         <dev:type>
@@ -2007,7 +2014,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Id</maml:name>
         <maml:description>
-          <maml:para>{{ Fill Id Description }}</maml:para>
+          <maml:para>Id of the alert rule to return.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
@@ -2019,7 +2026,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Name</maml:name>
         <maml:description>
-          <maml:para>{{ Fill Name Description }}</maml:para>
+          <maml:para>Name of the alert rule to return. Name field accepts wildcards to return multiple rules matching a specified string.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -2057,9 +2064,16 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:code>PS C:\&gt; Get-LMAlertRule -Id 1</dev:code>
         <dev:remarks>
-          <maml:para>{{ Add example description here }}</maml:para>
+          <maml:para>Get alert rule detail for all alerts that start with "Test*".</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-LMAlertRule -Name "Test*"</dev:code>
+        <dev:remarks>
+          <maml:para>Get alert rule detail for alert rule id 1.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -2071,7 +2085,7 @@
       <command:verb>Get</command:verb>
       <command:noun>LMAPIToken</command:noun>
       <maml:description>
-        <maml:para>{{ Fill in the Synopsis }}</maml:para>
+        <maml:para>Get list of a specifc or list of available API tokens</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -34569,89 +34583,9 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Properties</maml:name>
+          <maml:name>ParentGroupName</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Properties Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
-          <dev:type>
-            <maml:name>Hashtable</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>PropertiesMethod</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill PropertiesMethod Description }}</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">Add</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">Replace</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">Refresh</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>StopMonitoring</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill StopMonitoring Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
-          <dev:type>
-            <maml:name>Boolean</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-      </command:syntaxItem>
-      <command:syntaxItem>
-        <maml:name>Set-LMWebsiteGroup</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Description</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill Description Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>DisableAlerting</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill DisableAlerting Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
-          <dev:type>
-            <maml:name>Boolean</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Name</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill Name Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>NewName</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill NewName Description }}</maml:para>
+            <maml:para>{{ Fill ParentGroupName Description }}</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -34724,6 +34658,18 @@
           <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
           <dev:type>
             <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="none">
+          <maml:name>Id</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Id Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -34820,6 +34766,18 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Name Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NewName</maml:name>
           <maml:description>
@@ -34840,6 +34798,110 @@
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Properties</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Properties Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+          <dev:type>
+            <maml:name>Hashtable</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PropertiesMethod</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill PropertiesMethod Description }}</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Add</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Replace</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Refresh</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>StopMonitoring</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill StopMonitoring Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Set-LMWebsiteGroup</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Description</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Description Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisableAlerting</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill DisableAlerting Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Name Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NewName</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill NewName Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ParentGroupId</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ParentGroupId Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
