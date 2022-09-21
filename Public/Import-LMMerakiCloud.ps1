@@ -276,6 +276,7 @@ Function Import-LMMerakiCloud {
                     #Check if this network has any devices and avoid reporting deviceless networks.
                     $NetworkDevices  = $Devices.networkId.Contains($Network.id)
                     If (($NetworkDevices | Measure-Object).Count -eq 0) {
+                        Write-Host "[INFO]:$($Network.name) does not contain any devices, skipping processing" -ForegroundColor Gray
                         Continue
                     }
             

@@ -1,12 +1,22 @@
 Function Get-LMCachedAccount {
-
-    #Constuct cred path universally for windows and linux/mac
-    $CredentialPath = Join-Path -Path $Home -ChildPath "Logic.Monitor.json"
-
-    If (Test-Path -Path $CredentialPath) {
-        Get-Content -Path $CredentialPath | ConvertFrom-Json
+    [CmdletBinding()]
+    Param (
+        [String]$AccountName
+    )
+    If($AccountName){
+        $CachedAccountSecrets = Get-SecretInfo -Vault Logic.Monitor -Name $AccountName
     }
-    Else {
-        Write-Error "No credential file found, use Import-LMCachedAccount to setup a cached credential file"
+    Else{
+        $CachedAccountSecrets = Get-SecretInfo -Vault Logic.Monitor
     }
+    $CachedAccounts = @()
+    Foreach ($Secret in $CachedAccountSecrets.Metadata){
+        $CachedAccounts += [PSCustomObject]@{
+            Portal      = $Secret["Portal"]
+            Id          = $Secret["Id"]
+            Modified    = $Secret["Modified"]
+        }
+    }
+    Return $CachedAccounts
+
 }

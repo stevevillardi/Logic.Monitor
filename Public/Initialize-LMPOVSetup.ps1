@@ -166,8 +166,7 @@ Function Initialize-LMPOVSetup {
 
                     }
                     #Import LM Logs Datasource
-                    #Import-LMExchangeModule -LMExchangeId "ed2eaf02-8c48-4e41-a7f9-8fd3d96c8e5a"
-                    #Use Kevin Fords imporved version with metadata over the orginal version
+                    #Use imporved version with metadata over the orginal version
                     Import-LMExchangeModule -LMExchangeId "896d0c2c-a993-4f0b-8db2-2bb29947cb52"
                 }
                 Else{

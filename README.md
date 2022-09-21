@@ -581,6 +581,17 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 # Change List
 
+## 3.8
+###### Updated Commands:
+- **Connect-LMAccount**
+- **New-LMCachedAccount**
+- **Get-LMCachedAccount**
+- **Remove-LMCachedAccount**
+
+**NOTE**: This update removes the legacy cached account mechanism in favor of **Microsoft's SecretManagement** module. This allows for a much more secure way of storing and retrieving cached API credentials then the legacy method.
+
+If you are using the old cached account method the upgrade process will happen automatically when you connect to an LM portal using the -UseCachedAccount or -CachedAccountName parameters within the Connect-LMAccount command or when using New-CachedAccount to provision a new cached account
+
 ## 3.7.3
 ###### Bug Fixes:
 - **Import-LMMerakiCloud**: Fixed issue that prevented networks with tags applied from getting created during import

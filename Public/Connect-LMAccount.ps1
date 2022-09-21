@@ -15,10 +15,10 @@ Access Key from your API credential aquired from the LM Portal
 The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)
 
 .PARAMETER UseCachedCredential
-Used a cached account that has been added using New-LMCachedAccount instead of explicitly providing credentials.
+This will list all cached account for you to pick from. This parameter is optional
 
 .PARAMETER CachedAccountName
-Name of cached account you wish to connect to. If none is provided a list will be presented to pick from. This parameter is optional.
+Name of cached account you wish to connect to. This parameter is optional and can be used in place of UseCachedCredential
 
 .PARAMETER DisableConsoleLogging
 Disables on stdout messages from displaying for any subsquent commands are run. Useful when building scripted logicmodules and you want to supress unwanted output. Console logging is enabled by default.
@@ -54,7 +54,7 @@ Function Connect-LMAccount {
         [Parameter(Mandatory, ParameterSetName = 'Manual')]
         [String]$AccountName,
 
-        [Parameter(Mandatory, ParameterSetName = 'Cached')]
+        [Parameter(ParameterSetName = 'Cached')]
         [Switch]$UseCachedCredential,
 
         [Parameter(ParameterSetName = 'Cached')]
@@ -62,55 +62,100 @@ Function Connect-LMAccount {
 
         [Switch]$DisableConsoleLogging
     )
-    If ($UseCachedCredential) {
+    If ($UseCachedCredential -or $CachedAccountName) {
+
+        Try {
+            $ExistingVault = Get-SecretInfo -Name Logic.Monitor -WarningAction Stop
+            Write-Host "Existing vault Logic.Monitor already exists, skipping creation" -ForegroundColor Yellow
+        }
+        Catch {
+            If($_.Exception.Message -like "*There are currently no extension vaults registered*") {
+                Write-Host "Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor" -ForegroundColor Yellow
+                Register-SecretVault -Name Logic.Monitor -ModuleName Microsoft.PowerShell.SecretStore
+                Get-SecretStoreConfiguration | Out-Null
+            }
+        }
         $CredentialPath = Join-Path -Path $Home -ChildPath "Logic.Monitor.json"
         If ((Test-Path -Path $CredentialPath)) {
+            Write-Host "Previous version of cached accounts detected, migrating to secret store..." -ForegroundColor Yellow
             $CredentialFile = Get-Content -Path $CredentialPath | ConvertFrom-Json | Sort-Object -Property Modified -Descending
-
-            #If supplied and account name just use that vs showing a list of accounts
-            If($CachedAccountName){
-                $CachedAccountIndex = $CredentialFile.portal.IndexOf($CachedAccountName)
-                If($CachedAccountIndex -ne -1){
-                    $AccountName = $CredentialFile[$CachedAccountIndex].Portal
-                    [SecureString]$AccessKey = $CredentialFile[$CachedAccountIndex].Key | ConvertTo-SecureString
-                    $AccessId = $CredentialFile[$CachedAccountIndex].Id
+            $MigrationComplete = $true
+            Foreach ($Credential in $CredentialFile) {
+                $CurrentDate = Get-Date
+                [Hashtable]$Metadata = @{
+                    Portal      = [String]$Credential.Portal
+                    Id          = [String]$Credential.Id
+                    Modified    = [DateTime]$CurrentDate
                 }
-                Else{
-                    Write-Error "Entered CachedAccountName ($CachedAccountName) does not match one of the stored credentials, please check the selected entry and try again"
-                    Return
+                Try{
+                    Set-Secret -Name $Credential.Portal -Secret $Credential.Key -Vault Logic.Monitor -Metadata $Metadata -NoClobber
+                    Write-Host "Successfully migrated cached account secret for portal: $($Credential.Portal)" -ForegroundColor Yellow
                 }
-
+                Catch{
+                    Write-Error $_.Exception.Message
+                    $MigrationComplete = $false
+                }
+            }
+            If($MigrationComplete){
+                Remove-Item -Path $CredentialPath -Confirm:$false
+                Write-Host "Successfully migrated cached accounts into secret store, your legacy account cache hes been removed." -ForegroundColor Yellow
             }
             Else{
-                #List out current portals with saved credentials and let users chose which to use
-                $i = 0
+                $NewName = Join-Path -Path $Home -ChildPath "Logic.Monitor-Migrated.json"
+                Rename-Item -Path $CredentialPath -Confirm:$false -NewName $NewName
+                Write-Host "Unable to fully migrate cached accounts into secret store, your legacy account cache has been archived at: $NewName. No other attemps will be made to migrate any failed accounts." -ForegroundColor Red
+            }
+        }
+
+        If($CachedAccountName){
+            #If supplied and account name just use that vs showing a list of accounts
+            $CachedAccountSecrets = Get-SecretInfo -Vault Logic.Monitor
+            $CachedAccountIndex = $CachedAccountSecrets.Name.IndexOf($CachedAccountName)
+            If($CachedAccountIndex -ne -1){
+                $AccountName = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Portal"]
+                [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
+                $AccessId = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Id"]
+            }
+            Else{
+                Write-Error "Entered CachedAccountName ($CachedAccountName) does not match one of the stored credentials, please check the selected entry and try again"
+                Return
+            }
+        }
+        Else{
+            #List out current portals with saved credentials and let users chose which to use
+            $i = 0
+            $CachedAccountSecrets = Get-SecretInfo -Vault Logic.Monitor
+            If($CachedAccountSecrets){
                 Write-Host "Selection Number | Portal Name"
-                Foreach ($Credential in $CredentialFile) {
-                    Write-Host "$i)     $($Credential.Portal)"
+                Foreach ($Credential in $CachedAccountSecrets) {
+                    Write-Host "$i)     $($Credential.Name)"
                     $i++
                 }
                 $StoredCredentialIndex = Read-Host -Prompt "Enter the number for the cached credential you wish to use"
-                If ($CredentialFile[$StoredCredentialIndex]) {
-                    $AccountName = $CredentialFile[$StoredCredentialIndex].Portal
-                    [SecureString]$AccessKey = $CredentialFile[$StoredCredentialIndex].Key | ConvertTo-SecureString
-                    $AccessId = $CredentialFile[$StoredCredentialIndex].Id
+                If ($CachedAccountSecrets[$StoredCredentialIndex]) {
+                    $AccountName = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Portal"]
+                    [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $AccountName -AsPlainText | ConvertTo-SecureString
+                    $AccessId = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Id"]
                 }
                 Else {
                     Write-Error "Entered value does not match one of the listed credentials, please check the selected entry and try again"
                     Return
                 }
             }
+            Else{
+                Write-Error "No entries currently found in secret vault Logic.Monitor"
+                    Return
+            }
         }
-        Else {
-            Write-Error "No credential file could be located, use New-LMCachedAccount to cache a credential for use with -CachedAccountName or manually specify api credentials"
-            Return
-        }
-
     }
     Else {
         #Convert to secure string
         [SecureString]$AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force
     }
+
+    # $AccessId
+    # [System.Net.NetworkCredential]::new("", $AccessKey).Password
+    # $AccountName
     
     #Create Credential Object for reuse in other functions
     $Script:LMAuth = [PSCustomObject]@{

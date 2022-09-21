@@ -32,72 +32,34 @@ Function New-LMCachedAccount {
 
         [Boolean]$OverwriteExisting = $false
     )
-    #Constuct cred path universally for windows and linux/mac
-    $CredentialPath = Join-Path -Path $Home -ChildPath "Logic.Monitor.json"
 
-    
     Try {
-        #Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName
-        $CurrentDate = Get-Date
-        #Convert to secure string
-        $AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
-    
-        #Create Credential Object
-        $AccountCredentials = @()
-        $AccountCredentials += [PSCustomObject]@{
-            Portal   = $AccountName
-            Id       = $AccessId
-            Key      = $AccessKey
-            Modified = $CurrentDate
-        }
-        #Check to see if we have a credential file saved already
-        If (!(Test-Path -Path $CredentialPath)) {
-            #First time storing credentials
-            New-Item -ItemType File -Path $CredentialPath | Out-Null
-            $AccountCredentials
-            $AccountCredentials | ConvertTo-Json | Set-Content -Path $CredentialPath
-            Write-LMHost "Credential for $AccountName has been saved to: $CredentialPath"
-        }
-        Else {
-            $CredentialFile = Get-Content -Path $CredentialPath | ConvertFrom-Json
-
-            #Check if credential already exists
-            If (!($CredentialFile.Portal -match $AccountName)) {
-                #Loop through credentials and add to new array
-                Foreach ($Cred in $CredentialFile) {
-                    $AccountCredentials += [PSCustomObject]@{
-                        Portal   = $Cred.Portal
-                        Id       = $Cred.Id
-                        Key      = $Cred.Key
-                        Modified = $Cred.Modified
-                    }
-                }
-                #Export new credentials for json file
-                $AccountCredentials
-                $AccountCredentials | ConvertTo-Json | Set-Content -Path $CredentialPath
-                Write-LMHost "Credential for $AccountName has been saved to: $CredentialPath"
-            }
-            Else {
-                If ($OverwriteExisting) {
-                    $ExistingCred = $CredentialFile.Portal.IndexOf("$AccountName")
-
-                    $CredentialFile[$ExistingCred].Id = $AccessId
-                    $CredentialFile[$ExistingCred].Key = $AccessKey
-                    $CredentialFile[$ExistingCred].Portal = $AccountName
-                    $CredentialFile[$ExistingCred].Modified = $CurrentDate
-
-                    #Export new credentials for json file
-                    $CredentialFile
-                    $CredentialFile | ConvertTo-Json | Set-Content -Path $CredentialPath
-                    Write-LMHost "Credential for $AccountName has been updated in: $CredentialPath"
-                }
-                Else {
-                    Write-LMHost "A credential for portal $AccountName already exists, use overwrite switch to update existing entry"
-                }
-            }
-        }
+        $ExistingVault = Get-SecretInfo -Name Logic.Monitor -WarningAction Stop
+        Write-Host "Existing vault Logic.Monitor already exists, skipping creation"
     }
     Catch {
-        Write-Error "Unable to store credentials, check that you have the correct api info and try again"
+        If($_.Exception.Message -like "*There are currently no extension vaults registered*") {
+            Write-Host "Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor"
+            Register-SecretVault -Name Logic.Monitor -ModuleName Microsoft.PowerShell.SecretStore
+            Get-SecretStoreConfiguration | Out-Null
+        }
     }
+
+    $CurrentDate = Get-Date
+    #Convert to secure string
+    $AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
+    [Hashtable]$Metadata = @{
+        Portal      = [String]$AccountName
+        Id          = [String]$AccessId
+        Modified    = [DateTime]$CurrentDate
+    }
+    Try{
+        Set-Secret -Name $AccountName -Secret $AccessKey -Vault Logic.Monitor -Metadata $Metadata -NoClobber:$(!$OverwriteExisting)
+        Write-Host "Successfully created cached account secret for portal: $AccountName"
+    }
+    Catch{
+        Write-Error $_.Exception.Message
+    }
+
+    Return
 }
