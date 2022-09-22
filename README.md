@@ -44,6 +44,8 @@ Disconnect-LMAccount
 
 To cache credentials for multiple portals you can use the command New-LMCachedAccount, once a credential has been cached you can reference it when connecting to an lm portal using the -UserCachedCredentials switch in Connect-LMAccount.
 
+Cached credentials are stored in a LocalVault using **Microsoft's SecretManagement** module. If its your first time using SecretManagement you will be prompted to set up a password for accessing your cached accounts in the LocalVault using this method.
+
 ```powershell
 New-LMCachedAccount -AccessId "lm_access_id" -AccessKey "lm_access_key" -AccountName "lm_portal_prefix_name"
 Connect-LMAccount -UseCachedCredential
@@ -590,7 +592,7 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 **NOTE**: This update removes the legacy cached account mechanism in favor of **Microsoft's SecretManagement** module. This allows for a much more secure way of storing and retrieving cached API credentials then the legacy method.
 
-If you are using the old cached account method the upgrade process will happen automatically when you connect to an LM portal using the -UseCachedAccount or -CachedAccountName parameters within the Connect-LMAccount command or when using New-CachedAccount to provision a new cached account
+If you are using the old cached account method the upgrade process will happen automatically when you connect to an LM portal using the -UseCachedAccount or -CachedAccountName parameters within the Connect-LMAccount command or when using New-CachedAccount to provision a new cached account. If its your first time using SecretManagement you will be prompted to set up a password for accessing your cached accounts in the LocalVault.
 
 ## 3.7.3
 ###### Bug Fixes:
