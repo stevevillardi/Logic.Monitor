@@ -38,6 +38,27 @@ Function Initialize-LMPOVSetup {
             $PortalName = $Script:LMAuth.Portal
             $DeviceName = "$PortalName.logicmonitor.com"
 
+            #Generate hastable of new dynamic groups to create
+            $DynamicGroupList = @{
+                "All Devices" = 'true()'
+                "AWS Resources" = 'isAWSService()'
+                "Azure Resources" = 'isAzureService()'
+                "GCP Resources" = 'isGCPService()'
+                "K8s Resources" = 'system.devicetype == "8"'
+                "Dead Devices" = 'system.hoststatus == "dead" || system.hoststatus == "dead-collector" || system.gcp.status == "TERMINATED" || system.azure.status == "PowerState/stopped" || system.aws.stateName == "terminated"'
+                "Palo Alto" = 'hasCategory("PaloAlto")'
+                "Cisco ASA" = 'hasCategory("CiscoASA")'
+                "Logs Enabled Devices" = 'hasPushModules("LogUsage")'
+                "Netflow Enabled Devices" = 'isNetflow()'
+                "Cisco UCS" = 'hasCategory("CiscoUCSFabricInterconnect") || hasCategory("CiscoUCSManager")'
+                "Oracle" = 'hasCategory("OracleDB")'
+                "Domain Controllers" = 'hasCategory("MicrosoftDomainController")'
+                "Exchange Servers" = 'hasCategory("MSExchange")'
+                "IIS" = 'hasCategory("MicrosoftIIS")'
+                "Citrix XenApp" = 'hasCategory("CitrixBrokerActive") || hasCategory("CitrixMonitorServiceV2") || hasCategory("CitrixLicense") || hasCategory("CitrixEUEM")'
+
+            }
+
             #Create readonly API use for Portal Metrics
             If ($SetupPortalMetrics -or $RunAll) {
                 $CheckAPIUser = Get-LMUser -Name "$PortalMetricsAPIUsername"
@@ -91,17 +112,11 @@ Function Initialize-LMPOVSetup {
             If ($MoveMinimalMonitoring -or $RunAll) {
                 $DeviceFolderId = (Get-LMDeviceGroup -Name "Devices by Type").id
                 $MinimalFolderId = (Get-LMDeviceGroup -Name "Minimal Monitoring").id
-                $LogTrackedFolderId = (Get-LMDeviceGroup -Name "Log Tracked Queries").id
                 If ($DeviceFolderId -and $MinimalFolderId) {
                     Write-Host "[INFO]: Moving minimal monitoring folder into Devices by Type"
                     $MinimalFolderGroup = Set-LMDeviceGroup -id $MinimalFolderId -ParentGroupId $DeviceFolderId
                     If ($MinimalFolderGroup) {
                         Write-Host "[INFO]: Successfully moved minimal monitoring folder into Devices by Type"
-                    }
-                    Write-Host "[INFO]: Moving log tracked queries folder into Devices by Type"
-                    $LogTrackedFoldeGroup = Set-LMDeviceGroup -id $LogTrackedFolderId -ParentGroupId $DeviceFolderId
-                    If ($LogTrackedFoldeGroup) {
-                        Write-Host "[INFO]: Successfully log tracked queries folder into Devices by Type"
                     }
                     $MinimalFolderAppliesTo = (Get-LMDeviceGroup -Name "Minimal Monitoring").appliesTo
                     If ($MinimalFolderAppliesTo) {
@@ -120,19 +135,27 @@ Function Initialize-LMPOVSetup {
                 Write-Host "[INFO]: Cleaning up default dynamic groups"
                 $LinuxDeviceGroupId = (Get-LMDeviceGroup -Name "Linux Servers").id
                 $MiscDeviceGroupId = (Get-LMDeviceGroup -Name "Misc").id
+                If(!$DeviceFolderId){
+                    $DeviceFolderId = (Get-LMDeviceGroup -Name "Devices by Type").id
+                }
                 If ($LinuxDeviceGroupId) {
                     $ModifedLinuxGroup = Set-LMDeviceGroup -Id $LinuxDeviceGroupId -AppliesTo "isLinux() || hasCategory(`"Linux_SSH`")"
                     If ($ModifedLinuxGroup) {
                         Write-Host "[INFO]: Updated Linux Servers group to include Linux_SSH devices"
                     }
-
                 }
                 If ($MiscDeviceGroupId) {
                     $MiscDeviceGroup = Remove-LMDeviceGroup -Id $MiscDeviceGroupId
                     If ($ModifedLinuxGroup) {
                         Write-Host "[INFO]: Removed Misc devices group from Devices by Type"
                     }
-
+                }
+                Write-Host "[INFO]: Creating additional default dynamic groups"
+                Foreach($Group in $DynamicGroupList.GetEnumerator()){
+                    $NewGroup = New-LMDeviceGroup -Name $Group.Name -ParentGroupId $DeviceFolderId -AppliesTo $Group.Value
+                    If($NewGroup){
+                        Write-Host "[INFO]: Created new dynamic group: $($Group.Name)"
+                    }
                 }
             }
 
@@ -176,7 +199,7 @@ Function Initialize-LMPOVSetup {
             
         }
         Else {
-            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

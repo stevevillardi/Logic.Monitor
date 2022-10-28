@@ -9,10 +9,10 @@ Function Get-LMCollectorInstaller {
         [Parameter(Mandatory, ParameterSetName = "Name")]
         [string]$Name,
 
-        [ValidateSet("nano", "small", "medium", "large")]
+        [ValidateSet("nano", "small", "medium", "large", "extra_large","double_extra_large")]
         [string]$Size = "medium",
 
-        [ValidateSet("Win32", "Win64", "Linux32", "Linux64")]
+        [ValidateSet("Win64", "Linux64")]
         [string]$OSandArch = "Win64",
 
         [boolean]$UseEA = $false,
@@ -36,10 +36,10 @@ Function Get-LMCollectorInstaller {
         $QueryParams = "?useEA=$UseEA&collectorSize=$Size"
 
         If ($OSandArch -like "Linux*") {
-            $DownloadPath += "\LogicMonitor_Collector_$OSandArch($Size).bin"
+            $DownloadPath += "\LogicMonitor_Collector_$OSandArch`_$Size`_$Id.bin"
         }
         Else {
-            $DownloadPath += "\LogicMonitor_Collector_$OSandArch($Size).exe"
+            $DownloadPath += "\LogicMonitor_Collector_$OSandArch`_$Size`_$Id.exe"
         }
 
         Try {
@@ -60,6 +60,6 @@ Function Get-LMCollectorInstaller {
         }
     }
     Else {
-        Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
+        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

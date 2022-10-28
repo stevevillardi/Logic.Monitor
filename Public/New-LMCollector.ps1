@@ -80,7 +80,7 @@ Function New-LMCollector {
             }
         }
         Else {
-            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
     End {}

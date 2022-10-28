@@ -499,6 +499,7 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Set-LMNetscan
 - Remove-LMNetscan
 - Invoke-LMNetscan
+- Invoke-LMCloudGroupNetScan
 - Get-LMUnmonitoredDevices
 
 #### Ops Notes
@@ -582,6 +583,35 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Invoke-LMDeviceDedupe
 
 # Change List
+
+## 3.8.1
+###### Updated Commands:
+- **Get-CollectorInstaller**: Added support for XL and XXL collector sizes and removed legacy support for 32-bit collector variants
+- **Import-LMMerakiCloud**: Fixed issue with ListNetworkIds parameter not listing all NetworkIds if it encountered an issue enumerator any organization associated with the specified API key.
+- **Initialize-LMPOVSetup**: Remove Log tracked query folder deletion code since it is not longer valid. Added in creation of 16 new dynamic groups that are provisioned as part of the CleanupDynamicGroups parameter. 
+
+New groups include:
+```powershell
+"All Devices" = 'true()'
+"AWS Resources" = 'isAWSService()'
+"Azure Resources" = 'isAzureService()'
+"GCP Resources" = 'isGCPService()'
+"K8s Resources" = 'system.devicetype == "8"'
+"Dead Devices" = 'system.hoststatus == "dead" || system.hoststatus == "dead-collector" || system.gcp.status == "TERMINATED" || system.azure.status == "PowerState/stopped" || system.aws.stateName == "terminated"'
+"Palo Alto" = 'hasCategory("PaloAlto")'
+"Cisco ASA" = 'hasCategory("CiscoASA")'
+"Logs Enabled Devices" = 'hasPushModules("LogUsage")'
+"Netflow Enabled Devices" = 'isNetflow()'
+"Cisco UCS" = 'hasCategory("CiscoUCSFabricInterconnect") || hasCategory("CiscoUCSManager")'
+"Oracle" = 'hasCategory("OracleDB")'
+"Domain Controllers" = 'hasCategory("MicrosoftDomainController")'
+"Exchange Servers" = 'hasCategory("MSExchange")'
+"IIS" = 'hasCategory("MicrosoftIIS")'
+"Citrix XenApp" = 'hasCategory("CitrixBrokerActive") || hasCategory("CitrixMonitorServiceV2") || hasCategory("CitrixLicense") || hasCategory("CitrixEUEM")'
+```
+
+ ###### New Commands:
+- **Invoke-LMCloudGroupNetScan**: This command invokes re-discovery of a specified cloud device group. This allows for manually kickoff of new cloud resource discovery.
 
 ## 3.8
 ###### Updated Commands:

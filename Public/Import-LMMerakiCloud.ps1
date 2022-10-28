@@ -81,30 +81,6 @@ Function Import-LMMerakiCloud {
             If($ListOrgIds -or $ListNetworkIds){
                 Try{
                     $Orgs = Invoke-RestMethod -Uri "https://api.meraki.com/api/v1/organizations" -Headers @{"X-Cisco-Meraki-API-Key"=$MerakiAPIToken}
-                    $MerkaiInfo = @()
-                    Foreach($Org in $Orgs){
-                        If($ListNetworkIds){
-                            $Networks = Invoke-RestMethod -Uri "https://api.meraki.com/api/v1/organizations/$($Org.id)/networks" -Headers @{"X-Cisco-Meraki-API-Key"=$MerakiAPIToken}
-                            Foreach($Net in $Networks){
-                                $MerkaiInfo += [PSCustomObject]@{
-                                    org_id = $Org.id
-                                    org_name = $Org.name
-                                    network_id = $Net.id
-                                    network_name = $Net.name
-                                    api_dashboard_enabled = $Org.api.enabled
-                                }
-                            }
-                        }
-                        Else{
-                            $MerkaiInfo += [PSCustomObject]@{
-                                org_id = $Org.id
-                                org_name = $Org.name
-                                network_id = "N/A"
-                                network_name = "N/A"
-                                api_dashboard_enabled = $Org.api.enabled
-                            }
-                        }
-                    }
                 }
                 Catch [Exception] {
                     If($_.Exception.Response.StatusCode.value__ -eq "401"){
@@ -113,6 +89,42 @@ Function Import-LMMerakiCloud {
                     }
                     Else{
                         Write-Host "$($_.TargetObject.RequestUri.OriginalString): $(($_.ErrorDetails.Message | ConvertFrom-Json).errors)" -ForegroundColor Red
+                    }
+                }
+                $MerkaiInfo = @()
+                Foreach($Org in $Orgs){
+                    If($ListNetworkIds){
+                        Try{
+                            $Networks = Invoke-RestMethod -Uri "https://api.meraki.com/api/v1/organizations/$($Org.id)/networks" -Headers @{"X-Cisco-Meraki-API-Key"=$MerakiAPIToken}
+                        }
+                        Catch [Exception] {
+                            If($_.Exception.Response.StatusCode.value__ -eq "401"){
+                                Write-Host "Unathorized request, check API token and try again." -ForegroundColor Red
+                                return
+                            }
+                            Else{
+                                Write-Host "$($_.TargetObject.RequestUri.OriginalString): $(($_.ErrorDetails.Message | ConvertFrom-Json).errors)" -ForegroundColor Red
+                                Continue
+                            }
+                        }
+                        Foreach($Net in $Networks){
+                            $MerkaiInfo += [PSCustomObject]@{
+                                org_id = $Org.id
+                                org_name = $Org.name
+                                network_id = $Net.id
+                                network_name = $Net.name
+                                api_dashboard_enabled = $Org.api.enabled
+                            }
+                        }
+                    }
+                    Else{
+                        $MerkaiInfo += [PSCustomObject]@{
+                            org_id = $Org.id
+                            org_name = $Org.name
+                            network_id = "N/A"
+                            network_name = "N/A"
+                            api_dashboard_enabled = $Org.api.enabled
+                        }
                     }
                 }
                 Return $MerkaiInfo
@@ -321,7 +333,7 @@ Function Import-LMMerakiCloud {
 
         }
         Else {
-            Write-Error "Please ensure you are logged in before running any comands, use Connect-LMAccount to login and try again."
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
     End {}
