@@ -584,6 +584,30 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 # Change List
 
+## 3.8.2
+###### Updated Commands: 
+- **Multiple Commands**: Added custom object types to returned objects to control the default properties printed to console
+  -  Get-Collector
+  -  Set-Collector
+  -  Get-Device
+  -  Set-Device
+  -  Get-DeviceGroup
+  -  Set-DeviceGroup
+  -  Get-Website
+  -  Set-Website
+  -  Get-WebsiteGroup
+  -  Set-WebsiteGroup
+  -  Get-User
+  -  Set-User
+  -  Get-APIToken
+  -  Set-APIToken
+
+ - **Set-WebsiteGroup** : Fixed issue causing parameter set to not be resolved correctly when not specifying ParentGroupId or ParentGroupName parameters
+
+- **Set-LMApiToken**: Fixed issue that caused updating an api token to fail when specifying a -Username parameter instead of -UserId.
+
+- **Get-LMRepositoryLogicModule**: CoreVersion no longer is an optional parameter and must be included in the parameter set when running.
+
 ## 3.8.1
 ###### Updated Commands:
 - **Get-CollectorInstaller**: Added support for XL and XXL collector sizes and removed legacy support for 32-bit collector variants
