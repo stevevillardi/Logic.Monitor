@@ -601,12 +601,14 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
   -  Set-User
   -  Get-APIToken
   -  Set-APIToken
+  
+- **Get-LMRepositoryLogicModule**: CoreVersion no longer is an optional parameter and must be included in the parameter set when running.
 
+###### Bug Fixes: 
  - **Set-WebsiteGroup** : Fixed issue causing parameter set to not be resolved correctly when not specifying ParentGroupId or ParentGroupName parameters
 
 - **Set-LMApiToken**: Fixed issue that caused updating an api token to fail when specifying a -Username parameter instead of -UserId.
 
-- **Get-LMRepositoryLogicModule**: CoreVersion no longer is an optional parameter and must be included in the parameter set when running.
 
 ## 3.8.1
 ###### Updated Commands:
