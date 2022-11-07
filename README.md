@@ -586,7 +586,7 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 ## 3.8.2
 ###### Updated Commands: 
-- **Multiple Commands**: Added custom object types to returned objects to control the default properties printed to console
+- **Multiple Commands**: Added custom object types to returned objects to control the default properties printed to console and to in preparation for accepting pipeline input in a future release.
   -  Get-Collector
   -  Set-Collector
   -  Get-Device
@@ -601,7 +601,7 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
   -  Set-User
   -  Get-APIToken
   -  Set-APIToken
-  
+
 - **Get-LMRepositoryLogicModule**: CoreVersion no longer is an optional parameter and must be included in the parameter set when running.
 
 ###### Bug Fixes: 
