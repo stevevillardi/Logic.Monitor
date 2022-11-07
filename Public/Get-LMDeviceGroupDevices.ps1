@@ -87,7 +87,8 @@ Function Get-LMDeviceGroupDevices {
             }
             #Dedupe results
         }
-        Return ($Results | Sort-Object -Property Id -Unique)
+        $Results = ($Results | Sort-Object -Property Id -Unique)
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Device" )
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

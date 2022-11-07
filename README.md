@@ -601,6 +601,8 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
   -  Set-User
   -  Get-APIToken
   -  Set-APIToken
+  -  Get-DatasourceAssocaitedDevices
+  -  Get-DeviceGroupDevices
 
 - **Get-LMRepositoryLogicModule**: CoreVersion no longer is an optional parameter and must be included in the parameter set when running.
 

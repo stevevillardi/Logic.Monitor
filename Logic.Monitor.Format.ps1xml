@@ -54,7 +54,7 @@
             </TableRowEntries>
          </TableControl>
       </View>
-            <!-- New View LogicMonitor.Device-->
+      <!-- New View LogicMonitor.Device-->
       <View>
          <Name>LogicMonitorDevice</Name>
          <ViewSelectedBy>
@@ -101,6 +101,59 @@
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>hostStatus</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.DatasourceDevice-->
+      <View>
+         <Name>LogicMonitorDatasourceDevice</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.DatasourceDevice</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>displayName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>hasActiveInstance</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>instance</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>displayName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>hasActiveInstance</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>instance</PropertyName>
                      </TableColumnItem>
                   </TableColumnItems>
                </TableRowEntry>
