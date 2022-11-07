@@ -26,7 +26,7 @@ Function Set-LMAPIToken {
             If (Test-LookupResult -Result $LookupResult -LookupString $Username) {
                 return
             }
-            $Id = $LookupResult
+            $UserId = $LookupResult
         }
         
         #Build header and uri
@@ -53,7 +53,7 @@ Function Set-LMAPIToken {
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
 
-            Return $Response
+            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.APIToken" )
         }
         Catch [Exception] {
             $Proceed = Resolve-LMException -LMException $PSItem

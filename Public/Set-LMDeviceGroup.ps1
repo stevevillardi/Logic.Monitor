@@ -89,7 +89,7 @@ Function Set-LMDeviceGroup {
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
 
-                Return $Response
+                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

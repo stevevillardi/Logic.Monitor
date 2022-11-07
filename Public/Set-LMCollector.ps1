@@ -83,7 +83,7 @@ Function Set-LMCollector {
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "PUT" -Headers $Headers -Body $Data
 
-                Return $Response
+                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Collector" )
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

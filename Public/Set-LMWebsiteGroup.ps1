@@ -1,6 +1,6 @@
 Function Set-LMWebsiteGroup {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Id-ParentGroupId')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupName', ValueFromPipelineByPropertyName)]
@@ -92,7 +92,7 @@ Function Set-LMWebsiteGroup {
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
 
-                Return $Response
+                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.WebsiteGroup" )
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem
