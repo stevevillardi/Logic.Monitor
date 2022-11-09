@@ -15,7 +15,7 @@ The display name value for a device in LM. This value can include wildcard input
 The name value for a device in LM. This is the fqdn/ip used when adding a device into LM. This value accepts wildcard input such as "10.10.*"
 
 .PARAMETER Filter
-A hashtable of additonal filter properties to include with request. All properies are treated as if using the equals ":" operator. When using multiple filters they are combined as AND conditions.
+A hashtable of additional filter properties to include with request. All properties are treated as if using the equals ":" operator. When using multiple filters they are combined as AND conditions.
 
 An example Filter to get devices with alerting enabled and where the display name contains equal.com:
     @{displayName="*.example.com";disableAlerting=$false}

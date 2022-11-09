@@ -70,7 +70,7 @@ Function New-LMDeviceGroup {
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
 
-            Return $Response
+            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
         }
         Catch [Exception] {
             $Proceed = Resolve-LMException -LMException $PSItem

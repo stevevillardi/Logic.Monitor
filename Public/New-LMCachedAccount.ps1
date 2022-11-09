@@ -3,13 +3,13 @@
 Store a connection to a specified LM portal for use with Connect-LMAccount
 
 .DESCRIPTION
-Connect to a specified LM portal which will allow you run the other LM commands assoicated with the Logic.Monitor PS module. Used in conjunction with Disconnect-LMAccount to close a session previously connected via Connect-LMAccount
+Connect to a specified LM portal which will allow you run the other LM commands associated with the Logic.Monitor PS module. Used in conjunction with Disconnect-LMAccount to close a session previously connected via Connect-LMAccount
 
 .PARAMETER AccessId
-Access ID from your API credential aquired from the LM Portal
+Access ID from your API credential acquired from the LM Portal
 
 .PARAMETER AccessKey
-Access Key from your API credential aquired from the LM Portal
+Access Key from your API credential acquired from the LM Portal
 
 .PARAMETER AccountName
 The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)

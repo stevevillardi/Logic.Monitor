@@ -14,14 +14,14 @@ Number of days back to run the report, defaults to 7 if not specified
 .PARAMETER Path
 Path to export the HTML report to
 
-.PARAMETER OpenOnCompletetion
-Open the output htmml report automatically once completed
+.PARAMETER OpenOnCompletion
+Open the output html report automatically once completed
 
 .EXAMPLE
 Export-LMDeviceConfigReport -DaysBack 30 -DeviceGroupId 2 -Path export-report.html
 
 .EXAMPLE
-Export-LMDeviceConfigReport -Path export-report.html -OpenOnCompletetion
+Export-LMDeviceConfigReport -Path export-report.html -OpenOnCompletion
 
 .NOTES
 You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
@@ -47,13 +47,13 @@ Function Export-LMDeviceConfigReport {
         [Parameter(Mandatory)]
         [String]$Path,
 
-        [Switch]$OpenOnCompletetion
+        [Switch]$OpenOnCompletion
     )
 
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
         $ShowHtml = $false
-        If($OpenOnCompletetion){
+        If($OpenOnCompletion){
             $ShowHtml = $true
         }
 

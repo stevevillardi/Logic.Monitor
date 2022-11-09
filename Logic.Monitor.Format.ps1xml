@@ -213,6 +213,59 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.Role-->
+      <View>
+         <Name>LogicMonitorRole</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.Role</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>associatedUserCount</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>roleGroupId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>privileges</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>associatedUserCount</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>roleGroupId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>privileges</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.APIToken-->
       <View>
          <Name>LogicMonitorAPIToken</Name>
@@ -226,6 +279,9 @@
                </TableColumnHeader>
                <TableColumnHeader>
                   <Label>accessId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>accessKey</Label>
                </TableColumnHeader>
                <TableColumnHeader>
                   <Label>roles</Label>
@@ -248,6 +304,9 @@
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>accessId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>accessKey</PropertyName>
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>roles</PropertyName>

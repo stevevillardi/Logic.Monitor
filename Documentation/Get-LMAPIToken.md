@@ -14,17 +14,17 @@ Get list of a specifc or list of available API tokens
 
 ### All (Default)
 ```
-Get-LMAPIToken [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAPIToken [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### AdminId
 ```
-Get-LMAPIToken [-AdminId <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAPIToken [-AdminId <Int32>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMAPIToken [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAPIToken [-Filter <Hashtable>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -77,6 +77,21 @@ Accept wildcard characters: False
 ```yaml
 Type: Hashtable
 Parameter Sets: Filter
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Type
+{{ Fill Type Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: False

@@ -14,8 +14,9 @@ schema: 2.0.0
 
 ```
 New-LMDevice [-Name] <String> [-DisplayName] <String> [[-Description] <String>]
- [-PreferredCollectorId] <String> [[-PreferredCollectorGroupId] <String>] [[-Properties] <Hashtable>]
- [[-HostGroupIds] <String[]>] [[-Link] <String>] [[-DisableAlerting] <Boolean>] [[-EnableNetFlow] <Boolean>]
+ [-PreferredCollectorId] <String> [[-PreferredCollectorGroupId] <String>]
+ [-AutoBalancedCollectorGroupId <String>] [[-Properties] <Hashtable>] [[-HostGroupIds] <String[]>]
+ [[-Link] <String>] [[-DisableAlerting] <Boolean>] [[-EnableNetFlow] <Boolean>]
  [[-NetflowCollectorGroupId] <String>] [[-NetflowCollectorId] <String>] [<CommonParameters>]
 ```
 
@@ -208,6 +209,21 @@ Aliases:
 
 Required: False
 Position: 5
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AutoBalancedCollectorGroupId
+{{ Fill AutoBalancedCollectorGroupId Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

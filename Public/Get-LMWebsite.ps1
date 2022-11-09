@@ -15,7 +15,7 @@ The name value for a website in LM. This value accepts wildcard input such as "S
 The type of websites to return. Possible values are: Webcheck or PingCheck
 
 .PARAMETER Filter
-A hashtable of additonal filter properties to include with request. All properies are treated as if using the equals ":" operator. When using multiple filters they are combined as AND conditions.
+A hashtable of additional filter properties to include with request. All properties are treated as if using the equals ":" operator. When using multiple filters they are combined as AND conditions.
 
 An example Filter to get websites with type Webcheck that are internal:
     @{type="webcheck";isInternal=$true}

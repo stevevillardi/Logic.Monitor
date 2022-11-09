@@ -16,6 +16,8 @@ Function New-LMDevice {
 
         [String]$PreferredCollectorGroupId,
 
+        [String]$AutoBalancedCollectorGroupId,
+
         [Hashtable]$Properties,
 
         [String[]]$HostGroupIds, #Dynamic group ids will be ignored, operation will replace all existing groups
@@ -56,6 +58,7 @@ Function New-LMDevice {
                     customProperties          = $customProperties
                     preferredCollectorId      = $PreferredCollectorId
                     preferredCollectorGroupId = $PreferredCollectorGroupId
+                    autoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId
                     link                      = $Link
                     netflowCollectorGroupId   = $NetflowCollectorGroupId
                     netflowCollectorId        = $NetflowCollectorId
@@ -73,7 +76,7 @@ Function New-LMDevice {
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
 
-                Return $Response
+                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

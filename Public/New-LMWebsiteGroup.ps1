@@ -66,7 +66,7 @@ Function New-LMWebsiteGroup {
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
 
-            Return $Response
+            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.WebsiteGroup" )
         }
         Catch [Exception] {
             $Proceed = Resolve-LMException -LMException $PSItem

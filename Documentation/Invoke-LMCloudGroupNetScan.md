@@ -5,21 +5,21 @@ online version:
 schema: 2.0.0
 ---
 
-# New-LMAPIToken
+# Invoke-LMCloudGroupNetScan
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### Id
+### GroupId
 ```
-New-LMAPIToken -Id <String[]> [-Note <String>] [-CreateDisabled] [-Type <String>] [<CommonParameters>]
+Invoke-LMCloudGroupNetScan -Id <String> [<CommonParameters>]
 ```
 
-### Username
+### GroupName
 ```
-New-LMAPIToken -Username <String> [-Note <String>] [-CreateDisabled] [-Type <String>] [<CommonParameters>]
+Invoke-LMCloudGroupNetScan -Name <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,27 +36,12 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -CreateDisabled
-{{ Fill CreateDisabled Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
 {{ Fill Id Description }}
 
 ```yaml
-Type: String[]
-Parameter Sets: Id
+Type: String
+Parameter Sets: GroupId
 Aliases:
 
 Required: True
@@ -66,45 +51,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Note
-{{ Fill Note Description }}
+### -Name
+{{ Fill Name Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Username
-{{ Fill Username Description }}
-
-```yaml
-Type: String
-Parameter Sets: Username
+Parameter Sets: GroupName
 Aliases:
 
 Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Type
-{{ Fill Type Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

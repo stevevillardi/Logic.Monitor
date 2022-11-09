@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-LMRepositoryLogicModules [[-Type] <String>] [[-CoreVersion] <Int32>] [<CommonParameters>]
+Get-LMRepositoryLogicModules [[-Type] <String>] [-CoreVersion] <Int32> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,7 +38,7 @@ Type: Int32
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 1
 Default value: None
 Accept pipeline input: False

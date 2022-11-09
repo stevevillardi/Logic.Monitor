@@ -8,6 +8,9 @@ Function Get-LMAPIToken {
         [Parameter(ParameterSetName = 'Filter')]
         [Hashtable]$Filter,
 
+        [ValidateSet("LMv1", "Bearer")]
+        [String]$Type = "LMv1",
+
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
@@ -22,17 +25,21 @@ Function Get-LMAPIToken {
         $Done = $false
         $Results = @()
 
+        If($Type -eq "Bearer"){
+            $BearerParam = "&type=bearer"
+        }
+
         #Loop through requests 
         While (!$Done) {
             #Build query params
             Switch ($PSCmdlet.ParameterSetName) {
-                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
-                "AdminId" { $resourcePath = "/setting/admins/$AdminId/apitokens" }
+                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
+                "AdminId" { $resourcePath = "/setting/admins/$AdminId/apitokens$BearerParam" }
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id$BearerParam"
                 }
             }
             Try {

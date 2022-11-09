@@ -30,7 +30,7 @@ Export-LMTopologyMap -Id 12 -IncludeUndiscoveredDevices $false
 Export-LMTopologyMap Name "VMware Environment" -IncludeDataTable $true
 
 .NOTES
-Currently a beta command, topology map export is still under developement, please report any bugs you encounter while using this command.
+Currently a beta command, topology map export is still under development, please report any bugs you encounter while using this command.
 
 .INPUTS
 None. You cannot pipe objects to this command.

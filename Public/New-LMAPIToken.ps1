@@ -7,7 +7,9 @@ Function New-LMAPIToken {
         [Parameter(Mandatory, ParameterSetName = 'Username')]
         [String]$Username,
         [String]$Note,
-        [Switch]$CreateDisabled
+        [Switch]$CreateDisabled,
+        [ValidateSet("LMv1", "Bearer")]
+        [String]$Type = "LMv1"
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
@@ -25,6 +27,10 @@ Function New-LMAPIToken {
         }
         
         #Build header and uri
+        If($Type = "Bearer"){
+            $Params = "?type=bearer"
+        }
+
         $ResourcePath = "/setting/admins/$Id/apitokens"
 
         Try {
@@ -36,12 +42,12 @@ Function New-LMAPIToken {
             $Data = ($Data | ConvertTo-Json)
 
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $Params
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
 
-            Return $Response
+            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.APIToken" )
         }
         Catch [Exception] {
             $Proceed = Resolve-LMException -LMException $PSItem

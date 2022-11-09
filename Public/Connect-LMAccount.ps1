@@ -3,13 +3,13 @@
 Connect to a specified LM portal to run commands against
 
 .DESCRIPTION
-Connect to a specified LM portal which will allow you run the other LM commands assoicated with the Logic.Monitor PS module. Used in conjunction with Disconnect-LMAccount to close a session previously connected via Connect-LMAccount
+Connect to a specified LM portal which will allow you run the other LM commands associated with the Logic.Monitor PS module. Used in conjunction with Disconnect-LMAccount to close a session previously connected via Connect-LMAccount
 
 .PARAMETER AccessId
-Access ID from your API credential aquired from the LM Portal
+Access ID from your API credential acquired from the LM Portal
 
 .PARAMETER AccessKey
-Access Key from your API credential aquired from the LM Portal
+Access Key from your API credential acquired from the LM Portal
 
 .PARAMETER AccountName
 The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)
@@ -21,7 +21,7 @@ This will list all cached account for you to pick from. This parameter is option
 Name of cached account you wish to connect to. This parameter is optional and can be used in place of UseCachedCredential
 
 .PARAMETER DisableConsoleLogging
-Disables on stdout messages from displaying for any subsquent commands are run. Useful when building scripted logicmodules and you want to supress unwanted output. Console logging is enabled by default.
+Disables on stdout messages from displaying for any subsequent commands are run. Useful when building scripted logicmodules and you want to suppress unwanted output. Console logging is enabled by default.
 
 .EXAMPLE
 Connect-LMAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain

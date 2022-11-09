@@ -12,18 +12,18 @@ schema: 2.0.0
 
 ## SYNTAX
 
+### Id-ParentGroupId (Default)
+```
+Set-LMWebsiteGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
+ [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [-ParentGroupId <Int32>]
+ [<CommonParameters>]
+```
+
 ### Id-ParentGroupName
 ```
 Set-LMWebsiteGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>]
  [-ParentGroupName <String>] [<CommonParameters>]
-```
-
-### Id-ParentGroupId
-```
-Set-LMWebsiteGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
- [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [-ParentGroupId <Int32>]
- [<CommonParameters>]
 ```
 
 ### Name-ParentGroupName
@@ -89,7 +89,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: Id-ParentGroupName, Id-ParentGroupId
+Parameter Sets: Id-ParentGroupId, Id-ParentGroupName
 Aliases:
 
 Required: True

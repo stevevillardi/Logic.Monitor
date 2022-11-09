@@ -546,8 +546,10 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Get-LMUser
 - Get-LMUserGroup
 - New-LMUser
+- New-LMRole
 - New-LMApiUser
 - Set-LMUser
+- Set-LMRole
 - Remove-LMUser
 - Remove-LMRole
 
@@ -585,29 +587,51 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 # Change List
 
 ## 3.8.2
+###### New Commands: 
+- **New-LMRole**: Added command to create new User roles within LM. This command accepts a PSCustomObject parameter *CustomPrivledgesObject* as a precreated privledge object for more advanced permission requirements but also has built in parameters to accomodate simipler permission requirements.
+- **Set-LMRole**: Added command to create new User roles within LM. This command accepts a PSCustomObject parameter *CustomPrivledgesObject* as a precreated privledge object for more advanced permission requirements but also has built in parameters to accomodate simipler permission requirements.
+
 ###### Updated Commands: 
 - **Multiple Commands**: Added custom object types to returned objects to control the default properties printed to console and to in preparation for accepting pipeline input in a future release.
-  -  Get-Collector
-  -  Set-Collector
-  -  Get-Device
-  -  Set-Device
-  -  Get-DeviceGroup
-  -  Set-DeviceGroup
-  -  Get-Website
-  -  Set-Website
-  -  Get-WebsiteGroup
-  -  Set-WebsiteGroup
-  -  Get-User
-  -  Set-User
-  -  Get-APIToken
-  -  Set-APIToken
-  -  Get-DatasourceAssocaitedDevices
-  -  Get-DeviceGroupDevices
+  -  Get-LMCollector
+  -  Set-LMCollector
+  -  New-LMCollector
+  -  Get-LMDevice
+  -  Set-LMDevice
+  -  New-LMDevice
+  -  Get-LMDeviceGroup
+  -  Set-LMDeviceGroup
+  -  New-LMDeviceGroup
+  -  Get-LMWebsite
+  -  Set-LMWebsite
+  -  New-LMWebsite
+  -  Get-LMWebsiteGroup
+  -  Set-LMWebsiteGroup
+  -  New-LMWebsiteGroup
+  -  Get-LMUser
+  -  Set-LMUser
+  -  New-LMUser
+  -  Get-LMRole
+  -  Set-LMRole
+  -  New-LMRole
+  -  Get-LMAPIToken
+  -  Set-LMAPIToken
+  -  New-LMAPIToken
+  -  Get-LMDatasourceAssocaitedDevices
+  -  Get-LMDeviceGroupDevices
 
 - **Get-LMRepositoryLogicModule**: CoreVersion no longer is an optional parameter and must be included in the parameter set when running.
 
+- **New-LMDevice**: Added parameter -AutoBalancedCollectorGroupId for specifying an autobalance collector group as the prefered collector group. Use PerferredCollectorId of 0 when using this parameter.
+
+- **Get-LMAPIToken**: Added type parameter that accepts the value of LMv1 or Bearer to return the specified API token to return. Default value of this parameter is LMv1
+
+- **New-LMAPIToken**: Added type parameter that accepts the value of LMv1 or Bearer to create the specified API token in the correct type. Default value of this parameter is LMv1
+
 ###### Bug Fixes: 
- - **Set-WebsiteGroup** : Fixed issue causing parameter set to not be resolved correctly when not specifying ParentGroupId or ParentGroupName parameters
+ - **Initalize-LMPOVSetup** : Fixed issue when running dynamic group cleanup and lm logs setup when duplicate folders exist for default devices by type resource groups.
+
+ - **Set-LMWebsiteGroup** : Fixed issue causing parameter set to not be resolved correctly when not specifying ParentGroupId or ParentGroupName parameters
 
 - **Set-LMApiToken**: Fixed issue that caused updating an api token to fail when specifying a -Username parameter instead of -UserId.
 

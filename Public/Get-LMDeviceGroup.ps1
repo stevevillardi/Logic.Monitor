@@ -12,9 +12,9 @@ The device group id for a device group in LM.
 The name value for a device group in LM. This value accepts wildcard input such as "* - Servers"
 
 .PARAMETER Filter
-A hashtable of additonal filter properties to include with request. All properies are treated as if using the equals ":" operator. When using multiple filters they are combined as AND conditions.
+A hashtable of additional filter properties to include with request. All properties are treated as if using the equals ":" operator. When using multiple filters they are combined as AND conditions.
 
-An example Filter to get devices with alerting enabled and where the parent groud id equals 1:
+An example Filter to get devices with alerting enabled and where the parent group id equals 1:
     @{parentId=1;disableAlerting=$false}
 
 .PARAMETER BatchSize

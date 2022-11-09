@@ -133,7 +133,7 @@ Function Initialize-LMPOVSetup {
             #Cleanup dynamic groups will add Linux_SSH to the Linux folder and delete the Misc folder
             If ($CleanupDynamicGroups -or $RunAll) {
                 Write-Host "[INFO]: Cleaning up default dynamic groups"
-                $LinuxDeviceGroupId = (Get-LMDeviceGroup -Name "Linux Servers").id
+                $LinuxDeviceGroupId = (Get-LMDeviceGroup -Name "Linux Servers" | Where-Object {$_.fullPath -like "Devices by Type*"}).id
                 $MiscDeviceGroupId = (Get-LMDeviceGroup -Name "Misc").id
                 If(!$DeviceFolderId){
                     $DeviceFolderId = (Get-LMDeviceGroup -Name "Devices by Type").id
@@ -176,7 +176,8 @@ Function Initialize-LMPOVSetup {
                     If ($LMLogsAPIINfo) {
                         Write-Host "[INFO]: Successfully created API token for user: $LogsAPIUsername | $($LMLogsAPIINfo.accessId) | $($LMLogsAPIINfo.accessKey)"
         
-                        $WindowsServerDeviceGroup = Get-LMDeviceGroup -Name "Windows Servers"
+                        $WindowsServerDeviceGroup =  Get-LMDeviceGroup -Name "Windows Servers" | Where-Object {$_.fullPath -like "Devices by Type*"}
+
 
                         If ($WindowsServerDeviceGroup) {
                             Write-Host "[INFO]: Adding API properties to Windows Server device group"

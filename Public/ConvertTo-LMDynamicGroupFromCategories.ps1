@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Create a series of dynamic groups based off of active system.catgeories applied to your portal
+Create a series of dynamic groups based off of active system.categories applied to your portal
 
 .DESCRIPTION
 Created dynamic groups based on in use device categories

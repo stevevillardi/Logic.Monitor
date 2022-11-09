@@ -87,7 +87,9 @@ Function Get-LMDeviceGroupDevices {
             }
             #Dedupe results
         }
-        $Results = ($Results | Sort-Object -Property Id -Unique)
+        If($Results){
+            $Results = ($Results | Sort-Object -Property Id -Unique)
+        }
         Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Device" )
     }
     Else {

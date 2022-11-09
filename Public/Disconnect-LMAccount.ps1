@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Disconnect from a previouslly connected LM portal
+Disconnect from a previously connected LM portal
 
 .DESCRIPTION
 Clears stored API credentials for a previously connected LM portal. Useful for switching between LM portals or clearing credentials after a script runs
