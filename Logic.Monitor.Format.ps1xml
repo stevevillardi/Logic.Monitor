@@ -160,6 +160,59 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.Datasource-->
+      <View>
+         <Name>LogicMonitorDatasource</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.Datasource</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>displayName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>collectMethod</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>collectInterval</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>appliesTo</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>displayName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>collectMethod</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>collectInterval</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>appliesTo</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.Website-->
       <View>
          <Name>LogicMonitorWebsite</Name>
@@ -260,6 +313,112 @@
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>privileges</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.Dashboard-->
+      <View>
+         <Name>LogicMonitorDashboard</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.Dashboard</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>fullName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>groupName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>groupFullPath</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>fullName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>groupName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>groupFullPath</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.DashboardGroup-->
+      <View>
+         <Name>LogicMonitorDashboardGroup</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.DashboardGroup</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>fullPath</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>numOfDirectSubGroups</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>numOfDirectDashboards</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>fullPath</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>numOfDirectSubGroups</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>numOfDirectDashboards</PropertyName>
                      </TableColumnItem>
                   </TableColumnItems>
                </TableRowEntry>
@@ -478,53 +637,6 @@
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>numOfWebsites</PropertyName>
-                     </TableColumnItem>
-                  </TableColumnItems>
-               </TableRowEntry>
-            </TableRowEntries>
-         </TableControl>
-      </View>
-      <!-- New View LogicMonitor.LogicModule-->
-      <View>
-         <Name>LogicMonitorLogicModule</Name>
-         <ViewSelectedBy>
-            <TypeName>LogicMonitor.LogicModule</TypeName>
-         </ViewSelectedBy>
-         <TableControl>
-            <TableHeaders>
-               <TableColumnHeader>
-                  <Label>id</Label>
-               </TableColumnHeader>
-               <TableColumnHeader>
-                  <Label>name</Label>
-               </TableColumnHeader>
-               <TableColumnHeader>
-                  <Label>version</Label>
-               </TableColumnHeader>
-               <TableColumnHeader>
-                  <Label>appliesTo</Label>
-               </TableColumnHeader>
-               <TableColumnHeader>
-                  <Label>description</Label>
-               </TableColumnHeader>
-            </TableHeaders>
-            <TableRowEntries>
-               <TableRowEntry>
-                  <TableColumnItems>
-                     <TableColumnItem>
-                        <PropertyName>id</PropertyName>
-                     </TableColumnItem>
-                     <TableColumnItem>
-                        <PropertyName>name</PropertyName>
-                     </TableColumnItem>
-                     <TableColumnItem>
-                        <PropertyName>version</PropertyName>
-                     </TableColumnItem>
-                     <TableColumnItem>
-                        <PropertyName>appliesTo</PropertyName>
-                     </TableColumnItem>
-                     <TableColumnItem>
-                        <PropertyName>description</PropertyName>
                      </TableColumnItem>
                   </TableColumnItems>
                </TableRowEntry>

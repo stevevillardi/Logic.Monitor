@@ -30,7 +30,7 @@ Function Import-LMDashboard {
     Begin {}
     Process {
         If ($Script:LMAuth.Valid) {
-
+            $Results = @()
             $DashboardList = @()
 
             If($ParentGroupName){
@@ -95,17 +95,43 @@ Function Import-LMDashboard {
                     }
                 }
             }
+    
+            If($ReplaceAPITokensOnImport){
+                $DashboardAPIRoleName = "lm-dynamic-dashboards"
+                $DashboardAPIUserName = "lm_dynamic_dashboards"
+                $DashboardAPIRole = Get-LMRole -Name $DashboardAPIRoleName
+                $DashboardAPIUser = Get-LMUser -Name $DashboardAPIUserName
+                If(!$DashboardAPIRole){
+                    $DashboardAPIRole = New-LMRole -Name $DashboardAPIRoleName -ResourcePermission view -DashboardsPermission manage -Description "Auto provisioned for use with dynamic dashboards"
+                    Write-LMHost "Successfully generated required API role ($DashboardAPIRoleName) for dynamic dashboards"
+                }
+                If(!$DashboardAPIUser){
+                    $DashboardAPIUser = New-LMAPIUser -Username "$DashboardAPIUserName" -note "Auto provisioned for use with dynamic dashboards" -RoleNames @($DashboardAPIRoleName)
+                    Write-LMHost "Successfully generated required API user ($DashboardAPIUserName) for dynamic dashboards"
+                }
+                If($DashboardAPIRole -and $DashboardAPIUser){
+                    $APIToken = New-LMAPIToken -Username $DashboardAPIUserName -Note "Auto provisioned for use with dynamic dashboards"
+                    If($APIToken){
+                        Write-LMHost "Successfully generated required API token for dynamic dashboards for user: $DashboardAPIUserName"
+                    }
+                }
+                Else{
+                    Write-LMHost "Unable to generate required API token for dynamic dashboards, manually update the required tokens to use dynamic dashboards"
+                }
+            }
 
             Foreach($Dashboard in $DashboardList){
                 #Swap apiKeys for dynamic dashboards
                 If($ReplaceAPITokensOnImport){
-                    If($Dashboard.file.widgetTokens.name -contains "apiKey"){
-                       $KeyIndex = $Dashboard.file.widgetTokens.name.toLower().IndexOf("apikey")
-                       $Dashboard.file.widgetTokens[$KeyIndex].value = [System.Net.NetworkCredential]::new("", $Script:LMAuth.Key).Password
-                    }
-                    If($Dashboard.file.widgetTokens.name -contains "apiId"){
-                        $IdIndex = $Dashboard.file.widgetTokens.name.toLower().IndexOf("apiid")
-                        $Dashboard.file.widgetTokens[$IdIndex].value = $Script:LMAuth.Id
+                    If($APIToken){
+                        If($Dashboard.file.widgetTokens.name -contains "apiKey"){
+                           $KeyIndex = $Dashboard.file.widgetTokens.name.toLower().IndexOf("apikey")
+                           $Dashboard.file.widgetTokens[$KeyIndex].value = $APIToken.accessKey
+                        }
+                        If($Dashboard.file.widgetTokens.name -contains "apiId"){
+                            $IdIndex = $Dashboard.file.widgetTokens.name.toLower().IndexOf("apiid")
+                            $Dashboard.file.widgetTokens[$IdIndex].value = $APIToken.accessId
+                        }
                     }
                 }
 
@@ -176,7 +202,7 @@ Function Import-LMDashboard {
                     $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
                     Write-LMHost "Successfully imported dashboard: $($Dashboard.file.name)"
     
-                    $Response
+                    $Results += (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Dashboard" )
     
                 }
                 Catch [Exception] {
@@ -192,5 +218,7 @@ Function Import-LMDashboard {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    End {
+        $Results
+    }
 }

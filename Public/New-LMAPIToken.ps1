@@ -21,13 +21,13 @@ Function New-LMAPIToken {
             }
             $Id = (Get-LMUser -Name $Username | Select-Object -First 1 ).Id
             If (!$Id) {
-                Write-Error "Unable to find device group with name: $Username, please check spelling and try again." 
+                Write-Error "Unable to find user with name: $Username, please check spelling and try again." 
                 return
             }
         }
         
         #Build header and uri
-        If($Type = "Bearer"){
+        If($Type -eq "Bearer"){
             $Params = "?type=bearer"
         }
 

@@ -128,6 +128,29 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 Get-LMAlert -StartDate $(Get-Date).AddDays(-1) -EndDate $(Get-Date) -ClearedAlerts $true | Group-Object -Property resourceTemplateName,datapointName | select count, @{N='Name';E={$_.Name.Split(",")[0]}}, @{N='Datapoint';E={$_.Name.Split(",")[1]}} | Sort-Object -Property count -Descending
 ```
 
+#### Generate Website inventory report with specific properties
+```powershell
+$ExportList = @()
+$Websites = Get-LMWebsite
+
+Foreach($Website in $Websites){
+    $PropertyHash = @{}
+    $Website.properties | ForEach-Object {$PropertyHash[$_.name]= $_.value}
+
+    $ExportList += [PSCustomObject]@{
+        Name = $Website.name
+        Description = $Website.description
+        Type = $Website.type
+        "Prop.Criticality" = $PropertyHash["Prop.Criticality"]
+        "CI Platform" = $PropertyHash["CI Platform"]
+        "CI Role" = $PropertyHash["CI Role"]
+        "CI Sub Type" = $PropertyHash["CI Sub Type"]
+    }
+}
+
+$ExportList | Export-Csv -NoTypeInformation -Path "sample-report.csv"
+```
+
 #### Loop through all webchecks and list out SSL remaining days till expiration
 
 ```powershell
@@ -429,6 +452,7 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 #### Datasources/LogicModules
 
 - Get-LMDatasource
+- Set-LMDatasource
 - Get-LMDatasourceAssociatedDevices
 - Get-LMDatasourceUpdateHistory
 - Get-LMDatasourceMetadata
@@ -586,10 +610,19 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 # Change List
 
-## 3.8.2
+## 3.9
 ###### New Commands: 
 - **New-LMRole**: Added command to create new User roles within LM. This command accepts a PSCustomObject parameter *CustomPrivledgesObject* as a precreated privledge object for more advanced permission requirements but also has built in parameters to accomodate simipler permission requirements.
+
 - **Set-LMRole**: Added command to create new User roles within LM. This command accepts a PSCustomObject parameter *CustomPrivledgesObject* as a precreated privledge object for more advanced permission requirements but also has built in parameters to accomodate simipler permission requirements.
+
+- **Set-LMDatasource**: Added command to update datasources with a number of parameters. This command will be expanded on in future released but currently support modifying the following properties:
+  - Name
+  - DisplayName
+  - AppliesTo
+  - Description
+  - Tech Notes
+  - Polling Interval
 
 ###### Updated Commands: 
 - **Multiple Commands**: Added custom object types to returned objects to control the default properties printed to console and to in preparation for accepting pipeline input in a future release.
@@ -599,6 +632,8 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
   -  Get-LMDevice
   -  Set-LMDevice
   -  New-LMDevice
+  -  Get-LMDashboard
+  -  Get-LMDashboardGroup
   -  Get-LMDeviceGroup
   -  Set-LMDeviceGroup
   -  New-LMDeviceGroup
@@ -627,6 +662,10 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - **Get-LMAPIToken**: Added type parameter that accepts the value of LMv1 or Bearer to return the specified API token to return. Default value of this parameter is LMv1
 
 - **New-LMAPIToken**: Added type parameter that accepts the value of LMv1 or Bearer to create the specified API token in the correct type. Default value of this parameter is LMv1
+
+- **Import-LMDashboard**: When using the parameter --ReplaceAPITokensOnImport the command will now generate a new lm api token per run and auto create an lm_dynamic_dashboards user and custom role with the required minimal permissions. Previously this command would leverage the logged in users api info which is not always ideal.
+
+- **Initalize-LMPOVSetup**: When using the parameter -SetupWindowsLMLogs or -RunAll the command will provision a purpose built user/role called lm-logs-ingest along with the required minimal permissons needed. In addition it the default name of the api user created for portal metrics has been renamed to lm_portal_metrics, previously is was lm_api. In addition, the Windows Logs datasource has also been updated to use the new core module along with setting the appropriate appliesTo logic.
 
 ###### Bug Fixes: 
  - **Initalize-LMPOVSetup** : Fixed issue when running dynamic group cleanup and lm logs setup when duplicate folders exist for default devices by type resource groups.

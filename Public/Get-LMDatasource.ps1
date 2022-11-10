@@ -72,7 +72,7 @@ Function Get-LMDatasource {
                 }
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LogicModule")
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Datasource")
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

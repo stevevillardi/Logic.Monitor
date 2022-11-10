@@ -32,7 +32,7 @@ Set-LMRole -Id <String> [-NewName <String>] [-CustomHelpLabel <String>] [-Custom
 ```
 Set-LMRole -Id <String> [-NewName <String>] [-CustomHelpLabel <String>] [-CustomHelpURL <String>]
  [-Description <String>] [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>]
- -CustomPrivledgesObject <PSObject> [<CommonParameters>]
+ -CustomPrivilegesObject <PSObject> [<CommonParameters>]
 ```
 
 ### Name-Default
@@ -50,7 +50,7 @@ Set-LMRole -Name <String> [-NewName <String>] [-CustomHelpLabel <String>] [-Cust
 ```
 Set-LMRole -Name <String> [-NewName <String>] [-CustomHelpLabel <String>] [-CustomHelpURL <String>]
  [-Description <String>] [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>]
- -CustomPrivledgesObject <PSObject> [<CommonParameters>]
+ -CustomPrivilegesObject <PSObject> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -166,21 +166,6 @@ Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CustomPrivledgesObject
-{{ Fill CustomPrivledgesObject Description }}
-
-```yaml
-Type: PSObject
-Parameter Sets: Id-Custom, Name-Custom
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -443,6 +428,21 @@ Aliases:
 Accepted values: view, manage, none
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CustomPrivilegesObject
+{{ Fill CustomPrivilegesObject Description }}
+
+```yaml
+Type: PSObject
+Parameter Sets: Id-Custom, Name-Custom
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

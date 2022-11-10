@@ -26,7 +26,7 @@ New-LMRole -Name <String> [-CustomHelpLabel <String>] [-CustomHelpURL <String>] 
 ### Custom
 ```
 New-LMRole -Name <String> [-CustomHelpLabel <String>] [-CustomHelpURL <String>] [-Description <String>]
- [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>] -CustomPrivledgesObject <PSObject>
+ [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>] -CustomPrivilegesObject <PSObject>
  [<CommonParameters>]
 ```
 
@@ -143,21 +143,6 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CustomPrivledgesObject
-{{ Fill CustomPrivledgesObject Description }}
-
-```yaml
-Type: PSObject
-Parameter Sets: Custom
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -390,6 +375,21 @@ Aliases:
 Accepted values: view, manage, none
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CustomPrivilegesObject
+{{ Fill CustomPrivilegesObject Description }}
+
+```yaml
+Type: PSObject
+Parameter Sets: Custom
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

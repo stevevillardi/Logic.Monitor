@@ -14,7 +14,7 @@ Exports an HTML report containing changed network configs
 
 ```
 Export-LMDeviceConfigReport [[-DeviceGroupId] <Int32>] [[-DaysBack] <String>] [-Path] <String>
- [-OpenOnCompletetion] [<CommonParameters>]
+ [-OpenOnCompletion] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -79,8 +79,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -OpenOnCompletetion
-Open the output htmml report automatically once completed
+### -OpenOnCompletion
+Open the output html report automatically once completed
 
 ```yaml
 Type: SwitchParameter

@@ -7,7 +7,7 @@ Function Initialize-LMPOVSetup {
 
         [String]$WebsiteHttpType = "https",
 
-        [string]$PortalMetricsAPIUsername = "lm_api",
+        [string]$PortalMetricsAPIUsername = "lm_portal_metrics",
 
         [string]$LogsAPIUsername = "lm_logs",
 
@@ -160,11 +160,22 @@ Function Initialize-LMPOVSetup {
             }
 
             If($SetupWindowsLMLogs -or $RunAll){
+                $LogsAPIRoleName = "lm-logs-ingest"
                 $LogsAPIUser = Get-LMUser -Name "$LogsAPIUsername"
-
+                $LogsAPIRole = Get-LMRole -Name $LogsAPIRoleName
+                If(!$LogsAPIRole){
+                    Write-Host "[INFO]: Setting up LM Logs API Role: lm-logs-ingest"
+                    $LogsAPIRole = New-LMRole -Name $LogsAPIRoleName -ResourcePermission view -LogsPermission manage -Description "Auto provisioned to allow for windows events ingest via datasource"
+                    If($LogsAPIRole){
+                        Write-Host "[INFO]: Successfully setup API role: $LogsAPIRoleName"
+                    }
+                }
+                Else{
+                    Write-Host "[INFO]: LM Logs API Role ($LogsAPIRoleName) already exists in portal, skipping setup" -ForegroundColor Yellow
+                }
                 If(!$LogsAPIUser){
                     Write-Host "[INFO]: Setting up LM Logs API user: $LogsAPIUsername"
-                    $LogsAPIUser = New-LMAPIUser -Username "$LogsAPIUsername" -note "Auto provisioned for use with Windows LM Logs Datasource" -RoleNames @("administrator")
+                    $LogsAPIUser = New-LMAPIUser -Username "$LogsAPIUsername" -note "Auto provisioned for use with Windows LM Logs Datasource" -RoleNames @($LogsAPIRoleName)
                     If ($LogsAPIUser) {
                         Write-Host "[INFO]: Successfully setup API user: $LogsAPIUsername"
         
@@ -191,7 +202,12 @@ Function Initialize-LMPOVSetup {
                     }
                     #Import LM Logs Datasource
                     #Use imporved version with metadata over the orginal version
-                    Import-LMExchangeModule -LMExchangeId "896d0c2c-a993-4f0b-8db2-2bb29947cb52"
+                    #Import-LMExchangeModule -LMExchangeId "896d0c2c-a993-4f0b-8db2-2bb29947cb52" #v2 modules
+                    Import-LMExchangeModule -LMExchangeId "b853607c-e0f1-4682-abc0-2be3e4edbb8e" #core module
+                    $LogsDatasource = Set-LMDatasource -Name Windows_Events_LMLogs -appliesTo "isWindows() && lmlogs.winevent.channels && lmaccess.id && lmaccess.key && lmaccount"
+                    If($LogsDatasource){
+                        Write-Host "[INFO]: Successfully added core module (Windows_Events_LMLogs) and updated appliesto logic"
+                    }
                 }
                 Else{
                     Write-Host "[INFO]: LM Logs API User ($LogsAPIUsername) already exists in portal, skipping setup" -ForegroundColor Yellow
