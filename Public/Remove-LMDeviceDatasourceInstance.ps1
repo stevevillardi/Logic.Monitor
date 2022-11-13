@@ -6,19 +6,19 @@ Function Remove-LMDeviceDatasourceInstance {
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [String]$DatasourceName,
     
-        [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [Int]$DatasourceId,
     
-        [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
-        [Int]$Id,
+        [Int]$DeviceId,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
-        [String]$Name,
+        [String]$DeviceName,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$WildValue
 
     )
@@ -26,17 +26,17 @@ Function Remove-LMDeviceDatasourceInstance {
     If ($Script:LMAuth.Valid) {
 
         #Lookup Device Id
-        If ($Name) {
-            $LookupResult = (Get-LMDevice -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+        If ($DeviceName) {
+            $LookupResult = (Get-LMDevice -Name $DeviceName).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
                 return
             }
-            $Id = $LookupResult
+            $DeviceId = $LookupResult
         }
 
         #Lookup DatasourceId
         If ($DatasourceName -or $DatasourceId) {
-            $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId } ).Id
+            $LookupResult = (Get-LMDeviceDataSourceList -Id $DeviceId | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId } ).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                 return
             }
@@ -44,14 +44,14 @@ Function Remove-LMDeviceDatasourceInstance {
         }
 
         #Lookup Wildcard Id
-        $InstanceId = (Get-LMDeviceDataSourceInstance -Id $Id -HdsId $HdsId | Where-Object { $_.wildValue -eq $WildValue } | Select-Object -First 1).Id
+        $InstanceId = (Get-LMDeviceDataSourceInstance -DeviceId $DeviceId -HdsId $HdsId | Where-Object { $_.wildValue -eq $WildValue } | Select-Object -First 1).Id
         If (!$InstanceId) {
             Write-Error "Unable to find assocaited datasource instance with wildcard value: $WildValue, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device"
             return
         }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$InstanceId"
+        $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$InstanceId"
 
         Try {
 
@@ -60,8 +60,9 @@ Function Remove-LMDeviceDatasourceInstance {
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
+            Write-LMHost "Successfully removed id ($InstanceId)" -ForegroundColor Green
 
-            Return $Response
+            Return 
         }
         Catch [Exception] {
             $Proceed = Resolve-LMException -LMException $PSItem

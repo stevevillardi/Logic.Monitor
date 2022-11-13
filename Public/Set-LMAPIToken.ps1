@@ -2,14 +2,14 @@ Function Set-LMAPIToken {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
-        [Int]$UserId,
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
+        [Int]$AdminId,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
-        [String]$UserName,
+        [String]$AdminName,
 
-        [Parameter(Mandatory)]
-        [Int]$APITokenId,
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Int]$Id,
 
         [String]$Note,
 
@@ -20,17 +20,17 @@ Function Set-LMAPIToken {
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
-        #Lookup Id if supplying username
-        If ($Username) {
-            $LookupResult = (Get-LMUser -Name $Username).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Username) {
+        #Lookup Id if supplying AdminName
+        If ($AdminName) {
+            $LookupResult = (Get-LMUser -Name $AdminName).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $AdminName) {
                 return
             }
-            $UserId = $LookupResult
+            $AdminId = $LookupResult
         }
         
         #Build header and uri
-        $ResourcePath = "/setting/admins/$UserId/apitokens/$APITokenId"
+        $ResourcePath = "/setting/admins/$AdminId/apitokens/$Id"
 
         Try {
             $Data = @{

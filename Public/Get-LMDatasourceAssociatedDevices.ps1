@@ -65,7 +65,7 @@ Function Get-LMDatasourceAssociatedDevices {
                 #Stop looping if single device, no need to continue
                 If (![bool]$Response.psobject.Properties["total"]) {
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DatasourceDevice" )
                 }
                 #Check result size and if needed loop again
                 Else {

@@ -2,7 +2,7 @@ Function Remove-LMAPIToken {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$UserId,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]

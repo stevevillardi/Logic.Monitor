@@ -14,23 +14,26 @@ schema: 2.0.0
 
 ### Name-dsName
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceName <String> -Name <String> -WildValue <String>
+Remove-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceName <String> -WildValue <String>
  [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceName <String> -Id <Int32> -WildValue <String> [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceId <Int32> -WildValue <String>
+ [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -Name <String> -WildValue <String> [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceName <String> -WildValue <String>
+ [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -Id <Int32> -WildValue <String> [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> -WildValue <String>
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -52,7 +55,19 @@ PS C:\> {{ Add example code here }}
 
 ```yaml
 Type: Int32
-Parameter Sets: Name-dsId, Id-dsId
+Parameter Sets: Name-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: Int32
+Parameter Sets: Id-dsId
 Aliases:
 
 Required: True
@@ -77,42 +92,54 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Id-dsName, Id-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name-dsName, Name-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -WildValue
 {{ Fill WildValue Description }}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -DeviceId
+{{ Fill DeviceId Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: Id-dsName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: Int32
+Parameter Sets: Id-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceName
+{{ Fill DeviceName Description }}
+
+```yaml
+Type: String
+Parameter Sets: Name-dsName, Name-dsId
 Aliases:
 
 Required: True

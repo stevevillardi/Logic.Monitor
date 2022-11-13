@@ -14,37 +14,37 @@ schema: 2.0.0
 
 ### Name-dsName
 ```
-Get-LMDeviceDatasourceInstance -DatasourceName <String> -Name <String> [-Filter <Hashtable>]
+Get-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceName <String> [-Filter <Hashtable>]
  [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
-Get-LMDeviceDatasourceInstance -DatasourceName <String> -Id <Int32> [-Filter <Hashtable>] [-BatchSize <Int32>]
- [<CommonParameters>]
+Get-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceId <Int32> [-Filter <Hashtable>]
+ [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
-Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -Name <String> [-Filter <Hashtable>] [-BatchSize <Int32>]
- [<CommonParameters>]
+Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceName <String> [-Filter <Hashtable>]
+ [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
-Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -Id <Int32> [-Filter <Hashtable>] [-BatchSize <Int32>]
- [<CommonParameters>]
+Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> [-Filter <Hashtable>]
+ [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id-HdsId
 ```
-Get-LMDeviceDatasourceInstance -Id <Int32> -HdsId <String> [-Filter <Hashtable>] [-BatchSize <Int32>]
+Get-LMDeviceDatasourceInstance -DeviceId <Int32> -HdsId <String> [-Filter <Hashtable>] [-BatchSize <Int32>]
  [<CommonParameters>]
 ```
 
 ### Name-HdsId
 ```
-Get-LMDeviceDatasourceInstance -Name <String> -HdsId <String> [-Filter <Hashtable>] [-BatchSize <Int32>]
+Get-LMDeviceDatasourceInstance -DeviceName <String> -HdsId <String> [-Filter <Hashtable>] [-BatchSize <Int32>]
  [<CommonParameters>]
 ```
 
@@ -137,8 +137,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -DeviceId
+{{ Fill DeviceId Description }}
 
 ```yaml
 Type: Int32
@@ -152,8 +152,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-{{ Fill Name Description }}
+### -DeviceName
+{{ Fill DeviceName Description }}
 
 ```yaml
 Type: String

@@ -14,12 +14,12 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Set-LMAPIToken -UserId <Int32> -APITokenId <Int32> [-Note <String>] [-Status <String>] [<CommonParameters>]
+Set-LMAPIToken -AdminId <Int32> -Id <Int32> [-Note <String>] [-Status <String>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Set-LMAPIToken -UserName <String> -APITokenId <Int32> [-Note <String>] [-Status <String>] [<CommonParameters>]
+Set-LMAPIToken -AdminName <String> -Id <Int32> [-Note <String>] [-Status <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -35,21 +35,6 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
-
-### -APITokenId
-{{ Fill APITokenId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -Note
 {{ Fill Note Description }}
@@ -82,8 +67,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UserId
-{{ Fill UserId Description }}
+### -AdminId
+{{ Fill AdminId Description }}
 
 ```yaml
 Type: Int32
@@ -93,12 +78,12 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -UserName
-{{ Fill UserName Description }}
+### -AdminName
+{{ Fill AdminName Description }}
 
 ```yaml
 Type: String
@@ -109,6 +94,21 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+{{ Fill Id Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

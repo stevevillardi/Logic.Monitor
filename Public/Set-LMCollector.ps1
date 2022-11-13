@@ -3,7 +3,7 @@ Function Set-LMCollector {
     [CmdletBinding()]
     Param (
 
-        [Parameter(ParameterSetName = 'Id')]
+        [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
         [Parameter(ParameterSetName = 'Name')]

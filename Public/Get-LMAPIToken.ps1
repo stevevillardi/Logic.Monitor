@@ -5,6 +5,9 @@ Function Get-LMAPIToken {
         [Parameter(ParameterSetName = 'AdminId')]
         [Int]$AdminId,
 
+        [Parameter(ParameterSetName = 'Id')]
+        [Int]$Id,
+
         [Parameter(ParameterSetName = 'Filter')]
         [Hashtable]$Filter,
 
@@ -34,6 +37,7 @@ Function Get-LMAPIToken {
             #Build query params
             Switch ($PSCmdlet.ParameterSetName) {
                 "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
+                "Id" { $QueryParams = "?filter=id:$Id&size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
                 "AdminId" { $resourcePath = "/setting/admins/$AdminId/apitokens$BearerParam" }
                 "Filter" {
                     #List of allowed filter props
@@ -52,7 +56,7 @@ Function Get-LMAPIToken {
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response.items -TypeName "LogicMonitor.APIToken" )
                 }
                 #Check result size and if needed loop again
                 Else {

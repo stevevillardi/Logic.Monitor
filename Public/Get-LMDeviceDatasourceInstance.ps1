@@ -13,12 +13,12 @@ Function Get-LMDeviceDatasourceInstance {
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Id-HdsId')]
-        [Int]$Id,
+        [Int]$DeviceId,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Name-HdsId')]
-        [String]$Name,
+        [String]$DeviceName,
 
         [Parameter(Mandatory, ParameterSetName = 'Id-HdsId')]
         [Parameter(Mandatory, ParameterSetName = 'Name-HdsId')]
@@ -33,17 +33,17 @@ Function Get-LMDeviceDatasourceInstance {
     If ($Script:LMAuth.Valid) {
 
         #Lookup Device Id
-        If ($Name) {
-            $LookupResult = (Get-LMDevice -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+        If ($DeviceName) {
+            $LookupResult = (Get-LMDevice -Name $DeviceName).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
                 return
             }
-            $Id = $LookupResult
+            $DeviceId = $LookupResult
         }
 
         #Lookup DatasourceId
         If ($DatasourceName -or $DatasourceId) {
-            $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
+            $LookupResult = (Get-LMDeviceDataSourceList -Id $DeviceId | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                 return
             }
@@ -51,7 +51,7 @@ Function Get-LMDeviceDatasourceInstance {
         }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances"
+        $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances"
 
         #Initalize vars
         $QueryParams = ""
@@ -81,7 +81,7 @@ Function Get-LMDeviceDatasourceInstance {
                 #Stop looping if single device, no need to continue
                 If (![bool]$Response.psobject.Properties["total"]) {
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceDatasourceInstance" )
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -100,7 +100,7 @@ Function Get-LMDeviceDatasourceInstance {
                 }
             }
         }
-        Return $Results
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DeviceDatasourceInstance" )
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

@@ -22,6 +22,11 @@ Get-LMAPIToken [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
 Get-LMAPIToken [-AdminId <Int32>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
+### Id
+```
+Get-LMAPIToken [-Id <Int32>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
 ### Filter
 ```
 Get-LMAPIToken [-Filter <Hashtable>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
@@ -92,6 +97,21 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+{{ Fill Id Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: Id
 Aliases:
 
 Required: False

@@ -2,7 +2,8 @@ Function New-LMAlertAck {
 
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias("Id")]
         [String[]]$Ids,
         [Parameter(Mandatory)]
         [String]$Note

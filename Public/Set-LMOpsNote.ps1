@@ -2,7 +2,7 @@ Function Set-LMOpsNote {
 
     [CmdletBinding(DefaultParameterSetName = "All")]
     Param (
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id,
 
         [String]$Note,

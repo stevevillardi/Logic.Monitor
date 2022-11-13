@@ -16,28 +16,32 @@ schema: 2.0.0
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String> -Name <String> [<CommonParameters>]
+ [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String> -DeviceName <String>
+ [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String> -Id <String> [<CommonParameters>]
+ [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String> -DeviceId <String>
+ [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String> -Name <String> [<CommonParameters>]
+ [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String> -DeviceName <String>
+ [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String> -Id <String> [<CommonParameters>]
+ [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String> -DeviceId <String>
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -59,7 +63,19 @@ PS C:\> {{ Add example code here }}
 
 ```yaml
 Type: String
-Parameter Sets: Name-dsId, Id-dsId
+Parameter Sets: Name-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: String
+Parameter Sets: Id-dsId
 Aliases:
 
 Required: True
@@ -129,21 +145,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-dsName, Id-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -InstanceGroupId
 {{ Fill InstanceGroupId Description }}
 
@@ -165,27 +166,12 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Id
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name-dsName, Name-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -243,6 +229,48 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceId
+{{ Fill DeviceId Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id-dsName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: String
+Parameter Sets: Id-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceName
+{{ Fill DeviceName Description }}
+
+```yaml
+Type: String
+Parameter Sets: Name-dsName, Name-dsId
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

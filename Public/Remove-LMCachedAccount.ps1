@@ -1,7 +1,8 @@
 Function Remove-LMCachedAccount {
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Single')]
+        [Parameter(Mandatory, ParameterSetName = 'Single', ValueFromPipelineByPropertyName)]
+        [Alias("Portal")]
         [String]$AccountName,
 
         [Parameter(ParameterSetName = 'All')]

@@ -5,21 +5,31 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-LMCachedAccount
+# Get-LMOpsNote
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### Single
+### All (Default)
 ```
-Remove-LMCachedAccount -AccountName <String> [<CommonParameters>]
+Get-LMOpsNote [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
-### All
+### Id
 ```
-Remove-LMCachedAccount [-RemoveAllEntries <Boolean>] [<CommonParameters>]
+Get-LMOpsNote [-Id <String>] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Name
+```
+Get-LMOpsNote [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Filter
+```
+Get-LMOpsNote [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,27 +46,57 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -AccountName
-{{ Fill AccountName Description }}
+### -BatchSize
+{{ Fill BatchSize Description }}
 
 ```yaml
-Type: String
-Parameter Sets: Single
-Aliases: Portal
+Type: Int32
+Parameter Sets: (All)
+Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RemoveAllEntries
-{{ Fill RemoveAllEntries Description }}
+### -Filter
+{{ Fill Filter Description }}
 
 ```yaml
-Type: Boolean
-Parameter Sets: All
+Type: Hashtable
+Parameter Sets: Filter
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+{{ Fill Id Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+{{ Fill Name Description }}
+
+```yaml
+Type: String
+Parameter Sets: Name
 Aliases:
 
 Required: False

@@ -49,7 +49,7 @@ Function Get-LMUser {
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
                 }
                 #Check result size and if needed loop again
                 Else {

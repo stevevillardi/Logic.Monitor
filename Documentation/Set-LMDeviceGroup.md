@@ -119,7 +119,19 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: Id-ParentGroupId, Id-ParentGroupName
+Parameter Sets: Id-ParentGroupId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+```yaml
+Type: String
+Parameter Sets: Id-ParentGroupName
 Aliases:
 
 Required: True

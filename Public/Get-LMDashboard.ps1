@@ -59,6 +59,7 @@ Function Get-LMDashboard {
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
                     Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Dashboard" )
                 }
                 #Check result size and if needed loop again
                 Else {

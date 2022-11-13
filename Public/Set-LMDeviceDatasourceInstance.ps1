@@ -18,41 +18,42 @@ Function Set-LMDeviceDatasourceInstance {
 
         [String]$InstanceGroupId,
         
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
+        [Alias("Id")]
         [String]$InstanceId,
 
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [String]$DatasourceName,
     
-        [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [String]$DatasourceId,
     
-        [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
-        [String]$Id,
+        [String]$DeviceId,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
-        [String]$Name
+        [String]$DeviceName
 
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
         #Lookup Device Id
-        If ($Name) {
-            $LookupResult = (Get-LMDevice -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+        If ($DeviceName) {
+            $LookupResult = (Get-LMDevice -Name $DeviceName).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
                 return
             }
-            $Id = $LookupResult
+            $DeviceId = $LookupResult
         }
 
         #Lookup DatasourceId
         If ($DatasourceName -or $DatasourceId) {
-            $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
+            $LookupResult = (Get-LMDeviceDataSourceList -Id $DeviceId | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                 return
             }
@@ -70,7 +71,7 @@ Function Set-LMDeviceDatasourceInstance {
         }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$instanceId"
+        $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$instanceId"
 
         Try {
             $Data = @{
@@ -95,7 +96,7 @@ Function Set-LMDeviceDatasourceInstance {
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
 
-            Return $Response
+            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceDatasourceInstance" )
         }
         Catch [Exception] {
             $Proceed = Resolve-LMException -LMException $PSItem

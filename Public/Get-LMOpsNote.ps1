@@ -3,7 +3,7 @@ Function Get-LMOpsNote {
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
         [Parameter(ParameterSetName = 'Id')]
-        [Int]$Id,
+        [String]$Id,
 
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,

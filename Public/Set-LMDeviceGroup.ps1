@@ -3,7 +3,7 @@ Function Set-LMDeviceGroup {
     [CmdletBinding(DefaultParameterSetName = "Id-ParentGroupId")]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupId', ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupName', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupName')]
         [String]$Id,
         
         [Parameter(Mandatory, ParameterSetName = 'Name-ParentGroupId')]

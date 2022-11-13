@@ -2,7 +2,7 @@ Function Remove-LMDashboardGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
@@ -30,7 +30,7 @@ Function Remove-LMDashboardGroup {
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
-            Write-LMHost "Successfully removed dashboard group id ($Id)" -ForegroundColor Green
+            Write-LMHost "Successfully removed id ($Id)" -ForegroundColor Green
 
             Return
         }

@@ -2,8 +2,8 @@ Function Set-LMRole {
 
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'Id-Custom')]
-        [Parameter(Mandatory,ParameterSetName = 'Id-Default')]
+        [Parameter(Mandatory,ParameterSetName = 'Id-Custom', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory,ParameterSetName = 'Id-Default', ValueFromPipelineByPropertyName)]
         [String]$Id,
 
         [Parameter(Mandatory,ParameterSetName = 'Name-Custom')]
@@ -324,7 +324,6 @@ Function Set-LMRole {
             @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
 
             $Data = ($Data | ConvertTo-Json)
-            $Data
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
             $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 

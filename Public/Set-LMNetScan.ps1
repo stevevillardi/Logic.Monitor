@@ -7,7 +7,7 @@ Function Set-LMNetScan {
 
         [String]$Name,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id,
 
         [String]$Description,
@@ -112,14 +112,13 @@ Function Set-LMNetScan {
                 @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
                 
                 $Data = ($Data | ConvertTo-Json)
-                $Data
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
 
-                Return $Response
+                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

@@ -2,7 +2,7 @@ Function Set-LMWebsite {
 
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id,
 
         [String]$Name,
