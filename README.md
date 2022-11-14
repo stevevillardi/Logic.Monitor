@@ -623,6 +623,8 @@ Get-LMDevice -Name LM* | Set-LMDevice -Description "LogicMontior Collectors"
 
 - **Added additional custom object types**: Updated the list of object types that have a custom output format for easier reading. You will see that many objects now display up to 6 values by default but the full response is available when using Select-Object * or referencing the value by name.
 
+- **Outdated Module Pre-Check**: When connecting to an LM account the module will now attempt to verify that you are running the latest version of the PS Module and warn you if a newer version is available for update.
+
 - **Get-LMApiToken**: Added -Id as a new parameter to return a specific api token.
 
 - **Get/Set/Remove-LMDeviceDatasourceInstance**: Update parameter names for device id and device name to $DeviceId and $DeviceName in order to support pipeline processing and standarize parameter naming scheme.

@@ -62,6 +62,7 @@ Function Connect-LMAccount {
 
         [Switch]$DisableConsoleLogging
     )
+
     If ($UseCachedCredential -or $CachedAccountName) {
 
         Try {
@@ -152,10 +153,6 @@ Function Connect-LMAccount {
         #Convert to secure string
         [SecureString]$AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force
     }
-
-    # $AccessId
-    # [System.Net.NetworkCredential]::new("", $AccessKey).Password
-    # $AccountName
     
     #Create Credential Object for reuse in other functions
     $Script:LMAuth = [PSCustomObject]@{
@@ -165,6 +162,9 @@ Function Connect-LMAccount {
         Valid  = $false
         Logging = !$DisableConsoleLogging.IsPresent
     }
+
+    #Check for newer version of Logic.Monitor module
+    Update-LogicMonitorModule -CheckOnly
 
     Try {
         #Set valid flag so we dont prompt for auth details on future requests
