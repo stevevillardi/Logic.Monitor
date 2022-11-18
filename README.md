@@ -383,8 +383,6 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 **Note:** Using the Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
 
-**Additional Note:** Currently cmdlets do not support reciving input directly from the pipeline (**Get-LMDevice | Set-LMDevice**). If you need to make modifications use Foreach-Object to loop through the pipeline input (**Get-LMDevice | Foreach-Object {Set-LMDevice $\_.Id}**). I am working on building out custom PSObject types to enable this ability in the future.
-
 # Available Commands
 
 #### Account Connectivity
@@ -393,7 +391,7 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Disconnect-LMAccount
 - New-LMCachedAccount
 - Get-LMCachedAccount
-- Remove-LMCachedAccount
+- Remove-LMCachedAccount*
 
 #### Actuve Discovery
 
@@ -413,8 +411,8 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 - Get-LMAPIToken
 - New-LMAPIToken
-- Set-LMAPIToken
-- Remove-LMAPIToken
+- Set-LMAPIToken*
+- Remove-LMAPIToken*
 
 #### AplliesTo
 
@@ -431,7 +429,7 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Get-LMCollectorInstaller
 - Get-LMCollectorVersion
 - New-LMCollector
-- Set-LMCollector
+- Set-LMCollector*
 
 #### Collector Debug
 
@@ -443,25 +441,25 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Get-LMDashboard
 - Get-LMDashboardGroup
 - Get-LMDashboardWidget
-- Remove-LMDashboard
-- Remove-LMDashboardGroup
-- Remove-LMDashboardWidget
+- Remove-LMDashboard*
+- Remove-LMDashboardGroup*
+- Remove-LMDashboardWidget*
 - Import-LMDashboard
 - New-LMDashboardGroup
 
 #### Datasources/LogicModules
 
 - Get-LMDatasource
-- Set-LMDatasource
+- Set-LMDatasource*
 - Get-LMDatasourceAssociatedDevices
 - Get-LMDatasourceUpdateHistory
 - Get-LMDatasourceMetadata
-- Remove-LMDatasource
+- Remove-LMDatasource*
 - Get-LMEventSource
 - Get-LMPropertySource
 - Get-LMTopologySource
 - Get-LMConfigSource
-- Export-LMLogicModule
+- Export-LMLogicModule*
 - Import-LMLogicModule
 - Import-LMExchangeModule
 
@@ -471,7 +469,8 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Get-LMDeviceSDT
 - Get-LMDeviceSDTHistory
 - Get-LMDeviceProperty
-- Get-LMDeviceAlerts
+- Get-LMDeviceAlerts*
+- Get-LMDeviceAlertSettings*
 - Get-LMDeviceData
 - Get-LMDeviceDatasourceInstance
 - Get-LMDeviceDatasourceInstanceGroup
@@ -482,13 +481,13 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - New-LMDevice
 - New-LMDeviceDatasourceInstance
 - New-LMDeviceDatasourceInstanceGroup
-- Set-LMDeviceDatasourceInstance
+- Set-LMDeviceDatasourceInstance*
 - New-LMDeviceProperty
-- Set-LMDevice
-- Set-LMDeviceProperty
-- Remove-LMDevice
-- Remove-LMDeviceDatasourceInstance
-- Remove-DeviceProperty
+- Set-LMDevice*
+- Set-LMDeviceProperty*
+- Remove-LMDevice*
+- Remove-LMDeviceDatasourceInstance*
+- Remove-DeviceProperty*
 - Export-LMDeviceData
 - Invoke-LMDeviceConfigSourceCollection
 
@@ -497,14 +496,15 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Get-LMDeviceGroup
 - Get-LMDeviceGroupSDT
 - Get-LMDeviceGroupSDTHistory
-- Get-LMDeviceGroupAlerts
+- Get-LMDeviceGroupAlerts*
+- Get-LMDeviceGroupAlertSettings*
 - Get-LMDeviceGroupDevices
 - Get-LMDeviceGroupGroups
 - Get-LMDeviceGroupProperty
 - New-LMDeviceGroup
 - New-LMDeviceGroupProperty
-- Set-LMDeviceGroup
-- Remove-LMDeviceGroup
+- Set-LMDeviceGroup*
+- Remove-LMDeviceGroup*
 
 #### Escalation Chain
 
@@ -520,8 +520,8 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 - Get-LMNetscan
 - New-LMNetscan
-- Set-LMNetscan
-- Remove-LMNetscan
+- Set-LMNetscan*
+- Remove-LMNetscan*
 - Invoke-LMNetscan
 - Invoke-LMCloudGroupNetScan
 - Get-LMUnmonitoredDevices
@@ -530,8 +530,8 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 - Get-LMOpsNote
 - New-LMOpsNote
-- Set-LMOpsNote
-- Remove-LMOpsNote
+- Set-LMOpsNote*
+- Remove-LMOpsNote*
 
 #### Portal Info
 
@@ -572,10 +572,10 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - New-LMUser
 - New-LMRole
 - New-LMApiUser
-- Set-LMUser
-- Set-LMRole
-- Remove-LMUser
-- Remove-LMRole
+- Set-LMUser*
+- Set-LMRole*
+- Remove-LMUser*
+- Remove-LMRole*
 
 #### Websites
 
@@ -587,8 +587,8 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Get-LMWebsiteSDT
 - Get-LMWebsiteSDTHistory
 - New-LMWebsite
-- Set-LMWebsite
-- Remove-LMWebsite
+- Set-LMWebsite*
+- Remove-LMWebsite*
 
 #### Website Groups
 
@@ -597,8 +597,8 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Get-LMWebsiteGroupSDT
 - Get-LMWebsiteGroupSDTHistory
 - New-LMWebsiteGroup
-- Set-LMWebsiteGroup
-- Remove-LMWebsiteGroup
+- Set-LMWebsiteGroup*
+- Remove-LMWebsiteGroup*
 
 #### Utilities (Beta)
 
@@ -607,6 +607,8 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Initialize-LMPOVSetup
 - Import-LMMerakiCloud
 - Invoke-LMDeviceDedupe
+
+***Note**: Supports Pipline Input
 
 # Change List
 
