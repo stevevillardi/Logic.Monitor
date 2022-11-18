@@ -61,84 +61,89 @@ Function Set-LMWebsite {
 
 
     )
-    #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
 
-        #Lookup Id by name
-        If ($Name) {
-            $LookupResult = (Get-LMWebsite -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
-                return
+    Begin{}
+    Process{
+        #Check if we are logged in and have valid api creds
+        If ($Script:LMAuth.Valid) {
+
+            #Lookup Id by name
+            If ($Name) {
+                $LookupResult = (Get-LMWebsite -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                    return
+                }
+                $Id = $LookupResult
             }
-            $Id = $LookupResult
+
+            #Build custom props hashtable
+            $customProperties = @()
+            If ($Properties) {
+                Foreach ($Key in $Properties.Keys) {
+                    $customProperties += @{name = $Key; value = $Properties[$Key] }
+                }
+            }
+                    
+            #Build header and uri
+            $ResourcePath = "/website/websites/$Id"
+
+            Try {
+                $alertExpr = $null
+                If ($SSLAlertThresholds) {
+                    $alertExpr = "< " + $SSLAlertThresholds -join " "
+                }
+
+                $Data = @{
+                    name                        = $Name
+                    description                 = $Description
+                    disableAlerting             = $DisableAlerting
+                    isInternal                  = $IsInternal
+                    properties                  = $customProperties
+                    stopMonitoring              = $StopMonitoring
+                    groupId                     = $GroupId
+                    pollingInterval             = $PollingInterval
+                    overallAlertLevel           = $OverallAlertLevel
+                    individualAlertLevel        = $IndividualAlertLevel
+                    useDefaultAlertSetting      = $UseDefaultAlertSetting
+                    useDefaultLocationSetting   = $UseDefaultLocationSetting
+                    host                        = $Hostname
+                    triggerSSLStatusAlert       = $TriggerSSLStatusAlert
+                    triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
+                    count                       = $PingCount
+                    percentPktsNotReceiveInTime = $PingPercentNotReceived
+                    timeoutInMSPktsNotReceive   = $PingTimeout
+                    transition                  = $FailedCount
+                    pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
+                    alertExpr                   = $alertExpr
+                    schema                      = $HttpType
+                    domain                      = $Hostname
+
+                }
+
+            
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+            
+                $Data = ($Data | ConvertTo-Json)
+
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+
+                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
+                }
+            }
         }
-
-        #Build custom props hashtable
-        $customProperties = @()
-        If ($Properties) {
-            Foreach ($Key in $Properties.Keys) {
-                $customProperties += @{name = $Key; value = $Properties[$Key] }
-            }
-        }
-                
-        #Build header and uri
-        $ResourcePath = "/website/websites/$Id"
-
-        Try {
-            $alertExpr = $null
-            If ($SSLAlertThresholds) {
-                $alertExpr = "< " + $SSLAlertThresholds -join " "
-            }
-
-            $Data = @{
-                name                        = $Name
-                description                 = $Description
-                disableAlerting             = $DisableAlerting
-                isInternal                  = $IsInternal
-                properties                  = $customProperties
-                stopMonitoring              = $StopMonitoring
-                groupId                     = $GroupId
-                pollingInterval             = $PollingInterval
-                overallAlertLevel           = $OverallAlertLevel
-                individualAlertLevel        = $IndividualAlertLevel
-                useDefaultAlertSetting      = $UseDefaultAlertSetting
-                useDefaultLocationSetting   = $UseDefaultLocationSetting
-                host                        = $Hostname
-                triggerSSLStatusAlert       = $TriggerSSLStatusAlert
-                triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
-                count                       = $PingCount
-                percentPktsNotReceiveInTime = $PingPercentNotReceived
-                timeoutInMSPktsNotReceive   = $PingTimeout
-                transition                  = $FailedCount
-                pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
-                alertExpr                   = $alertExpr
-                schema                      = $HttpType
-                domain                      = $Hostname
-
-            }
-
-        
-            #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-        
-            $Data = ($Data | ConvertTo-Json)
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
-        }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        Else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    Else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
-    }
+    End{}
 }

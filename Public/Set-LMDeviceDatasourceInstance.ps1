@@ -39,73 +39,78 @@ Function Set-LMDeviceDatasourceInstance {
         [String]$DeviceName
 
     )
-    #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
 
-        #Lookup Device Id
-        If ($DeviceName) {
-            $LookupResult = (Get-LMDevice -Name $DeviceName).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
-                return
+    Begin{}
+    Process{
+        #Check if we are logged in and have valid api creds
+        If ($Script:LMAuth.Valid) {
+
+            #Lookup Device Id
+            If ($DeviceName) {
+                $LookupResult = (Get-LMDevice -Name $DeviceName).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
+                    return
+                }
+                $DeviceId = $LookupResult
             }
-            $DeviceId = $LookupResult
+
+            #Lookup DatasourceId
+            If ($DatasourceName -or $DatasourceId) {
+                $LookupResult = (Get-LMDeviceDataSourceList -Id $DeviceId | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
+                    return
+                }
+                $HdsId = $LookupResult
+            }
+
+
+
+            #Build custom props hashtable
+            $customProperties = @()
+            If ($Properties) {
+                Foreach ($Key in $Properties.Keys) {
+                    $customProperties += @{name = $Key; value = $Properties[$Key] }
+                }
+            }
+            
+            #Build header and uri
+            $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$instanceId"
+
+            Try {
+                $Data = @{
+                    displayName      = $DisplayName
+                    description      = $Description
+                    wildValue        = $WildValue
+                    wildValue2       = $WildValue2
+                    stopMonitoring   = $StopMonitoring
+                    disableAlerting  = $DisableAlerting
+                    customProperties = $customProperties
+                    groupId          = $InstanceGroupId
+                }
+
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+
+                $Data = ($Data | ConvertTo-Json)
+
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+
+                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceDatasourceInstance" )
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
+                }
+            }
         }
-
-        #Lookup DatasourceId
-        If ($DatasourceName -or $DatasourceId) {
-            $LookupResult = (Get-LMDeviceDataSourceList -Id $DeviceId | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
-                return
-            }
-            $HdsId = $LookupResult
-        }
-
-
-
-        #Build custom props hashtable
-        $customProperties = @()
-        If ($Properties) {
-            Foreach ($Key in $Properties.Keys) {
-                $customProperties += @{name = $Key; value = $Properties[$Key] }
-            }
-        }
-        
-        #Build header and uri
-        $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$instanceId"
-
-        Try {
-            $Data = @{
-                displayName      = $DisplayName
-                description      = $Description
-                wildValue        = $WildValue
-                wildValue2       = $WildValue2
-                stopMonitoring   = $StopMonitoring
-                disableAlerting  = $DisableAlerting
-                customProperties = $customProperties
-                groupId          = $InstanceGroupId
-            }
-
-            #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-
-            $Data = ($Data | ConvertTo-Json)
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceDatasourceInstance" )
-        }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        Else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    Else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
-    }
+    End{}
 }

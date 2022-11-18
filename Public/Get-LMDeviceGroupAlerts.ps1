@@ -2,7 +2,7 @@ Function Get-LMDeviceGroupAlerts {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
         [Parameter(ParameterSetName = 'Name')]

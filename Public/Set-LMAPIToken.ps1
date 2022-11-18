@@ -17,52 +17,57 @@ Function Set-LMAPIToken {
         [String]$Status
 
     )
-    #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
 
-        #Lookup Id if supplying AdminName
-        If ($AdminName) {
-            $LookupResult = (Get-LMUser -Name $AdminName).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $AdminName) {
-                return
+    Begin{}
+    Process{
+        #Check if we are logged in and have valid api creds
+        If ($Script:LMAuth.Valid) {
+
+            #Lookup Id if supplying AdminName
+            If ($AdminName) {
+                $LookupResult = (Get-LMUser -Name $AdminName).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $AdminName) {
+                    return
+                }
+                $AdminId = $LookupResult
             }
-            $AdminId = $LookupResult
+            
+            #Build header and uri
+            $ResourcePath = "/setting/admins/$AdminId/apitokens/$Id"
+
+            Try {
+                $Data = @{
+                    note   = $Note
+                    status = $Status
+                }
+
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { if (-not $Data[$_]) { $Data.Remove($_) } }
+
+                If ($Status) {
+                    $Data.status = $(If ($Status -eq "active") { 2 }Else { 1 })
+                }
+
+                $Data = ($Data | ConvertTo-Json)
+
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
+
+                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.APIToken" )
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
+                }
+            }
         }
-        
-        #Build header and uri
-        $ResourcePath = "/setting/admins/$AdminId/apitokens/$Id"
-
-        Try {
-            $Data = @{
-                note   = $Note
-                status = $Status
-            }
-
-            #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if (-not $Data[$_]) { $Data.Remove($_) } }
-
-            If ($Status) {
-                $Data.status = $(If ($Status -eq "active") { 2 }Else { 1 })
-            }
-
-            $Data = ($Data | ConvertTo-Json)
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
-
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.APIToken" )
-        }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        Else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    Else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
-    }
+    End{}
 }

@@ -70,6 +70,9 @@ Function Import-LMMerakiCloud {
         [Switch]$ListOrgIds,
 
         [Parameter(ParameterSetName = 'List')]
+        [Switch]$ListSNMPInfo,
+
+        [Parameter(ParameterSetName = 'List')]
         [Switch]$ListNetworkIds
     )
 
@@ -78,7 +81,7 @@ Function Import-LMMerakiCloud {
     Process {
         If ($Script:LMAuth.Valid) {
             #List out org devices
-            If($ListOrgIds -or $ListNetworkIds){
+            If($ListOrgIds -or $ListNetworkIds -or $ListSNMPInfo){
                 Try{
                     $Orgs = Invoke-RestMethod -Uri "https://api.meraki.com/api/v1/organizations" -Headers @{"X-Cisco-Meraki-API-Key"=$MerakiAPIToken}
                 }
@@ -93,28 +96,67 @@ Function Import-LMMerakiCloud {
                 }
                 $MerkaiInfo = @()
                 Foreach($Org in $Orgs){
-                    If($ListNetworkIds){
-                        Try{
-                            $Networks = Invoke-RestMethod -Uri "https://api.meraki.com/api/v1/organizations/$($Org.id)/networks" -Headers @{"X-Cisco-Meraki-API-Key"=$MerakiAPIToken}
-                        }
-                        Catch [Exception] {
-                            If($_.Exception.Response.StatusCode.value__ -eq "401"){
-                                Write-Host "Unathorized request, check API token and try again." -ForegroundColor Red
-                                return
+                    If($ListSNMPInfo){
+                        If($Org.api.enabled){
+                            Try{
+                                $SNMPInfo = Invoke-RestMethod -Uri "https://api.meraki.com/api/v1/organizations/$($Org.id)/snmp" -Headers @{"X-Cisco-Meraki-API-Key"=$MerakiAPIToken}
                             }
-                            Else{
-                                Write-Host "$($_.TargetObject.RequestUri.OriginalString): $(($_.ErrorDetails.Message | ConvertFrom-Json).errors)" -ForegroundColor Red
-                                Continue
+                            Catch{
+                                If($_.Exception.Response.StatusCode.value__ -eq "401"){
+                                    Write-Host "Unathorized request, check API token and try again." -ForegroundColor Red
+                                    return
+                                }
+                                Else{
+                                    Write-Host "$($_.TargetObject.RequestUri.OriginalString): $(($_.ErrorDetails.Message | ConvertFrom-Json).errors)" -ForegroundColor Red
+                                    Continue
+                                }
                             }
-                        }
-                        Foreach($Net in $Networks){
                             $MerkaiInfo += [PSCustomObject]@{
-                                org_id = $Org.id
-                                org_name = $Org.name
-                                network_id = $Net.id
-                                network_name = $Net.name
-                                api_dashboard_enabled = $Org.api.enabled
+                                orgId = $Org.id
+                                orgName = $Org.name
+                                v2cEnabled = $SNMPInfo.v2cEnabled
+                                v3Enabled = $SNMPInfo.v3Enabled
+                                v3AuthMode = $SNMPInfo.v3AuthMode
+                                v3PrivMode = $SNMPInfo.v3PrivMode
+                                peerIps = $SNMPInfo.peerIps
+                                v2CommunityString = $SNMPInfo.v2CommunityString
+                                hostname = $SNMPInfo.hostname
+                                port = $SNMPInfo.port
                             }
+                        }
+                        Else{
+                            Write-Host "Skipping SNMP Info check for ($($Org.name)) since dashboard api access is disabled for that org." -ForegroundColor Yellow
+                            Continue
+                        }
+                    }
+                    ElseIf($ListNetworkIds){
+                        If($Org.api.enabled){
+                            Try{
+                                $Networks = Invoke-RestMethod -Uri "https://api.meraki.com/api/v1/organizations/$($Org.id)/networks" -Headers @{"X-Cisco-Meraki-API-Key"=$MerakiAPIToken}
+                            }
+                            Catch [Exception] {
+                                If($_.Exception.Response.StatusCode.value__ -eq "401"){
+                                    Write-Host "Unathorized request, check API token and try again." -ForegroundColor Red
+                                    return
+                                }
+                                Else{
+                                    Write-Host "$($_.TargetObject.RequestUri.OriginalString): $(($_.ErrorDetails.Message | ConvertFrom-Json).errors)" -ForegroundColor Red
+                                    Continue
+                                }
+                            }
+                            Foreach($Net in $Networks){
+                                $MerkaiInfo += [PSCustomObject]@{
+                                    org_id = $Org.id
+                                    org_name = $Org.name
+                                    network_id = $Net.id
+                                    network_name = $Net.name
+                                    api_dashboard_enabled = $Org.api.enabled
+                                }
+                            }
+                        }
+                        Else{
+                            Write-Host "Skipping Network Info check for ($($Org.name)) since dashboard api access is disabled for that org." -ForegroundColor Yellow
+                            Continue
                         }
                     }
                     Else{

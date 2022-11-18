@@ -37,9 +37,10 @@ PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
 #>
 Function Export-LMLogicModule {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = "Id")]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
+        [Alias("Id")]
         [Int]$LogicModuleId,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
@@ -51,100 +52,107 @@ Function Export-LMLogicModule {
 
         [String]$DownloadPath = (Get-Location).Path
     )
+    Begin{
 
-    #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    }
+    Process{
+        #Check if we are logged in and have valid api creds
+        If ($Script:LMAuth.Valid) {
 
-        $LogicModuleInfo = @()
-        $QueryParams = ""
+            $LogicModuleInfo = @()
+            $QueryParams = ""
+            $ExportPath = ""
 
-        If ($LogicModuleName) {
-            Switch ($Type) {
-                "datasources" {
-                    $LogicModuleInfo = Get-LMDataSource -Name $LogicModuleName
-                    $DownloadPath += "\$($LogicModuleInfo.name).xml"
-                    $QueryParams = "?format=xml&v=3"
+            If ($LogicModuleName) {
+                Switch ($Type) {
+                    "datasources" {
+                        $LogicModuleInfo = Get-LMDataSource -Name $LogicModuleName
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
+                        $QueryParams = "?format=xml&v=3"
+                    }
+                    "propertyrules" {
+                        #Not implemented yet
+                        $LogicModuleInfo = Get-LMPropertysource -Name $LogicModuleName
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
+                        $QueryParams = "?format=file&v=3"
+                    }
+                    "eventsources" {
+                        $LogicModuleInfo = Get-LMEventSource -Name $LogicModuleName
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
+                        $QueryParams = "?format=xml&v=3"
+                    }
+                    "topologysources" {
+                        $LogicModuleInfo = Get-LMTopologySource -Name $LogicModuleName
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
+                        $QueryParams = "?format=file&v=3"
+                    }
+                    "configsources" {
+                        $LogicModuleInfo = Get-LMConfigSource -Name $LogicModuleName
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
+                        $QueryParams = "?format=xml&v=3"
+                    }
                 }
-                "propertyrules" {
-                    #Not implemented yet
-                    $LogicModuleInfo = Get-LMPropertysource -Name $LogicModuleName
-                    $DownloadPath += "\$($LogicModuleInfo.name).json"
-                    $QueryParams = "?format=file&v=3"
+                #Verify our query only returned one result
+                If (Test-LookupResult -Result $LogicModuleInfo.Id -LookupString $LogicModuleName) {
+                    return
                 }
-                "eventsources" {
-                    $LogicModuleInfo = Get-LMEventSource -Name $LogicModuleName
-                    $DownloadPath += "\$($LogicModuleInfo.name).xml"
-                    $QueryParams = "?format=xml&v=3"
-                }
-                "topologysources" {
-                    $LogicModuleInfo = Get-LMTopologySource -Name $LogicModuleName
-                    $DownloadPath += "\$($LogicModuleInfo.name).json"
-                    $QueryParams = "?format=file&v=3"
-                }
-                "configsources" {
-                    $LogicModuleInfo = Get-LMConfigSource -Name $LogicModuleName
-                    $DownloadPath += "\$($LogicModuleInfo.name).xml"
-                    $QueryParams = "?format=xml&v=3"
+                $LogicModuleId = $LogicModuleInfo.Id
+            }
+            Else {
+                Switch ($Type) {
+                    "datasources" {
+                        $LogicModuleInfo = Get-LMDatasource -Id $LogicModuleId
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
+                        $QueryParams = "?format=xml&v=3"
+                    }
+                    "propertyrules" {
+                        #Not implemented yet
+                        $LogicModuleInfo = Get-LMPropertysource -Id $LogicModuleId
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
+                        $QueryParams = "?format=file&v=3"
+                    }
+                    "eventsources" {
+                        $LogicModuleInfo = Get-LMEventSource -Id $LogicModuleId
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
+                        $QueryParams = "?format=xml&v=3"
+                    }
+                    "topologysources" {
+                        $LogicModuleInfo = Get-LMTopologySource -Id $LogicModuleId
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
+                        $QueryParams = "?format=file&v=3"
+                    }
+                    "configsources" {
+                        $LogicModuleInfo = Get-LMConfigSource -Id $LogicModuleId
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
+                        $QueryParams = "?format=xml&v=3"
+                    }
                 }
             }
-            #Verify our query only returned one result
-            If (Test-LookupResult -Result $LogicModuleInfo.Id -LookupString $LogicModuleName) {
-                return
-            }
-            $LogicModuleId = $LogicModuleInfo.Id
-        }
-        Else {
-            Switch ($Type) {
-                "datasources" {
-                    $LogicModuleInfo = Get-LMDatasource -Id $LogicModuleId
-                    $DownloadPath += "\$($LogicModuleInfo.name).xml"
-                    $QueryParams = "?format=xml&v=3"
-                }
-                "propertyrules" {
-                    #Not implemented yet
-                    $LogicModuleInfo = Get-LMPropertysource -Id $LogicModuleId
-                    $DownloadPath += "\$($LogicModuleInfo.name).json"
-                    $QueryParams = "?format=file&v=3"
-                }
-                "eventsources" {
-                    $LogicModuleInfo = Get-LMEventSource -Id $LogicModuleId
-                    $DownloadPath += "\$($LogicModuleInfo.name).xml"
-                    $QueryParams = "?format=xml&v=3"
-                }
-                "topologysources" {
-                    $LogicModuleInfo = Get-LMTopologySource -Id $LogicModuleId
-                    $DownloadPath += "\$($LogicModuleInfo.name).json"
-                    $QueryParams = "?format=file&v=3"
-                }
-                "configsources" {
-                    $LogicModuleInfo = Get-LMConfigSource -Id $LogicModuleId
-                    $DownloadPath += "\$($LogicModuleInfo.name).xml"
-                    $QueryParams = "?format=xml&v=3"
-                }
-            }
-        }
 
-        
-        #Build header and uri
-        $ResourcePath = "/setting/$Type/$LogicModuleId"
-        
-        Try {
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+            
+            #Build header and uri
+            $ResourcePath = "/setting/$Type/$LogicModuleId"
+            
+            Try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers -OutFile $DownloadPath
-        
-            Return
-        }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers -OutFile $ExportPath
+
+                Write-LMHost "Successfully downloaded LogicModule id ($LogicModuleId) of type $Type"
                 Return
             }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
+                }
+            }
+        }
+        Else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    Else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
-    }
+    End{}
 }

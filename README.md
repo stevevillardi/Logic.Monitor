@@ -610,6 +610,33 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 
 # Change List
 
+## 3.9.2
+###### Updated Commands:
+- **Additional Pipeline Support**: Added pipeline support for the following modules:
+  - Get-LMDeviceGroupAlerts
+  - Get-LMDeviceAlertSettings
+  - Get-LMDeviceAlerts
+  - Export-LMLogicModule
+
+- **Import-LMMerakiCloud**: Added an additional parameter *-ListSNMPInfo* to return the configured SNMP org settings for the provided API key. Also added in logic to skip orgs and networks that do not have the dashboard api enabled from being processed.
+
+###### Bug Fixes:
+- **Pipeline Support Fix**: Fixed an issue with the following modules that caused pipeline processing to only process the last object passed to it:
+  - Remove-LMAPIToken
+  - Remove-LMCachedAccount
+  - Remove-LMDashboard
+  - Remove-LMDashboardGroup
+  - Remove-LMDashboardWidget
+  - Remove-LMDatasource
+  - Remove-LMDeviceProperty
+  - Remove-LMNetscan
+  - Remove-LMWebsite
+  - Set-LMAPIToken
+  - Set-LMDeviceDatasourceInstance
+  - Set-LMDeviceProperty
+  - Set-LMOpsNotes
+  - Set-LMWebsite
+
 ## 3.9.1
 ###### Updated Commands:
 

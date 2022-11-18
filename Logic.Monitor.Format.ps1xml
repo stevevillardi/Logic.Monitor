@@ -319,6 +319,59 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.AlertSetting-->
+      <View>
+         <Name>LogicMonitorAlertSetting</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.AlertSetting</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>dataPointName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>dataSourceInstanceAlias</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>dataPointDescription</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>globalAlertExpr</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>disableAlerting</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>dataPointName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>dataSourceInstanceAlias</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>dataPointDescription</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>globalAlertExpr</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>disableAlerting</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.Datasource-->
       <View>
          <Name>LogicMonitorDatasource</Name>
