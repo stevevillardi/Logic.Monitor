@@ -343,6 +343,31 @@ Foreach($line in $pingList){
 }
 ```
 
+#### Remove a category from system.categories
+```powershell
+$CategoryToRemove = "test"
+
+$Devices = Get-LMDevice
+Foreach($Device in $Devices){
+    $Categories = $Device.customproperties.value[$Device.customProperties.name.IndexOf("system.categories")]
+
+    If($Categories -and ($Categories -Split (",")).toLower().Contains($CategoryToRemove.toLower())){
+        Try{
+            $UpdatedCategories = ($Categories -Split (",") | Where-Object {$_ -ne $CategoryToRemove}) -Join ","    
+            Set-LMDevice -Id $Device.Id -Properties @{"system.categories"=$UpdatedCategories}
+
+            Write-Host "Successfully updated device system.properties to remove category ($CategoryToRemove)" -ForegroundColor Green
+        }
+        Catch{
+            Write-Host "Unable to update device: $_" -ForegroundColor Red
+        }
+    }
+    Else{
+        Write-Host "Skipping device update, no matching systemcategories value found matching: $CategoryToRemove"
+    }
+}
+```
+
 #### Import list of UNC path instances
 ``` powershell
 #Example adding UNC Path monitoring via csv with headers DisplayName,Wildvalue,Description
