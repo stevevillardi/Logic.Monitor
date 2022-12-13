@@ -12,7 +12,7 @@
     RootModule         = 'Logic.Monitor.psm1'
 
     # Version number of this module.
-    ModuleVersion      = '3.9.2'
+    ModuleVersion      = '3.9.3'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -24,10 +24,10 @@
     Author             = 'Steven Villardi'
 
     # Company or vendor of this module
-    CompanyName        = 'LogicMonitor'
+    CompanyName        = ''
 
     # Copyright statement for this module
-    Copyright          = '(c) Steven Villardi. All rights reserved.'
+    Copyright          = ''
 
     # Description of the functionality provided by this module
     Description        = 'PowerShell module to query the Logic Monitor API. This is a personal project and is not an offically supported LogicMonitor integration.'
