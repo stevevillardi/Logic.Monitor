@@ -1,4 +1,5 @@
-Function Get-LMNetscan {
+
+Function Get-LMLogsAlertPipeline {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
@@ -17,7 +18,7 @@ Function Get-LMNetscan {
     If ($Script:LMAuth.Valid) {
         
         #Build header and uri
-        $ResourcePath = "/setting/netscans"
+        $ResourcePath = "/logpipelines"
 
         #Initalize vars
         $QueryParams = ""
@@ -40,16 +41,17 @@ Function Get-LMNetscan {
                 }
             }
             Try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath -Version 4
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
-
+                #Resolve-LMv4Response -LMResponse $Response
+                return $Response
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
+                    Return $Response
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -68,7 +70,7 @@ Function Get-LMNetscan {
                 }
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.NetScan" )
+        Return $Results
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

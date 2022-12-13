@@ -49,7 +49,7 @@ Function Get-LMCollectorDebugResult {
                     Return
                 }
             }
-            Return $Response
+            Return $Response.output
         }
         Else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

@@ -1,23 +1,30 @@
-Function Get-LMNetscan {
+Function Get-LMNetscanExecution {
 
-    [CmdletBinding(DefaultParameterSetName = 'All')]
+    [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
-        [Parameter(ParameterSetName = 'Id')]
+        [Parameter(Mandatory,ParameterSetName = 'Id')]
         [Int]$Id,
 
-        [Parameter(ParameterSetName = 'Name')]
+        [Parameter(Mandatory,ParameterSetName = 'Name')]
         [String]$Name,
 
-        [Parameter(ParameterSetName = 'Filter')]
         [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
+
+        If ($Name) {
+            $LookupResult = (Get-LMNetscan -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                return
+            }
+            $Id = $LookupResult
+        }
         
         #Build header and uri
-        $ResourcePath = "/setting/netscans"
+        $ResourcePath = "/setting/netscans/$Id/executions"
 
         #Initalize vars
         $QueryParams = ""
@@ -28,17 +35,13 @@ Function Get-LMNetscan {
         #Loop through requests 
         While (!$Done) {
             #Build query params
-            Switch ($PSCmdlet.ParameterSetName) {
-                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
-                "Id" { $resourcePath += "/$Id" }
-                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
-                "Filter" {
-                    #List of allowed filter props
-                    $PropList = @()
-                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
-                }
+            If ($Filter) {
+                #List of allowed filter props
+                $PropList = @()
+                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
             }
+
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
@@ -49,7 +52,7 @@ Function Get-LMNetscan {
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response.items -TypeName "LogicMonitor.NetScanExecution" )
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -68,7 +71,7 @@ Function Get-LMNetscan {
                 }
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.NetScan" )
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.NetScanExecution" )
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

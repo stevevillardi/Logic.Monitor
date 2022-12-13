@@ -1,6 +1,6 @@
 Function New-LMOpsNote {
 
-    [CmdletBinding(DefaultParameterSetName = "All")]
+    [CmdletBinding()]
     Param (
         [Parameter(Mandatory)]
         [String]$Note,
@@ -9,13 +9,10 @@ Function New-LMOpsNote {
 
         [String[]]$Tags,
 
-        [Parameter(ParameterSetName = 'Group')]
         [String[]]$DeviceGroupIds,
 
-        [Parameter(ParameterSetName = 'Resource')]
         [String[]]$WebsiteIds, 
 
-        [Parameter(ParameterSetName = 'Resource')]
         [String[]]$DeviceIds
     )
     #Check if we are logged in and have valid api creds

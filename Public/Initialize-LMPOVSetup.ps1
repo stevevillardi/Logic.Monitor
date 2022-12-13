@@ -204,9 +204,13 @@ Function Initialize-LMPOVSetup {
                     #Use imporved version with metadata over the orginal version
                     #Import-LMExchangeModule -LMExchangeId "896d0c2c-a993-4f0b-8db2-2bb29947cb52" #v2 modules
                     Import-LMExchangeModule -LMExchangeId "b853607c-e0f1-4682-abc0-2be3e4edbb8e" #core module
+                    Start-Sleep -Seconds 5 #Added manual pause to ensure datasource is available after importing from the exchange
                     $LogsDatasource = Set-LMDatasource -Name Windows_Events_LMLogs -appliesTo "isWindows() && lmlogs.winevent.channels && lmaccess.id && lmaccess.key && lmaccount"
                     If($LogsDatasource){
                         Write-Host "[INFO]: Successfully added core module (Windows_Events_LMLogs) and updated appliesto logic"
+                    }
+                    Else{
+                        Write-Host "[WARN]: Successfully added core module (Windows_Events_LMLogs) but was unable to modify the appliesTo criteria, please manually set the appliesTo criteria for the datasource to apply: 'isWindows() && lmlogs.winevent.channels && lmaccess.id && lmaccess.key && lmaccount'" -ForegroundColor Yellow
                     }
                 }
                 Else{

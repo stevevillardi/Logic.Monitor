@@ -1,24 +1,33 @@
+Function Get-LMNetscanExecutionDevices {
 
-Function Get-LMLogsAlertPipeline {
-
-    [CmdletBinding(DefaultParameterSetName = 'All')]
+    [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
-        [Parameter(ParameterSetName = 'Id')]
+        [Parameter(Mandatory,ParameterSetName = 'Id')]
         [Int]$Id,
 
-        [Parameter(ParameterSetName = 'Name')]
-        [String]$Name,
+        [Parameter(Mandatory,ParameterSetName = 'Id')]
+        [String]$NspId,
 
-        [Parameter(ParameterSetName = 'Filter')]
+        [Parameter(Mandatory,ParameterSetName = 'Name')]
+        [String]$NspName,
+
         [Hashtable]$Filter,
 
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
+
+        If ($NspName) {
+            $LookupResult = (Get-LMNetscan -Name $NspName).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $NspName) {
+                return
+            }
+            $NspId = $LookupResult
+        }
         
         #Build header and uri
-        $ResourcePath = "/setting/logpipelines"
+        $ResourcePath = "/setting/netscans/$NspId/executions/$Id/devices"
 
         #Initalize vars
         $QueryParams = ""
@@ -29,17 +38,13 @@ Function Get-LMLogsAlertPipeline {
         #Loop through requests 
         While (!$Done) {
             #Build query params
-            Switch ($PSCmdlet.ParameterSetName) {
-                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
-                "Id" { $resourcePath += "/$Id" }
-                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
-                "Filter" {
-                    #List of allowed filter props
-                    $PropList = @()
-                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
-                }
+            If ($Filter) {
+                #List of allowed filter props
+                $PropList = @()
+                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
             }
+
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
@@ -50,7 +55,7 @@ Function Get-LMLogsAlertPipeline {
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response.items -TypeName "LogicMonitor.NetScanExecutionDevice" )
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -69,7 +74,7 @@ Function Get-LMLogsAlertPipeline {
                 }
             }
         }
-        Return $Results
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.NetScanExecutionDevice" )
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

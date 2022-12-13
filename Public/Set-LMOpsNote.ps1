@@ -1,6 +1,6 @@
 Function Set-LMOpsNote {
 
-    [CmdletBinding(DefaultParameterSetName = "All")]
+    [CmdletBinding()]
     Param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -13,13 +13,10 @@ Function Set-LMOpsNote {
 
         [Switch]$ClearTags,
 
-        [Parameter(ParameterSetName = 'Group')]
         [String[]]$DeviceGroupIds,
 
-        [Parameter(ParameterSetName = 'Resource')]
         [String[]]$WebsiteIds, 
 
-        [Parameter(ParameterSetName = 'Resource')]
         [String[]]$DeviceIds
     )
 

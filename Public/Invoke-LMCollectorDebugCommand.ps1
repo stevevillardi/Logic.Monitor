@@ -100,12 +100,13 @@ $PoshCommand
                         }
                         Else {
                             $CommandCompleted = $false
-                            Return $CommandResult.output
+                            Return $CommandResult
                         }
                     }
                 }
                 Else {
-                    Write-LMHost "Submitted debug command task ($Command) for device id: $($Response.sessionId). Use Get-LMCollectorDebugResult to retrieve response or resubmit request with -IncludeResult" -ForegroundColor green
+                    Write-LMHost "Submitted debug command task under session id $($Response.sessionId) for device id: $($Response.sessionId). Use Get-LMCollectorDebugResult to retrieve response or resubmit request with -IncludeResult" -ForegroundColor green
+                    Return $Response.sessionId
                 }
             }
             Catch [Exception] {

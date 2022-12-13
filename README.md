@@ -513,12 +513,15 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 #### LM Logs
 
 - Send-LMLogMessage
-- Get-LMLogMessage
-- Get-LMLogsAlertPipeline
+- Get-LMLogAnomolies - **Removed due to API v4 restrictions**
+- Get-LMLogMessage - **Removed due to API v4 restrictions**
+- Get-LMLogsAlertPipeline - **Removed due to API v4 restrictions**
 
 #### Netscan
 
 - Get-LMNetscan
+- Get-LMNetscanExecution
+- Get-LMNetscanExecutionDevices
 - New-LMNetscan
 - Set-LMNetscan*
 - Remove-LMNetscan*
@@ -611,6 +614,25 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 ***Note**: Supports Pipline Input
 
 # Change List
+
+## 3.9.3
+###### Update Commands/Bug Fixes:
+- **New-LMAlertAck**: Downgrade api version used from v4 to v3.
+- **New-LMAlertNote**: Downgrade api version used from v4 to v3.
+- **Get-LMCollectorDebugResult**: Fixed returned data to just return the command output
+- **Invoke-LMCollectorDebugCommand**: Fixed bug that caused session id to not be returned when not running the command with the -IncludeResult switch set.
+- **Get-LMNetscan**: Added custom object type to returned Netscan objects
+- **Initialize-LMPOVSetup**: Fixed an issue causing setup of lm logs to not properly assign the correct appliesTo logic to the imported Windows Logs DS.
+- **New/Set-LMOpsNote**: Updated parameter set to allow for specifying device, website and device group scopes together when modifying or creating an opts note.
+
+###### New Commands:
+- **Get-LMNetscanExecution**: Get list of executions for a specified NetScan policy.
+- **Get-LMNetscanExecutionDevices**: Get list of devices discovered by a executed netscan policy for a given execution.
+
+###### Removed Commands:
+- **Get-LMLogAnomolies** - Removed due to API v4 restrictions
+- **Get-LMLogMessage** - Removed due to API v4 restrictions
+- **Get-LMLogsAlertPipeline** - Removed due to API v4 restrictions
 
 ## 3.9.2
 ###### Updated Commands:
