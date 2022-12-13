@@ -603,7 +603,7 @@ Send-LMPushMetric -Instances $InstanceObj -DatasourceName "My_First_Push_Metric"
 - Set-LMWebsiteGroup*
 - Remove-LMWebsiteGroup*
 
-#### Utilities (Beta)
+#### Utilities
 
 - ConvertTo-LMDynamicGroupFromCategories
 - Export-LMDeviceConfigReport
