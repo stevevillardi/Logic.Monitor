@@ -1,4 +1,4 @@
-[![Publish to PSGallery](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/main.yml/badge.svg?event=release)](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/main.yml)
+[![Build and Test PSGallery Release](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/main.yml/badge.svg?event=release)](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/main.yml)
 
 # General
 
