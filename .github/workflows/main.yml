@@ -16,6 +16,7 @@ jobs:
   publish-to-gallery:
     needs: build
     runs-on: ubuntu-latest
+    environment: publish
     steps:
       - uses: actions/checkout@v2
       - name: Build and publish
