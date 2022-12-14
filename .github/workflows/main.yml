@@ -14,7 +14,6 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   publish-to-gallery:
-    needs: build
     runs-on: ubuntu-latest
     environment: publish
     steps:
