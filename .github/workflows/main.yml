@@ -22,6 +22,7 @@ jobs:
       # API key generated in PSGallery
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          BUILD_VERSION: 3.9.3
         shell: pwsh
         run: |
           ./build_scripts/build.ps1
