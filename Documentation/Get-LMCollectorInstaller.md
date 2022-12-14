@@ -90,7 +90,7 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: Win32, Win64, Linux32, Linux64
+Accepted values: Win64, Linux64
 
 Required: False
 Position: Named
@@ -106,7 +106,7 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: nano, small, medium, large
+Accepted values: nano, small, medium, large, extra_large, double_extra_large
 
 Required: False
 Position: Named

@@ -36,12 +36,12 @@ PS C:\> {{ Add example code here }}
 ```yaml
 Type: String[]
 Parameter Sets: (All)
-Aliases:
+Aliases: Id
 
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

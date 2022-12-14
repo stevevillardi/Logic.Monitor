@@ -92,21 +92,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WildValue
-{{ Fill WildValue Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
 ### -DeviceId
 {{ Fill DeviceId Description }}
 
@@ -146,6 +131,21 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WildValue
+{{ Fill WildValue Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

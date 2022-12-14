@@ -21,7 +21,8 @@ Import-LMMerakiCloud -MerakiAPIToken <String> [-AllowedOrgIds <String[]>] [-Allo
 
 ### List
 ```
-Import-LMMerakiCloud -MerakiAPIToken <String> [-ListOrgIds] [-ListNetworkIds] [<CommonParameters>]
+Import-LMMerakiCloud -MerakiAPIToken <String> [-ListOrgIds] [-ListSNMPInfo] [-ListNetworkIds]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -134,6 +135,21 @@ Accept wildcard characters: False
 ### -ListOrgIds
 List out the available org ids for a given Meraki Portal.
 Useful if you want to use the AllowedOrgIds filter but dont know the id/names of the orgs
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: List
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ListSNMPInfo
+{{ Fill ListSNMPInfo Description }}
 
 ```yaml
 Type: SwitchParameter

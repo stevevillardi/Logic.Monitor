@@ -149,6 +149,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -CustomPrivilegesObject
+{{ Fill CustomPrivilegesObject Description }}
+
+```yaml
+Type: PSObject
+Parameter Sets: Custom
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DashboardsPermission
 {{ Fill DashboardsPermission Description }}
 
@@ -375,21 +390,6 @@ Aliases:
 Accepted values: view, manage, none
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CustomPrivilegesObject
-{{ Fill CustomPrivilegesObject Description }}
-
-```yaml
-Type: PSObject
-Parameter Sets: Custom
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

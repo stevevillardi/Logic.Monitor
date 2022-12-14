@@ -91,6 +91,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DeviceDisplayName
+{{ Fill DeviceDisplayName Description }}
+
+```yaml
+Type: String
+Parameter Sets: DeviceDisplayName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DeviceGroupId
 {{ Fill DeviceGroupId Description }}
 
@@ -112,6 +127,21 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: DeviceGroupName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceHostName
+{{ Fill DeviceHostName Description }}
+
+```yaml
+Type: String
+Parameter Sets: DeviceHostName
 Aliases:
 
 Required: True
@@ -191,36 +221,6 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeviceDisplayName
-{{ Fill DeviceDisplayName Description }}
-
-```yaml
-Type: String
-Parameter Sets: DeviceDisplayName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeviceHostName
-{{ Fill DeviceHostName Description }}
-
-```yaml
-Type: String
-Parameter Sets: DeviceHostName
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

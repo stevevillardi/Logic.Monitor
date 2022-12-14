@@ -12,22 +12,9 @@ schema: 2.0.0
 
 ## SYNTAX
 
-### All (Default)
 ```
-Set-LMOpsNote -Id <String> [-Note <String>] [-NoteDate <DateTime>] [-Tags <String[]>] [-ClearTags]
- [<CommonParameters>]
-```
-
-### Group
-```
-Set-LMOpsNote -Id <String> [-Note <String>] [-NoteDate <DateTime>] [-Tags <String[]>] [-ClearTags]
- [-DeviceGroupIds <String[]>] [<CommonParameters>]
-```
-
-### Resource
-```
-Set-LMOpsNote -Id <String> [-Note <String>] [-NoteDate <DateTime>] [-Tags <String[]>] [-ClearTags]
- [-WebsiteIds <String[]>] [-DeviceIds <String[]>] [<CommonParameters>]
+Set-LMOpsNote [-Id] <String> [[-Note] <String>] [[-NoteDate] <DateTime>] [[-Tags] <String[]>] [-ClearTags]
+ [[-DeviceGroupIds] <String[]>] [[-WebsiteIds] <String[]>] [[-DeviceIds] <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -64,11 +51,11 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String[]
-Parameter Sets: Group
+Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -79,11 +66,11 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String[]
-Parameter Sets: Resource
+Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 6
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -98,7 +85,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
+Position: 0
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
@@ -113,7 +100,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -128,7 +115,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -143,7 +130,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -154,11 +141,11 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String[]
-Parameter Sets: Resource
+Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 5
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

@@ -15,7 +15,7 @@ schema: 2.0.0
 ```
 New-LMDevice [-Name] <String> [-DisplayName] <String> [[-Description] <String>]
  [-PreferredCollectorId] <String> [[-PreferredCollectorGroupId] <String>]
- [-AutoBalancedCollectorGroupId <String>] [[-Properties] <Hashtable>] [[-HostGroupIds] <String[]>]
+ [[-AutoBalancedCollectorGroupId] <String>] [[-Properties] <Hashtable>] [[-HostGroupIds] <String[]>]
  [[-Link] <String>] [[-DisableAlerting] <Boolean>] [[-EnableNetFlow] <Boolean>]
  [[-NetflowCollectorGroupId] <String>] [[-NetflowCollectorId] <String>] [<CommonParameters>]
 ```
@@ -33,6 +33,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -AutoBalancedCollectorGroupId
+{{ Fill AutoBalancedCollectorGroupId Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Description
 {{ Fill Description Description }}
@@ -58,7 +73,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 9
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -88,7 +103,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 9
+Position: 10
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -103,7 +118,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 7
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -118,7 +133,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 8
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -148,7 +163,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 10
+Position: 11
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -163,7 +178,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 11
+Position: 12
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -208,22 +223,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AutoBalancedCollectorGroupId
-{{ Fill AutoBalancedCollectorGroupId Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
+Position: 6
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

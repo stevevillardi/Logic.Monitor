@@ -91,12 +91,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-{{ Fill Type Description }}
+### -Id
+{{ Fill Id Description }}
 
 ```yaml
-Type: String
-Parameter Sets: (All)
+Type: Int32
+Parameter Sets: Id
 Aliases:
 
 Required: False
@@ -106,13 +106,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -Type
+{{ Fill Type Description }}
 
 ```yaml
-Type: Int32
-Parameter Sets: Id
+Type: String
+Parameter Sets: (All)
 Aliases:
+Accepted values: LMv1, Bearer
 
 Required: False
 Position: Named

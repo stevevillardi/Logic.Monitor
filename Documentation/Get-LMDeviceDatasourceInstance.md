@@ -107,36 +107,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Filter
-{{ Fill Filter Description }}
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -HdsId
-{{ Fill HdsId Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-HdsId, Name-HdsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -DeviceId
 {{ Fill DeviceId Description }}
 
@@ -158,6 +128,36 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: Name-dsName, Name-dsId, Name-HdsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Filter
+{{ Fill Filter Description }}
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HdsId
+{{ Fill HdsId Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id-HdsId, Name-HdsId
 Aliases:
 
 Required: True

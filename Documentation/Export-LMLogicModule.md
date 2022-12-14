@@ -12,7 +12,7 @@ Exports a specified logicmodule
 
 ## SYNTAX
 
-### Id
+### Id (Default)
 ```
 Export-LMLogicModule -LogicModuleId <Int32> -Type <String> [-DownloadPath <String>] [<CommonParameters>]
 ```
@@ -45,12 +45,12 @@ Id of the logic module you are looking to export
 ```yaml
 Type: Int32
 Parameter Sets: Id
-Aliases:
+Aliases: Id
 
 Required: True
 Position: Named
 Default value: 0
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

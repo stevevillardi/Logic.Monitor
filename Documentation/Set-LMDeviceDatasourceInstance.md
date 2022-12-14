@@ -115,6 +115,48 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DeviceId
+{{ Fill DeviceId Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id-dsName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+```yaml
+Type: String
+Parameter Sets: Id-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceName
+{{ Fill DeviceName Description }}
+
+```yaml
+Type: String
+Parameter Sets: Name-dsName, Name-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DisableAlerting
 {{ Fill DisableAlerting Description }}
 
@@ -229,48 +271,6 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeviceId
-{{ Fill DeviceId Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-dsName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-```yaml
-Type: String
-Parameter Sets: Id-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeviceName
-{{ Fill DeviceName Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name-dsName, Name-dsId
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
