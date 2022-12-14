@@ -1,0 +1,44 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Test Current Build
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and Test
+      # API key generated in PSGallery
+        env:
+          LM_ACCESS_ID: ${{ secrets.LM_ACCESS_ID }}
+          LM_ACCESS_KEY: ${{ secrets.LM_ACCESS_KEY }}
+          LM_PORTAL: ${{ secrets.LM_PORTAL }}
+          BUILD_VERSION: 9.9.9
+        shell: pwsh
+        run: |
+          ./Build.ps1
+
+          $Data = @{
+            AccessId="$env:LM_ACCESS_ID"
+            AccessKey="$env:LM_ACCESS_KEY"
+            AccountName="$env:LM_PORTAL"
+            Module="./Logic.Monitor.psd1"
+            TestDeviceName="1.1.1.1"
+            TestDeviceDisplayName="Logic.Monitor Build Test Device"
+            PreferredCollectorId="8"
+            TestGroupName = "Logic.Monitor Build Tests"
+          }
+
+          $Container = New-PesterContainer -Path ./Tests/ -Data $Data
+          Invoke-Pester -Container $Container -Output Detailed      

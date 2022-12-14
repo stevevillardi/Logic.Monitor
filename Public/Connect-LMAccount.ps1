@@ -207,7 +207,7 @@ Function Connect-LMAccount {
         }
         Catch{
 
-            Write-Error "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
+            throw "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
             #Clear credential object from environment
             Remove-Variable LMAuth -Scope Global -ErrorAction SilentlyContinue
         }
