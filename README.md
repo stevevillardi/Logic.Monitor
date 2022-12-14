@@ -1,3 +1,5 @@
+[![Publish to PSGallery](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/main.yml/badge.svg?event=release)](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/main.yml)
+
 # General
 
 Windows PowerShell module for accessing the LogicMonitor REST API.
