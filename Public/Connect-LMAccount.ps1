@@ -65,6 +65,11 @@ Function Connect-LMAccount {
 
     If ($UseCachedCredential -or $CachedAccountName) {
 
+        #Autoload web assembly if on older version of powershell
+        If((Get-Host).Version.Major -lt 6){
+            Add-type -AssemblyName System.Web
+        }
+
         Try {
             $ExistingVault = Get-SecretInfo -Name Logic.Monitor -WarningAction Stop
             Write-Host "Existing vault Logic.Monitor already exists, skipping creation" -ForegroundColor Yellow
