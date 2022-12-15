@@ -17,9 +17,7 @@ Function New-LMWebsiteGroup {
         [Int]$ParentGroupId,
 
         [Parameter(Mandatory, ParameterSetName = 'GroupName')]
-        [String]$ParentGroupName,
-
-        [String]$AppliesTo
+        [String]$ParentGroupName
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {

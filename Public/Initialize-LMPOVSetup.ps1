@@ -102,7 +102,7 @@ Function Initialize-LMPOVSetup {
             If (($SetupWebsite -or $RunAll) -and $Website) {
                 Write-Host "[INFO]: Setting up external webcheck for: $Website"
                 $Website = $Website.split("//")[-1] #Make sure http/https is not in the entered site name
-                $WebsiteResult = New-LMWebsite -Type "webcheck" -Name $Website -HttpType $WebsiteHttpType -Hostname $Website
+                $WebsiteResult = New-LMWebsite -Type "webcheck" -Name $Website -HttpType $WebsiteHttpType -WebsiteDomain $Website
                 If ($WebsiteResult) {
                     Write-Host "[INFO]: Successfully setup external webcheck for: $Website"
                 }

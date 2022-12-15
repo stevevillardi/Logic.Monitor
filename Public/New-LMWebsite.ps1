@@ -17,27 +17,38 @@ Function New-LMWebsite {
 
         [Nullable[boolean]]$UseDefaultLocationSetting = $true,
 
+        [Parameter(ParameterSetName="Website")]
         [Nullable[boolean]]$TriggerSSLStatusAlert,
         
+        [Parameter(ParameterSetName="Website")]
         [Nullable[boolean]]$TriggerSSLExpirationAlert,
 
         [String]$GroupId,
 
-        [Parameter(Mandatory)]
-        [String]$Hostname,
+        [Parameter(Mandatory,ParameterSetName="Ping")]
+        [String]$PingAddress,
 
+        [Parameter(Mandatory,ParameterSetName="Website")]
+        [String]$WebsiteDomain,
+
+        [Parameter(ParameterSetName="Website")]
         [ValidateSet("http", "https")]
-        [String]$HttpType,
+        [String]$HttpType = "https",
 
+        [Parameter(ParameterSetName="Website")]
         [String[]]$SSLAlertThresholds,
 
+        [Parameter(ParameterSetName="Ping")]
         [ValidateSet(5, 10, 15, 20, 30, 60)]
         [Nullable[Int]]$PingCount,
 
+        [Parameter(ParameterSetName="Ping")]
         [Nullable[Int]]$PingTimeout,
 
+        [Parameter(ParameterSetName="Website")]
         [Nullable[Int]]$PageLoadAlertTimeInMS,
 
+        [Parameter(ParameterSetName="Ping")]
         [ValidateSet(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)]
         [Nullable[Int]]$PingPercentNotReceived,
 
@@ -125,7 +136,7 @@ Function New-LMWebsite {
                 individualAlertLevel        = $IndividualAlertLevel
                 useDefaultAlertSetting      = $UseDefaultAlertSetting
                 useDefaultLocationSetting   = $UseDefaultLocationSetting
-                host                        = $Hostname
+                host                        = $PingAddress
                 triggerSSLStatusAlert       = $TriggerSSLStatusAlert
                 triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
                 count                       = $PingCount
@@ -135,7 +146,7 @@ Function New-LMWebsite {
                 pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
                 alertExpr                   = $AlertExp
                 schema                      = $HttpType
-                domain                      = $Hostname
+                domain                      = $WebsiteDomain
                 type                        = $Type
                 steps                       = $Steps
             }

@@ -5,7 +5,7 @@ Function Get-LMWebsiteProperty {
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$Id,
 
-        [Parameter(ParameterSetName = 'Name')]
+        [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$Name,
 
         [Hashtable]$Filter,
@@ -22,7 +22,7 @@ Function Get-LMWebsiteProperty {
             }
             $Id = $LookupResult
         }
-        
+
         #Build header and uri
         $ResourcePath = "/website/websites/$Id/properties"
 

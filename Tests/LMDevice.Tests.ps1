@@ -10,6 +10,38 @@ Describe 'Device Testing New/Get/Set/Remove' {
             $Script:NewDevice | Should -Not -BeNullOrEmpty
         }
     }
+
+    Describe 'New-LMDeviceProperty' {
+        It 'When given mandatory parameters, returns a created property with matching values' {
+            $DeviceProp = New-LMDeviceProperty -Id $Script:NewDevice.Id -PropertyName "newpropname" -PropertyValue "NewPropValue"
+            $DeviceProp | Should -Not -BeNullOrEmpty
+            $DeviceProp.name | Should -BeLike "newpropname"
+            $DeviceProp.value | Should -BeLike "NewPropValue"
+        }
+    }
+
+    Describe 'Get-LMDeviceProperty' {
+        It 'When given mandatory parameters, returns a specified property' {
+            $DeviceProp = Get-LMDeviceProperty -Id $Script:NewDevice.Id -PropertyName "newpropname"
+            $DeviceProp | Should -Not -BeNullOrEmpty
+            $DeviceProp.name | Should -BeLike "newpropname"
+        }
+    }
+
+    Describe 'Set-LMDeviceProperty' {
+        It 'When given mandatory parameters, returns a updated property with matching values' {
+            $DeviceProp = Set-LMDeviceProperty -Id $Script:NewDevice.Id -PropertyName "newpropname" -PropertyValue "UpdatedPropValue"
+            $DeviceProp | Should -Not -BeNullOrEmpty
+            $DeviceProp.name | Should -BeLike "newpropname"
+            $DeviceProp.value | Should -BeLike "UpdatedPropValue"
+        }
+    }
+
+    Describe 'Remove-LMDeviceProperty' {
+        It 'When given an id, remove the device property from resource' {
+            { Remove-LMDeviceProperty -Id $Script:NewDevice.Id -PropertyName "newpropname" } | Should -Not -Throw
+        }
+    }
     
     Describe 'Get-LMDevice' {
         It 'When given no parameters, returns all devices' {

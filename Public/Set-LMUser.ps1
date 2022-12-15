@@ -8,6 +8,8 @@ Function Set-LMUser {
         [Parameter(Mandatory, ParameterSetName = 'Username')]
         [String]$Username,
 
+        [String]$NewUsername,
+
         [String]$Email,
 
         [String[]]$UserGroups,
@@ -123,7 +125,7 @@ Function Set-LMUser {
     
             Try {
                 $Data = @{
-                    username            = $Username
+                    username            = $NewUsername
                     email               = $Email
                     acceptEULA          = $AcceptEULA
                     password            = $Password
