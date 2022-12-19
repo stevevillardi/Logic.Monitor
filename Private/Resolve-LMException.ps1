@@ -28,10 +28,10 @@ Function Resolve-LMException {
                 Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException" -ErrorAction SilentlyContinue
                 #Pretty print error to console
                 If($ErrorActionPreference -ne "SilentlyContinue"){
-                    # [Console]::ForegroundColor = 'red'
-                    # [Console]::Error.WriteLine("Failed to execute web request($($HttpStatusCode)): $HttpException")
-                    # [Console]::ResetColor()
-                    throw "Failed to execute web request($($HttpStatusCode)): $HttpException"
+                    [Console]::ForegroundColor = 'red'
+                    [Console]::Error.WriteLine("Failed to execute web request($($HttpStatusCode)): $HttpException")
+                    [Console]::ResetColor()
+                    #throw "Failed to execute web request($($HttpStatusCode)): $HttpException"
                 }
             }
             default {
@@ -42,10 +42,10 @@ Function Resolve-LMException {
                 Write-Error "Failed to execute web request: $LMError" -ErrorAction SilentlyContinue
                 #Pretty print error to console
                 If($ErrorActionPreference -ne "SilentlyContinue"){
-                # [Console]::ForegroundColor = 'red'
-                # [Console]::Error.WriteLine("Failed to execute web request: $LMError")
-                # [Console]::ResetColor()
-                throw "Failed to execute web request: $LMError"
+                    [Console]::ForegroundColor = 'red'
+                    [Console]::Error.WriteLine("Failed to execute web request: $LMError")
+                    [Console]::ResetColor()
+                    #throw "Failed to execute web request: $LMError"
                 }
             }
         }

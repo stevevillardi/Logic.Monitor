@@ -6,7 +6,7 @@ Describe 'DeviceGroup Testing New/Get/Set/Remove' {
     
     Describe 'New-LMDeviceGroup' {
         It 'When given mandatory parameters, returns a created group with matching values' {
-            $Script:NewDeviceGroup = New-LMDeviceGroup -Name $TestGroupName -Description "Testing123" -ParentGroupId 1 -Properties @{"testing"="123"} -DisableAlerting $true -AppliesTo "false()"
+            $Script:NewDeviceGroup = New-LMDeviceGroup -Name "DeviceGroup.Build.Test" -Description "Testing123" -ParentGroupId 1 -Properties @{"testing"="123"} -DisableAlerting $true -AppliesTo "false()"
             $Script:NewDeviceGroup | Should -Not -BeNullOrEmpty
             $Script:NewDeviceGroup.Description | Should -Be "Testing123"
             $Script:NewDeviceGroup.DisableAlerting | Should -Be $true
@@ -24,7 +24,7 @@ Describe 'DeviceGroup Testing New/Get/Set/Remove' {
             $DeviceGroup = Get-LMDeviceGroup -Id $Script:NewDeviceGroup.Id
             ($DeviceGroup | Measure-Object).Count | Should -BeExactly 1
         }
-        It 'When given a name should return all devices matching that name' {
+        It 'When given a name should return specified device matching that name' {
             $DeviceGroup = Get-LMDeviceGroup -Name $Script:NewDeviceGroup.Name
             ($DeviceGroup | Measure-Object).Count | Should -BeExactly 1
         }
@@ -36,7 +36,7 @@ Describe 'DeviceGroup Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMDeviceGroup' {
         It 'When given a set of parameters, returns an updated group with matching values' {
-            { $DeviceGroup = Set-LMDeviceGroup -Id $Script:NewDeviceGroup.Id -Description "Updated" -Properties @{"test"="123";"test2"="456"} 
+            { $DeviceGroup = Set-LMDeviceGroup -Id $Script:NewDeviceGroup.Id -Description "Updated" -Properties @{"test"="123";"test2"="456"} -ErrorAction Stop
                 $DeviceGroup.Description | Should -Be "Updated"
                 $DeviceGroup.CustomProperties.name.IndexOf("test") | Should -Not -BeExactly -1
                 $DeviceGroup.CustomProperties.name.IndexOf("test2") | Should -Not -BeExactly -1
@@ -46,7 +46,7 @@ Describe 'DeviceGroup Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMDeviceGroup' {
         It 'When given an id, remove the group from logic monitor' {
-            { Remove-LMDeviceGroup -Id $Script:NewDeviceGroup.Id -HardDelete $true } | Should -Not -Throw
+            { Remove-LMDeviceGroup -Id $Script:NewDeviceGroup.Id -HardDelete $true -ErrorAction Stop } | Should -Not -Throw
         }
     }
     

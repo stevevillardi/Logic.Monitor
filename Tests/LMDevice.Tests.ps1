@@ -6,7 +6,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
     
     Describe 'New-LMDevice' {
         It 'When given mandatory parameters, returns a created resource with matching values' {
-            $Script:NewDevice = New-LMDevice -Name $TestDeviceName -DisplayName $TestDeviceDisplayName -PreferredCollectorId $PreferredCollectorId -DisableAlerting $true
+            $Script:NewDevice = New-LMDevice -Name "1.1.1.1" -DisplayName "Device.Build.Test" -PreferredCollectorId $PreferredCollectorId -DisableAlerting $true
             $Script:NewDevice | Should -Not -BeNullOrEmpty
         }
     }
@@ -39,7 +39,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMDeviceProperty' {
         It 'When given an id, remove the device property from resource' {
-            { Remove-LMDeviceProperty -Id $Script:NewDevice.Id -PropertyName "newpropname" } | Should -Not -Throw
+            { Remove-LMDeviceProperty -Id $Script:NewDevice.Id -PropertyName "newpropname" -ErrorAction Stop } | Should -Not -Throw
         }
     }
     
@@ -64,7 +64,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMDevice' {
         It 'When given a set of parameters, returns an updated resource with matching values' {
-            { $Device = Set-LMDevice -Id $Script:NewDevice.Id -Description "Updated" -Properties @{"test"="123";"test2"="456"} 
+            { $Device = Set-LMDevice -Id $Script:NewDevice.Id -Description "Updated" -Properties @{"test"="123";"test2"="456"}  -ErrorAction Stop
                 $Device.Description | Should -Be "Updated"
                 $Device.CustomProperties.name.IndexOf("test") | Should -Not -BeExactly -1
                 $Device.CustomProperties.name.IndexOf("test2") | Should -Not -BeExactly -1
@@ -74,7 +74,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMDevice' {
         It 'When given an id, remove the device from logic monitor' {
-            { Remove-LMDevice -Id $Script:NewDevice.Id -HardDelete $true } | Should -Not -Throw
+            { Remove-LMDevice -Id $Script:NewDevice.Id -HardDelete $true  -ErrorAction Stop} | Should -Not -Throw
         }
     }
     

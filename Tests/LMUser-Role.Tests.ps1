@@ -31,7 +31,7 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
             $User = Get-LMUser -Id $Script:NewUser.Id
             ($User | Measure-Object).Count | Should -BeExactly 1
         }
-        It 'When given a name should return all users matching that name' {
+        It 'When given a name should return specified user matching that name' {
             $User = Get-LMUser -Name $Script:NewUser.UserName
             ($User | Measure-Object).Count | Should -BeExactly 1
         }
@@ -50,7 +50,7 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
             $Role = Get-LMRole -Id $Script:NewRole.Id
             ($Role | Measure-Object).Count | Should -BeExactly 1
         }
-        It 'When given a name should return all roles matching that name' {
+        It 'When given a name should return specified role matching that name' {
             $Role = Get-LMRole -Name $Script:NewRole.Name
             ($Role | Measure-Object).Count | Should -BeExactly 1
         }
@@ -62,7 +62,7 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMUser' {
         It 'When given a set of parameters, returns an updated user with matching values' {
-            { $User = Set-LMUser -Id $Script:NewUser.Id -Note "Updated" -NewUsername "User.Build.Test.Updated"
+            { $User = Set-LMUser -Id $Script:NewUser.Id -Note "Updated" -NewUsername "User.Build.Test.Updated" -ErrorAction Stop
                 $User.Note | Should -Be "Updated"
                 $User.Username | Should -Be "User.Build.Test.Updated"
             } | Should -Not -Throw
@@ -71,7 +71,7 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMRole' {
         It 'When given a set of parameters, returns an updated role with matching values' {
-            { $Role = Set-LMRole -Id $Script:NewRole.Id -Description "Updated" -NewName "Role.Build.Test.Updated" -CustomHelpLabel "Example Help" -CustomHelpURL "https://logicmonitor.com"
+            { $Role = Set-LMRole -Id $Script:NewRole.Id -Description "Updated" -NewName "Role.Build.Test.Updated" -CustomHelpLabel "Example Help" -CustomHelpURL "https://logicmonitor.com" -ErrorAction Stop
                 $Role.Description | Should -Be "Updated"
                 $Role.Name | Should -Be "Role.Build.Test.Updated"
                 $Role.CustomHelpLabel | Should -Be "Example Help"
@@ -82,13 +82,13 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMUser' {
         It 'When given an id, remove the user from logic monitor' {
-            { Remove-LMUser -Id $Script:NewUser.Id } | Should -Not -Throw
+            { Remove-LMUser -Id $Script:NewUser.Id -ErrorAction Stop } | Should -Not -Throw
         }
     }
 
     Describe 'Remove-LMRole' {
         It 'When given an id, remove the role from logic monitor' {
-            { Remove-LMRole -Id $Script:NewRole.Id  } | Should -Not -Throw
+            { Remove-LMRole -Id $Script:NewRole.Id -ErrorAction Stop  } | Should -Not -Throw
         }
     }
     

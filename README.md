@@ -107,12 +107,6 @@ Send LM Log Message:
 Send-LMLogMessage -Message "Hello World!" -resourceMapping @{"system.displayname"="LM-COLL"} -Metadata @{"extra-data"="value";"extra-data2"="value2"}
 ```
 
-Get LM Log Message:
-
-```powershell
-Get-LMLogMessage -Range 1month -Query "error text"
-```
-
 Add a new user to LogicMonitor:
 ```powershell
 New-LMUser -RoleNames @("administrator") -Password "changeme" -FirstName John -LastName Doe -Email jdoe@example.com -Username jdoe@example.com -ForcePasswordChange $true -Phone "5558675309"
@@ -363,7 +357,6 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 ###### Module Updates:
 - Automated build and release pipelines have been created to streamline the build and release process.
 - Pester testing framework has been created and will be added to throughout future versions to improve testing code coverage
-- All commands will now throw an exception if the assocaited REST call does not come back as a status code 200, previously this was just written to console as an error message.
 - All previous release notes have been migrated to a seperate release notes page. Going forward only current release notes will be present on the main page.
 
 ###### Update Commands/Bug Fixes:

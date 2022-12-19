@@ -34,10 +34,7 @@ jobs:
             AccessKey="$env:LM_ACCESS_KEY"
             AccountName="$env:LM_PORTAL"
             Module="./Logic.Monitor.psd1"
-            TestDeviceName="1.1.1.1"
-            TestDeviceDisplayName="Logic.Monitor Build Test Device"
             PreferredCollectorId="8"
-            TestGroupName = "Logic.Monitor Build Tests"
           }
 
           $Container = New-PesterContainer -Path ./Tests/ -Data $Data

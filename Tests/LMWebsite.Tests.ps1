@@ -29,7 +29,7 @@ Describe 'Website Testing New/Get/Set/Remove' {
             $Website = Get-LMWebsite -Id $Script:NewWebsite.Id
             ($Website | Measure-Object).Count | Should -BeExactly 1
         }
-        It 'When given a name should return all websites matching that name' {
+        It 'When given a name should return specified website matching that name' {
             $Website = Get-LMWebsite -Name $Script:NewWebsite.Name
             ($Website | Measure-Object).Count | Should -BeExactly 1
         }
@@ -45,7 +45,7 @@ Describe 'Website Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMWebsite' {
         It 'When given a set of parameters, returns an updated website with matching values' {
-            { $Device = Set-LMWebsite -Id $Script:NewWebsite.Id -Description "Updated" -Properties @{"test"="123";"test2"="456"} 
+            { $Device = Set-LMWebsite -Id $Script:NewWebsite.Id -Description "Updated" -Properties @{"test"="123";"test2"="456"} -ErrorAction Stop
                 $Device.Description | Should -Be "Updated"
                 $Device.Properties.name.IndexOf("test") | Should -Not -BeExactly -1
                 $Device.Properties.name.IndexOf("test2") | Should -Not -BeExactly -1
@@ -55,7 +55,7 @@ Describe 'Website Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMWebsite' {
         It 'When given an id, remove the device from logic monitor' {
-            { Remove-LMWebsite -Id $Script:NewWebsite.Id } | Should -Not -Throw
+            { Remove-LMWebsite -Id $Script:NewWebsite.Id -ErrorAction Stop } | Should -Not -Throw
         }
     }
     
