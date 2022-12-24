@@ -45,5 +45,5 @@ jobs:
           #Write OpsNote to test portal indicating test status
           Connect-LMAccount -AccessId $env:LM_ACCESS_ID -AccessKey $env:LM_ACCESS_KEY -AccountName $env:LM_PORTAL -DisableConsoleLogging
           $TimeNow = Get-Date -UFormat %m%d%Y-%H%M
-          New-LMOpsNote -Note "Github test build submitted on $TimeNow - $($Result.Result)" -Tags @("GithubActions","TestPipeline")
+          $OpsNote = New-LMOpsNote -Note "Github test build submitted on $TimeNow - $($Result.Result)" -Tags @("GithubActions","TestPipeline")
 

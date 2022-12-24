@@ -30,11 +30,19 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
             ($OpsNote | Measure-Object).Count | Should -BeExactly 1
         }
         It 'When given a name should return specified opsnote matching that tag value' {
-            $OpsNote = Get-LMOpsNote -Tag $Script:NewOpsNote.Tags.name
+            $Retry = 0
+            While(!$OpsNote -or $Retry -eq 5){
+                $OpsNote = Get-LMOpsNote -Tag $Script:NewOpsNote.Tags.name -ErrorAction SilentlyContinue
+                $Retry++
+            }
             ($OpsNote | Measure-Object).Count | Should -BeExactly 1
         }
         It 'When given a wildcard name should return all opsnotes matching that wildcard value' {
-            $OpsNote = Get-LMOpsNote -Tag "$(($Script:NewOpsNote.Tags.name.Split(".")[0]))*"
+            $Retry = 0
+            While(!$OpsNote -or $Retry -eq 5){
+                $OpsNote = Get-LMOpsNote -Tag "$(($Script:NewOpsNote.Tags.name.Split(".")[0]))*"  -ErrorAction SilentlyContinue
+                $Retry++
+            }
             ($OpsNote | Measure-Object).Count | Should -BeGreaterThan 0
         }
     }
