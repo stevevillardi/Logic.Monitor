@@ -3,7 +3,7 @@ Function Remove-LMCachedAccount {
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Single', ValueFromPipelineByPropertyName)]
         [Alias("Portal")]
-        [String]$AccountName,
+        [String]$CachedAccountName,
 
         [Parameter(ParameterSetName = 'All')]
         [Boolean]$RemoveAllEntries = $false
@@ -26,8 +26,8 @@ Function Remove-LMCachedAccount {
         }
         Else{
             Try{
-                Remove-Secret -Name $AccountName -Vault Logic.Monitor -Confirm:$false -ErrorAction Stop
-                Write-Host "Removed cached account secret for: $AccountName"
+                Remove-Secret -Name $CachedAccountName -Vault Logic.Monitor -Confirm:$false -ErrorAction Stop
+                Write-Host "Removed cached account secret for: $CachedAccountName"
             }
             Catch{
                 Write-Error $_.Exception.Message

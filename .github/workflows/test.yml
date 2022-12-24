@@ -24,6 +24,7 @@ jobs:
           LM_ACCESS_ID: ${{ secrets.LM_ACCESS_ID }}
           LM_ACCESS_KEY: ${{ secrets.LM_ACCESS_KEY }}
           LM_PORTAL: ${{ secrets.LM_PORTAL }}
+          LM_BEARER_TOKEN: ${{ secrets.LM_BEARER_TOKEN }}
           BUILD_VERSION: 9.9.9
         shell: pwsh
         run: |
@@ -33,9 +34,16 @@ jobs:
             AccessId="$env:LM_ACCESS_ID"
             AccessKey="$env:LM_ACCESS_KEY"
             AccountName="$env:LM_PORTAL"
+            BearerToken="$env:LM_BEARER_TOKEN"
             Module="./Logic.Monitor.psd1"
             PreferredCollectorId="8"
           }
 
           $Container = New-PesterContainer -Path ./Tests/ -Data $Data
-          Invoke-Pester -Container $Container -Output Detailed      
+          $Result = Invoke-Pester -Container $Container -Output Detailed -PassThru
+
+          #Write OpsNote to test portal indicating test status
+          Connect-LMAccount -AccessId $env:LM_ACCESS_ID -AccessKey $env:LM_ACCESS_KEY -AccountName $env:LM_PORTAL -DisableConsoleLogging
+          $TimeNow = Get-Date -UFormat %m%d%Y-%H%M
+          New-LMOpsNote -Note "Github test build submitted on $TimeNow - $($Result.Result)" -Tags @("GithubActions","TestPipeline")
+

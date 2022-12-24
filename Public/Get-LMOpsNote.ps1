@@ -5,8 +5,8 @@ Function Get-LMOpsNote {
         [Parameter(ParameterSetName = 'Id')]
         [String]$Id,
 
-        [Parameter(ParameterSetName = 'Name')]
-        [String]$Name,
+        [Parameter(ParameterSetName = 'Tag')]
+        [String]$Tag,
 
         [Parameter(ParameterSetName = 'Filter')]
         [Hashtable]$Filter,
@@ -31,7 +31,7 @@ Function Get-LMOpsNote {
             Switch ($PSCmdlet.ParameterSetName) {
                 "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
                 "Id" { $resourcePath += "/$Id" }
-                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
+                "Tag" { $QueryParams = "?filter=tags:`"$Tag`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()

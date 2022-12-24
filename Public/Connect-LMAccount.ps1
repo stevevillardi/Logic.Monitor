@@ -11,6 +11,9 @@ Access ID from your API credential acquired from the LM Portal
 .PARAMETER AccessKey
 Access Key from your API credential acquired from the LM Portal
 
+.PARAMETER BearerToken
+Bearer token from your API credential acquired from the LM Portal. For use in place of LMv1 token
+
 .PARAMETER AccountName
 The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)
 
@@ -25,6 +28,9 @@ Disables on stdout messages from displaying for any subsequent commands are run.
 
 .EXAMPLE
 Connect-LMAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
+
+.EXAMPLE
+Connect-LMAccount -BearerToken xxxxxx -AccountName subdomain
 
 .EXAMPLE
 Connect-LMAccount -UseCachedCredential
@@ -43,15 +49,19 @@ PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
 #>
 Function Connect-LMAccount {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName="LMv1")]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Manual')]
+        [Parameter(Mandatory, ParameterSetName = 'LMv1')]
         [String]$AccessId,
 
-        [Parameter(Mandatory, ParameterSetName = 'Manual')]
+        [Parameter(Mandatory, ParameterSetName = 'LMv1')]
         [String]$AccessKey,
 
-        [Parameter(Mandatory, ParameterSetName = 'Manual')]
+        [Parameter(Mandatory, ParameterSetName = 'Bearer')]
+        [String]$BearerToken,
+
+        [Parameter(Mandatory, ParameterSetName = 'LMv1')]
+        [Parameter(Mandatory, ParameterSetName = 'Bearer')]
         [String]$AccountName,
 
         [Parameter(ParameterSetName = 'Cached')]
@@ -63,12 +73,12 @@ Function Connect-LMAccount {
         [Switch]$DisableConsoleLogging
     )
 
-    If ($UseCachedCredential -or $CachedAccountName) {
+    #Autoload web assembly if on older version of powershell
+    If((Get-Host).Version.Major -lt 6){
+        Add-type -AssemblyName System.Web
+    }
 
-        #Autoload web assembly if on older version of powershell
-        If((Get-Host).Version.Major -lt 6){
-            Add-type -AssemblyName System.Web
-        }
+    If ($UseCachedCredential -or $CachedAccountName) {
 
         Try {
             $ExistingVault = Get-SecretInfo -Name Logic.Monitor -WarningAction Stop
@@ -119,8 +129,14 @@ Function Connect-LMAccount {
             $CachedAccountIndex = $CachedAccountSecrets.Name.IndexOf($CachedAccountName)
             If($CachedAccountIndex -ne -1){
                 $AccountName = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Portal"]
-                [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                 $AccessId = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Id"]
+                $Type = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Type"]
+                If(($Type -eq "LMv1") -or ($null -eq $Type)){
+                    [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
+                }
+                Else{
+                    [SecureString]$BearerToken = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
+                }
             }
             Else{
                 Write-Error "Entered CachedAccountName ($CachedAccountName) does not match one of the stored credentials, please check the selected entry and try again"
@@ -140,8 +156,14 @@ Function Connect-LMAccount {
                 $StoredCredentialIndex = Read-Host -Prompt "Enter the number for the cached credential you wish to use"
                 If ($CachedAccountSecrets[$StoredCredentialIndex]) {
                     $AccountName = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Portal"]
-                    [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $AccountName -AsPlainText | ConvertTo-SecureString
                     $AccessId = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Id"]
+                    $Type = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Type"]
+                    If($AccessId){
+                        [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $AccountName -AsPlainText | ConvertTo-SecureString
+                    }
+                    Else{
+                        [SecureString]$BearerToken = Get-Secret -Vault "Logic.Monitor" -Name $AccountName -AsPlainText | ConvertTo-SecureString
+                    }
                 }
                 Else {
                     Write-Error "Entered value does not match one of the listed credentials, please check the selected entry and try again"
@@ -155,37 +177,60 @@ Function Connect-LMAccount {
         }
     }
     Else {
-        #Convert to secure string
-        [SecureString]$AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force
+        If($PsCmdlet.ParameterSetName -eq "LMv1"){
+            #Convert to secure string
+            [SecureString]$AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force
+            $Type = "LMv1"
+        }
+        Else{
+            #Convert to secure string
+            [SecureString]$BearerToken = $BearerToken | ConvertTo-SecureString -AsPlainText -Force
+            $Type = "Bearer"
+        }
+    }
+
+    If(!$Type){
+        $Type = "LMv1"
     }
     
     #Create Credential Object for reuse in other functions
     $Script:LMAuth = [PSCustomObject]@{
         Id     = $AccessId
         Key    = $AccessKey
+        BearerToken    = $BearerToken
         Portal = $AccountName
-        Valid  = $false
+        Valid  = $true
         Logging = !$DisableConsoleLogging.IsPresent
+        Type = $Type
     }
 
     #Check for newer version of Logic.Monitor module
     Update-LogicMonitorModule -CheckOnly
 
+    #Bearer token warning banner
+    If($Type -eq "Bearer"){
+        Write-LMHost "[WARN]: Please note that while usage of Bearer tokens in this module is supported, not all  LM v3 API endpoints currently support both LMv1 and Bearer authentication methods. If you encounter authentication issues try using an LMv1 token instead." -ForegroundColor Yellow
+    }
+
     Try {
-        #Set valid flag so we dont prompt for auth details on future requests
-        $Script:LMAuth.Valid = $true
 
         #Collect portal info and api username and roles
-        $ApiInfo = Get-LMAPIToken -Filter @{accessId = $AccessId } -ErrorAction SilentlyContinue
+        If($Type -eq "Bearer"){
+            $Token = [System.Net.NetworkCredential]::new("", $BearerToken).Password
+            $ApiInfo = Get-LMAPIToken -Type Bearer -ErrorAction SilentlyContinue | Where-Object {$_.accessKey -like "$($Token.Substring(0,20))*"}
+        }
+        Else{
+            $ApiInfo = Get-LMAPIToken -Filter @{accessId = $AccessId } -ErrorAction SilentlyContinue
+        }
         If ($ApiInfo) {
             $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
-            Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) using account $($ApiInfo.adminName) with assigned roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
+            Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) using account ($($ApiInfo.adminName) via $Type Token) with assigned roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
             Return
         }
         Else {
             Try{
                 $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
-                Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) using access id $AccessId - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
+                Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) via $Type Token - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
                 Return
             }
             Catch {
@@ -198,7 +243,7 @@ Function Connect-LMAccount {
             $DeviceInfo = Get-LMDevice -ErrorAction Stop
 
             If($DeviceInfo){
-                Write-LMHost "Connected to LM portal $AccountName with limited permissions, ensure your api token has the necessary rights needed to run desired commands." -ForegroundColor Yellow
+                Write-LMHost "Connected to LM portal $AccountName via $Type Token with limited permissions, ensure your api token has the necessary rights needed to run desired commands." -ForegroundColor Yellow
                 Return
             }
             Else{

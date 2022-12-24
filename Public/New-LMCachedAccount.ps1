@@ -19,16 +19,22 @@ New-LMCachedAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
 #>
 Function New-LMCachedAccount {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName="LMv1")]
     Param (
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName="LMv1")]
         [String]$AccessId,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName="LMv1")]
         [String]$AccessKey,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName="LMv1")]
+        [Parameter(Mandatory, ParameterSetName="Bearer")]
         [String]$AccountName,
+
+        [Parameter(Mandatory, ParameterSetName="Bearer")]
+        [String]$BearerToken,
+
+        [String]$CachedAccountName = $AccountName,
 
         [Boolean]$OverwriteExisting = $false
     )
@@ -47,15 +53,27 @@ Function New-LMCachedAccount {
 
     $CurrentDate = Get-Date
     #Convert to secure string
-    $AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
-    [Hashtable]$Metadata = @{
-        Portal      = [String]$AccountName
-        Id          = [String]$AccessId
-        Modified    = [DateTime]$CurrentDate
+    If($BearerToken){
+        $Secret = $BearerToken | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
+        [Hashtable]$Metadata = @{
+            Portal      = [String]$AccountName
+            Id          = "$($BearerToken.Substring(0,20))****"
+            Modified    = [DateTime]$CurrentDate
+            Type    = "Bearer"
+        }
+    }
+    Else{
+        $Secret = $AccessKey | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
+        [Hashtable]$Metadata = @{
+            Portal      = [String]$AccountName
+            Id          = [String]$AccessId
+            Modified    = [DateTime]$CurrentDate
+            Type    = "LMv1"
+        }
     }
     Try{
-        Set-Secret -Name $AccountName -Secret $AccessKey -Vault Logic.Monitor -Metadata $Metadata -NoClobber:$(!$OverwriteExisting)
-        Write-Host "Successfully created cached account secret for portal: $AccountName"
+        Set-Secret -Name $CachedAccountName -Secret $Secret -Vault Logic.Monitor -Metadata $Metadata -NoClobber:$(!$OverwriteExisting)
+        Write-Host "Successfully created cached account ($CachedAccountName) secret for portal: $AccountName"
     }
     Catch{
         Write-Error $_.Exception.Message
