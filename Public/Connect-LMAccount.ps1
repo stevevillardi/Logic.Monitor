@@ -254,7 +254,7 @@ Function Connect-LMAccount {
 
             throw "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
             #Clear credential object from environment
-            Remove-Variable LMAuth -Scope Global -ErrorAction SilentlyContinue
+            Remove-Variable LMAuth -Scope Script -ErrorAction SilentlyContinue
         }
         Return
     }

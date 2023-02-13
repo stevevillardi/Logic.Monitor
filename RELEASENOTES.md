@@ -1,4 +1,16 @@
 # Previous module release notes
+## 4.0
+###### Module Updates:
+- Automated build and release pipelines have been created to streamline the build and release process.
+- Pester testing framework has been created and will be added to throughout future versions to improve testing code coverage
+- All previous release notes have been migrated to a seperate release notes page. Going forward only current release notes will be present on the main page.
+
+###### Update Commands/Bug Fixes:
+- **Set-LMUser**: Added new parameter *-NewUsername* to allow for updating the username property, previously there was a bug in the parameter sets that did not allow you to update the username.
+- **New-LMWebsiteGroup**: Removed unnecessary parameter *-AppliesTo*.
+- **New-LMWebsite**: Split out parameter sets for pingcheck and webchecks to make it easier to see which properties are required depending on what type of check you are creating. Also split out the parameter *-Hostname* to be *-PingAddress* or *-WebsiteAddress* depending on which type of check you are creating.
+- **Initialize-LMPOVSetup**: Updated website creation to utilize new *-WebsiteAddress* parameter when calling **New-LMWebsite**.
+- **Get-LMWebsiteProperty**: Fixed bug that did not require the *-Name* parameter as mandatory if querying by resource name.
 
 ## 3.9.3
 ###### Update Commands/Bug Fixes:

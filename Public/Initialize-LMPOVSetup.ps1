@@ -203,7 +203,7 @@ Function Initialize-LMPOVSetup {
                     #Import LM Logs Datasource
                     #Use imporved version with metadata over the orginal version
                     #Import-LMExchangeModule -LMExchangeId "896d0c2c-a993-4f0b-8db2-2bb29947cb52" #v2 modules
-                    Import-LMExchangeModule -LMExchangeId "b853607c-e0f1-4682-abc0-2be3e4edbb8e" #core module
+                    Import-LMExchangeModule -LMExchangeId "16831b61-4ab1-4f8e-810c-64c39d0128ba" #core module
                     Start-Sleep -Seconds 5 #Added manual pause to ensure datasource is available after importing from the exchange
                     $LogsDatasource = Set-LMDatasource -Name Windows_Events_LMLogs -appliesTo "isWindows() && lmlogs.winevent.channels && lmaccess.id && lmaccess.key && lmaccount"
                     If($LogsDatasource){

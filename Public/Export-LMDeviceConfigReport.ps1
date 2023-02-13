@@ -77,12 +77,17 @@ Function Export-LMDeviceConfigReport {
 
         #Loop through Network group devices and pull list of applied ConfigSources
         $instance_list = @()
+        Write-LMHost -Message "Found $(($network_devices | Measure-Object).Count) devices."
         Foreach ($device in $network_devices) {
+            Write-LMHost -Message "Collecting configurations for: $($device.displayName)"
             $device_config_sources = Get-LMDeviceDatasourceList -id $device.id | ? { $_.dataSourceType -eq "CS" }
 
+            Write-LMHost -Message "Found $(($device_config_sources | Measure-Object).Count) configsource(s)."
+            
             #Loop through DSes and pull all instances matching running or current and add them to processing list
             Foreach ($config_source in $device_config_sources) {
-                $running_config_instance = Get-LMDeviceDatasourceInstance -id $config_source.deviceId -DatasourceId $config_source.dataSourceId | ? { $_.displayName -like "*running*" -or $_.displayName -like "*current*" -or $_.name -like "PaloAlto*" } | Select-Object -First 1
+                $running_config_instance = Get-LMDeviceDatasourceInstance -DeviceId $config_source.deviceId -DatasourceId $config_source.dataSourceId | ? { $_.displayName -like "*running*" -or $_.displayName -like "*current*" -or $_.name -like "PaloAlto*"} | Select-Object -First 1
+                Write-LMHost -Message "Found $(($running_config_instance | Measure-Object).Count) configsource instances."
                 If ($running_config_instance) {
                     $instance_list += [PSCustomObject]@{
                         deviceId              = $device.id
@@ -108,10 +113,11 @@ Function Export-LMDeviceConfigReport {
         Foreach ($instance in $instance_list) {
             $device_configs += Get-LMDeviceConfigSourceDiff -id $instance.deviceId -HdsId $instance.dataSourceId -HdsInsId $instance.instanceId
         }
-
+        
         #We found some config changes, let organize them
         $output_list = @()
         If ($device_configs) {
+            Write-LMHost -Message "Found $(($device_configs | Measure-Object).Count) configsource instance versions for: : $($device.displayName)"
             #Get start and end epoch range
             $start_date = [Math]::Floor((New-TimeSpan -Start (Get-Date "01/01/1970") -End ((Get-Date).AddDays(-$DaysBack).ToUniversalTime())).TotalMilliseconds)
             $end_date = [Math]::Floor((New-TimeSpan -Start (Get-Date "01/01/1970") -End ((Get-Date).ToUniversalTime())).TotalMilliseconds)
@@ -141,15 +147,19 @@ Function Export-LMDeviceConfigReport {
             }
         }
 
-
-        #Generate HTML Report
-        New-HTML -TitleText "LogicMonitor - Config Report" -ShowHTML:$ShowHtml -Online -FilePath $Path {
-            New-HTMLPanel {
-                New-HTMLTable -DataTable $output_list -HideFooter -ScrollCollapse -PagingLength 1000 {
-                    New-TableHeader -Title "LogicMonitor - Config Report (Last $DaysBack days)" -Alignment center -BackGroundColor BuddhaGold -Color White -FontWeight bold
-                    New-TableRowGrouping -Name "deviceDisplayName"
+        If($output_list){
+            #Generate HTML Report
+            New-HTML -TitleText "LogicMonitor - Config Report" -ShowHTML:$ShowHtml -Online -FilePath $Path {
+                New-HTMLPanel {
+                    New-HTMLTable -DataTable $output_list -HideFooter -ScrollCollapse -PagingLength 1000 {
+                        New-TableHeader -Title "LogicMonitor - Config Report (Last $DaysBack days)" -Alignment center -BackGroundColor BuddhaGold -Color White -FontWeight bold
+                        New-TableRowGrouping -Name "deviceDisplayName"
+                    }
                 }
             }
+        }
+        Else{
+            Write-LMHost -Message "Did not find any configs to output, check your parameters and try again." -ForegroundColor Yellow
         }
         
     }

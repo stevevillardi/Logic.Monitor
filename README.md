@@ -353,17 +353,16 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 ***Note**: Supports Pipline Input
 
 # Change List
-## 4.0
+## 4.0.1
 ###### Module Updates:
-- Automated build and release pipelines have been created to streamline the build and release process.
-- Pester testing framework has been created and will be added to throughout future versions to improve testing code coverage
-- All previous release notes have been migrated to a seperate release notes page. Going forward only current release notes will be present on the main page.
+- Fix scope bug on Connect-LMAccount cmdlet
+- Added support for **Bearer Token** authenticaiton when running Connect-LMAccount and New-LMCachedAccount
 
 ###### Update Commands/Bug Fixes:
-- **Set-LMUser**: Added new parameter *-NewUsername* to allow for updating the username property, previously there was a bug in the parameter sets that did not allow you to update the username.
-- **New-LMWebsiteGroup**: Removed unnecessary parameter *-AppliesTo*.
-- **New-LMWebsite**: Split out parameter sets for pingcheck and webchecks to make it easier to see which properties are required depending on what type of check you are creating. Also split out the parameter *-Hostname* to be *-PingAddress* or *-WebsiteAddress* depending on which type of check you are creating.
-- **Initialize-LMPOVSetup**: Updated website creation to utilize new *-WebsiteAddress* parameter when calling **New-LMWebsite**.
-- **Get-LMWebsiteProperty**: Fixed bug that did not require the *-Name* parameter as mandatory if querying by resource name.
+- **Initialize-LMPOVSetup**: Updated LM Logs datasource to use the latest core version 1.2 when setting up logs.
+- **New-LMCachedAccount**: Added new **CachedAccountName** parameter to allow storing of multiple crednetials for the same portal, it is optional and will default to the **AccountName** value if not specified.
+- **Get/Remove-LMCachedAccount**: Updated use the new parameter **CachedAccountName** as the required paramerter instead of **AccountName**.
+- **Get-LMOpsNotes**: Updated the **Name** parameter to **Tag** to allow for retrival of ops notes by tag since Name is not relevant.
+
 
 [Previous Release Notes](RELEASENOTES.md)
