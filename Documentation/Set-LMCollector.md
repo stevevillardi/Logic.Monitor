@@ -17,7 +17,7 @@ schema: 2.0.0
 Set-LMCollector [-Id <Int32>] [-Description <String>] [-BackupAgentId <Int32>] [-CollectorGroupId <Int32>]
  [-Properties <Hashtable>] [-EnableFailBack <Boolean>] [-EnableFailOverOnCollectorDevice <Boolean>]
  [-EscalatingChainId <Int32>] [-SuppressAlertClear <Boolean>] [-ResendAlertInterval <Int32>]
- [-SpecifiedCollectorDeviceGroupId <Int32>] [<CommonParameters>]
+ [-SpecifiedCollectorDeviceGroupId <Int32>] [-AutomaticUpgradeInfo <PSObject>] [<CommonParameters>]
 ```
 
 ### Name
@@ -25,7 +25,7 @@ Set-LMCollector [-Id <Int32>] [-Description <String>] [-BackupAgentId <Int32>] [
 Set-LMCollector [-Name <String>] [-Description <String>] [-BackupAgentId <Int32>] [-CollectorGroupId <Int32>]
  [-Properties <Hashtable>] [-EnableFailBack <Boolean>] [-EnableFailOverOnCollectorDevice <Boolean>]
  [-EscalatingChainId <Int32>] [-SuppressAlertClear <Boolean>] [-ResendAlertInterval <Int32>]
- [-SpecifiedCollectorDeviceGroupId <Int32>] [<CommonParameters>]
+ [-SpecifiedCollectorDeviceGroupId <Int32>] [-AutomaticUpgradeInfo <PSObject>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -212,6 +212,20 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+### -AutomaticUpgradeInfo
+{{ Fill BackupAgentId Description }}
+
+```yaml
+Type: PSObject
 Parameter Sets: (All)
 Aliases:
 
