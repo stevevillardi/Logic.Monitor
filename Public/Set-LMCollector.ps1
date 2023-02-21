@@ -27,7 +27,9 @@ Function Set-LMCollector {
 
         [Nullable[Int]]$ResendAlertInterval,
 
-        [Nullable[Int]]$SpecifiedCollectorDeviceGroupId
+        [Nullable[Int]]$SpecifiedCollectorDeviceGroupId,
+
+        [PsObject]$AutomaticUpgradeInfo
 
     )
     #Check if we are logged in and have valid api creds
@@ -69,6 +71,7 @@ Function Set-LMCollector {
                     resendIval                      = $ResendAlertInterval
                     netflowCollectorId              = $NetflowCollectorId
                     specifiedCollectorDeviceGroupId = $SpecifiedCollectorDeviceGroupId
+                    automaticUpgradeInfo = $AutomaticUpgradeInfo
                 }
 
             
