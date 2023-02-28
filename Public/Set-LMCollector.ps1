@@ -77,11 +77,11 @@ Function Set-LMCollector {
             
                 $Data = ($Data | ConvertTo-Json)
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PUT" -ResourcePath $ResourcePath -Data $Data
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PUT" -Headers $Headers -Body $Data
+                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers -Body $Data
 
                 Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Collector" )
             }
