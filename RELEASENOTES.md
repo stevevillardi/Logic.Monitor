@@ -1,4 +1,15 @@
 # Previous module release notes
+## 4.0.1
+###### Module Updates:
+- Fix scope bug on Connect-LMAccount cmdlet
+- Added support for **Bearer Token** authenticaiton when running Connect-LMAccount and New-LMCachedAccount
+
+###### Update Commands/Bug Fixes:
+- **Initialize-LMPOVSetup**: Updated LM Logs datasource to use the latest core version 1.2 when setting up logs.
+- **New-LMCachedAccount**: Added new **CachedAccountName** parameter to allow storing of multiple crednetials for the same portal, it is optional and will default to the **AccountName** value if not specified.
+- **Get/Remove-LMCachedAccount**: Updated use the new parameter **CachedAccountName** as the required paramerter instead of **AccountName**.
+- **Get-LMOpsNotes**: Updated the **Name** parameter to **Tag** to allow for retrival of ops notes by tag since Name is not relevant.
+
 ## 4.0
 ###### Module Updates:
 - Automated build and release pipelines have been created to streamline the build and release process.

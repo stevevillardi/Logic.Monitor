@@ -353,16 +353,9 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 ***Note**: Supports Pipline Input
 
 # Change List
-## 4.0.1
-###### Module Updates:
-- Fix scope bug on Connect-LMAccount cmdlet
-- Added support for **Bearer Token** authenticaiton when running Connect-LMAccount and New-LMCachedAccount
-
+## 4.0.2
 ###### Update Commands/Bug Fixes:
-- **Initialize-LMPOVSetup**: Updated LM Logs datasource to use the latest core version 1.2 when setting up logs.
-- **New-LMCachedAccount**: Added new **CachedAccountName** parameter to allow storing of multiple crednetials for the same portal, it is optional and will default to the **AccountName** value if not specified.
-- **Get/Remove-LMCachedAccount**: Updated use the new parameter **CachedAccountName** as the required paramerter instead of **AccountName**.
-- **Get-LMOpsNotes**: Updated the **Name** parameter to **Tag** to allow for retrival of ops notes by tag since Name is not relevant.
-
+- Fixed **Set-LMCollector** bug causing automatic upgrade schedules to get reset when updating the collector
+- Updated **Export-LMDeviceConfigReport** to allow a bunch more filter options. You can now override the default ConfigSourceName and InstanceName filters that were previosuly used by setting the paramerters *-ConfigSourceNameFilter* and *-InstanceNameFilter* to a regex pattern you want to match against. You can no also limit the scope of the report to a single device or a group of devices.
 
 [Previous Release Notes](RELEASENOTES.md)
