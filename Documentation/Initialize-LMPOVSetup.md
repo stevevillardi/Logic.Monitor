@@ -16,13 +16,24 @@ schema: 2.0.0
 ```
 Initialize-LMPOVSetup [-Website <String>] [-WebsiteHttpType <String>] [-PortalMetricsAPIUsername <String>]
  [-LogsAPIUsername <String>] [-SetupWebsite] [-SetupPortalMetrics] [-MoveMinimalMonitoring]
- [-CleanupDynamicGroups] [-SetupWindowsLMLogs] [-WindowsLMLogsEventChannels <String>] [<CommonParameters>]
+ [-CleanupDynamicGroups] [-SetupWindowsLMLogs] [-SetupCollectorServiceInsight]
+ [-WindowsLMLogsEventChannels <String>] [<CommonParameters>]
 ```
 
 ### All
 ```
 Initialize-LMPOVSetup [-Website <String>] [-WebsiteHttpType <String>] [-PortalMetricsAPIUsername <String>]
  [-LogsAPIUsername <String>] [-WindowsLMLogsEventChannels <String>] [-RunAll] [<CommonParameters>]
+```
+
+### PostPOV-Readonly
+```
+Initialize-LMPOVSetup [-ReadOnlyMode] [<CommonParameters>]
+```
+
+### PostPOV-RevertReadonly
+```
+Initialize-LMPOVSetup [-RevertReadOnlyMode] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -59,7 +70,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Individual, All
 Aliases:
 
 Required: False
@@ -89,7 +100,37 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Individual, All
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReadOnlyMode
+{{ Fill ReadOnlyMode Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: PostPOV-Readonly
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RevertReadOnlyMode
+{{ Fill RevertReadOnlyMode Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: PostPOV-RevertReadonly
 Aliases:
 
 Required: False
@@ -105,6 +146,21 @@ Accept wildcard characters: False
 ```yaml
 Type: SwitchParameter
 Parameter Sets: All
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SetupCollectorServiceInsight
+{{ Fill SetupCollectorServiceInsight Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Individual
 Aliases:
 
 Required: False
@@ -164,7 +220,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Individual, All
 Aliases:
 
 Required: False
@@ -179,7 +235,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Individual, All
 Aliases:
 
 Required: False
@@ -194,7 +250,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Individual, All
 Aliases:
 
 Required: False

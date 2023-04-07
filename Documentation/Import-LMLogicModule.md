@@ -12,8 +12,14 @@ schema: 2.0.0
 
 ## SYNTAX
 
+### FilePath
 ```
-Import-LMLogicModule [-FilePath] <String> [[-Type] <String>] [[-ForceOverwrite] <Boolean>] [<CommonParameters>]
+Import-LMLogicModule -FilePath <String> [-Type <String>] [-ForceOverwrite <Boolean>] [<CommonParameters>]
+```
+
+### File
+```
+Import-LMLogicModule -File <String> [-Type <String>] [-ForceOverwrite <Boolean>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,16 +36,31 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
+### -File
+{{ Fill File Description }}
+
+```yaml
+Type: String
+Parameter Sets: File
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -FilePath
 {{ Fill FilePath Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: FilePath
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -54,7 +75,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -70,7 +91,7 @@ Aliases:
 Accepted values: datasource, propertyrules, eventsource, topologysource, configsource
 
 Required: False
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

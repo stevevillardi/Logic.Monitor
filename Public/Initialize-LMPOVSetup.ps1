@@ -3,12 +3,20 @@ Function Initialize-LMPOVSetup {
 
     [CmdletBinding()]
     Param (
+        [Parameter(ParameterSetName = 'All')]
+        [Parameter(ParameterSetName = 'Individual')]
         [String]$Website,
 
+        [Parameter(ParameterSetName = 'All')]
+        [Parameter(ParameterSetName = 'Individual')]
         [String]$WebsiteHttpType = "https",
 
+        [Parameter(ParameterSetName = 'All')]
+        [Parameter(ParameterSetName = 'Individual')]
         [string]$PortalMetricsAPIUsername = "lm_portal_metrics",
 
+        [Parameter(ParameterSetName = 'All')]
+        [Parameter(ParameterSetName = 'Individual')]
         [string]$LogsAPIUsername = "lm_logs",
 
         [Parameter(ParameterSetName = 'Individual')]
@@ -26,6 +34,17 @@ Function Initialize-LMPOVSetup {
         [Parameter(ParameterSetName = 'Individual')]
         [Switch]$SetupWindowsLMLogs,
 
+        [Parameter(ParameterSetName = 'PostPOV-Readonly')]
+        [Switch]$ReadOnlyMode,
+
+        [Parameter(ParameterSetName = 'PostPOV-RevertReadonly')]
+        [Switch]$RevertReadOnlyMode,
+
+        [Parameter(ParameterSetName = 'Individual')]
+        [Switch]$SetupCollectorServiceInsight,
+        
+        [Parameter(ParameterSetName = 'All')]
+        [Parameter(ParameterSetName = 'Individual')]
         [String]$WindowsLMLogsEventChannels = "Application,System",
 
         [Parameter(ParameterSetName = 'All')]
@@ -57,6 +76,71 @@ Function Initialize-LMPOVSetup {
                 "IIS" = 'hasCategory("MicrosoftIIS")'
                 "Citrix XenApp" = 'hasCategory("CitrixBrokerActive") || hasCategory("CitrixMonitorServiceV2") || hasCategory("CitrixLicense") || hasCategory("CitrixEUEM")'
 
+            }
+
+            #If readonly mode, siwtch all users to readonly and record previous role permissions for role back
+            If($ReadOnlyMode){
+                $Users = Get-LMUser | Where-Object {$_.apionly -eq $False -and $_.username -ne "lmsupport"}
+                Foreach($User in $Users){
+                    If($User.Note -notlike "Previous Roles:*"){
+                        $PreviousRoles = $User.roles.Name -Join(",")
+                        $UpdatedUser = Set-LMUser -Id $User.Id -RoleNames @("readonly") -Note "Previous Roles: $PreviousRoles"
+                        If($UpdatedUser){
+                            Write-Host "[INFO]: Previous role info ($($User.roles.Name -Join(","))) stored for user $($User.username), successfully converted to readonly role." -ForegroundColor Yellow
+                        }
+                    }
+                    Else{
+                        Write-Host "[INFO]: User $($User.username) previously converted, skipping processing." -ForegroundColor Yellow
+                    }
+                }
+            }
+            #Revert any previous set readonly roles back to their original state
+            If($RevertReadOnlyMode){
+                $Users = Get-LMUser | Where-Object {$_.apionly -eq $False -and $_.username -ne "lmsupport"}
+                Foreach($User in $Users){
+                    $PreviousRoles = ($User.Note -Split "Previous Roles: ")[1] -Split (",")
+                    If($PreviousRoles){
+                        $UpdatedUser = Set-LMUser -Id $User.Id -RoleNames $PreviousRoles -Note " "
+                        If($UpdatedUser){
+                            Write-Host "[INFO]: Previous role info ($(($User.Note -Split "Previous Roles: ")[1])) found for user $($User.username), successfully reverted readonly role." -ForegroundColor Yellow
+                        }
+                    }
+                    Else{
+                        Write-Host "[INFO]: No previous role info found for user $($User.username), skipping role revert for user." -ForegroundColor Yellow
+                    }
+                }
+            }
+
+            #Create example collector service insight
+            If($SetupCollectorServiceInsight -or $RunAll){
+                $ServiceInsightProps = @{
+                    device = @(
+                        @{
+                            deviceGroupFullPath = "Devices by Type/Collectors";
+                            deviceDisplayName = "*";
+                            deviceProperties = @()
+                        }
+                    )
+                } | ConvertTo-Json -Depth 3
+
+                #Create new SI resource
+                $ServiceInsightResource = New-LMDevice -name "LogicMonitorCollectorHealth" -DisplayName "LogicMonitor: Collector Health" -PreferredCollectorId -4 -DeviceType 6 -Properties @{"predef.bizservice.members"=$ServiceInsightProps;"predef.bizService.evalMembersInterval"="30"}
+                If($ServiceInsightResource){
+                    Write-Host "[INFO]: Successfully created service insight resource (LogicMonitor: Collector Health)"
+                    #Upload SI datasource from xml
+                    Try{
+                        $SIDatasource = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/Logic.Monitor/main/Private/SIs/LogicMonitor_Collector_Health.xml").Content
+                        Import-LMLogicModule -File $SIDatasource -Type datasource -ErrorAction Stop
+                    }
+                    Catch{
+                        #Oops
+                        Write-Host "[INFO]: Unable to import SI template from source: $_" -ForegroundColor Yellow
+                    }
+                }
+                Else{
+                    #Oops
+                    Write-Host "[INFO]: Failed to create service insight resource (LogicMonitor: Collector Health), review error message and try again." -ForegroundColor Yellow
+                }
             }
 
             #Create readonly API use for Portal Metrics

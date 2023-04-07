@@ -19,7 +19,7 @@ Get-LMWebsiteProperty -Id <Int32> [-Filter <Hashtable>] [-BatchSize <Int32>] [<C
 
 ### Name
 ```
-Get-LMWebsiteProperty [-Name <String>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsiteProperty -Name <String> [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -89,7 +89,7 @@ Type: String
 Parameter Sets: Name
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

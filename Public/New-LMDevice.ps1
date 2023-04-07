@@ -12,11 +12,13 @@ Function New-LMDevice {
         [String]$Description,
         
         [Parameter(Mandatory)]
-        [String]$PreferredCollectorId,
+        [Nullable[Int]]$PreferredCollectorId,
 
-        [String]$PreferredCollectorGroupId,
+        [Nullable[Int]]$PreferredCollectorGroupId,
 
-        [String]$AutoBalancedCollectorGroupId,
+        [Nullable[Int]]$AutoBalancedCollectorGroupId,
+
+        [Int]$DeviceType = 0,
 
         [Hashtable]$Properties,
 
@@ -28,9 +30,9 @@ Function New-LMDevice {
 
         [Nullable[boolean]]$EnableNetFlow,
 
-        [String]$NetflowCollectorGroupId,
+        [Nullable[Int]]$NetflowCollectorGroupId,
 
-        [String]$NetflowCollectorId
+        [Nullable[Int]]$NetflowCollectorId
     )
     #Check if we are logged in and have valid api creds
     Begin {}
@@ -56,6 +58,7 @@ Function New-LMDevice {
                     disableAlerting           = $DisableAlerting
                     enableNetflow             = $EnableNetFlow
                     customProperties          = $customProperties
+                    deviceType                = $DeviceType
                     preferredCollectorId      = $PreferredCollectorId
                     preferredCollectorGroupId = $PreferredCollectorGroupId
                     autoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId

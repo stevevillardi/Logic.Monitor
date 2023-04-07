@@ -65,6 +65,44 @@
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Connect-LMAccount</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>BearerToken</maml:name>
+          <maml:description>
+            <maml:para>Bearer token from your API credential acquired from the LM Portal. For use in place of LMv1 token</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AccountName</maml:name>
+          <maml:description>
+            <maml:para>The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisableConsoleLogging</maml:name>
+          <maml:description>
+            <maml:para>Disables on stdout messages from displaying for any subsquent commands are run. Useful when building scripted logicmodules and you want to supress unwanted output. Console logging is enabled by default.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Connect-LMAccount</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>UseCachedCredential</maml:name>
           <maml:description>
@@ -118,6 +156,18 @@
         <maml:name>AccessKey</maml:name>
         <maml:description>
           <maml:para>Access Key from your API credential aquired from the LM Portal</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>BearerToken</maml:name>
+        <maml:description>
+          <maml:para>Bearer token from your API credential acquired from the LM Portal. For use in place of LMv1 token</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -348,7 +398,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Export-LMDeviceConfigReport</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>DeviceGroupId</maml:name>
           <maml:description>
             <maml:para>Device group id for the group to use as the source of running the report, defaults to Devices by Type/Network folder if not specified</maml:para>
@@ -360,7 +410,31 @@
           </dev:type>
           <dev:defaultValue>0</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>InstanceNameFilter</maml:name>
+          <maml:description>
+            <maml:para>Regex filter to use to filter out Instance names used for discovery, defaults to "running|current|PaloAlto".</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Regex</command:parameterValue>
+          <dev:type>
+            <maml:name>Regex</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[rR]unning|[cC]urrent|[pP]aloAlto</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigSourceNameFilter</maml:name>
+          <maml:description>
+            <maml:para>Regex filter to use to filter out ConfigSource names used for discovery, defaults to ".*"</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Regex</command:parameterValue>
+          <dev:type>
+            <maml:name>Regex</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>.*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>DaysBack</maml:name>
           <maml:description>
             <maml:para>Number of days back to run the report, defaults to 7 if not specified</maml:para>
@@ -372,7 +446,81 @@
           </dev:type>
           <dev:defaultValue>7</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>Path to export the HTML report to</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OpenOnCompletion</maml:name>
+          <maml:description>
+            <maml:para>Open the output html report automatically once completed</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Export-LMDeviceConfigReport</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DeviceId</maml:name>
+          <maml:description>
+            <maml:para>Device id to use as the source of running the report, defaults to Devices by Type/Network folder if not specified</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>0</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>InstanceNameFilter</maml:name>
+          <maml:description>
+            <maml:para>Regex filter to use to filter out Instance names used for discovery, defaults to "running|current|PaloAlto".</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Regex</command:parameterValue>
+          <dev:type>
+            <maml:name>Regex</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[rR]unning|[cC]urrent|[pP]aloAlto</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ConfigSourceNameFilter</maml:name>
+          <maml:description>
+            <maml:para>Regex filter to use to filter out ConfigSource names used for discovery, defaults to ".*"</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Regex</command:parameterValue>
+          <dev:type>
+            <maml:name>Regex</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>.*</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DaysBack</maml:name>
+          <maml:description>
+            <maml:para>Number of days back to run the report, defaults to 7 if not specified</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>7</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Path</maml:name>
           <maml:description>
             <maml:para>Path to export the HTML report to</maml:para>
@@ -398,7 +546,7 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>DeviceGroupId</maml:name>
         <maml:description>
           <maml:para>Device group id for the group to use as the source of running the report, defaults to Devices by Type/Network folder if not specified</maml:para>
@@ -410,7 +558,43 @@
         </dev:type>
         <dev:defaultValue>0</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DeviceId</maml:name>
+        <maml:description>
+          <maml:para>Device id to use as the source of running the report, defaults to Devices by Type/Network folder if not specified</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>0</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>InstanceNameFilter</maml:name>
+        <maml:description>
+          <maml:para>Regex filter to use to filter out Instance names used for discovery, defaults to "running|current|PaloAlto".</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Regex</command:parameterValue>
+        <dev:type>
+          <maml:name>Regex</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[rR]unning|[cC]urrent|[pP]aloAlto</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ConfigSourceNameFilter</maml:name>
+        <maml:description>
+          <maml:para>Regex filter to use to filter out ConfigSource names used for discovery, defaults to ".*"</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Regex</command:parameterValue>
+        <dev:type>
+          <maml:name>Regex</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>.*</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>DaysBack</maml:name>
         <maml:description>
           <maml:para>Number of days back to run the report, defaults to 7 if not specified</maml:para>
@@ -422,7 +606,7 @@
         </dev:type>
         <dev:defaultValue>7</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Path</maml:name>
         <maml:description>
           <maml:para>Path to export the HTML report to</maml:para>
@@ -2826,9 +3010,9 @@
       <command:syntaxItem>
         <maml:name>Get-LMCachedAccount</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
-          <maml:name>AccountName</maml:name>
+          <maml:name>CachedAccountName</maml:name>
           <maml:description>
-            <maml:para>{{ Fill AccountName Description }}</maml:para>
+            <maml:para>{{ Fill CachedAccountName Description }}</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -2841,9 +3025,9 @@
     </command:syntax>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
-        <maml:name>AccountName</maml:name>
+        <maml:name>CachedAccountName</maml:name>
         <maml:description>
-          <maml:para>{{ Fill AccountName Description }}</maml:para>
+          <maml:para>{{ Fill CachedAccountName Description }}</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -12933,9 +13117,9 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>Name</maml:name>
+          <maml:name>Tag</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Name Description }}</maml:para>
+            <maml:para>{{ Fill Tag Description }}</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -12984,9 +13168,9 @@
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>Name</maml:name>
+        <maml:name>Tag</maml:name>
         <maml:description>
-          <maml:para>{{ Fill Name Description }}</maml:para>
+          <maml:para>{{ Fill Tag Description }}</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -16764,7 +16948,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Name</maml:name>
           <maml:description>
             <maml:para>{{ Fill Name Description }}</maml:para>
@@ -16815,7 +16999,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Name</maml:name>
         <maml:description>
           <maml:para>{{ Fill Name Description }}</maml:para>
@@ -17674,10 +17858,10 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Import-LMLogicModule</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
-          <maml:name>FilePath</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>File</maml:name>
           <maml:description>
-            <maml:para>{{ Fill FilePath Description }}</maml:para>
+            <maml:para>{{ Fill File Description }}</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -17686,7 +17870,19 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ForceOverwrite</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ForceOverwrite Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Type</maml:name>
           <maml:description>
             <maml:para>{{ Fill Type Description }}</maml:para>
@@ -17705,7 +17901,22 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Import-LMLogicModule</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>FilePath</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill FilePath Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ForceOverwrite</maml:name>
           <maml:description>
             <maml:para>{{ Fill ForceOverwrite Description }}</maml:para>
@@ -17717,10 +17928,41 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Type</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Type Description }}</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">datasource</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">propertyrules</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">eventsource</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">topologysource</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">configsource</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>File</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill File Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FilePath</maml:name>
         <maml:description>
           <maml:para>{{ Fill FilePath Description }}</maml:para>
@@ -17732,7 +17974,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ForceOverwrite</maml:name>
         <maml:description>
           <maml:para>{{ Fill ForceOverwrite Description }}</maml:para>
@@ -17744,7 +17986,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Type</maml:name>
         <maml:description>
           <maml:para>{{ Fill Type Description }}</maml:para>
@@ -18279,6 +18521,17 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SetupCollectorServiceInsight</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill SetupCollectorServiceInsight Description }}</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SetupPortalMetrics</maml:name>
           <maml:description>
             <maml:para>{{ Fill SetupPortalMetrics Description }}</maml:para>
@@ -18422,6 +18675,34 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Initialize-LMPOVSetup</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ReadOnlyMode</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill ReadOnlyMode Description }}</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Initialize-LMPOVSetup</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>RevertReadOnlyMode</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill RevertReadOnlyMode Description }}</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
@@ -18473,9 +18754,45 @@
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ReadOnlyMode</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill ReadOnlyMode Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>RevertReadOnlyMode</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill RevertReadOnlyMode Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>RunAll</maml:name>
         <maml:description>
           <maml:para>{{ Fill RunAll Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SetupCollectorServiceInsight</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill SetupCollectorServiceInsight Description }}</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -20998,7 +21315,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>New-LMCachedAccount</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>AccessId</maml:name>
           <maml:description>
             <maml:para>Access ID from your API credential aquired from the LM Portal</maml:para>
@@ -21010,7 +21327,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>AccessKey</maml:name>
           <maml:description>
             <maml:para>Access Key from your API credential aquired from the LM Portal</maml:para>
@@ -21022,7 +21339,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>AccountName</maml:name>
           <maml:description>
             <maml:para>The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)</maml:para>
@@ -21034,7 +21351,70 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CachedAccountName</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill CachedAccountName Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$AccountName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OverwriteExisting</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill OverwriteExisting Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>New-LMCachedAccount</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AccountName</maml:name>
+          <maml:description>
+            <maml:para>The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>BearerToken</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill BearerToken Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CachedAccountName</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill CachedAccountName Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>$AccountName</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>OverwriteExisting</maml:name>
           <maml:description>
             <maml:para>{{ Fill OverwriteExisting Description }}</maml:para>
@@ -21049,7 +21429,7 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>AccessId</maml:name>
         <maml:description>
           <maml:para>Access ID from your API credential aquired from the LM Portal</maml:para>
@@ -21061,7 +21441,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>AccessKey</maml:name>
         <maml:description>
           <maml:para>Access Key from your API credential aquired from the LM Portal</maml:para>
@@ -21073,7 +21453,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>AccountName</maml:name>
         <maml:description>
           <maml:para>The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)</maml:para>
@@ -21085,7 +21465,31 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>BearerToken</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill BearerToken Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CachedAccountName</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill CachedAccountName Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>$AccountName</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>OverwriteExisting</maml:name>
         <maml:description>
           <maml:para>{{ Fill OverwriteExisting Description }}</maml:para>
@@ -21689,6 +22093,18 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
+          <maml:name>DisableAlerting</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill DisableAlerting Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="11" aliases="none">
           <maml:name>EnableNetFlow</maml:name>
           <maml:description>
             <maml:para>{{ Fill EnableNetFlow Description }}</maml:para>
@@ -21700,26 +22116,26 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="11" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="12" aliases="none">
           <maml:name>NetflowCollectorGroupId</maml:name>
           <maml:description>
             <maml:para>{{ Fill NetflowCollectorGroupId Description }}</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
-            <maml:name>String</maml:name>
+            <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="12" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="13" aliases="none">
           <maml:name>NetflowCollectorId</maml:name>
           <maml:description>
             <maml:para>{{ Fill NetflowCollectorId Description }}</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
-            <maml:name>String</maml:name>
+            <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -21741,9 +22157,9 @@
           <maml:description>
             <maml:para>{{ Fill PreferredCollectorId Description }}</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
-            <maml:name>String</maml:name>
+            <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -21753,9 +22169,9 @@
           <maml:description>
             <maml:para>{{ Fill PreferredCollectorGroupId Description }}</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
-            <maml:name>String</maml:name>
+            <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -21765,14 +22181,26 @@
           <maml:description>
             <maml:para>{{ Fill AutoBalancedCollectorGroupId Description }}</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
-            <maml:name>String</maml:name>
+            <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+          <maml:name>DeviceType</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill DeviceType Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
           <maml:name>Properties</maml:name>
           <maml:description>
             <maml:para>{{ Fill Properties Description }}</maml:para>
@@ -21784,7 +22212,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
           <maml:name>HostGroupIds</maml:name>
           <maml:description>
             <maml:para>{{ Fill HostGroupIds Description }}</maml:para>
@@ -21796,7 +22224,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
           <maml:name>Link</maml:name>
           <maml:description>
             <maml:para>{{ Fill Link Description }}</maml:para>
@@ -21804,18 +22232,6 @@
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
-          <maml:name>DisableAlerting</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill DisableAlerting Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
-          <dev:type>
-            <maml:name>Boolean</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -21828,9 +22244,9 @@
         <maml:description>
           <maml:para>{{ Fill AutoBalancedCollectorGroupId Description }}</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
-          <maml:name>String</maml:name>
+          <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -21847,7 +22263,19 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+        <maml:name>DeviceType</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill DeviceType Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
         <maml:name>DisableAlerting</maml:name>
         <maml:description>
           <maml:para>{{ Fill DisableAlerting Description }}</maml:para>
@@ -21871,7 +22299,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="11" aliases="none">
         <maml:name>EnableNetFlow</maml:name>
         <maml:description>
           <maml:para>{{ Fill EnableNetFlow Description }}</maml:para>
@@ -21883,7 +22311,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
         <maml:name>HostGroupIds</maml:name>
         <maml:description>
           <maml:para>{{ Fill HostGroupIds Description }}</maml:para>
@@ -21895,7 +22323,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
         <maml:name>Link</maml:name>
         <maml:description>
           <maml:para>{{ Fill Link Description }}</maml:para>
@@ -21919,26 +22347,26 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="11" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="12" aliases="none">
         <maml:name>NetflowCollectorGroupId</maml:name>
         <maml:description>
           <maml:para>{{ Fill NetflowCollectorGroupId Description }}</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
-          <maml:name>String</maml:name>
+          <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="12" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="13" aliases="none">
         <maml:name>NetflowCollectorId</maml:name>
         <maml:description>
           <maml:para>{{ Fill NetflowCollectorId Description }}</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
-          <maml:name>String</maml:name>
+          <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -21948,9 +22376,9 @@
         <maml:description>
           <maml:para>{{ Fill PreferredCollectorGroupId Description }}</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
-          <maml:name>String</maml:name>
+          <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -21960,14 +22388,14 @@
         <maml:description>
           <maml:para>{{ Fill PreferredCollectorId Description }}</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
-          <maml:name>String</maml:name>
+          <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
         <maml:name>Properties</maml:name>
         <maml:description>
           <maml:para>{{ Fill Properties Description }}</maml:para>
@@ -26104,10 +26532,10 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>New-LMWebsite</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
-          <maml:name>Name</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Description</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Name Description }}</maml:para>
+            <maml:para>{{ Fill Description Description }}</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -26116,10 +26544,10 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
-          <maml:name>IsInternal</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisableAlerting</maml:name>
           <maml:description>
-            <maml:para>{{ Fill IsInternal Description }}</maml:para>
+            <maml:para>{{ Fill DisableAlerting Description }}</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
           <dev:type>
@@ -26128,115 +26556,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
-          <maml:name>Hostname</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill Hostname Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="11" aliases="none">
-          <maml:name>HttpType</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill HttpType Description }}</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">http</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">https</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="12" aliases="none">
-          <maml:name>SSLAlertThresholds</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill SSLAlertThresholds Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
-          <dev:type>
-            <maml:name>String[]</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="13" aliases="none">
-          <maml:name>PingCount</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill PingCount Description }}</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">5</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">10</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">15</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">20</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">30</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">60</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
-          <dev:type>
-            <maml:name>Int32</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="14" aliases="none">
-          <maml:name>PingTimeout</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill PingTimeout Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
-          <dev:type>
-            <maml:name>Int32</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="15" aliases="none">
-          <maml:name>PageLoadAlertTimeInMS</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill PageLoadAlertTimeInMS Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
-          <dev:type>
-            <maml:name>Int32</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="16" aliases="none">
-          <maml:name>PingPercentNotReceived</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill PingPercentNotReceived Description }}</maml:para>
-          </maml:description>
-          <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">10</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">20</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">30</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">40</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">50</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">60</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">70</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">80</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">90</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">100</command:parameterValue>
-          </command:parameterValueGroup>
-          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
-          <dev:type>
-            <maml:name>Int32</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="17" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FailedCount</maml:name>
           <maml:description>
             <maml:para>{{ Fill FailedCount Description }}</maml:para>
@@ -26262,15 +26582,26 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="18" aliases="none">
-          <maml:name>OverallAlertLevel</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>GroupId</maml:name>
           <maml:description>
-            <maml:para>{{ Fill OverallAlertLevel Description }}</maml:para>
+            <maml:para>{{ Fill GroupId Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>HttpType</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill HttpType Description }}</maml:para>
           </maml:description>
           <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">warn</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">error</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">critical</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">http</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">https</command:parameterValue>
           </command:parameterValueGroup>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -26279,7 +26610,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="19" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>IndividualAlertLevel</maml:name>
           <maml:description>
             <maml:para>{{ Fill IndividualAlertLevel Description }}</maml:para>
@@ -26296,10 +26627,22 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-          <maml:name>Description</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>IsInternal</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Description Description }}</maml:para>
+            <maml:para>{{ Fill IsInternal Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Name Description }}</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -26308,27 +26651,15 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="20" aliases="none">
-          <maml:name>Properties</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OverallAlertLevel</maml:name>
           <maml:description>
-            <maml:para>{{ Fill Properties Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
-          <dev:type>
-            <maml:name>Hashtable</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="21" aliases="none">
-          <maml:name>PropertiesMethod</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill PropertiesMethod Description }}</maml:para>
+            <maml:para>{{ Fill OverallAlertLevel Description }}</maml:para>
           </maml:description>
           <command:parameterValueGroup>
-            <command:parameterValue required="false" command:variableLength="false">Add</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">Replace</command:parameterValue>
-            <command:parameterValue required="false" command:variableLength="false">Refresh</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">warn</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">error</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">critical</command:parameterValue>
           </command:parameterValueGroup>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -26337,7 +26668,19 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="22" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PageLoadAlertTimeInMS</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill PageLoadAlertTimeInMS Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>PollingInterval</maml:name>
           <maml:description>
             <maml:para>{{ Fill PollingInterval Description }}</maml:para>
@@ -26361,7 +26704,84 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="23" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Properties</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Properties Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+          <dev:type>
+            <maml:name>Hashtable</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PropertiesMethod</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill PropertiesMethod Description }}</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Add</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Replace</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Refresh</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SSLAlertThresholds</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill SSLAlertThresholds Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>StopMonitoring</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill StopMonitoring Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TriggerSSLExpirationAlert</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill TriggerSSLExpirationAlert Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TriggerSSLStatusAlert</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill TriggerSSLStatusAlert Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Type</maml:name>
           <maml:description>
             <maml:para>{{ Fill Type Description }}</maml:para>
@@ -26377,31 +26797,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
-          <maml:name>DisableAlerting</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill DisableAlerting Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
-          <dev:type>
-            <maml:name>Boolean</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
-          <maml:name>StopMonitoring</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill StopMonitoring Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
-          <dev:type>
-            <maml:name>Boolean</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>UseDefaultAlertSetting</maml:name>
           <maml:description>
             <maml:para>{{ Fill UseDefaultAlertSetting Description }}</maml:para>
@@ -26413,7 +26809,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>UseDefaultLocationSetting</maml:name>
           <maml:description>
             <maml:para>{{ Fill UseDefaultLocationSetting Description }}</maml:para>
@@ -26425,10 +26821,37 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
-          <maml:name>TriggerSSLStatusAlert</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>WebsiteDomain</maml:name>
           <maml:description>
-            <maml:para>{{ Fill TriggerSSLStatusAlert Description }}</maml:para>
+            <maml:para>{{ Fill WebsiteDomain Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>New-LMWebsite</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Description</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Description Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DisableAlerting</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill DisableAlerting Description }}</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
           <dev:type>
@@ -26437,19 +26860,33 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
-          <maml:name>TriggerSSLExpirationAlert</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>FailedCount</maml:name>
           <maml:description>
-            <maml:para>{{ Fill TriggerSSLExpirationAlert Description }}</maml:para>
+            <maml:para>{{ Fill FailedCount Description }}</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">1</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">2</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">3</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">4</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">5</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">6</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">7</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">8</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">9</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">10</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">30</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">60</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
-            <maml:name>Boolean</maml:name>
+            <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>GroupId</maml:name>
           <maml:description>
             <maml:para>{{ Fill GroupId Description }}</maml:para>
@@ -26461,10 +26898,241 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>IndividualAlertLevel</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill IndividualAlertLevel Description }}</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">warn</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">error</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">critical</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>IsInternal</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill IsInternal Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Name Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OverallAlertLevel</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill OverallAlertLevel Description }}</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">warn</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">error</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">critical</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PingAddress</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill PingAddress Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PingCount</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill PingCount Description }}</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">5</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">10</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">15</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">20</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">30</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">60</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PingPercentNotReceived</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill PingPercentNotReceived Description }}</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">10</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">20</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">30</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">40</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">50</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">60</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">70</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">80</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">90</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">100</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PingTimeout</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill PingTimeout Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PollingInterval</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill PollingInterval Description }}</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">1</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">2</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">3</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">4</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">5</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">6</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">7</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">8</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">9</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">10</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Properties</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Properties Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Hashtable</command:parameterValue>
+          <dev:type>
+            <maml:name>Hashtable</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>PropertiesMethod</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill PropertiesMethod Description }}</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Add</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Replace</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Refresh</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>StopMonitoring</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill StopMonitoring Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Type</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill Type Description }}</maml:para>
+          </maml:description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">pingcheck</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">webcheck</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UseDefaultAlertSetting</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill UseDefaultAlertSetting Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UseDefaultLocationSetting</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill UseDefaultLocationSetting Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+          <dev:type>
+            <maml:name>Boolean</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Description</maml:name>
         <maml:description>
           <maml:para>{{ Fill Description Description }}</maml:para>
@@ -26476,7 +27144,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>DisableAlerting</maml:name>
         <maml:description>
           <maml:para>{{ Fill DisableAlerting Description }}</maml:para>
@@ -26488,7 +27156,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="17" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FailedCount</maml:name>
         <maml:description>
           <maml:para>{{ Fill FailedCount Description }}</maml:para>
@@ -26500,7 +27168,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="9" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>GroupId</maml:name>
         <maml:description>
           <maml:para>{{ Fill GroupId Description }}</maml:para>
@@ -26512,19 +27180,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="10" aliases="none">
-        <maml:name>Hostname</maml:name>
-        <maml:description>
-          <maml:para>{{ Fill Hostname Description }}</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="11" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>HttpType</maml:name>
         <maml:description>
           <maml:para>{{ Fill HttpType Description }}</maml:para>
@@ -26536,7 +27192,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="19" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>IndividualAlertLevel</maml:name>
         <maml:description>
           <maml:para>{{ Fill IndividualAlertLevel Description }}</maml:para>
@@ -26548,7 +27204,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>IsInternal</maml:name>
         <maml:description>
           <maml:para>{{ Fill IsInternal Description }}</maml:para>
@@ -26560,7 +27216,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Name</maml:name>
         <maml:description>
           <maml:para>{{ Fill Name Description }}</maml:para>
@@ -26572,7 +27228,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="18" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>OverallAlertLevel</maml:name>
         <maml:description>
           <maml:para>{{ Fill OverallAlertLevel Description }}</maml:para>
@@ -26584,7 +27240,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="15" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PageLoadAlertTimeInMS</maml:name>
         <maml:description>
           <maml:para>{{ Fill PageLoadAlertTimeInMS Description }}</maml:para>
@@ -26596,7 +27252,19 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="13" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>PingAddress</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill PingAddress Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PingCount</maml:name>
         <maml:description>
           <maml:para>{{ Fill PingCount Description }}</maml:para>
@@ -26608,7 +27276,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="16" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PingPercentNotReceived</maml:name>
         <maml:description>
           <maml:para>{{ Fill PingPercentNotReceived Description }}</maml:para>
@@ -26620,7 +27288,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="14" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PingTimeout</maml:name>
         <maml:description>
           <maml:para>{{ Fill PingTimeout Description }}</maml:para>
@@ -26632,7 +27300,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="22" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PollingInterval</maml:name>
         <maml:description>
           <maml:para>{{ Fill PollingInterval Description }}</maml:para>
@@ -26644,7 +27312,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="20" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Properties</maml:name>
         <maml:description>
           <maml:para>{{ Fill Properties Description }}</maml:para>
@@ -26656,7 +27324,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="21" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>PropertiesMethod</maml:name>
         <maml:description>
           <maml:para>{{ Fill PropertiesMethod Description }}</maml:para>
@@ -26668,7 +27336,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="12" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SSLAlertThresholds</maml:name>
         <maml:description>
           <maml:para>{{ Fill SSLAlertThresholds Description }}</maml:para>
@@ -26680,7 +27348,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>StopMonitoring</maml:name>
         <maml:description>
           <maml:para>{{ Fill StopMonitoring Description }}</maml:para>
@@ -26692,7 +27360,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="8" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>TriggerSSLExpirationAlert</maml:name>
         <maml:description>
           <maml:para>{{ Fill TriggerSSLExpirationAlert Description }}</maml:para>
@@ -26704,7 +27372,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>TriggerSSLStatusAlert</maml:name>
         <maml:description>
           <maml:para>{{ Fill TriggerSSLStatusAlert Description }}</maml:para>
@@ -26716,7 +27384,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="23" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Type</maml:name>
         <maml:description>
           <maml:para>{{ Fill Type Description }}</maml:para>
@@ -26728,7 +27396,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>UseDefaultAlertSetting</maml:name>
         <maml:description>
           <maml:para>{{ Fill UseDefaultAlertSetting Description }}</maml:para>
@@ -26740,7 +27408,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>UseDefaultLocationSetting</maml:name>
         <maml:description>
           <maml:para>{{ Fill UseDefaultLocationSetting Description }}</maml:para>
@@ -26748,6 +27416,18 @@
         <command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
         <dev:type>
           <maml:name>Boolean</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>WebsiteDomain</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill WebsiteDomain Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -26804,18 +27484,6 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>New-LMWebsiteGroup</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>AppliesTo</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill AppliesTo Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Description</maml:name>
           <maml:description>
@@ -26892,18 +27560,6 @@
       <command:syntaxItem>
         <maml:name>New-LMWebsiteGroup</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>AppliesTo</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill AppliesTo Description }}</maml:para>
-          </maml:description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Description</maml:name>
           <maml:description>
             <maml:para>{{ Fill Description Description }}</maml:para>
@@ -26978,18 +27634,6 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>AppliesTo</maml:name>
-        <maml:description>
-          <maml:para>{{ Fill AppliesTo Description }}</maml:para>
-        </maml:description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Description</maml:name>
         <maml:description>
@@ -27269,9 +27913,9 @@
       <command:syntaxItem>
         <maml:name>Remove-LMCachedAccount</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Portal">
-          <maml:name>AccountName</maml:name>
+          <maml:name>CachedAccountName</maml:name>
           <maml:description>
-            <maml:para>{{ Fill AccountName Description }}</maml:para>
+            <maml:para>{{ Fill CachedAccountName Description }}</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -27299,9 +27943,9 @@
     </command:syntax>
     <command:parameters>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Portal">
-        <maml:name>AccountName</maml:name>
+        <maml:name>CachedAccountName</maml:name>
         <maml:description>
-          <maml:para>{{ Fill AccountName Description }}</maml:para>
+          <maml:para>{{ Fill CachedAccountName Description }}</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -35151,6 +35795,18 @@
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NewUsername</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill NewUsername Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Note</maml:name>
           <maml:description>
             <maml:para>{{ Fill Note Description }}</maml:para>
@@ -35782,6 +36438,18 @@
           <maml:name>LastName</maml:name>
           <maml:description>
             <maml:para>{{ Fill LastName Description }}</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NewUsername</maml:name>
+          <maml:description>
+            <maml:para>{{ Fill NewUsername Description }}</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -36446,6 +37114,18 @@
         <maml:name>LastName</maml:name>
         <maml:description>
           <maml:para>{{ Fill LastName Description }}</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>NewUsername</maml:name>
+        <maml:description>
+          <maml:para>{{ Fill NewUsername Description }}</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>

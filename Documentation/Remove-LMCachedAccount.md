@@ -14,7 +14,7 @@ schema: 2.0.0
 
 ### Single
 ```
-Remove-LMCachedAccount -AccountName <String> [<CommonParameters>]
+Remove-LMCachedAccount -CachedAccountName <String> [<CommonParameters>]
 ```
 
 ### All
@@ -36,8 +36,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -AccountName
-{{ Fill AccountName Description }}
+### -CachedAccountName
+{{ Fill CachedAccountName Description }}
 
 ```yaml
 Type: String

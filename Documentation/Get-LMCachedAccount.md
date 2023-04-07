@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-LMCachedAccount [[-AccountName] <String>] [<CommonParameters>]
+Get-LMCachedAccount [[-CachedAccountName] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,8 +30,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -AccountName
-{{ Fill AccountName Description }}
+### -CachedAccountName
+{{ Fill CachedAccountName Description }}
 
 ```yaml
 Type: String

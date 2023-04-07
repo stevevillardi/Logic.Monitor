@@ -13,11 +13,11 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-New-LMDevice [-Name] <String> [-DisplayName] <String> [[-Description] <String>]
- [-PreferredCollectorId] <String> [[-PreferredCollectorGroupId] <String>]
- [[-AutoBalancedCollectorGroupId] <String>] [[-Properties] <Hashtable>] [[-HostGroupIds] <String[]>]
- [[-Link] <String>] [[-DisableAlerting] <Boolean>] [[-EnableNetFlow] <Boolean>]
- [[-NetflowCollectorGroupId] <String>] [[-NetflowCollectorId] <String>] [<CommonParameters>]
+New-LMDevice [-Name] <String> [-DisplayName] <String> [[-Description] <String>] [-PreferredCollectorId] <Int32>
+ [[-PreferredCollectorGroupId] <Int32>] [[-AutoBalancedCollectorGroupId] <Int32>] [[-DeviceType] <Int32>]
+ [[-Properties] <Hashtable>] [[-HostGroupIds] <String[]>] [[-Link] <String>] [[-DisableAlerting] <Boolean>]
+ [[-EnableNetFlow] <Boolean>] [[-NetflowCollectorGroupId] <Int32>] [[-NetflowCollectorId] <Int32>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,7 +38,7 @@ PS C:\> {{ Add example code here }}
 {{ Fill AutoBalancedCollectorGroupId Description }}
 
 ```yaml
-Type: String
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
@@ -64,6 +64,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DeviceType
+{{ Fill DeviceType Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DisableAlerting
 {{ Fill DisableAlerting Description }}
 
@@ -73,7 +88,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 9
+Position: 10
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -103,7 +118,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 10
+Position: 11
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -118,7 +133,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: 8
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -133,7 +148,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 9
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -158,22 +173,7 @@ Accept wildcard characters: False
 {{ Fill NetflowCollectorGroupId Description }}
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 11
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NetflowCollectorId
-{{ Fill NetflowCollectorId Description }}
-
-```yaml
-Type: String
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
@@ -184,11 +184,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -NetflowCollectorId
+{{ Fill NetflowCollectorId Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 13
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -PreferredCollectorGroupId
 {{ Fill PreferredCollectorGroupId Description }}
 
 ```yaml
-Type: String
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
@@ -203,7 +218,7 @@ Accept wildcard characters: False
 {{ Fill PreferredCollectorId Description }}
 
 ```yaml
-Type: String
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
@@ -223,7 +238,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: 7
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

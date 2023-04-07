@@ -12,10 +12,15 @@ Connect to a specified LM portal to run commands against
 
 ## SYNTAX
 
-### Manual
+### LMv1 (Default)
 ```
 Connect-LMAccount -AccessId <String> -AccessKey <String> -AccountName <String> [-DisableConsoleLogging]
  [<CommonParameters>]
+```
+
+### Bearer
+```
+Connect-LMAccount -BearerToken <String> -AccountName <String> [-DisableConsoleLogging] [<CommonParameters>]
 ```
 
 ### Cached
@@ -52,7 +57,7 @@ Access ID from your API credential aquired from the LM Portal
 
 ```yaml
 Type: String
-Parameter Sets: Manual
+Parameter Sets: LMv1
 Aliases:
 
 Required: True
@@ -67,7 +72,22 @@ Access Key from your API credential aquired from the LM Portal
 
 ```yaml
 Type: String
-Parameter Sets: Manual
+Parameter Sets: LMv1
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BearerToken
+Bearer token from your API credential acquired from the LM Portal. For use in place of LMv1 token
+
+```yaml
+Type: String
+Parameter Sets: Bearer
 Aliases:
 
 Required: True
@@ -82,7 +102,7 @@ The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain
 
 ```yaml
 Type: String
-Parameter Sets: Manual
+Parameter Sets: LMv1, Bearer
 Aliases:
 
 Required: True

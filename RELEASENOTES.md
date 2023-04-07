@@ -1,4 +1,9 @@
 # Previous module release notes
+## 4.0.2
+###### Update Commands/Bug Fixes:
+- Fixed **Set-LMCollector** bug causing automatic upgrade schedules to get reset when updating the collector
+- Updated **Export-LMDeviceConfigReport** to allow a bunch more filter options. You can now override the default ConfigSourceName and InstanceName filters that were previosuly used by setting the paramerters *-ConfigSourceNameFilter* and *-InstanceNameFilter* to a regex pattern you want to match against. You can no also limit the scope of the report to a single device or a group of devices.
+
 ## 4.0.1
 ###### Module Updates:
 - Fix scope bug on Connect-LMAccount cmdlet

@@ -1,9 +1,12 @@
 Function Import-LMLogicModule {
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory,ParameterSetName = 'FilePath')]
         [String]$FilePath,
 
+        [Parameter(Mandatory,ParameterSetName = 'File')]
+        [String]$File,
+        
         [ValidateSet("datasource", "propertyrules", "eventsource", "topologysource", "configsource")]
         [String]$Type = "datasource",
 
@@ -14,27 +17,30 @@ Function Import-LMLogicModule {
     Begin {}
     Process {
         If ($Script:LMAuth.Valid) {
+            
+            #Get file content from path if not given file data directly
+            If($FilePath){
 
-            #Check for PS version 6.1 +
-            If (($PSVersionTable.PSVersion.Major -le 5) -or ($PSVersionTable.PSVersion.Major -eq 6 -and $PSVersionTable.PSVersion.Minor -lt 1)) {
-                Write-Error "This command requires PS version 6.1 or higher to run."
-                return
+                #Check for PS version 6.1 +
+                If (($PSVersionTable.PSVersion.Major -le 5) -or ($PSVersionTable.PSVersion.Major -eq 6 -and $PSVersionTable.PSVersion.Minor -lt 1)) {
+                    Write-Error "This command requires PS version 6.1 or higher to run."
+                    return
+                }
+
+                If (!(Test-Path -Path $FilePath) -and ((!([IO.Path]::GetExtension($FilePath) -eq '.xml')) -or (!([IO.Path]::GetExtension($FilePath) -eq '.json')))) {
+                    Write-Error "File not found or is not a valid xml/json file, check file path and try again"
+                    Return
+                }
+
+                $File = Get-Content $FilePath -Raw
             }
-
-            If (!(Test-Path -Path $FilePath) -and ((!([IO.Path]::GetExtension($FilePath) -eq '.xml')) -or (!([IO.Path]::GetExtension($FilePath) -eq '.json')))) {
-                Write-Error "File not found or is not a valid xml/json file, check file path and try again"
-                Return
-            }
-
+            
             #Build query params
             $QueryParams = "?type=$Type&forceOverwrite=$ForceOverwrite"
 
             #Build header and uri
             $ResourcePath = "/setting/logicmodules/importfile"
 
-            #Get file content
-            $File = Get-Content $FilePath -Raw
-            
             Try {
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File

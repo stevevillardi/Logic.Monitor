@@ -15,15 +15,13 @@ schema: 2.0.0
 ### GroupId
 ```
 New-LMWebsiteGroup -Name <String> [-Description <String>] [-Properties <Hashtable>]
- [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] -ParentGroupId <Int32> [-AppliesTo <String>]
- [<CommonParameters>]
+ [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] -ParentGroupId <Int32> [<CommonParameters>]
 ```
 
 ### GroupName
 ```
 New-LMWebsiteGroup -Name <String> [-Description <String>] [-Properties <Hashtable>]
- [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] -ParentGroupName <String> [-AppliesTo <String>]
- [<CommonParameters>]
+ [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] -ParentGroupName <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -39,21 +37,6 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
-
-### -AppliesTo
-{{ Fill AppliesTo Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -Description
 {{ Fill Description Description }}

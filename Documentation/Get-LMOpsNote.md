@@ -22,9 +22,9 @@ Get-LMOpsNote [-BatchSize <Int32>] [<CommonParameters>]
 Get-LMOpsNote [-Id <String>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
-### Name
+### Tag
 ```
-Get-LMOpsNote [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMOpsNote [-Tag <String>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Filter
@@ -91,12 +91,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-{{ Fill Name Description }}
+### -Tag
+{{ Fill Tag Description }}
 
 ```yaml
 Type: String
-Parameter Sets: Name
+Parameter Sets: Tag
 Aliases:
 
 Required: False

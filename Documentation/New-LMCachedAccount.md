@@ -12,9 +12,16 @@ Store a connection to a specified LM portal for use with Connect-LMAccount
 
 ## SYNTAX
 
+### LMv1 (Default)
 ```
-New-LMCachedAccount [-AccessId] <String> [-AccessKey] <String> [-AccountName] <String>
- [[-OverwriteExisting] <Boolean>] [<CommonParameters>]
+New-LMCachedAccount -AccessId <String> -AccessKey <String> -AccountName <String> [-CachedAccountName <String>]
+ [-OverwriteExisting <Boolean>] [<CommonParameters>]
+```
+
+### Bearer
+```
+New-LMCachedAccount -AccountName <String> -BearerToken <String> [-CachedAccountName <String>]
+ [-OverwriteExisting <Boolean>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -35,11 +42,11 @@ Access ID from your API credential aquired from the LM Portal
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: LMv1
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -50,11 +57,11 @@ Access Key from your API credential aquired from the LM Portal
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: LMv1
 Aliases:
 
 Required: True
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -69,8 +76,38 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 3
+Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BearerToken
+{{ Fill BearerToken Description }}
+
+```yaml
+Type: String
+Parameter Sets: Bearer
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CachedAccountName
+{{ Fill CachedAccountName Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: $AccountName
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -84,7 +121,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: Named
 Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False

@@ -12,9 +12,16 @@ Exports an HTML report containing changed network configs
 
 ## SYNTAX
 
+### Device (Default)
 ```
-Export-LMDeviceConfigReport [[-DeviceGroupId] <Int32>] [[-DaysBack] <String>] [-Path] <String>
- [-OpenOnCompletion] [<CommonParameters>]
+Export-LMDeviceConfigReport -DeviceId <Int32> [-InstanceNameFilter <Regex>] [-ConfigSourceNameFilter <Regex>]
+ [-DaysBack <String>] -Path <String> [-OpenOnCompletion] [<CommonParameters>]
+```
+
+### DeviceGroup
+```
+Export-LMDeviceConfigReport -DeviceGroupId <Int32> [-InstanceNameFilter <Regex>]
+ [-ConfigSourceNameFilter <Regex>] [-DaysBack <String>] -Path <String> [-OpenOnCompletion] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -39,12 +46,57 @@ Device group id for the group to use as the source of running the report, defaul
 
 ```yaml
 Type: Int32
+Parameter Sets: DeviceGroup
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceId
+Device id to use as the source of running the report, defaults to Devices by Type/Network folder if not specified
+
+```yaml
+Type: Int32
+Parameter Sets: Device
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceNameFilter
+Regex filter to use to filter out Instance names used for discovery, defaults to "running|current|PaloAlto".
+
+```yaml
+Type: Regex
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
-Default value: 0
+Position: Named
+Default value: [rR]unning|[cC]urrent|[pP]aloAlto
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ConfigSourceNameFilter
+Regex filter to use to filter out ConfigSource names used for discovery, defaults to ".*"
+
+```yaml
+Type: Regex
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: .*
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -58,7 +110,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: 7
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -73,7 +125,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 3
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

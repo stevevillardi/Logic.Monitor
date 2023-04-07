@@ -353,9 +353,11 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 ***Note**: Supports Pipline Input
 
 # Change List
-## 4.0.2
+## 4.0.3
 ###### Update Commands/Bug Fixes:
-- Fixed **Set-LMCollector** bug causing automatic upgrade schedules to get reset when updating the collector
-- Updated **Export-LMDeviceConfigReport** to allow a bunch more filter options. You can now override the default ConfigSourceName and InstanceName filters that were previosuly used by setting the paramerters *-ConfigSourceNameFilter* and *-InstanceNameFilter* to a regex pattern you want to match against. You can no also limit the scope of the report to a single device or a group of devices.
+- **Initialize-LMPOVSetup**: Added two new switches *-ReadOnlyMode* and *-RevertReadOnlyMode* that will convert and revert all non api accounts to/from readonly mode.
+- **Initialize-LMPOVSetup**: Added a new switch *-SetupCollectorServiceInsight* that will provision a service insight example aggregating important collector metrics accross all installed collectors in a portal. This example will be expanded on in future releases.
+- **Import-LMLogicModule**: Added new *-File* switch that allows for providing a XML file object directly as oposed to just a FilePath previsouly.
+- **New-LMDevice**: Added support for -*DeviceType* to allow for setting the device type when provisioning a new resource, useful for creating service resources.
 
 [Previous Release Notes](RELEASENOTES.md)
