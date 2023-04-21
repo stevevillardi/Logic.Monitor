@@ -246,6 +246,13 @@ Foreach($Device in $Devices){
 }
 ```
 
+#### Update a set of datapoints on a datasource
+```powershell
+$datapoints = $(Get-LMDatasource -id 458).datapoints
+$datapoints[1].alertExpr = "> 80 90 95"
+Set-LMDatasource -id 458 -Datapoints $datapoints
+```
+
 #### Import list of UNC path instances
 ``` powershell
 #Example adding UNC Path monitoring via csv with headers DisplayName,Wildvalue,Description
@@ -256,7 +263,6 @@ $uncMonitorId = (Get-LMDeviceDatasourceList -Id $device.Id | Where-Object {$_.da
 Foreach($line in $uncPathList){
     New-LMDeviceDatasourceInstance -DisplayName $line.DisplayName -WildValue $line.Wildvalue -Description $line.Description -DatasourceId $uncMonitorId -Id $device.id
 }
-
 ```
 #### Export a set of device configurations and search for a specified regex/string
 ```powershell
