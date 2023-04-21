@@ -1,6 +1,6 @@
 Function Get-LMAuditLogs {
 
-    [CmdletBinding(DefaultParameterSetName = 'All')]
+    [CmdletBinding(DefaultParameterSetName = 'Range')]
     Param (
         [Parameter(ParameterSetName = 'Id')]
         [String]$Id,
@@ -48,7 +48,7 @@ Function Get-LMAuditLogs {
         While (!$Done) {
             #Build query params
             Switch ($PSCmdlet.ParameterSetName) {
-                "All" { $QueryParams = "?filter=happenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`"&size=$BatchSize&offset=$Count&sort=+happenedOn" }
+                "Range" { $QueryParams = "?filter=happenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`"&size=$BatchSize&offset=$Count&sort=+happenedOn" }
                 "Id" { $resourcePath += "/$Id" }
                 "Filter" {
                     #List of allowed filter props

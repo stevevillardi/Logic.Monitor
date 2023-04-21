@@ -1,4 +1,11 @@
 # Previous module release notes
+## 4.0.3
+###### Update Commands/Bug Fixes:
+- **Initialize-LMPOVSetup**: Added two new switches *-ReadOnlyMode* and *-RevertReadOnlyMode* that will convert and revert all non api accounts to/from readonly mode.
+- **Initialize-LMPOVSetup**: Added a new switch *-SetupCollectorServiceInsight* that will provision a service insight example aggregating important collector metrics accross all installed collectors in a portal. This example will be expanded on in future releases.
+- **Import-LMLogicModule**: Added new *-File* switch that allows for providing a XML file object directly as opposed to just a FilePath previously.
+- **New-LMDevice**: Added support for -*DeviceType* to allow for setting the device type when provisioning a new resource, useful for creating service resources.
+
 ## 4.0.2
 ###### Update Commands/Bug Fixes:
 - Fixed **Set-LMCollector** bug causing automatic upgrade schedules to get reset when updating the collector

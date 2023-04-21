@@ -26,6 +26,13 @@ Function Initialize-LMPOVSetup {
         [Switch]$SetupPortalMetrics,
 
         [Parameter(ParameterSetName = 'Individual')]
+        [Switch]$SetupLMContainer,
+
+        [Parameter(ParameterSetName = 'All')]
+        [Parameter(ParameterSetName = 'Individual')]
+        [string]$LMContainerAPIUsername = "lm_container",
+
+        [Parameter(ParameterSetName = 'Individual')]
         [Switch]$MoveMinimalMonitoring,
 
         [Parameter(ParameterSetName = 'Individual')]
@@ -90,7 +97,7 @@ Function Initialize-LMPOVSetup {
                         }
                     }
                     Else{
-                        Write-Host "[INFO]: User $($User.username) previously converted, skipping processing." -ForegroundColor Yellow
+                        Write-Host "[INFO]: User $($User.username) previously converted, skipping processing." -ForegroundColor Gray
                     }
                 }
             }
@@ -106,7 +113,7 @@ Function Initialize-LMPOVSetup {
                         }
                     }
                     Else{
-                        Write-Host "[INFO]: No previous role info found for user $($User.username), skipping role revert for user." -ForegroundColor Yellow
+                        Write-Host "[WARN]: No previous role info found for user $($User.username), skipping role revert for user." -ForegroundColor Yellow
                     }
                 }
             }
@@ -124,22 +131,42 @@ Function Initialize-LMPOVSetup {
                 } | ConvertTo-Json -Depth 3
 
                 #Create new SI resource
-                $ServiceInsightResource = New-LMDevice -name "LogicMonitorCollectorHealth" -DisplayName "LogicMonitor: Collector Health" -PreferredCollectorId -4 -DeviceType 6 -Properties @{"predef.bizservice.members"=$ServiceInsightProps;"predef.bizService.evalMembersInterval"="30"}
-                If($ServiceInsightResource){
-                    Write-Host "[INFO]: Successfully created service insight resource (LogicMonitor: Collector Health)"
-                    #Upload SI datasource from xml
-                    Try{
-                        $SIDatasource = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/Logic.Monitor/main/Private/SIs/LogicMonitor_Collector_Health.xml").Content
-                        Import-LMLogicModule -File $SIDatasource -Type datasource -ErrorAction Stop
+                $ServiceInsightResource = Get-LMDevice -name "LogicMonitorCollectorHealth"
+                If(!$ServiceInsightResource){
+                    $ServiceInsightResource = New-LMDevice -name "LogicMonitorCollectorHealth" -DisplayName "LogicMonitor: Collector Health" -PreferredCollectorId -4 -DeviceType 6 -Properties @{"predef.bizservice.members"=$ServiceInsightProps;"predef.bizService.evalMembersInterval"="30"}
+                    If($ServiceInsightResource){
+                        Write-Host "[INFO]: Successfully created service insight resource (LogicMonitor: Collector Health)"
+                        #Upload SI datasource from xml
+                        Try{
+                            $SIDatasource = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/Logic.Monitor/main/Private/SIs/LogicMonitor_Collector_Health.xml").Content
+                            Import-LMLogicModule -File $SIDatasource -Type datasource -ErrorAction Stop
+                        }
+                        Catch{
+                            #Oops
+                            Write-Host "[ERROR]: Unable to import SI template from source: $_" -ForegroundColor Red
+                        }
                     }
-                    Catch{
+                    Else{
                         #Oops
-                        Write-Host "[INFO]: Unable to import SI template from source: $_" -ForegroundColor Yellow
+                        Write-Host "[ERROR]: Failed to create service insight resource (LogicMonitor: Collector Health), review error message and try again." -ForegroundColor Red
                     }
                 }
                 Else{
-                    #Oops
-                    Write-Host "[INFO]: Failed to create service insight resource (LogicMonitor: Collector Health), review error message and try again." -ForegroundColor Yellow
+                    Write-Host "[INFO]: Service insight resource (LogicMonitor: Collector Health) already exists, skipping creation" -ForegroundColor Gray
+                    #Upload SI datasource from xml
+                    If(!$(Get-LMDatasource -DisplayName "LogicMonitor Collector Health")){
+                        Try{
+                            $SIDatasource = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/Logic.Monitor/main/Private/SIs/LogicMonitor_Collector_Health.xml").Content
+                            Import-LMLogicModule -File $SIDatasource -Type datasource -ErrorAction Stop
+                        }
+                        Catch{
+                            #Oops
+                            Write-Host "[WARN]: Unable to import SI template from source: $_" -ForegroundColor Yellow
+                        }
+                    }
+                    Else{
+                        Write-Host "[INFO]: Service insight aggregate datasource (LogicMonitor Collector Health) already exists, skipping import" -ForegroundColor Gray
+                    }
                 }
             }
 
@@ -178,7 +205,7 @@ Function Initialize-LMPOVSetup {
                     }
                 }
                 Else{
-                    Write-Host "[INFO]: API User ($PortalMetricsAPIUsername) or portal metrics device ($DeviceName) already exists in portal, skipping setup for portal metrics" -ForegroundColor Yellow
+                    Write-Host "[INFO]: API User ($PortalMetricsAPIUsername) or portal metrics device ($DeviceName) already exists in portal, skipping setup for portal metrics" -ForegroundColor Gray
                 }
             }
 
@@ -205,7 +232,7 @@ Function Initialize-LMPOVSetup {
                     $MinimalFolderAppliesTo = (Get-LMDeviceGroup -Name "Minimal Monitoring").appliesTo
                     If ($MinimalFolderAppliesTo) {
                         Write-Host "[INFO]: Updating Minimal Monitoring folder to exclude Meraki and Portal Metrics resources"
-                        $MinimalFolderAppliesTo = $MinimalFolderAppliesTo + " && !hasCategory(`"LogicMonitorPortal`")  && !hasCategory(`"MerakiAPIOrg`")  && !hasCategory(`"MerakiAPINetwork`")"
+                        $MinimalFolderAppliesTo = "system.sysinfo == `"`" && system.sysoid == `"`" && isDevice() && !(system.virtualization) && (monitoring != `"basic`") && system.devicetype != `"8`" && !hasCategory(`"LogicMonitorPortal`")  && !hasCategory(`"MerakiAPIOrg`")  && !hasCategory(`"MerakiAPINetwork`")"
                         $MinimalFolder = Set-LMDeviceGroup -Id $MinimalFolderId -AppliesTo $MinimalFolderAppliesTo
                         If ($MinimalFolder) {
                             Write-Host "[INFO]: Successfully updated minimal monitoring appliesTo query"
@@ -236,9 +263,40 @@ Function Initialize-LMPOVSetup {
                 }
                 Write-Host "[INFO]: Creating additional default dynamic groups"
                 Foreach($Group in $DynamicGroupList.GetEnumerator()){
-                    $NewGroup = New-LMDeviceGroup -Name $Group.Name -ParentGroupId $DeviceFolderId -AppliesTo $Group.Value
-                    If($NewGroup){
-                        Write-Host "[INFO]: Created new dynamic group: $($Group.Name)"
+                    If(!$(Get-LMDeviceGroup -Name $Group.Name)){
+                        $NewGroup = New-LMDeviceGroup -Name $Group.Name -ParentGroupId $DeviceFolderId -AppliesTo $Group.Value
+                        If($NewGroup){
+                            Write-Host "[INFO]: Created new dynamic group: $($Group.Name)"
+                        }
+                    }
+                    Else{
+                        Write-Host "[INFO]: Dynamic group: $($Group.Name) already exists, skipping creation" -ForegroundColor Gray
+                    }
+                }
+            }
+
+            #Add k8s role with proper permissions
+            If($RunAll -or $SetupLMContainer){
+                $LMContainerAPIRoleName = "lm-container"
+                $LMContainerAPIUser = Get-LMUser -Name "$LMContainerAPIUsername"
+                $LMContainerAPIRole = Get-LMRole -Name $LMContainerAPIRoleName
+
+                If(!$LMContainerAPIRole){
+                    Write-Host "[INFO]: Setting up LM Container API Role: $LMContainerAPIRoleName"
+                    $LMContainerAPIRole = New-LMRole -Name $LMContainerAPIRoleName -ResourcePermission manage -LogsPermission manage -DashboardsPermission manage -SettingsPermission manage-collectors -Description "Auto provisioned to allow for API token creation for use with lm-container"
+                    If($LMContainerAPIRole){
+                        Write-Host "[INFO]: Successfully setup API role: $LMContainerAPIRoleName"
+                    }
+                }
+                Else{
+                    Write-Host "[INFO]: LM Container API Role ($LMContainerAPIRoleName) already exists in portal, skipping setup" -ForegroundColor Gray
+                }
+
+                If(!$LMContainerAPIUser){
+                    Write-Host "[INFO]: Setting up LM Container API user: $LMContainerAPIUsername"
+                    $LMContainerAPIUser = New-LMAPIUser -Username "$LMContainerAPIUsername" -note "Auto provisioned for use with LM Container" -RoleNames @($LMContainerAPIRoleName)
+                    If ($LMContainerAPIUser) {
+                        Write-Host "[INFO]: Successfully setup API user: $LMContainerAPIUsername"
                     }
                 }
             }
@@ -248,14 +306,14 @@ Function Initialize-LMPOVSetup {
                 $LogsAPIUser = Get-LMUser -Name "$LogsAPIUsername"
                 $LogsAPIRole = Get-LMRole -Name $LogsAPIRoleName
                 If(!$LogsAPIRole){
-                    Write-Host "[INFO]: Setting up LM Logs API Role: lm-logs-ingest"
+                    Write-Host "[INFO]: Setting up LM Logs API Role: $LogsAPIRoleName"
                     $LogsAPIRole = New-LMRole -Name $LogsAPIRoleName -ResourcePermission view -LogsPermission manage -Description "Auto provisioned to allow for windows events ingest via datasource"
                     If($LogsAPIRole){
                         Write-Host "[INFO]: Successfully setup API role: $LogsAPIRoleName"
                     }
                 }
                 Else{
-                    Write-Host "[INFO]: LM Logs API Role ($LogsAPIRoleName) already exists in portal, skipping setup" -ForegroundColor Yellow
+                    Write-Host "[INFO]: LM Logs API Role ($LogsAPIRoleName) already exists in portal, skipping setup" -ForegroundColor Gray
                 }
                 If(!$LogsAPIUser){
                     Write-Host "[INFO]: Setting up LM Logs API user: $LogsAPIUsername"
@@ -298,7 +356,7 @@ Function Initialize-LMPOVSetup {
                     }
                 }
                 Else{
-                    Write-Host "[INFO]: LM Logs API User ($LogsAPIUsername) already exists in portal, skipping setup" -ForegroundColor Yellow
+                    Write-Host "[INFO]: LM Logs API User ($LogsAPIUsername) already exists in portal, skipping setup" -ForegroundColor Gray
                 }
             }
             

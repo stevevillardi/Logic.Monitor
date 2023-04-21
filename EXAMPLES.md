@@ -256,7 +256,23 @@ $uncMonitorId = (Get-LMDeviceDatasourceList -Id $device.Id | Where-Object {$_.da
 Foreach($line in $uncPathList){
     New-LMDeviceDatasourceInstance -DisplayName $line.DisplayName -WildValue $line.Wildvalue -Description $line.Description -DatasourceId $uncMonitorId -Id $device.id
 }
+
 ```
+#### Export a set of device configurations and search for a specified regex/string
+```powershell
+Export-LMDeviceConfigBackup -DeviceGroupId 654 | Search-LMDeviceConfigBackup -SearchPattern "snmp"
+```
+
+#### Export a set of device configurations to CSV
+```powershell
+Export-LMDeviceConfigBackup -DeviceGroupId 654 -Path device-configs.csv
+```
+
+#### Generate an html report showing delta changes for a set of device configurations over the last 30 days
+```powershell
+Export-LMDeviceConfigReport -DeviceGroupId 654 -Path device-configs.html -DaysBack 30
+```
+
 
 #### Ingest PushMetrics 
 ###### Note: PushMetrics must be enabled for the LM Portal

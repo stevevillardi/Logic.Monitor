@@ -8,9 +8,17 @@ When starting a new POV there is often a checklist of items that need to be done
 
 - **MoveMinimalMonitoring:** Moves the _Minimal Monitoring_ folder into _Devices by Type_. Also modifies the AppliesTo query to exclude Meraki and PortalMetrics devices from showing up.
 
-- **CleanUpDynamicGroups:** Deletes the Misc folder and updates the Linux Servers folders AppliesTo to include Linux_SSH devices.
+- **CleanUpDynamicGroups:** Deletes the Misc folder and updates the Linux Servers folders AppliesTo to include Linux_SSH devices. Also deploys and additional 15 dynamic groups for various resource types (dead devices, palo alto, aws, gcp, azure, etc)
 
 - **SetupWindowsLMLogs:** Generates a lm_logs api user, imports the LM Logs datasource from the LM Exchange and assigns the required properties to the dynamic group Windows Servers.
+
+- **SetupLMContainer:** Generates and lm_container user and role with required permissions for use with LM Container.
+
+- **SetupCollectorServiceInsight:** Create an example service insight for all collectors in a portal and import required DS from LM Repo.
+
+- **ReadOnlyMode:** Used by itself to convert a portals users to the readonly role. Excludes lmsupport and api only users. Retains previous role history for rollback
+
+- **RevertReadOnlyMode:** Revert any users effected by the ReadOnlyMode parameter. Useful if you need to re-enable previously converted users from readonly mode.
 
 - **RunAll:** Performs all of the above functions.
 
@@ -20,6 +28,8 @@ When starting a new POV there is often a checklist of items that need to be done
 **-WebstieHttpType** : Protocol to use for webcheck (http or https). Defaults to **https** if not specified
 **-PortalMetricsAPIUsername** : The name to use for creation of the API User. Defaults to **lm_api** if not specified.
 **-LogsAPIUsername** : The name to use for creation of the LM Logs API User. Defaults to **lm_logs** if not specified.
+**-LMContainerAPIUsername** : The name to use for creation of the LM Container API User. Defaults to **lm_container** if not specified.
+**-WindowsLMLogsEventChannels**: Comma seperated list of windows event channel to setup for ingestions. Defaults to **Application,System** if not specified.
 
 This utility is an ongoing devlopment. If you have things you would like added to this prep utility let me know (customer image upload, upload additonal datasources/dashboards, etc)
 
@@ -39,4 +49,10 @@ Initialize-LMPOVSetup -SetupPortalMetrics -PortalMetricsAPIUsername "custom_name
 
 #Setup LM Logs with custom api username
 Initialize-LMPOVSetup -SetupWindowsLMLogs -LogsAPIUsername "custom_logs_name"
+
+#Convert a portal to readonly mode
+Initialize-LMPOVSetup -ReadOnlyMode
+
+#Revert a portal from readonly mode
+Initialize-LMPOVSetup -RevertReadOnlyMode
 ```

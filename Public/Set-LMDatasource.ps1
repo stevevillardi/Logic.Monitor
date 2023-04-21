@@ -18,7 +18,8 @@ Function Set-LMDatasource {
 
         [String]$PollingIntervalInSeconds, #In Seconds
 
-        [String]$appliesTo
+        [PSCustomObject]$Datapoints #Should be the full datapoints object from the output of Get-LMDatasource
+
     )
     #Check if we are logged in and have valid api creds
     Begin {}
@@ -45,6 +46,7 @@ Function Set-LMDatasource {
                     appliesTo                 = $appliesTo
                     technology                = $TechNotes
                     collectInterval           = $PollingIntervalInSeconds
+                    dataPoints                = $Datapoints
                 }
 
                 #Remove empty keys so we dont overwrite them

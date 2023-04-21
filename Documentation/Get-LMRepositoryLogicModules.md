@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-LMRepositoryLogicModules [[-Type] <String>] [-CoreVersion] <Int32> [<CommonParameters>]
+Get-LMRepositoryLogicModules [[-Type] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,21 +29,6 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
-
-### -CoreVersion
-{{ Fill CoreVersion Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -Type
 {{ Fill Type Description }}

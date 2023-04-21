@@ -13,8 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Import-LMRepositoryLogicModules [-Type] <String> [[-CoreVersion] <Int32>] [-LogicModuleNames] <String[]>
- [<CommonParameters>]
+Import-LMRepositoryLogicModules [-Type] <String> [-LogicModuleNames] <String[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,33 +30,18 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -CoreVersion
-{{ Fill CoreVersion Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -LogicModuleNames
 {{ Fill LogicModuleNames Description }}
 
 ```yaml
 Type: String[]
 Parameter Sets: (All)
-Aliases:
+Aliases: Name
 
 Required: True
-Position: 2
+Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

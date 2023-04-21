@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-Exports an HTML report containing changed network configs
+Exports the latest version of a device config for a select set of devices
 
 .DESCRIPTION
-Export device config change report based on the number of days specified, defaults to using the Devices by Type/Network folder
+Exports the latest version of a device config for a select set of devices
 
 .PARAMETER DeviceGroupId
 Device group id for the group to use as the source of running the report.
@@ -11,11 +11,8 @@ Device group id for the group to use as the source of running the report.
 .PARAMETER DeviceId
 Device id to use as the source of running the report, defaults to Devices by Type/Network folder if not specified
 
-.PARAMETER DaysBack
-Number of days back to run the report, defaults to 7 if not specified
-
 .PARAMETER Path
-Path to export the HTML report to
+Path to export the csv backup to
 
 .PARAMETER InstanceNameFilter
 Regex filter to use to filter out Instance names used for discovery, defaults to "running|current|PaloAlto".
@@ -23,17 +20,12 @@ Regex filter to use to filter out Instance names used for discovery, defaults to
 .PARAMETER ConfigSourceNameFilter
 Regex filter to use to filter out ConfigSource names used for discovery, defaults to ".*"
 
-.PARAMETER OpenOnCompletion
-Open the output html report automatically once completed
+.EXAMPLE
+Export-LMDeviceConfigBackup -DeviceGroupId 2 -Path export-report.csv
 
 .EXAMPLE
-Export-LMDeviceConfigReport -DaysBack 30 -DeviceGroupId 2 -Path export-report.html
+Export-LMDeviceConfigBackup -DeviceId 1 -Path export-report.csv
 
-.EXAMPLE
-Export-LMDeviceConfigReport -Path export-report.html -OpenOnCompletion
-
-.NOTES
-You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
 
 .INPUTS
 None. You cannot pipe objects to this command.
@@ -45,7 +37,7 @@ Module repo: https://github.com/stevevillardi/Logic.Monitor
 PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
 #>
 
-Function Export-LMDeviceConfigReport {
+Function Export-LMDeviceConfigBackup {
 
     [CmdletBinding(DefaultParameterSetName="Device")]
     Param (
@@ -58,13 +50,9 @@ Function Export-LMDeviceConfigReport {
         [Regex]$InstanceNameFilter = "[rR]unning|[cC]urrent|[pP]aloAlto",
 
         [Regex]$ConfigSourceNameFilter = ".*",
-
-        [String]$DaysBack = 7,
         
-        [Parameter(Mandatory)]
-        [String]$Path,
-
-        [Switch]$OpenOnCompletion
+        [Parameter()]
+        [String]$Path
     )
 
     #Check if we are logged in and have valid api creds
@@ -112,57 +100,40 @@ Function Export-LMDeviceConfigReport {
         #Loop through filtered instance list and pull config diff
         $device_configs = @()
         Foreach ($instance in $instance_list) {
-            $device_configs += Get-LMDeviceConfigSourceData -id $instance.deviceId -HdsId $instance.dataSourceId -HdsInsId $instance.instanceId -ConfigType Delta
+            $device_configs += Get-LMDeviceConfigSourceData -id $instance.deviceId -HdsId $instance.dataSourceId -HdsInsId $instance.instanceId -ConfigType Full -LatestConfigOnly
         }
         
         #We found some config changes, let organize them
         $output_list = @()
         If ($device_configs) {
-            #Filter configs by start and end date based on number of days to look back
-
-            #Get start and end epoch range
-            $start_date = [Math]::Floor((New-TimeSpan -Start (Get-Date "01/01/1970") -End ((Get-Date).AddDays(-$DaysBack).ToUniversalTime())).TotalMilliseconds)
-            $end_date = [Math]::Floor((New-TimeSpan -Start (Get-Date "01/01/1970") -End ((Get-Date).ToUniversalTime())).TotalMilliseconds)
-            
-            #Remove old configs from report to limit processing
-            $device_configs = $device_configs | Where-Object { $_.pollTimestamp -ge $start_date -and $_.pollTimestamp -le $end_date }
-            
             #Group Configs by device so we can work through each set
             $config_grouping = $device_configs | Group-Object -Property deviceId
             Write-LMHost -Message "Collecting latest device configurations from $(($config_grouping | Measure-Object).Count) devices."
-
             #Loop through each set and built report
             Foreach ($device in $config_grouping) {
-                Write-LMHost -Message " [INFO]: Found $(($device.Group | Measure-Object).Count) configsource instance version(s) for: $($device.deviceDisplayName) matching selected range of last $DaysBack day(s)"  -ForegroundColor Gray
-                Foreach ($config in $device.Group) {
-                    Foreach ($line in $config.deltaConfig) {
-                        $output_list += [PSCustomObject]@{
-                            deviceDisplayName        = $config.deviceDisplayName
-                            deviceInstanceName       = $config.instanceName
-                            devicePollTimestampEpoch = $config.pollTimestamp
-                            devicePollTimestampUTC   = [datetimeoffset]::FromUnixTimeMilliseconds($config.pollTimestamp).DateTime
-                            deviceConfigVersion      = $config.version
-                            configChangeType         = $line.type
-                            configChangeRow          = $line.rowNo
-                            configChangeContent      = $line.content
-                        }
-                    }
+                $config = $device.Group | Sort-Object -Property pollTimestamp -Descending | Select-Object -First 1
+                Write-LMHost -Message " [INFO]: Found $(($device.Group | Measure-Object).Count) configsource instance version(s) for: $($config.deviceDisplayName), selecting latest config dated: $([datetimeoffset]::FromUnixTimeMilliseconds($config.pollTimestamp).DateTime)UTC"  -ForegroundColor Gray
+                $output_list += [PSCustomObject]@{
+                    deviceDisplayName        = $config.deviceDisplayName
+                    deviceInstanceName       = $config.instanceName
+                    deviceDatasourceName     = $config.dataSourceName
+                    devicePollTimestampEpoch = $config.pollTimestamp
+                    devicePollTimestampUTC   = [datetimeoffset]::FromUnixTimeMilliseconds($config.pollTimestamp).DateTime
+                    deviceConfigVersion      = $config.version
+                    configContent            = $config.config
                 }
             }
         }
+
         If($output_list){
-            #Generate HTML Report
-            New-HTML -TitleText "LogicMonitor - Config Report" -ShowHTML:$OpenOnCompletion -Online -FilePath $Path {
-                New-HTMLPanel {
-                    New-HTMLTable -DataTable $output_list -HideFooter -ScrollCollapse -PagingLength 1000 {
-                        New-TableHeader -Title "LogicMonitor - Config Report (Last $DaysBack days)" -Alignment center -BackGroundColor BuddhaGold -Color White -FontWeight bold
-                        New-TableRowGrouping -Name "deviceDisplayName"
-                    }
-                }
+            If($Path){
+                #Generate CSV Export
+                $output_list | Export-Csv -Path $Path -NoTypeInformation
             }
+            Return (Add-ObjectTypeInfo -InputObject $output_list -TypeName "LogicMonitor.ConfigBackup" )
         }
         Else{
-            Write-LMHost -Message "Did not find any configs to output based on date range selected ($DaysBack days), check your parameters and try again." -ForegroundColor Yellow
+            Write-LMHost -Message "Did not find any configs to output based on selected resource(s), check your parameters and try again." -ForegroundColor Yellow
         }
         
     }

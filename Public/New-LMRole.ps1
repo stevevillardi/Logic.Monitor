@@ -55,7 +55,7 @@ Function New-LMRole {
         [String]$ReportsPermission = "none",
 
         [Parameter(ParameterSetName = 'Default')]
-        [ValidateSet("view", "manage","none")]
+        [ValidateSet("view", "manage","none","manage-collectors","view-collectors")]
         [String]$SettingsPermission = "none",
 
         [Parameter(ParameterSetName = 'Default')]
@@ -249,19 +249,30 @@ Function New-LMRole {
             }
 
             If($SettingsPermission -ne "none"){
-                $Privileges += [PSCustomObject]@{
-                    objectId = "*"
-                    objectName = "*"
-                    objectType = "setting"
-                    operation = If($SettingsPermission -eq "manage"){"write"}Else{"read"}
-                    subOperation = ""
+                If($SettingsPermission -ne "manage-collectors" -and $SettingsPermission -ne "view-collectors"){
+                    $Privileges += [PSCustomObject]@{
+                        objectId = "*"
+                        objectName = "*"
+                        objectType = "setting"
+                        operation = If($SettingsPermission -eq "manage"){"write"}Else{"read"}
+                        subOperation = ""
+                    }
+
+                    $Privileges += [PSCustomObject]@{
+                        objectId = "useraccess.*"
+                        objectName = "useraccess.*"
+                        objectType = "setting"
+                        operation = If($ResourcePermission -eq "manage"){"write"}Else{"read"}
+                        subOperation = ""
+                    }
                 }
-                $Privileges += [PSCustomObject]@{
-                    objectId = "useraccess.*"
-                    objectName = "useraccess.*"
-                    objectType = "setting"
-                    operation = If($ResourcePermission -eq "manage"){"write"}Else{"read"}
-                    subOperation = ""
+                Else{
+                    $Privileges += [PSCustomObject]@{
+                        objectId = "collectorgroup.*"
+                        objectName = "Collectors"
+                        objectType = "setting"
+                        operation = If($SettingsPermission -eq "manage-collectors"){"write"}Else{"read"}
+                    }
                 }
             }
 

@@ -3,10 +3,7 @@ Function Get-LMRepositoryLogicModules {
     [CmdletBinding()]
     Param (
         [ValidateSet("datasource", "propertyrules", "eventsource", "topologysource", "configsource")]
-        [String]$Type = "datasource",
-
-        [Parameter(Mandatory)]
-        [Int]$CoreVersion
+        [String]$Type = "datasource"
 
     )
     #Check if we are logged in and have valid api creds
@@ -20,7 +17,7 @@ Function Get-LMRepositoryLogicModules {
         $Results = @()
 
         $Data = @{
-            coreServer = "v$CoreVersion.core.logicmonitor.com"
+            coreServer = "core.logicmonitor.com"
             password   = "logicmonitor"
             username   = "anonymouse"
         }

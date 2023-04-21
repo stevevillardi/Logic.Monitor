@@ -45,7 +45,7 @@ Function Get-LMEscalationChain {
     
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
-
+                
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true

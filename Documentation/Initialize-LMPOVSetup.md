@@ -15,15 +15,16 @@ schema: 2.0.0
 ### Individual
 ```
 Initialize-LMPOVSetup [-Website <String>] [-WebsiteHttpType <String>] [-PortalMetricsAPIUsername <String>]
- [-LogsAPIUsername <String>] [-SetupWebsite] [-SetupPortalMetrics] [-MoveMinimalMonitoring]
- [-CleanupDynamicGroups] [-SetupWindowsLMLogs] [-SetupCollectorServiceInsight]
- [-WindowsLMLogsEventChannels <String>] [<CommonParameters>]
+ [-LogsAPIUsername <String>] [-SetupWebsite] [-SetupPortalMetrics] [-SetupLMContainer]
+ [-LMContainerAPIUsername <String>] [-MoveMinimalMonitoring] [-CleanupDynamicGroups] [-SetupWindowsLMLogs]
+ [-SetupCollectorServiceInsight] [-WindowsLMLogsEventChannels <String>] [<CommonParameters>]
 ```
 
 ### All
 ```
 Initialize-LMPOVSetup [-Website <String>] [-WebsiteHttpType <String>] [-PortalMetricsAPIUsername <String>]
- [-LogsAPIUsername <String>] [-WindowsLMLogsEventChannels <String>] [-RunAll] [<CommonParameters>]
+ [-LogsAPIUsername <String>] [-LMContainerAPIUsername <String>] [-WindowsLMLogsEventChannels <String>]
+ [-RunAll] [<CommonParameters>]
 ```
 
 ### PostPOV-Readonly
@@ -56,6 +57,21 @@ PS C:\> {{ Add example code here }}
 ```yaml
 Type: SwitchParameter
 Parameter Sets: Individual
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LMContainerAPIUsername
+{{ Fill LMContainerAPIUsername Description }}
+
+```yaml
+Type: String
+Parameter Sets: Individual, All
 Aliases:
 
 Required: False
@@ -157,6 +173,21 @@ Accept wildcard characters: False
 
 ### -SetupCollectorServiceInsight
 {{ Fill SetupCollectorServiceInsight Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Individual
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SetupLMContainer
+{{ Fill SetupLMContainer Description }}
 
 ```yaml
 Type: SwitchParameter

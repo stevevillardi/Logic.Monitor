@@ -12,19 +12,14 @@ schema: 2.0.0
 
 ## SYNTAX
 
-### All (Default)
+### Range (Default)
 ```
-Get-LMAuditLogs [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAuditLogs [-StartDate <DateTime>] [-EndDate <DateTime>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id
 ```
 Get-LMAuditLogs [-Id <String>] [-BatchSize <Int32>] [<CommonParameters>]
-```
-
-### Range
-```
-Get-LMAuditLogs [-StartDate <DateTime>] [-EndDate <DateTime>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Filter

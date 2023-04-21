@@ -1,4 +1,4 @@
-Function Get-LMDeviceConfigSourceDiff {
+Function Get-LMDeviceConfigSourceData {
 
     [CmdletBinding(DefaultParameterSetName = 'ListDiffs')]
     Param (
@@ -14,8 +14,12 @@ Function Get-LMDeviceConfigSourceDiff {
         [Parameter(ParameterSetName = 'ConfigId')]
         [String]$ConfigId,
 
-        [Parameter(ParameterSetName = 'ListDiffs')]
-        [Int]$BatchSize = 100
+        [Parameter(ParameterSetName = 'ListConfigs')]
+        [switch]$LatestConfigOnly,
+
+        [Parameter(ParameterSetName = 'ListConfigs')]
+        [ValidateSet("Delta", "Full")]
+        [String]$ConfigType = "Delta"
 
     )
     #Check if we are logged in and have valid api creds
@@ -26,26 +30,36 @@ Function Get-LMDeviceConfigSourceDiff {
 
         #Initalize vars
         $QueryParams = ""
+        $SortParam = ""
         $Count = 0
         $Done = $false
         $Results = @()
+
+        Switch($ConfigType){
+            "Delta" {$ConfigField = "!config"}
+            "Full" {$ConfigField = "!deltaConfig"}
+        }
+
+        If($LatestConfigOnly){
+            $BatchSize = 1
+            $SortParam = "&sort=-pollTimestamp"
+        }
 
         #Loop through requests 
         While (!$Done) {
             #Build query params
             If($ConfigId){
-                $StartEpoch = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
                 $ResourcePath = $ResourcePath + "/$ConfigId"
-                $QueryParams = "?deviceId=$Id&deviceDataSourceId=$HdsId&instanceId=$HdsInsId&fields=!deltaconfig&startEpoch=$StartEpoch"
+                $QueryParams = "?deviceId=$Id&deviceDataSourceId=$HdsId&instanceId=$HdsInsId&fields=$ConfigField"
             }
             Else{
-                $QueryParams = "?size=$BatchSize&offset=$Count&fields=!config"
+                $QueryParams = "?size=$BatchSize&offset=$Count&fields=$ConfigField$SortParam"
             }
 
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
-
+                
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 
@@ -53,6 +67,9 @@ Function Get-LMDeviceConfigSourceDiff {
                 If (![bool]$Response.psobject.Properties["total"]) {
                     $Done = $true
                     Return $Response
+                }
+                ElseIf($LatestConfigOnly){
+                    Return $Response.Items
                 }
                 #Check result size and if needed loop again
                 Else {
