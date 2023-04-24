@@ -315,6 +315,7 @@ Function Initialize-LMPOVSetup {
                 Else{
                     Write-Host "[INFO]: LM Logs API Role ($LogsAPIRoleName) already exists in portal, skipping setup" -ForegroundColor Gray
                 }
+
                 If(!$LogsAPIUser){
                     Write-Host "[INFO]: Setting up LM Logs API user: $LogsAPIUsername"
                     $LogsAPIUser = New-LMAPIUser -Username "$LogsAPIUsername" -note "Auto provisioned for use with Windows LM Logs Datasource" -RoleNames @($LogsAPIRoleName)
@@ -342,10 +343,17 @@ Function Initialize-LMPOVSetup {
 
 
                     }
-                    #Import LM Logs Datasource
-                    #Import-LMExchangeModule -LMExchangeId "2cb0a988-487a-48a6-b332-62003ef3b3dc" #core module
-                    #Start-Sleep -Seconds 5 #Added manual pause to ensure datasource is available after importing from the exchange
-                    #$LogsDatasource = Set-LMDatasource -Name Windows_Events_LMLogs -appliesTo "isWindows() && lmlogs.winevent.channels && lmaccess.id && lmaccess.key && lmaccount"
+                }
+                Else{
+                    Write-Host "[INFO]: LM Logs API User ($LogsAPIUsername) already exists in portal, skipping setup" -ForegroundColor Gray
+                }
+
+                #Import LM Logs Datasource
+                $LogsDatasource = Get-LMDatasource -Name "Windows_Events_LMLogs"
+                If(!$LogsDatasource){
+                    Import-LMExchangeModule -LMExchangeId "2cb0a988-487a-48a6-b332-62003ef3b3dc" #core module
+                    Start-Sleep -Seconds 5 #Added manual pause to ensure datasource is available after importing from the exchange
+                    $LogsDatasource = Set-LMDatasource -Name Windows_Events_LMLogs -appliesTo "isWindows() && lmlogs.winevent.channels && lmaccess.id && lmaccess.key && lmaccount"
                     If($LogsDatasource){
                         Write-Host "[INFO]: Successfully added core module (Windows_Events_LMLogs) and updated appliesto logic"
                     }
@@ -354,7 +362,7 @@ Function Initialize-LMPOVSetup {
                     }
                 }
                 Else{
-                    Write-Host "[INFO]: LM Logs API User ($LogsAPIUsername) already exists in portal, skipping setup" -ForegroundColor Gray
+                    Write-Host "[INFO]: LM Logs core logicmodule ($($LogsDatasource.displayname)) already exists in portal, skipping setup" -ForegroundColor Gray
                 }
             }
             

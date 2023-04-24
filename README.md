@@ -355,20 +355,12 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 ***Note**: Supports Pipline Input
 
 # Change List
-## 4.1
-###### New Commands:
-- **Search-LMDeviceConfigBackup**: Performs a search against the output of *Export-LMDeviceConfigBackup* for any line in configurations matching the specified regex pattern. See example documentation for usage.
-- **Export-LMDeviceConfigBackup**: Export the latest configuration data for a single or group of devices and export to CSV. Output can also be piped to perform as search against the result set.
-
+## 4.1.1
 ###### Update Commands/Bug Fixes:
-- **Get-LMAuditLog**: Fixed bug that ignored start and end date filters when trying to search by date range.
-- **Set-LMDatasource**: Add new parameter *-Datapoints* that takes an array of datapoints. See example documentation for usage.
-- **New-LMRole**: Added new setting permissions values for manage-collectors and view-collectors.
-- **Set-LMRole**: Added new setting permissions values for manage-collectors and view-collectors.
-- **Initalize-LMPOVSetup**: Added provisioning of lm_container user for use with LM Container. Fixed retry logic for Service Insight creation. Updated minimal monitoring applpiesto criteria.
-- **Import-LMRepositoryLogicModules**: Updated command to align with the removal of the core version from the server parameter that was made in portal version 185. Enabled pipeline processing from Get-LMRepositoryLogicModules.
-- **Get-LMRepositoryLogicModules**: Updated command to align with the removal of the core version from the server parameter that was made in portal version 185.
-- **Get-LMDeviceConfigSourceData**: Added *-ConfigType* parameter to allow you to pull Delta or Full configuration data. Also added *-LatestConfigOnly* switch to only return the more recent configuration backup for the selected devices.
-- **Get-LMAuditLogs**: Fixed bug that caused start and end dates to be ignored when performing search.
-- **Export-LMDeviceConfigReport**: Updated command to support the changes from *Get-LMDeviceConfigSourceData* and improved console logging.
+- **Initalize-LMPOVSetup**: Fixed LM Logs datasource issue with importing an older core module that has collection issues. If you are using the POV setup command make sure you use this updated version for all new POVs. For existing POVs to ensure you have the latest core module for Logs either manually update the datasource using the LM Exchange/Repository or by running the bellow command:
+
+```powershell
+Import-LMRepositoryLogicModules -Type datasources -LogicModuleNames Windows_Events_LMLogs
+```
+
 [Previous Release Notes](RELEASENOTES.md)
