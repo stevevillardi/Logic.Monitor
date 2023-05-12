@@ -8,7 +8,7 @@ Function Get-LMDeviceGroupDevices {
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Boolean]$IncludeSubGroups = $false,
 

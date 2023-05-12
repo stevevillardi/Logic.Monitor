@@ -14,13 +14,13 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMDeviceInstanceList -Id <Int32> [-Filter <Hashtable>] [-BatchSize <Int32>] [-CountOnly <Boolean>]
+Get-LMDeviceInstanceList -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [-CountOnly <Boolean>]
  [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceInstanceList [-Name <String>] [-Filter <Hashtable>] [-BatchSize <Int32>] [-CountOnly <Boolean>]
+Get-LMDeviceInstanceList [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>] [-CountOnly <Boolean>]
  [<CommonParameters>]
 ```
 
@@ -72,7 +72,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

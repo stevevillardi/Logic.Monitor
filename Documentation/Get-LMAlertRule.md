@@ -29,7 +29,7 @@ Get-LMAlertRule [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
 
 ### Filter
 ```
-Get-LMAlertRule [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAlertRule [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -72,7 +72,7 @@ Accept wildcard characters: False
 Apply a custom filter to query for alerts rules. Filters are currently treated as exact matches.
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 

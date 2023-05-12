@@ -8,7 +8,7 @@ Function Get-LMDeviceNetflowPorts {
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Datetime]$StartDate,
 

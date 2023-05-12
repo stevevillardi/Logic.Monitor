@@ -1,4 +1,12 @@
 # Previous module release notes
+## 4.1.1
+###### Update Commands/Bug Fixes:
+- **Initalize-LMPOVSetup**: Fixed LM Logs datasource issue with importing an older core module that has collection issues. If you are using the POV setup command make sure you use this updated version for all new POVs. For existing POVs to ensure you have the latest core module for Logs either manually update the datasource using the LM Exchange/Repository or by running the bellow command:
+
+```powershell
+Import-LMRepositoryLogicModules -Type datasources -LogicModuleNames Windows_Events_LMLogs
+```
+
 ## 4.1
 ###### New Commands:
 - **Search-LMDeviceConfigBackup**: Performs a search against the output of *Export-LMDeviceConfigBackup* for any line in configurations matching the specified regex pattern. See example documentation for usage.

@@ -14,12 +14,12 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMDeviceAlerts -Id <Int32> [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceAlerts -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceAlerts [-Name <String>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceAlerts [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -55,7 +55,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

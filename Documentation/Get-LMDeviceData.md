@@ -15,49 +15,49 @@ schema: 2.0.0
 ### dsName-deviceName-instanceId
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceName <String> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### dsName-deviceName-instanceName
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceName <String> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### dsName-deviceId-instanceName
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceId <Int32> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### dsName-deviceId-instanceId
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceId <Int32> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### dsId-deviceName-instanceId
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceName <String> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### dsId-deviceName-instanceName
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceName <String> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### dsId-deviceId-instanceName
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceId <Int32> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### dsId-deviceId-instanceId
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceId <Int32> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -168,7 +168,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

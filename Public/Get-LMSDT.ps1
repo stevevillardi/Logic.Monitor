@@ -3,13 +3,13 @@ Function Get-LMSDT {
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
         [Parameter(ParameterSetName = 'Id')]
-        [Int]$Id,
+        [String]$Id,
 
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

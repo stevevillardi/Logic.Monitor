@@ -29,7 +29,7 @@ Get-LMAPIToken [-Id <Int32>] [-Type <String>] [-BatchSize <Int32>] [<CommonParam
 
 ### Filter
 ```
-Get-LMAPIToken [-Filter <Hashtable>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAPIToken [-Filter <Object>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -80,7 +80,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 

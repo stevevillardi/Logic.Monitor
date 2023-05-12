@@ -8,7 +8,7 @@ Function Get-LMDeviceNetflowFlows {
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Datetime]$StartDate,
 

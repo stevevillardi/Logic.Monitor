@@ -29,7 +29,7 @@ Get-LMOpsNote [-Tag <String>] [-BatchSize <Int32>] [<CommonParameters>]
 
 ### Filter
 ```
-Get-LMOpsNote [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMOpsNote [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,7 +65,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 

@@ -15,7 +15,7 @@ Function Get-LMDashboard {
         [String]$GroupName,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

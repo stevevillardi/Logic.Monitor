@@ -29,7 +29,7 @@ Get-LMDeviceGroup [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
 
 ### Filter
 ```
-Get-LMDeviceGroup [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceGroup [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -95,7 +95,7 @@ An example Filter to get devices with alerting enabled and where the parent grou
     @{parentId=1;disableAlerting=$false}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 

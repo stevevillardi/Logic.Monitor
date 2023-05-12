@@ -17,7 +17,7 @@ schema: 2.0.0
 Initialize-LMPOVSetup [-Website <String>] [-WebsiteHttpType <String>] [-PortalMetricsAPIUsername <String>]
  [-LogsAPIUsername <String>] [-SetupWebsite] [-SetupPortalMetrics] [-SetupLMContainer]
  [-LMContainerAPIUsername <String>] [-MoveMinimalMonitoring] [-CleanupDynamicGroups] [-SetupWindowsLMLogs]
- [-SetupCollectorServiceInsight] [-WindowsLMLogsEventChannels <String>] [<CommonParameters>]
+ [-IncludeDefaults] [-SetupCollectorServiceInsight] [-WindowsLMLogsEventChannels <String>] [<CommonParameters>]
 ```
 
 ### All
@@ -173,6 +173,21 @@ Accept wildcard characters: False
 
 ### -SetupCollectorServiceInsight
 {{ Fill SetupCollectorServiceInsight Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Individual
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IncludeDefaults
+{{ Fill IncludeDefaults Description }}
 
 ```yaml
 Type: SwitchParameter

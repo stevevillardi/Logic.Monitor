@@ -14,14 +14,14 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMDeviceGroupDevices -Id <Int32> [-Filter <Hashtable>] [-IncludeSubGroups <Boolean>] [-BatchSize <Int32>]
+Get-LMDeviceGroupDevices -Id <Int32> [-Filter <Object>] [-IncludeSubGroups <Boolean>] [-BatchSize <Int32>]
  [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceGroupDevices [-Name <String>] [-Filter <Hashtable>] [-IncludeSubGroups <Boolean>]
- [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceGroupDevices [-Name <String>] [-Filter <Object>] [-IncludeSubGroups <Boolean>] [-BatchSize <Int32>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,7 +57,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

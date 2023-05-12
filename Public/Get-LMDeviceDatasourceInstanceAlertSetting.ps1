@@ -32,7 +32,7 @@ Function Get-LMDeviceDatasourceInstanceAlertSetting {
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [String]$HdsiId,
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
 

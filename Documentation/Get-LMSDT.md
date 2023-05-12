@@ -19,7 +19,7 @@ Get-LMSDT [-BatchSize <Int32>] [<CommonParameters>]
 
 ### Id
 ```
-Get-LMSDT [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMSDT [-Id <String>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name
@@ -29,7 +29,7 @@ Get-LMSDT [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
 
 ### Filter
 ```
-Get-LMSDT [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMSDT [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,7 +65,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 
@@ -80,7 +80,7 @@ Accept wildcard characters: False
 {{ Fill Id Description }}
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: Id
 Aliases:
 

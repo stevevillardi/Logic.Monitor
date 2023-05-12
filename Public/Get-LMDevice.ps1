@@ -37,7 +37,7 @@ Get multiple devices using wildcards:
     Get-LMDevice -Name "10.10.*"
 
 Get device/s using a custom filter:
-    Get-LMDevice -Filter @{displayName="corp-*";preferredCollectorId=1}
+    Get-LMDevice -Filter "displayName -eq 'corp-*' -and preferredCollectorId -eq '1'"
 
 .NOTES
 Consult the LM API docs for a list of allowed fields when using filter parameter as all fields are not available for use with filtering.
@@ -56,7 +56,7 @@ Function Get-LMDevice {
         [String]$Name,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -90,7 +90,7 @@ Function Get-LMDevice {
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
-    
+                
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
 

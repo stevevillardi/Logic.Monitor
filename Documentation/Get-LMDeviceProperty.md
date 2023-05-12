@@ -14,20 +14,20 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMDeviceProperty -Id <Int32> [-PropertyName <String>] [-Filter <Hashtable>] [-BatchSize <Int32>]
+Get-LMDeviceProperty -Id <Int32> [-PropertyName <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceProperty [-Name <String>] [-PropertyName <String>] [-Filter <Hashtable>] [-BatchSize <Int32>]
+Get-LMDeviceProperty [-Name <String>] [-PropertyName <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [<CommonParameters>]
 ```
 
 ### DisplayName
 ```
-Get-LMDeviceProperty [-DisplayName <String>] [-PropertyName <String>] [-Filter <Hashtable>]
- [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceProperty [-DisplayName <String>] [-PropertyName <String>] [-Filter <Object>] [-BatchSize <Int32>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -78,7 +78,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

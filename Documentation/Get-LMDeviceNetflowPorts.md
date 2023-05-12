@@ -14,13 +14,13 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMDeviceNetflowPorts -Id <Int32> [-Filter <Hashtable>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+Get-LMDeviceNetflowPorts -Id <Int32> [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceNetflowPorts [-Name <String>] [-Filter <Hashtable>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+Get-LMDeviceNetflowPorts [-Name <String>] [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
@@ -72,7 +72,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

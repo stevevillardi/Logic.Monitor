@@ -9,7 +9,7 @@ Function Get-LMAPIToken {
         [Int]$Id,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [ValidateSet("LMv1", "Bearer")]
         [String]$Type = "LMv1",

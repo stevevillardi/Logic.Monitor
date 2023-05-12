@@ -39,7 +39,7 @@ Get-LMDashboard [-GroupName <String>] [-BatchSize <Int32>] [<CommonParameters>]
 
 ### Filter
 ```
-Get-LMDashboard [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboard [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -75,7 +75,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 

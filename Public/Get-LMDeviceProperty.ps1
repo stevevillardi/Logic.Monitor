@@ -13,7 +13,7 @@ Function Get-LMDeviceProperty {
 
         [String]$PropertyName,
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

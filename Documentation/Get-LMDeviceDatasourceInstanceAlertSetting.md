@@ -15,37 +15,37 @@ schema: 2.0.0
 ### Name-dsName
 ```
 Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <String> -Name <String> -HdsiId <String>
- [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
 Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <String> -Id <Int32> -HdsiId <String>
- [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
 Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Name <String> -HdsiId <String>
- [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
 Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Id <Int32> -HdsiId <String>
- [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id-HdsId
 ```
-Get-LMDeviceDatasourceInstanceAlertSetting -Id <Int32> -HdsId <String> -HdsiId <String> [-Filter <Hashtable>]
+Get-LMDeviceDatasourceInstanceAlertSetting -Id <Int32> -HdsId <String> -HdsiId <String> [-Filter <Object>]
  [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name-HdsId
 ```
-Get-LMDeviceDatasourceInstanceAlertSetting -Name <String> -HdsId <String> -HdsiId <String>
- [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstanceAlertSetting -Name <String> -HdsId <String> -HdsiId <String> [-Filter <Object>]
+ [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -111,7 +111,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

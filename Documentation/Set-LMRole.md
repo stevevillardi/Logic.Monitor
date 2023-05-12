@@ -379,7 +379,7 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Id-Default, Name-Default
 Aliases:
-Accepted values: view, manage, none
+Accepted values: view, manage, none, manage-collectors, view-collectors
 
 Required: False
 Position: Named

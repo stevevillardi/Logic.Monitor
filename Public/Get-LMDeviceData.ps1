@@ -42,7 +42,7 @@ Function Get-LMDeviceData {
 
         [Datetime]$EndDate,
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
 

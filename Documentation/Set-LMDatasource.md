@@ -15,13 +15,15 @@ schema: 2.0.0
 ### Id
 ```
 Set-LMDatasource -Id <String> [-NewName <String>] [-DisplayName <String>] [-Description <String>]
- [-TechNotes <String>] [-PollingIntervalInSeconds <String>] [-Datapoints <PSObject>] [<CommonParameters>]
+ [-appliesTo <String>] [-TechNotes <String>] [-PollingIntervalInSeconds <String>] [-Datapoints <PSObject>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
 Set-LMDatasource -Name <String> [-NewName <String>] [-DisplayName <String>] [-Description <String>]
- [-TechNotes <String>] [-PollingIntervalInSeconds <String>] [-Datapoints <PSObject>] [<CommonParameters>]
+ [-appliesTo <String>] [-TechNotes <String>] [-PollingIntervalInSeconds <String>] [-Datapoints <PSObject>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -145,6 +147,21 @@ Accept wildcard characters: False
 
 ### -TechNotes
 {{ Fill TechNotes Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -appliesTo
+{{ Fill appliesTo Description }}
 
 ```yaml
 Type: String

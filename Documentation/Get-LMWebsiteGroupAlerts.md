@@ -14,12 +14,12 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMWebsiteGroupAlerts -Id <Int32> [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsiteGroupAlerts -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMWebsiteGroupAlerts [-Name <String>] [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsiteGroupAlerts [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -55,7 +55,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

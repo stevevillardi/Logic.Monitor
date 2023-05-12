@@ -32,7 +32,7 @@ Get-LMAlert -Id <String> [-Severity <String>] [-Type <String>] [-ClearedAlerts <
 
 ### Filter
 ```
-Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-Filter <Hashtable>]
+Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-Filter <Object>]
  [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
@@ -121,7 +121,7 @@ Accept wildcard characters: False
 Apply a custom filter to query the alerts list. Filters are currently treated as exact matches.
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 

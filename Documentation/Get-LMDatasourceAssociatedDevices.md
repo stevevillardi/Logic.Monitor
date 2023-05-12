@@ -14,18 +14,17 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMDatasourceAssociatedDevices -Id <Int32> [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasourceAssociatedDevices -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDatasourceAssociatedDevices [-Name <String>] [-Filter <Hashtable>] [-BatchSize <Int32>]
- [<CommonParameters>]
+Get-LMDatasourceAssociatedDevices [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### DisplayName
 ```
-Get-LMDatasourceAssociatedDevices [-DisplayName <String>] [-Filter <Hashtable>] [-BatchSize <Int32>]
+Get-LMDatasourceAssociatedDevices [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [<CommonParameters>]
 ```
 
@@ -77,7 +76,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

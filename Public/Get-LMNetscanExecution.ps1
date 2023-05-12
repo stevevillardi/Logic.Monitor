@@ -8,7 +8,7 @@ Function Get-LMNetscanExecution {
         [Parameter(Mandatory,ParameterSetName = 'Name')]
         [String]$Name,
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

@@ -140,7 +140,7 @@ Invoke-LMActiveDiscovery -GroupName "Eastbridge"
 ```powershell
 #Method One
 #Using Get-LMDeviceProperty to retrieve the value for sysname and Set-LMDevice to set the new displayName for it
-$deviceProperty = (Get-LMDeviceProperty -Name "192.168.1.1" -Filter @{name="system.sysname"}).value
+$deviceProperty = (Get-LMDeviceProperty -Name "192.168.1.1" -Filter "name -eq 'system.sysname'").value
 Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
 
 #Method Two

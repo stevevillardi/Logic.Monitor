@@ -3,7 +3,7 @@ Function Get-LMUnmonitoredDevices {
     [CmdletBinding()]
     Param (
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

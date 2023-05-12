@@ -11,7 +11,7 @@ Function Get-LMDatasourceUpdateHistory {
         [Parameter(ParameterSetName = 'DisplayName')]
         [String]$DisplayName,
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

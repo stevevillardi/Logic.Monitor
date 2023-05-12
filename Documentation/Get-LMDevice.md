@@ -34,7 +34,7 @@ Get-LMDevice [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
 
 ### Filter
 ```
-Get-LMDevice [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -119,7 +119,7 @@ An example Filter to get devices with alerting enabled and where the display nam
     @{displayName="*.example.com";disableAlerting=$false}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 

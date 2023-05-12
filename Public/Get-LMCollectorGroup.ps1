@@ -9,7 +9,7 @@ Function Get-LMCollectorGroup {
         [String]$Name,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )
@@ -49,7 +49,7 @@ Function Get-LMCollectorGroup {
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.CollectorGroup" )
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -68,7 +68,7 @@ Function Get-LMCollectorGroup {
                 }
             }
         }
-        Return $Results
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.CollectorGroup" )
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

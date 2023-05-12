@@ -9,7 +9,7 @@ Function Get-LMConfigSource {
         [String]$Name,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

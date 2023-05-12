@@ -220,7 +220,7 @@ Function Connect-LMAccount {
             $ApiInfo = Get-LMAPIToken -Type Bearer -ErrorAction SilentlyContinue | Where-Object {$_.accessKey -like "$($Token.Substring(0,20))*"}
         }
         Else{
-            $ApiInfo = Get-LMAPIToken -Filter @{accessId = $AccessId } -ErrorAction SilentlyContinue
+            $ApiInfo = Get-LMAPIToken -Filter "accessId -eq '$AccessId'" -ErrorAction SilentlyContinue
         }
         If ($ApiInfo) {
             $PortalInfo = Get-LMPortalInfo -ErrorAction Stop

@@ -12,7 +12,7 @@ Function Get-LMAuditLogs {
         [Datetime]$EndDate,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

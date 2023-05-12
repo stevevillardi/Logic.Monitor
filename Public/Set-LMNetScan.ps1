@@ -1,4 +1,4 @@
-Function Set-LMNetScan {
+Function Set-LMNetscan {
 
     [CmdletBinding()]
     Param (

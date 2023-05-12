@@ -14,14 +14,14 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMDeviceNetflowEndpoints -Id <Int32> [-Filter <Hashtable>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+Get-LMDeviceNetflowEndpoints -Id <Int32> [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceNetflowEndpoints [-Name <String>] [-Filter <Hashtable>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceNetflowEndpoints [-Name <String>] [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+ [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -72,7 +72,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

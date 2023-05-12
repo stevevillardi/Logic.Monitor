@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-LMNetScan
+# Set-LMNetscan
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Set-LMNetScan [[-CollectorId] <String>] [[-Name] <String>] [-Id] <String> [[-Description] <String>]
+Set-LMNetscan [[-CollectorId] <String>] [[-Name] <String>] [-Id] <String> [[-Description] <String>]
  [[-ExcludeDuplicateType] <String>] [[-IgnoreSystemIpDuplpicates] <Boolean>] [[-Method] <String>]
  [[-NextStart] <String>] [[-NextStartEpoch] <String>] [[-NetScanGroupId] <String>] [[-SubnetRange] <String>]
  [[-CredentialGroupId] <String>] [[-CredentialGroupName] <String>] [[-ChangeNameToken] <String>]

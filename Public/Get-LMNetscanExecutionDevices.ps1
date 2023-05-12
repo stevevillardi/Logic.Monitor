@@ -11,7 +11,7 @@ Function Get-LMNetscanExecutionDevices {
         [Parameter(Mandatory,ParameterSetName = 'Name')]
         [String]$NspName,
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

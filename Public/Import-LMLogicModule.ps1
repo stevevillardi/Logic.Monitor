@@ -48,7 +48,7 @@ Function Import-LMLogicModule {
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{file = $File }
-                Write-LMHost "Successfully imported $([IO.Path]::GetFileName($FilePath)) of type: $($Response.items.type)"
+                Write-LMHost "Successfully imported LogicModule of type: $($Response.items.type)"
 
                 Return
 

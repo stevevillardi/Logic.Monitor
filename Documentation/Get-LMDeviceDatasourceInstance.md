@@ -14,37 +14,37 @@ schema: 2.0.0
 
 ### Name-dsName
 ```
-Get-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceName <String> [-Filter <Hashtable>]
+Get-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceName <String> [-Filter <Object>]
  [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
-Get-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceId <Int32> [-Filter <Hashtable>]
+Get-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceId <Int32> [-Filter <Object>]
  [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
-Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceName <String> [-Filter <Hashtable>]
+Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceName <String> [-Filter <Object>]
  [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
-Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> [-Filter <Hashtable>]
- [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+ [<CommonParameters>]
 ```
 
 ### Id-HdsId
 ```
-Get-LMDeviceDatasourceInstance -DeviceId <Int32> -HdsId <String> [-Filter <Hashtable>] [-BatchSize <Int32>]
+Get-LMDeviceDatasourceInstance -DeviceId <Int32> -HdsId <String> [-Filter <Object>] [-BatchSize <Int32>]
  [<CommonParameters>]
 ```
 
 ### Name-HdsId
 ```
-Get-LMDeviceDatasourceInstance -DeviceName <String> -HdsId <String> [-Filter <Hashtable>] [-BatchSize <Int32>]
+Get-LMDeviceDatasourceInstance -DeviceName <String> -HdsId <String> [-Filter <Object>] [-BatchSize <Int32>]
  [<CommonParameters>]
 ```
 
@@ -141,7 +141,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

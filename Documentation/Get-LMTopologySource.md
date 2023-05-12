@@ -29,7 +29,7 @@ Get-LMTopologySource [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
 
 ### Filter
 ```
-Get-LMTopologySource [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMTopologySource [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,7 +65,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 

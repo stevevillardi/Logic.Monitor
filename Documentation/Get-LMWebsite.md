@@ -34,7 +34,7 @@ Get-LMWebsite [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
 
 ### Filter
 ```
-Get-LMWebsite [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsite [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -116,7 +116,7 @@ An example Filter to get websites with type Webcheck that are internal:
     @{type="webcheck";isInternal=$true}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 

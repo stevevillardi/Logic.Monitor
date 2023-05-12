@@ -20,7 +20,7 @@ Function Get-LMAlert {
         [Boolean]$ClearedAlerts = $false,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Parameter(ParameterSetName = 'Id')]
         [String[]]$CustomColumns,

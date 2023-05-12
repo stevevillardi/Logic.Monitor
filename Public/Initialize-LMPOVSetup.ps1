@@ -41,6 +41,10 @@ Function Initialize-LMPOVSetup {
         [Parameter(ParameterSetName = 'Individual')]
         [Switch]$SetupWindowsLMLogs,
 
+        [Parameter(ParameterSetName = 'Individual')]
+        [Parameter(ParameterSetName = 'All')]
+        [Switch]$IncludeDefaults,
+
         [Parameter(ParameterSetName = 'PostPOV-Readonly')]
         [Switch]$ReadOnlyMode,
 
@@ -114,6 +118,85 @@ Function Initialize-LMPOVSetup {
                     }
                     Else{
                         Write-Host "[WARN]: No previous role info found for user $($User.username), skipping role revert for user." -ForegroundColor Yellow
+                    }
+                }
+            }
+
+            #Setup common default options/imports
+            If($IncludeDefaults){
+                #Set SSL_Cert DS to only alert on non self signed certs
+                $SSLDatasourceName = "SSL_Certificates"
+                $SSLDatasource = Get-LMDatasource -name $SSLDatasourceName
+                If($SSLDatasource){
+                    If($SSLDatasource.dataPoints.name.IndexOf("Alerting_DaysRemainingIfNotSelfSigned") -ne 1 -and $SSLDatasource.dataPoints.name.IndexOf("DaysRemaining") -ne 1){
+                        Try{
+                            $SSLDatasource.dataPoints[$SSLDatasource.dataPoints.name.IndexOf("Alerting_DaysRemainingIfNotSelfSigned")].alertExpr = "< 28 7 2"
+                            $SSLDatasource.dataPoints[$SSLDatasource.dataPoints.name.IndexOf("DaysRemaining")].alertExpr = $null
+                            $SSLResult = Set-LMDatasource -Id $SSLDatasource.id -Datapoints $SSLDatasource.datapoints -ErrorAction Stop
+                            Write-Host "[INFO]: Successfully updated default alert thresholds on LogicModule ($SSLDatasourceName)"
+                        }
+                        Catch{
+                            Write-Host "[ERROR]: Unable to modify default alert thresholds on LogicModule ($SSLDatasourceName): $_" -ForegroundColor Red
+                        }
+                    }
+                    Else{
+                        #Unable to find required datapoints for modification
+                        Write-Host "[ERROR]: Unable to modify default alert thresholds on LogicModule ($SSLDatasourceName), expected datapoints not found" -ForegroundColor Red
+                    }
+                }
+                Else{
+                    #Unable to find SSL_Certificates DS
+                    Write-Host "[ERROR]: Unable to locate LogicModule ($SSLDatasourceName), skipping alert threshold modification" -ForegroundColor Red
+                }
+
+                #Import default DSes
+                $ModuleList = @(
+                    @{
+                        name = "Microsoft_Windows_Services_AD.xml"
+                        type = "datasource"
+                    },
+                    @{
+                        name = "LogicMonitor_Collector_Configurations.xml"
+                        type = "configsource"
+                    },
+                    @{
+                        name = "NoData_Metrics.xml"
+                        type = "datasource"
+                    },
+                    @{
+                        name = "NoData_Tasks_By_Type_v2.xml"
+                        type = "datasource"
+                    },
+                    @{
+                        name = "NoData_Tasks_Overall_v2.xml"
+                        type = "datasource"
+                    },
+                    @{
+                        name = "NoData_Tasks_Discovery_v2.json"
+                        type = "propertyrules"
+                    }
+                )
+                Foreach($Module in $ModuleList){
+                    $ModuleName = $Module.name.Split(".")[0]
+                    $LogicModule = Switch($Module.type){
+                        "datasource" {Get-LMDataSource -name $ModuleName}
+                        "configsource" {Get-LMConfigSource -name $ModuleName}
+                        "propertyrules" {Get-LMPropertySource -name $ModuleName}
+                        default {Get-LMDataSource -name $ModuleName}
+                    }
+                    If(!$LogicModule){                
+                        Try{
+                            $LogicModule = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/Logic.Monitor/main/Private/SIs/$($Module.name)").Content
+                            Import-LMLogicModule -File $LogicModule -Type $Module.type -ErrorAction Stop
+                            Write-Host "[INFO]: Successfully imported $ModuleName datasource"
+                        }
+                        Catch{
+                            #Oops
+                            Write-Host "[ERROR]: Unable to import $ModuleName LogicModule from source: $_" -ForegroundColor Red
+                        }
+                    }
+                    Else{
+                        Write-Host "[INFO]: LogicModule $ModuleName already exists, skipping import" -ForegroundColor Gray
                     }
                 }
             }

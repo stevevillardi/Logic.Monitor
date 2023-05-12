@@ -19,7 +19,7 @@ Get-LMCollectorVersions [-BatchSize <Int32>] [<CommonParameters>]
 
 ### Filter
 ```
-Get-LMCollectorVersions [-Filter <Hashtable>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMCollectorVersions [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -55,7 +55,7 @@ Accept wildcard characters: False
 {{ Fill Filter Description }}
 
 ```yaml
-Type: Hashtable
+Type: Object
 Parameter Sets: Filter
 Aliases:
 

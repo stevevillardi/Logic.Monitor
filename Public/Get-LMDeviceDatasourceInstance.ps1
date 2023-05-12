@@ -24,7 +24,7 @@ Function Get-LMDeviceDatasourceInstance {
         [Parameter(Mandatory, ParameterSetName = 'Name-HdsId')]
         [String]$HdsId,
 
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
 

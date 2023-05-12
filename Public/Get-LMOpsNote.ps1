@@ -9,7 +9,7 @@ Function Get-LMOpsNote {
         [String]$Tag,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

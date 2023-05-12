@@ -32,7 +32,7 @@ Get multiple device groups using wildcards:
     Get-LMDeviceGroup -Name "* - Servers"
 
 Get device groups using a custom filter:
-    Get-LMDeviceGroup -Filter @{parentId=1;disableAlerting=$false}
+    Get-LMDeviceGroup -Filter "parentId -eq '1' -and disableAlerting -eq '$false'"
 
 .NOTES
 Consult the LM API docs for a list of allowed fields when using filter parameter as all fields are not available for use with filtering.
@@ -48,7 +48,7 @@ Function Get-LMDeviceGroup {
         [String]$Name,
 
         [Parameter(ParameterSetName = 'Filter')]
-        [Hashtable]$Filter,
+        [Object]$Filter,
 
         [Int]$BatchSize = 1000
     )

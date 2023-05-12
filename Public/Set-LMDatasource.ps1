@@ -14,6 +14,8 @@ Function Set-LMDatasource {
 
         [String]$Description,
 
+        [String]$appliesTo,
+
         [String]$TechNotes,
 
         [String]$PollingIntervalInSeconds, #In Seconds
