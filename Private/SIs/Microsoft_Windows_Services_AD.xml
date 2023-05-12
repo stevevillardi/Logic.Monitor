@@ -1,0 +1,936 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed  version="1.0" hasPendingRequests="false" >
+  <company></company>
+  <status>200</status>
+  <errmsg>OK</errmsg>
+  <interval>0</interval>
+    <entry type="predatasource">
+        <version>1683854065</version>
+        <name>Microsoft_Windows_Services_AD</name>
+        <displayedas>Microsoft Windows Services_AD</displayedas>
+        <description>Tracks the State of Installed Services via WMI including state, start mode, status, exit code, and service specific error code.</description>
+        <collector>script</collector>
+        <hasMultiInstances>true</hasMultiInstances>
+        <useWildValueAsUniqueIdentifier>false</useWildValueAsUniqueIdentifier>
+        <schedule>180</schedule>
+        <appliesTo>isWindows() &#38;&#38; false()</appliesTo>
+        <wildcardauto>true</wildcardauto>
+        <wildcardpersist>false</wildcardpersist>
+        <wildcardlinuxscript>ad_script</wildcardlinuxscript>
+        <wildcardlinuxcmdline>type=&#34;embeded&#34; </wildcardlinuxcmdline>
+        <wildcardwinscript>ad_script</wildcardwinscript>
+        <wildcardwincmdline>type=&#34;embeded&#34; </wildcardwincmdline>
+        <wildcardgroovyscript>/*******************************************************************************
+ *  © 2007-2021 - LogicMonitor, Inc. All rights reserved.
+ ******************************************************************************/
+
+import com.santaba.agent.groovyapi.win32.WMI
+import groovy.json.JsonOutput
+
+
+
+def hostname = hostProps.get(&#34;system.hostname&#34;)
+
+def wildValue = &#39;##WILDVALUE##&#39;
+def wmi_query = &#34;SELECT NAME, DISPLAYNAME, STATE, STATUS, STARTMODE, EXITCODE, STARTED, SERVICESPECIFICEXITCODE, ERRORCONTROL FROM Win32_Service&#34;
+def namespace = &#39;CIMV2&#39;
+def executeQuery = WMI.queryAll(hostname, namespace, wmi_query)
+
+if(executeQuery){
+    executeQuery.each{ service -&#62;
+        def name = service[&#34;NAME&#34;]
+        def state = service[&#34;STATE&#34;]
+        def displayname = service[&#34;DISPLAYNAME&#34;]
+
+        println &#34;${name}##${displayname}######auto.service.name=${name}&#38;auto.service.displayname=${displayname}&#38;auto.service.state=${state}&#34;
+    }
+}
+
+return 0</wildcardgroovyscript>
+        <wildcardschedule>15</wildcardschedule>
+        <wildcarddisable>false</wildcarddisable>
+        <wildcarddeleteinactive>true</wildcarddeleteinactive>
+        <agdmethod>none</agdmethod>
+        <agdparams></agdparams>
+        <group></group>
+        <tags>os,services,microsoft,windows</tags>
+        <technology>AppliesTo is set to not applied by default, update as needed along with AD filter criteria.
+
+
+An automated list of services with names as wildcards will likely be included in add other monitoring in the future to help automate this process as we replace the older WinService- module.
+
+Some alert thresholds are recommended in the datapoint descriptions.</technology>
+        <adlist><![CDATA[{"agdmethod":"none","method":"ad_script","agdparams":"","id":0,"filters":[{"attribute":"auto.service.displayname","operation":"Contain","value":"App"},{"attribute":"auto.service.state","operation":"Equal","value":"Running"}],"params":{"type":"embeded","groovyscript":"/*******************************************************************************\n *  © 2007-2021 - LogicMonitor, Inc. All rights reserved.\n ******************************************************************************/\n\nimport com.santaba.agent.groovyapi.win32.WMI\nimport groovy.json.JsonOutput\n\n\n\ndef hostname = hostProps.get(\"system.hostname\")\n\ndef wildValue = '##WILDVALUE##'\ndef wmi_query = \"SELECT NAME, DISPLAYNAME, STATE, STATUS, STARTMODE, EXITCODE, STARTED, SERVICESPECIFICEXITCODE, ERRORCONTROL FROM Win32_Service\"\ndef namespace = 'CIMV2'\ndef executeQuery = WMI.queryAll(hostname, namespace, wmi_query)\n\nif(executeQuery){\n    executeQuery.each{ service ->\n        def name = service[\"NAME\"]\n        def state = service[\"STATE\"]\n        def displayname = service[\"DISPLAYNAME\"]\n\n        println \"${name}##${displayname}######auto.service.name=${name}&auto.service.displayname=${displayname}&auto.service.state=${state}\"\n    }\n}\n\nreturn 0"}}]]></adlist>
+        <schemaVersion>2</schemaVersion>
+        <dataSourceType>1</dataSourceType>
+        <attributes>
+        <attribute>
+            <name>scripttype</name>
+            <value>embed</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>scriptgroovy</name>
+            <value>/*******************************************************************************
+ *  © 2007-2021 - LogicMonitor, Inc. All rights reserved.
+ ******************************************************************************/
+
+import com.santaba.agent.groovyapi.win32.WMI
+import groovy.json.JsonOutput
+
+
+
+def hostname = hostProps.get(&#34;system.hostname&#34;)
+
+def wildValue = &#39;##WILDVALUE##&#39;
+def wmi_query = &#34;SELECT STATE, STATUS, STARTMODE, EXITCODE, STARTED, SERVICESPECIFICEXITCODE, ERRORCONTROL FROM Win32_Service WHERE NAME  = \&#34;&#34;+ wildValue + &#34;\&#34;&#34;
+def namespace = &#39;CIMV2&#39;
+def executeQuery = WMI.queryAll(hostname, namespace, wmi_query)
+def enumState = [
+
+        &#34;Unknown&#34; : &#34;0&#34;,
+        &#34;Running&#34; : &#34;1&#34;,
+        &#34;Stopped&#34; : &#34;2&#34;,
+        &#34;Start Pending&#34; : &#34;3&#34;,
+        &#34;Stop Pending&#34; : &#34;4&#34;,
+        &#34;Continue Pending&#34; : &#34;5&#34;,
+        &#34;Pause Pending&#34; : &#34;6&#34;,
+        &#34;Paused&#34; : &#34;7&#34;,
+        &#34;Windows Server 2008&#34; : &#34;8&#34;,
+        &#34;Windows Vista&#34; : &#34;9&#34;
+
+]
+
+def enumStatus = [
+
+        &#34;OK&#34; : &#34;1&#34;,
+        &#34;Service&#34; : &#34;2&#34;,  // could apply during mirror-resilvering of a disk, reload of a user permissions list, or other administrative work. Not all such work is online, yet the managed element is neither &#34;OK&#34; nor in one of the other states.
+        &#34;Degraded&#34; : &#34;3&#34;,
+        &#34;Pred Fail&#34; : &#34;4&#34;,
+        &#34;Lost Comm&#34; : &#34;5&#34;,
+        &#34;No Contact&#34; : &#34;6&#34;
+
+]
+
+def enumStartmode = [
+
+        &#34;Disabled&#34; : &#34;0&#34;,
+        &#34;Auto&#34; : &#34;1&#34;,
+        &#34;Boot&#34; : &#34;2&#34;,
+        &#34;Manual&#34; : &#34;3&#34;,
+        &#34;System&#34; : &#34;4&#34;,
+
+
+]
+
+def enumErrorControl = [
+
+        &#34;Unknown&#34; : &#34;0&#34;,
+        &#34;Normal&#34; : &#34;1&#34;,
+        &#34;Ignore&#34; : &#34;2&#34;,
+        &#34;Severe&#34; : &#34;3&#34;,
+        &#34;Critical&#34; : &#34;4&#34;
+
+
+
+]
+
+
+executeQuery.each{
+
+    def getState = executeQuery[&#34;STATE&#34;].getAt(0).toString()
+    def printState = enumState.get(getState)
+
+    def getStatus = executeQuery[&#34;STATUS&#34;].getAt(0).toString()
+    def printStatus = enumStatus.get(getStatus)
+
+    def getStartmode = executeQuery[&#34;STARTMODE&#34;].getAt(0).toString()
+    def printStartmode = enumStartmode.get(getStartmode)
+
+    def getErrorControl = executeQuery[&#34;ERRORCONTROL&#34;].getAt(0).toString()
+    def printErrorControl = enumErrorControl.get(getErrorControl)
+
+    def getExitCode = executeQuery[&#34;EXITCODE&#34;].getAt(0).toString()
+
+    def getServiceSpecificExitCode = executeQuery[&#34;SERVICESPECIFICEXITCODE&#34;].getAt(0).toString()
+
+    def getStarted = executeQuery[&#34;STARTED&#34;]? 1 : 0
+
+
+    Map PreFormat = [
+            &#39;##WILDVALUE##&#39; : wildValue ,
+            &#34;State&#34; : printState ,
+            &#34;Status&#34; : printStatus ,
+            &#34;ErrorControl&#34; : printErrorControl ,
+            &#34;StartMode&#34; : printStartmode ,
+            &#34;ExitCode&#34; : getExitCode ,
+            &#34;ServiceSpecificErrorCode&#34; : getServiceSpecificExitCode ,
+            &#34;Started&#34; : getStarted
+    ]
+
+
+
+
+    def outputJson = new JsonOutput()
+    outputJson = outputJson.toJson(PreFormat)
+    println outputJson
+}
+
+return 0</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>windowsscript</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>linuxscript</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>windowscmdline</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>linuxcmdline</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>properties</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>manualConnections</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>__filter_0</name>
+            <value>auto.service.displayname	Contain	App</value>
+            <comment>Update filter example with required criteria</comment>
+        </attribute>
+        <attribute>
+            <name>__filter_1</name>
+            <value>auto.service.state	Equal	Running</value>
+            <comment></comment>
+        </attribute>
+        </attributes>
+        <datapoints>
+        <datapoint>
+            <name>ErrorControl</name>
+            <originId></originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>ErrorControl</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Error severity level
+
+Status Code:
+Unknown = 0
+Normal = 1
+Ignore = 2
+Severe = 3
+Critical = 4</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>ExitCode</name>
+            <originId></originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>ExitCode</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Exit Code of Service
+
+https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>ServiceSpecificErrorCode</name>
+            <originId></originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>ServiceSpecificErrorCode</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Service Specific Error Code for Service</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>Started</name>
+            <originId></originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>Started</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Started State:
+
+Status Code
+True = 1
+False = 0</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>StartMode</name>
+            <originId></originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>StartMode</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Start mode reported by a service
+
+Status Code:
+Disabled = 0
+Auto = 1
+Boot = 2
+Manual = 3
+System = 4</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>State</name>
+            <originId></originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>State</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr>= 0</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>Microsoft Windows Services on ##HOST## is reporting that ##INSTANCE## is showing a value for State of ##VALUE##, this indicates an unknown state placing the host into ##LEVEL## state.
+
+This started at ##START##, -- or ##DURATION## ago.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>State of a Windows service.
+
+Status Code:
+Unknown = 0
+Running = 1
+Stopped = 2
+Start Pending = 3
+Stop Pending = 4
+Continue Pending = 5
+Pause Pending = 6
+Paused = 7
+Windows Server 2008 = 8
+Windows Vista = 9</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>Status</name>
+            <originId></originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>json</postprocessormethod>
+            <postprocessorparam>Status</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr>&#62;= 3 3</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>Microsoft Windows Service on ##HOST## for instance ##INSTANCE## is reporting a value of ##VALUE##, placing the host into ##LEVEL## state.
+
+This started at ##START##, -- or ##DURATION## ago.
+
+Status Code:
+OK = 1
+Service = 2
+Degraded = 3
+Pred Fail = 4
+Lost Comm = 5
+No Contact = 6
+
+Note on Service = 2: (Could apply during mirror-resilvering of a disk, reload of a user permissions list, or other administrative work. Not all such work is online, yet the managed element is neither &#34;OK&#34; nor in one of the other states.)</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Status of a Windows service.
+
+Status Code:
+Ok = 1
+Service = 2
+Degraded = 3
+Pred Fail = 4
+Lost Comm = 5
+No Contact = 6</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>AutomaticStart_NotRunning</name>
+            <originId></originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>if(||(un(StartMode),un(State)),unkn(),if(&#38;&#38;(ge(StartMode,1),eq(State,1)),0,1))</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>Microsoft Windows Services on ##HOST## is reporting a value of ##VALUE## for service ##INSTANCE##, this indicates that the service is set to an auto start method (Automatic, Automatic (Delayed Start), Automatic (Triggered Start)) and is not currently reporting running as it&#39;s state placing the host into ##LEVEL## state.
+
+This started at ##START##, -- or ##DURATION## ago.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>For alerting on Auto StartMode services only. Valid if the service is set to automatic and is not running.
+
+Reports 1 for services that are reporting &#34;auto, boot, manual or system&#34;as their start mode via WMI but are not reporting running in state i.e (stopped, paused, start pending, continue pending, pause pending, paused, windows server 2000, windows vista).
+
+Reports 0 if the services is &#34;auto&#34; and state is running.
+
+
+Thresholds are not set by default due to considerations for delayed/triggered services noted below.
+
+Recommended Alert Threshold by service instance start mode:
+
+For Automatic
+(!= 1 1) with 0-2 consecutive polls
+
+For Automatic (Delayed Start)
+(!= 1 1) with 7-10 consecutive polls
+
+For Automatic (Triggered Start)
+(no alert threshold)
+
+
+
+While it is useful to alert on running status for most automatic mode services that are not reporting OK in state ASAP, every environment is different and each service may not need to monitor data and alert on this condition so no default threshold is set.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>DisabledStart_Running</name>
+            <originId></originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>if(||(un(StartMode),un(State)),unkn(),if(&#38;&#38;(eq(StartMode,0),eq(State,1)),1,0))</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody>Microsoft Windows Services on ##HOST## is reporting a value of ##VALUE## for service ##INSTANCE##, this indicates that the service is set to the disabled start method and is currently reporting running as it&#39;s state placing the host into ##LEVEL## state.
+
+This started at ##START##, -- or ##DURATION## ago.</alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>For alerting on disabled StartMode services only. Valid if the service is set to disabled and is running.
+
+Output is 1 if a service that has it&#39;s startup type set to disabled but is running.
+
+Reports 0 if if the services is disabled and state is not running.
+
+If the service is set to disabled and is running you can use this complex datapoint to trigger an alert.
+
+Thresholds are not set by default due to considerations noted below.
+
+Recommended Alert Threshold by service instance start mode:
+
+(= 1 1)
+
+While it is useful to alert on running status for most disabled mode services that are reporting OK in state ASAP, every environment is different and each service may not need to monitor data and alert on this condition so no default threshold is set.</description>
+            <maxvalue></maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        </datapoints>
+        <graphs>
+        <graph>
+            <name>Automatic start mode but not in running state</name>
+            <title>Automatic start mode but not in running state</title>
+            <originId></originId>            <verticallabel>status code</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>2</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>AutomaticStart_NotRunning</name>
+            <datapointname>AutomaticStart_NotRunning</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>StartMode</name>
+            <datapointname>StartMode</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>Status</name>
+            <datapointname>Status</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Automatic Start but Not Running</legend>
+                <color>orange</color>
+                <datapointname>AutomaticStart_NotRunning</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>Start Mode</legend>
+                <color>olive</color>
+                <datapointname>StartMode</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>Status</legend>
+                <color>silver</color>
+                <datapointname>Status</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Disabled start mode but in running state</name>
+            <title>Disabled start mode but in running state</title>
+            <originId></originId>            <verticallabel>status code</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>5</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>DisabledStart_NotRunning</name>
+            <datapointname>DisabledStart_Running</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>StartMode</name>
+            <datapointname>StartMode</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>Status</name>
+            <datapointname>Status</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>Disabled Start but Not Running</legend>
+                <color>maroon</color>
+                <datapointname>DisabledStart_NotRunning</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>Start Mode</legend>
+                <color>silver</color>
+                <datapointname>StartMode</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>Status</legend>
+                <color>olive</color>
+                <datapointname>Status</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Error Control Status</name>
+            <title>Error Control Status</title>
+            <originId></originId>            <verticallabel>status code</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>4</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>ErrorControl</name>
+            <datapointname>ErrorControl</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>Error Control Status</legend>
+                <color>aqua</color>
+                <datapointname>ErrorControl</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Service Exit Code</name>
+            <title>Service Exit Code</title>
+            <originId></originId>            <verticallabel>status code</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>4</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>ExitCode</name>
+            <datapointname>ExitCode</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>Exit Code</legend>
+                <color>orange</color>
+                <datapointname>ExitCode</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Service Specific Error Code</name>
+            <title>Service Specific Error Code</title>
+            <originId></originId>            <verticallabel>status code</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>6</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>ServiceSpecificErrorCode</name>
+            <datapointname>ServiceSpecificErrorCode</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>Service Specific Error Code</legend>
+                <color>orange</color>
+                <datapointname>ServiceSpecificErrorCode</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Service Status</name>
+            <title>Service Status</title>
+            <originId></originId>            <verticallabel>status code</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>2</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>Status</name>
+            <datapointname>Status</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>Status</legend>
+                <color>orange2</color>
+                <datapointname>Status</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Started Status</name>
+            <title>Started Status</title>
+            <originId></originId>            <verticallabel>status code</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>3</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>Started</name>
+            <datapointname>Started</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>Started</legend>
+                <color>maroon</color>
+                <datapointname>Started</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>State</name>
+            <title>State</title>
+            <originId></originId>            <verticallabel>status code</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>State</name>
+            <datapointname>State</datapointname>
+            <originId></originId>
+            <cf>2</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>2</type>
+                <legend>State</legend>
+                <color>green</color>
+                <datapointname>State</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        </graphs>
+        <overviewgraphs>
+        <overviewgraph>
+            <name>Top 10 Automatic start mode but not in running state</name>
+            <title>Top 10 Automatic start mode but not in running state</title>
+            <verticallabel>status code</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <aggregated>false</aggregated>
+            <originId></originId>
+            <datapoints>
+        <overviewgraphdatapoint>
+            <name>AutomaticStart_NotRunning</name>
+            <datapointname>AutomaticStart_NotRunning</datapointname>
+            <cf>2</cf>
+            <aggregateMethod>max</aggregateMethod>
+            <originId></originId>
+        </overviewgraphdatapoint>
+            </datapoints>
+            <virtualdatapoints>
+            </virtualdatapoints>
+            <lines>
+            <overviewgraphline>
+                <type>1</type>
+                <legend>##INSTANCE##</legend>
+                <datapointname>AutomaticStart_NotRunning</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+                <color>silver</color>
+            </overviewgraphline>
+            </lines>
+        </overviewgraph>
+        <overviewgraph>
+            <name>Top 10 Disabled start mode but in running state</name>
+            <title>Top 10 Disabled start mode but in running state</title>
+            <verticallabel>status code</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>2</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <aggregated>false</aggregated>
+            <originId></originId>
+            <datapoints>
+        <overviewgraphdatapoint>
+            <name>DisabledStart_Running</name>
+            <datapointname>DisabledStart_Running</datapointname>
+            <cf>2</cf>
+            <aggregateMethod>max</aggregateMethod>
+            <originId></originId>
+        </overviewgraphdatapoint>
+            </datapoints>
+            <virtualdatapoints>
+            </virtualdatapoints>
+            <lines>
+            <overviewgraphline>
+                <type>1</type>
+                <legend>##INSTANCE##</legend>
+                <datapointname>DisabledStart_Running</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+                <color>silver</color>
+            </overviewgraphline>
+            </lines>
+        </overviewgraph>
+        </overviewgraphs>
+        <scripts>
+        </scripts>
+    </entry>
+</feed>
