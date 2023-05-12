@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed  version="1.0" hasPendingRequests="false" >
+  <company></company>
+  <status>200</status>
+  <errmsg>OK</errmsg>
+  <interval>0</interval>
+    <entry type="predatasource">
+        <version>1508320429</version>
+        <name>LogicMonitor_Collector_Configurations</name>
+        <displayedas>_Collector Configurations</displayedas>
+        <description></description>
+        <collector>script</collector>
+        <hasMultiInstances>true</hasMultiInstances>
+        <useWildValueAsUniqueIdentifier>false</useWildValueAsUniqueIdentifier>
+        <schedule>3600</schedule>
+        <appliesTo>hasCategory(&#34;collector&#34;)</appliesTo>
+        <wildcardauto>true</wildcardauto>
+        <wildcardpersist>false</wildcardpersist>
+        <wildcardlinuxscript>ad_script</wildcardlinuxscript>
+        <wildcardlinuxcmdline>type=&#34;embeded&#34; </wildcardlinuxcmdline>
+        <wildcardwinscript>script</wildcardwinscript>
+        <wildcardwincmdline>type=&#34;embeded&#34; </wildcardwincmdline>
+        <wildcardgroovyscript>println &#34;agent.conf##Agent Config&#34;;
+println &#34;sbproxy.conf##SB Proxy Config&#34;;
+println &#34;watchdog.conf##Watchdog Config&#34;;
+println &#34;wrapper.conf##Wrapper Config&#34;;
+return 0;</wildcardgroovyscript>
+        <wildcardschedule>0</wildcardschedule>
+        <wildcarddisable>false</wildcarddisable>
+        <wildcarddeleteinactive>true</wildcarddeleteinactive>
+        <agdmethod>none</agdmethod>
+        <agdparams></agdparams>
+        <group>Collector</group>
+        <tags></tags>
+        <technology></technology>
+        <adlist><![CDATA[{"agdmethod":"none","method":"ad_script","agdparams":"","id":0,"filters":[],"params":{"type":"embeded","groovyscript":"println \"agent.conf##Agent Config\";\nprintln \"sbproxy.conf##SB Proxy Config\";\nprintln \"watchdog.conf##Watchdog Config\";\nprintln \"wrapper.conf##Wrapper Config\";\nreturn 0;"}}]]></adlist>
+        <schemaVersion>2</schemaVersion>
+    <integrationMetadata>
+        <integrationVersion>1.2.0</integrationVersion>
+        <integrationAuthorCompanyUuid>5d1de56c-12dc-11e6-8dbd-0a8c30e38697</integrationAuthorCompanyUuid>
+        <integrationLineageId>Q9jZ43VgQVaxbkQ4TyLf5g</integrationLineageId>
+        <integrationChecksum>483e6aa5d4eae0b211f67848f8721ab1</integrationChecksum>
+        <integrationAuthorNamespace>antony</integrationAuthorNamespace>
+        <integrationId>6054ac80-4703-4660-a0fa-be4c5570c5af</integrationId>
+        <integrationLocator>76PEZ2</integrationLocator>
+        <integrationName>LogicMonitor_Collector_Configurations</integrationName>
+        <integrationStatus>Community</integrationStatus>
+        <integrationPublishedAtMS>1508320462105</integrationPublishedAtMS>
+        <integrationIsPrivate></integrationIsPrivate>
+    </integrationMetadata>
+        <dataSourceType>2</dataSourceType>
+        <attributes>
+        <attribute>
+            <name>scripttype</name>
+            <value>embed</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>scriptgroovy</name>
+            <value>File file = new File(&#34;../conf/##WILDVALUE##&#34;);
+println file.text;</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>windowsscript</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>linuxscript</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>windowscmdline</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>linuxcmdline</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>csfileformat</name>
+            <value>arbitrary</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>cstimestampformat</name>
+            <value>yyyy-MM-dd hh:mm:ss z</value>
+            <comment></comment>
+        </attribute>
+        </attributes>
+        <datapoints>
+        <datapoint>
+            <name>ConfigChanged</name>
+            <originId>7lQjT6bkS0y46-g2Y3bdEw</originId>
+            <dataType>1</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam>{&#34;format&#34;:&#34;arbitrary&#34;,&#34;diff_check&#34;:{&#34;ignore_line_start_with&#34;:[&#34;credential=&#34;,&#34;# Periodic rotation on&#34;]}}</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr>= 1</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Config file has changed</description>
+            <maxvalue>1</maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>ignore</userparam1>
+            <userparam2>true</userparam2>
+            <userparam3>0</userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>ConfigNotRetrieved</name>
+            <originId>f-yp9M6FTTelQDQq4qnF3A</originId>
+            <dataType>1</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam>{&#34;fetch_check&#34;:{},&#34;format&#34;:&#34;arbitrary&#34;}</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr>= 1</alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue>1</maxvalue>
+            <minvalue>0</minvalue>
+            <userparam1>fetch</userparam1>
+            <userparam2>false</userparam2>
+            <userparam3>0</userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        </datapoints>
+        <graphs>
+        </graphs>
+        <overviewgraphs>
+        </overviewgraphs>
+        <scripts>
+        </scripts>
+    </entry>
+</feed>

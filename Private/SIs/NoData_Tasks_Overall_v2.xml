@@ -1,0 +1,1021 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed  version="1.0" hasPendingRequests="false" >
+  <company></company>
+  <status>200</status>
+  <errmsg>OK</errmsg>
+  <interval>0</interval>
+    <entry type="predatasource">
+        <version>1659005191</version>
+        <name>NoData_Tasks_Overall_v2</name>
+        <displayedas>NoData Tasks Overall v2</displayedas>
+        <description>Returns task counts overall, counts with some or all no data, and counts of tasks waiting.</description>
+        <collector>script</collector>
+        <hasMultiInstances>false</hasMultiInstances>
+        <useWildValueAsUniqueIdentifier>false</useWildValueAsUniqueIdentifier>
+        <schedule>120</schedule>
+        <appliesTo>system.collectorId &#62; 0</appliesTo>
+        <wildcardauto>false</wildcardauto>
+        <wildcardpersist>false</wildcardpersist>
+        <wildcardlinuxscript></wildcardlinuxscript>
+        <wildcardlinuxcmdline></wildcardlinuxcmdline>
+        <wildcardwinscript></wildcardwinscript>
+        <wildcardwincmdline></wildcardwincmdline>
+        <wildcardgroovyscript></wildcardgroovyscript>
+        <wildcardschedule>1440</wildcardschedule>
+        <wildcarddisable>false</wildcarddisable>
+        <wildcarddeleteinactive>false</wildcarddeleteinactive>
+        <agdmethod>none</agdmethod>
+        <agdparams></agdparams>
+        <group>NoDataMonitoring</group>
+        <tags></tags>
+        <technology>Created by Antony Hawkins, LogicMonitor.
+Gives more granular breakdown of results than previous versions.</technology>
+        <adlist><![CDATA[{"agdmethod":"none","agdparams":"","id":0,"filters":[],"params":{}}]]></adlist>
+        <schemaVersion>2</schemaVersion>
+    <integrationMetadata>
+        <integrationVersion>1.1.0</integrationVersion>
+        <integrationAuthorCompanyUuid>5d1de56c-12dc-11e6-8dbd-0a8c30e38697</integrationAuthorCompanyUuid>
+        <integrationLineageId>5GEmz0wYQxiigBqrFeY8NA</integrationLineageId>
+        <integrationChecksum>dc57d0edec83d8106cec295d4ada87f8</integrationChecksum>
+        <integrationAuthorNamespace>antony</integrationAuthorNamespace>
+        <integrationId>95f6747c-7c40-43c2-b2af-bd20c4cbb142</integrationId>
+        <integrationLocator>MCPEGK</integrationLocator>
+        <integrationName>NoData_Tasks_Overall_v2</integrationName>
+        <integrationStatus>Community</integrationStatus>
+        <integrationPublishedAtMS>1659005220907</integrationPublishedAtMS>
+        <integrationIsPrivate></integrationIsPrivate>
+    </integrationMetadata>
+        <dataSourceType>1</dataSourceType>
+        <attributes>
+        <attribute>
+            <name>scripttype</name>
+            <value>embed</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>scriptgroovy</name>
+            <value>/*******************************************************************************
+ * © 2007-2022 - LogicMonitor, Inc. All rights reserved.
+ * Script written by Antony Hawkins.
+ * Collection script
+ ******************************************************************************/
+
+import com.santaba.agent.debugger.TlistTask
+
+/*
+ Script to list tasks counts of all types.
+
+ Notes:
+ Do we actually benefit from getting a split by collection type?
+ 	For:
+ 	- Shows if e.g. all SNMP tasks are failing (indicates credentials/access);
+ 	- Shows if e.g. *not* &#34;all&#34; SNMP tasks are failing (rules out credentials/access);
+ 	
+ 	Against:
+ 	- Lots of protocols are now lost within &#34;script&#34;, undermining per-type value;
+ 	- More differentiation =&#62; more processing within script =&#62; more collector cycles;
+ 	- If you have problems with &#34;All NaN&#34; you&#39;re coming to debug anyway, to dig into it,
+ 	   as trying to identify from the resource side is silly;
+*/
+
+// Set debug=true to print debug outputs. Leave =false for normal operation.
+debug = false;
+
+hostname = hostProps.get(&#39;system.hostname&#39;);
+taskTypeOverall = &#39;All_Tasks&#39;
+
+outputMap = [:];
+
+taskCount = 0
+
+/*
+Set up outputMap - it needs to cope with any/all task types in the auto.taskTypesList.v2 property,
+ including those that no longer exist on the device - if we don&#39;t do this bit they&#39;ll return NaN,
+ which (a) is bad because they&#39;re actually zeros, and (b) is more bad because this task will also 
+ add to the Has NaN task counts...
+*/
+
+addToMap(outputMap,taskTypeOverall);
+
+debugPrinter(outputMap);
+
+TlistTask debug = new TlistTask(&#39;!tlist h=&#39; + hostname);
+
+debug.run()
+debug.awaitFinish()
+debugOutput = debug.output
+
+debugPrinter(debugOutput);
+
+// Regex to match task lines (excluding EventSources, no point) and capture collection type and
+//  status (EXECUTING|SCHEDULING|WAITING);
+taskCollectorAndStatusRegex = /^\d+\s+\d+\s+(\S+)\s+(\S+)/;
+
+// Regex to capture last result, after || or from end of line.
+// Specific results are listed here such that we get a positive match to known options, or no
+//  match - this means we can make tie map keys specifically to these options and not have to
+//  do any interpretation.
+lastResultRegex = /([|]{2}\s+(OK|Has NaN|All NaN|Unable to execute)|(Not executed yet$))/;
+
+debugOutput.eachLine()
+{ line -&#62;
+	debugPrinter(line)
+	if(line =~ taskCollectorAndStatusRegex)
+	{
+		taskCollector = taskTypeOverall // Don&#39;t care what collector type, provided there is one.
+		taskStatus = (line =~ taskCollectorAndStatusRegex)[0][2];
+		
+		// Start off with unknown and correct if we can.
+		taskLastResult = &#39;Undetermined&#39;;
+
+		// &#39;Not executed yet&#39; would be in group 3, else, look to group 2
+		try
+		{
+			if((line =~ lastResultRegex)[0][3])
+			{
+				taskLastResult = (line =~ lastResultRegex)[0][3];
+			}
+			else
+			{
+				taskLastResult = (line =~ lastResultRegex)[0][2];
+			}
+		}
+		catch(e)
+		{
+			debugPrinter(&#39;broken line:&#39;);
+			debugPrinter(e);
+		}
+
+		debugPrinter(&#39;taskCollector: &#39; + taskCollector)
+		debugPrinter(&#39;taskStatus: &#39; + taskStatus)
+		debugPrinter(&#39;taskLastResult: &#39; + taskLastResult)
+
+		// Cannot differentiate ConfigSources and DataSources from !tlist without summary.
+		// Solution is to not differentiate between these on discovery (they will just be script collection
+		//  types as per scripted DataSources. ConfigSources usually alert on failure themselves.
+		// If this is a collection task type we don&#39;t have an instance for, there&#39;s no point adding it to
+		//  the map - can only wait for autoprops to run again and for it to become an available output.
+		if(outputMap.containsKey(taskCollector))
+		{
+			// Now or already exists, add to it
+			// Always increment count
+			outputMap[taskCollector][&#39;taskCount&#39;]++
+			debugPrinter(&#39;taskCount: &#39; + outputMap[taskCollector][&#39;taskCount&#39;])
+
+			// Increment relevant task RESULTS
+			// First, swap spaces for underscore:
+			taskLastResult = taskLastResult.replaceAll(&#39; &#39;,&#39;_&#39;)
+			// Increment:
+			outputMap[taskCollector][&#39;task&#39; + taskLastResult]++
+			debugPrinter(&#39;task&#39; + taskLastResult + &#39;: &#39; + outputMap[taskCollector][&#39;task&#39; + taskLastResult])
+
+			// Increment relevant task STATUS count
+			outputMap[taskCollector][&#39;task&#39; + taskStatus]++
+			debugPrinter(&#39;task&#39; + taskStatus + &#39;: &#39; + outputMap[taskCollector][&#39;task&#39; + taskStatus])
+		}
+	}
+}
+
+debugPrinter(outputMap);
+
+outputMap.each()
+{ wildvalue, dataMap -&#62;
+	// Note, don&#39;t need wildvalue here because it&#39;s a single-instance DataSource.
+	// It only exists in this structure because this script is cut down from the
+	//  per-collection-type multi-instance version.
+	dataMap.each()
+	{ metricName,metricValue -&#62;
+		println metricName + &#39;=&#39; + metricValue;
+	}
+}
+
+return 0;
+
+// ---------------------------------------------------------------------------------------
+// End core logic. Helper functions below.
+// ---------------------------------------------------------------------------------------
+
+
+// ---------------------------------------------------------------------------------------
+// Function to add a collection type to the output map.
+def addToMap(map,newKey)
+{
+	map &#60;&#60; 	[(newKey) :
+				[
+					taskCount		: 0,
+
+					// Last status:
+					taskEXECUTING	: 0,
+					taskSCHEDULING	: 0,
+					taskWAITING		: 0,
+
+					// Last result:
+					taskOK			: 0,
+					taskHas_NaN		: 0,
+					taskAll_NaN		: 0,
+					taskNot_executed_yet		: 0,
+					taskUnable_to_execute		: 0,
+					taskUndetermined		: 0,
+				]
+			];
+	return map;
+}
+// ---------------------------------------------------------------------------------------
+
+
+// ---------------------------------------------------------------------------------------
+// Function to print debug outputs.
+def debugPrinter(text)
+{
+	// Just prints debug text, if enabled.
+	if(debug)
+	{
+		println &#39;DEBUG: &#39; + text;
+	}
+}
+// ---------------------------------------------------------------------------------------</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>windowsscript</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>linuxscript</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>windowscmdline</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>linuxcmdline</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        </attributes>
+        <datapoints>
+        <datapoint>
+            <name>percentTaskAll_NaN</name>
+            <originId>GRXkQyWsRJG21z1PtU_GZA</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>100*(taskAll_NaN/taskCount)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>percentTaskEXECUTING</name>
+            <originId>1B3Ig1QjTrC0fcYoUsoQ2w</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>100*(taskEXECUTING/taskCount)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>percentTaskHas_NaN</name>
+            <originId>xFQGjJCrTX-i94VdCZ3yAw</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>100*(taskHas_NaN/taskCount)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>percentTaskNot_executed_yet</name>
+            <originId>Z33djg5rRc-11wSYzyLdug</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>100*(taskNot_executed_yet/taskCount)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>percentTaskOK</name>
+            <originId>bUvZJDLWQJ6S8irmOWHFgA</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>100*(taskOK/taskCount)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>percentTaskSCHEDULING</name>
+            <originId>GM8d65O5RoyvxpfrCy9Qew</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>100*(taskSCHEDULING/taskCount)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>percentTaskUnable_to_execute</name>
+            <originId>u6xQAVDpR7GxUHcrO1y-sw</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>100*(taskUnable_to_execute/taskCount)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>percentTaskUndetermined</name>
+            <originId>vtMOBbVUTve1V10cPGFPLw</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>100*(taskUndetermined/taskCount)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>percentTaskWAITING</name>
+            <originId>K0vIxwHDSBSGxCXKcq7UaQ</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>expression</postprocessormethod>
+            <postprocessorparam>100*(taskWAITING/taskCount)</postprocessorparam>
+            <usevalue></usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>taskAll_NaN</name>
+            <originId>OuFpElmBQ6OLmzOcnWjcSA</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>taskAll_NaN</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>taskCount</name>
+            <originId>md-9CJhnRMy6ZsZ2WYWsOA</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>taskCount</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>taskEXECUTING</name>
+            <originId>fLuA7X3pST2xq6eKn06-Wg</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>taskEXECUTING</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>taskHas_NaN</name>
+            <originId>7ZlZgVAPQCKr1vOJLeUxgA</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>taskHas_NaN</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>taskNot_executed_yet</name>
+            <originId>x6tuIv5QSl6YFIp-4xCcoQ</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>taskNot_executed_yet</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>taskOK</name>
+            <originId>gj4y8aFKRwqsLKqg2fFk0w</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>taskOK</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>taskSCHEDULING</name>
+            <originId>Y0X6JVbgQESh61o8YWPWiA</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>taskSCHEDULING</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>taskUnable_to_execute</name>
+            <originId>I9SNlOd7S7yc3BX19GTSuw</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>taskUnable_to_execute</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>taskUndetermined</name>
+            <originId>uy1UreFcSXa7riCk-CnNRg</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>taskUndetermined</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>taskWAITING</name>
+            <originId>MR8H1naVSV2lGiwKDOtnow</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>taskWAITING</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        </datapoints>
+        <graphs>
+        <graph>
+            <name>Status splits by count</name>
+            <title>Status splits by count</title>
+            <originId>kOTNXZo0TTmIfJNKigbLhQ</originId>            <verticallabel>counts</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>2</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>taskAll_NaN</name>
+            <datapointname>taskAll_NaN</datapointname>
+            <originId>RwmJ8qysRoGtGmyA3iDz7g</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>taskHas_NaN</name>
+            <datapointname>taskHas_NaN</datapointname>
+            <originId>OBox0FqtQL2_t_0OTBDecg</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>taskNot_executed_yet</name>
+            <datapointname>taskNot_executed_yet</datapointname>
+            <originId>Xnzdt7NEQqigUWe2xg1eAA</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>taskOK</name>
+            <datapointname>taskOK</datapointname>
+            <originId>bRgkP9XbSbahlfbd_uHWyQ</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>taskUnable_to_execute</name>
+            <datapointname>taskUnable_to_execute</datapointname>
+            <originId>-L0HKyg2QFazefz878yXLg</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>taskUndetermined</name>
+            <datapointname>taskUndetermined</datapointname>
+            <originId>4DUYZfDsREussR9ERJQVqw</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>3</type>
+                <legend>All NaN</legend>
+                <color>red</color>
+                <datapointname>taskAll_NaN</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>Has NaN</legend>
+                <color>fuchsia</color>
+                <datapointname>taskHas_NaN</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>Not executed yet</legend>
+                <color>silver</color>
+                <datapointname>taskNot_executed_yet</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>OK</legend>
+                <color>lime</color>
+                <datapointname>taskOK</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>Unable to execute</legend>
+                <color>orange2</color>
+                <datapointname>taskUnable_to_execute</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>Undetermined</legend>
+                <color>yellow</color>
+                <datapointname>taskUndetermined</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Status splits by percentage</name>
+            <title>Status splits by percentage</title>
+            <originId>tENRuTQRStm-RtsHu9W-1w</originId>            <verticallabel>%</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>100.0</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>taskAll_NaN</name>
+            <datapointname>percentTaskAll_NaN</datapointname>
+            <originId>3hInhoTASNa8pbRlu1rtpA</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>taskHas_NaN</name>
+            <datapointname>percentTaskHas_NaN</datapointname>
+            <originId>Ru2f64-7SmqvbbWOUk0_Xg</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>taskNot_executed_yet</name>
+            <datapointname>percentTaskNot_executed_yet</datapointname>
+            <originId>TkeTHaxUQau5ojcBOcd8kg</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>taskOK</name>
+            <datapointname>percentTaskOK</datapointname>
+            <originId>HkOBU337RpaPG56JCjlLpA</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>taskUnable_to_execute</name>
+            <datapointname>percentTaskUnable_to_execute</datapointname>
+            <originId>xdU3qeAwRuuM1kt3NF3lqA</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>taskUndetermined</name>
+            <datapointname>percentTaskUndetermined</datapointname>
+            <originId>orO2hQF0QzS0pEWOgglorw</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>3</type>
+                <legend>All NaN</legend>
+                <color>red</color>
+                <datapointname>taskAll_NaN</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>Has NaN</legend>
+                <color>fuchsia</color>
+                <datapointname>taskHas_NaN</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>Not executed yet</legend>
+                <color>silver</color>
+                <datapointname>taskNot_executed_yet</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>OK</legend>
+                <color>lime</color>
+                <datapointname>taskOK</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>Unable to execute</legend>
+                <color>orange2</color>
+                <datapointname>taskUnable_to_execute</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>Undetermined</legend>
+                <color>yellow</color>
+                <datapointname>taskUndetermined</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Tasks Waiting</name>
+            <title>Tasks Waiting</title>
+            <originId>yptdeK8jQIi-BsXtgU_oEQ</originId>            <verticallabel>count</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>3</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>taskWAITING</name>
+            <datapointname>taskWAITING</datapointname>
+            <originId>GI0_b3UqQdeRxu7Fol0dsQ</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>3</type>
+                <legend>Waiting</legend>
+                <color>red</color>
+                <datapointname>taskWAITING</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        </graphs>
+        <overviewgraphs>
+        </overviewgraphs>
+        <scripts>
+        </scripts>
+    </entry>
+</feed>

@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<feed  version="1.0" hasPendingRequests="false" >
+  <company></company>
+  <status>200</status>
+  <errmsg>OK</errmsg>
+  <interval>0</interval>
+    <entry type="predatasource">
+        <version>1613141785</version>
+        <name>NoData_Metrics</name>
+        <displayedas>No Data Metrics</displayedas>
+        <description>Returns counts of datapoints returning NaN vs Numeric values</description>
+        <collector>script</collector>
+        <hasMultiInstances>false</hasMultiInstances>
+        <useWildValueAsUniqueIdentifier>false</useWildValueAsUniqueIdentifier>
+        <schedule>60</schedule>
+        <appliesTo>system.collectorId &#62; 0</appliesTo>
+        <wildcardauto>false</wildcardauto>
+        <wildcardpersist>false</wildcardpersist>
+        <wildcardlinuxscript></wildcardlinuxscript>
+        <wildcardlinuxcmdline></wildcardlinuxcmdline>
+        <wildcardwinscript></wildcardwinscript>
+        <wildcardwincmdline></wildcardwincmdline>
+        <wildcardgroovyscript></wildcardgroovyscript>
+        <wildcardschedule>1440</wildcardschedule>
+        <wildcarddisable>false</wildcarddisable>
+        <wildcarddeleteinactive>false</wildcarddeleteinactive>
+        <agdmethod>none</agdmethod>
+        <agdparams></agdparams>
+        <group>NoDataMonitoring</group>
+        <tags></tags>
+        <technology></technology>
+        <adlist><![CDATA[{"agdmethod":"none","agdparams":"","id":0,"filters":[],"params":{}}]]></adlist>
+        <schemaVersion>2</schemaVersion>
+    <integrationMetadata>
+        <integrationVersion>1.1.0</integrationVersion>
+        <integrationAuthorCompanyUuid>5d1de56c-12dc-11e6-8dbd-0a8c30e38697</integrationAuthorCompanyUuid>
+        <integrationLineageId>KEBpqRCzS3Kp72ke5ybq8g</integrationLineageId>
+        <integrationChecksum>8580b7f71ea978a0fdb2a6260fa74e0f</integrationChecksum>
+        <integrationAuthorNamespace>antony</integrationAuthorNamespace>
+        <integrationId>c3e53c39-0757-4dd4-83db-fbc65b2542c6</integrationId>
+        <integrationLocator>ZKTG2R</integrationLocator>
+        <integrationName>NoData_Metrics</integrationName>
+        <integrationStatus>Community</integrationStatus>
+        <integrationPublishedAtMS>1613141864316</integrationPublishedAtMS>
+        <integrationIsPrivate></integrationIsPrivate>
+    </integrationMetadata>
+        <dataSourceType>1</dataSourceType>
+        <attributes>
+        <attribute>
+            <name>scripttype</name>
+            <value>embed</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>scriptgroovy</name>
+            <value>import com.santaba.agent.collector3.CollectorDb
+
+// Set debug=true to print debug outputs. Leave =false for normal operation.
+debug = false;
+
+def hostName = hostProps.get(&#39;system.hostname&#39;);
+def hostId = hostProps.get(&#39;system.deviceId&#39;);
+
+def CollectorId = hostProps.get(&#39;system.collectorid&#39;);
+
+numberCount = 0;
+NaNCount = 0;
+complexCount = 0;
+allCount = 0;
+
+// This has interesting stuff and knows DS names associated with task ID
+allTasks = CollectorDb.getInstance().getTasks()
+allTasks.each
+{ task -&#62;
+	def taskInfo = task.getTaskInfo();
+
+	if(taskInfo.toString().contains(hostName + &#39; (&#39; + hostId + &#39;)&#39;))
+	{
+		debugPrinter(&#39;=&#39;*20);
+		debugPrinter(task);
+		try
+		{
+			lastValues = taskInfo.getCollectingHistory().getHistory().last().value
+			lastValues.each
+			{ value -&#62;
+				debugPrinter(&#39;-&#39;*20);
+				debugPrinter(value);
+				// DO NOT just increment allCount, as some failures of collection put spurious entries into
+				//  this .each loop. Honest. Trust me on this one.
+				// First, see if the value is numeric. If it isn&#39;t, see whether it&#39;s NaN or a complex datapoint.
+				// Anything else can be ignored.
+				// Complex datapoints are only known to the collector as &#39;-Infinity&#39;, as Santaba does the mathematics.
+				try
+				{
+					isNumeric = value.toBigInteger();
+					debugPrinter(isNumeric);
+					numberCount++;
+				}
+				catch(notNumeric)
+				{
+					debugPrinter(notNumeric);
+					if(value.toString() == &#39;NaN&#39;)
+					{
+						NaNCount++;
+						debugPrinter(&#39;NAN: &#39; + value);
+					}
+					if(value.toString() == &#39;-Infinity&#39;)
+					{
+						complexCount++;
+						debugPrinter(&#39;Complex: &#39; + value);
+					}
+				}
+			}
+		}
+		catch(e)
+		{
+			debugPrinter(e);
+		}
+	}
+
+}
+
+allCount = numberCount + NaNCount + complexCount
+
+println &#39;allMetricsCount=&#39; + allCount;
+println &#39;numericMetricsCount=&#39; + numberCount;
+println &#39;NaNMetricsCount=&#39; + NaNCount;
+println &#39;complexMetricsCount=&#39; + complexCount;
+
+println &#39;CollectorId=&#39; + CollectorId;
+
+return 0;
+
+
+// ---------------------------------------------------------------------------------------
+// Function to print debug outputs. 
+def debugPrinter(text,override=false)
+{
+	// Just prints debug text, if enabled.
+	if(debug || override)
+	{
+		println &#39;DEBUG: &#39; + text;
+	}
+}
+// ---------------------------------------------------------------------------------------</value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>windowsscript</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>linuxscript</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>windowscmdline</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        <attribute>
+            <name>linuxcmdline</name>
+            <value></value>
+            <comment></comment>
+        </attribute>
+        </attributes>
+        <datapoints>
+        <datapoint>
+            <name>CollectorId</name>
+            <originId>fdyBr8QJSHipSz3HnV30nA</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>CollectorId</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Recorded and returned such that jumps in NaN counts as a result of collector reassignment are easy to spot.</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>NaNMetricsCount</name>
+            <originId>1oZ7K_CuSUqytvWScikQsg</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>NaNMetricsCount</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Count of datapoints returning NaN</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>allMetricsCount</name>
+            <originId>_VoWIlGhRuKtPoUu86X14w</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>allMetricsCount</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Total count of datapoints on resource</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>complexMetricsCount</name>
+            <originId>l3nM9yrkTGazi3Sto3KpOQ</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>complexMetricsCount</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Count of complex datapoints on resource</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>numericMetricsCount</name>
+            <originId>8tq2hoNiSYevdaBqVvi7UA</originId>
+            <dataType>7</dataType>
+            <type>2</type>
+            <postprocessormethod>namevalue</postprocessormethod>
+            <postprocessorparam>numericMetricsCount</postprocessorparam>
+            <usevalue>output</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description>Count of metrics returning numeric values.</description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        <datapoint>
+            <name>scriptTime</name>
+            <originId>ZqfCtuQ0QS2k6OSNzcG0cg</originId>
+            <dataType>4</dataType>
+            <type>2</type>
+            <postprocessormethod>none</postprocessormethod>
+            <postprocessorparam></postprocessorparam>
+            <usevalue>responseTime</usevalue>
+            <alertexpr></alertexpr>
+            <alertmissing>1</alertmissing>
+            <alertsubject></alertsubject>
+            <alertbody></alertbody>
+            <enableanomalyalertsuppression></enableanomalyalertsuppression>
+            <adadvsettingenabled>false</adadvsettingenabled>
+            <warnadadvsetting></warnadadvsetting>
+            <erroradadvsetting></erroradadvsetting>
+            <criticaladadvsetting></criticaladadvsetting>
+            <description></description>
+            <maxvalue></maxvalue>
+            <minvalue></minvalue>
+            <userparam1></userparam1>
+            <userparam2></userparam2>
+            <userparam3></userparam3>
+            <iscomposite>false</iscomposite>
+            <rpn></rpn>
+            <alertTransitionIval>0</alertTransitionIval>
+            <alertClearTransitionIval>0</alertClearTransitionIval>
+        </datapoint>
+        </datapoints>
+        <graphs>
+        <graph>
+            <name>Collector Id</name>
+            <title>Collector Id</title>
+            <originId>WmHwYsQWQOu0Az9B6I8bfg</originId>            <verticallabel>ID</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>6</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>CollectorId</name>
+            <datapointname>CollectorId</datapointname>
+            <originId>bH1PV_rYSR2jAvhm31LPPg</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>CollectorId</legend>
+                <color>fuchsia</color>
+                <datapointname>CollectorId</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Metrics</name>
+            <title>Metrics</title>
+            <originId>n1vl13vXQPOLopcUk2TR7A</originId>            <verticallabel>count</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>1</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>allMetricsCount</name>
+            <datapointname>allMetricsCount</datapointname>
+            <originId>LJXFuYnKTDuzpCKdGQ-ljA</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>complexMetricsCount</name>
+            <datapointname>complexMetricsCount</datapointname>
+            <originId>xFtB8gPURz2mX-736kR0MA</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>NaNMetricsCount</name>
+            <datapointname>NaNMetricsCount</datapointname>
+            <originId>et96NMyOSFK0TxHb83fAwg</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+        <graphdatapoint>
+            <name>numericMetricsCount</name>
+            <datapointname>numericMetricsCount</datapointname>
+            <originId>kQcvEftLQHu2nHFLHxy59w</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>3</type>
+                <legend>NaNMetricsCount</legend>
+                <color>red</color>
+                <datapointname>NaNMetricsCount</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>1</type>
+                <legend>allMetricsCount</legend>
+                <color>aqua</color>
+                <datapointname>allMetricsCount</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>complexMetricsCount</legend>
+                <color>gray</color>
+                <datapointname>complexMetricsCount</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            <graphdata>
+                <type>3</type>
+                <legend>numericMetricsCount</legend>
+                <color>olive</color>
+                <datapointname>numericMetricsCount</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        <graph>
+            <name>Script Time</name>
+            <title>Script Time</title>
+            <originId>xNbF1bA6QA6dcLbiZ_J42Q</originId>            <verticallabel>ms</verticallabel>
+            <rigid>false</rigid>
+            <maxvalue>NaN</maxvalue>
+            <minvalue>0.0</minvalue>
+            <displayprio>4</displayprio>
+            <timescale>1day</timescale>
+            <base1024>false</base1024>
+            <graphdatapoints>
+        <graphdatapoint>
+            <name>scriptTime</name>
+            <datapointname>scriptTime</datapointname>
+            <originId>XTXMudOURGewBu53sWeAmA</originId>
+            <cf>1</cf>
+        </graphdatapoint>
+            </graphdatapoints>
+            <graphvirtualdatapoints>
+            </graphvirtualdatapoints>
+            <graphdatas>
+            <graphdata>
+                <type>1</type>
+                <legend>scriptTime</legend>
+                <color>silver</color>
+                <datapointname>scriptTime</datapointname>
+                <isvirtualdatapoint>false</isvirtualdatapoint>
+            </graphdata>
+            </graphdatas>
+        </graph>
+        </graphs>
+        <overviewgraphs>
+        </overviewgraphs>
+        <scripts>
+        </scripts>
+    </entry>
+</feed>

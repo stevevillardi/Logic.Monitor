@@ -1,0 +1,53 @@
+{
+    "scheduleOption": 0,
+    "metadata": {
+        "currentUuid": "Jpi6g0MNTOCm1ZK3rrzxeg",
+        "originalUuid": "Jpi6g0MNTOCm1ZK3rrzxeg",
+        "authorCompanyUuid": "1c0ca6ae-b3a2-4a08-9809-5935c90e4a1d",
+        "registryVersion": "1.0.0",
+        "checksum": "91d301cad6e45455e3b8e1457e28919b"
+    },
+    "dataType": 0,
+    "description": "Validates that the PS Module Logic.Monitor is installed on all windows collectors. If not detected it will attempt to install the module.",
+    "appliesTo": "hasCategory(\"collector\") && system.collectorplatform == \"windows\"",
+    "technology": "",
+    "type": 5,
+    "params": [
+        {
+            "name": "linuxcmdline",
+            "comment": "",
+            "value": ""
+        },
+        {
+            "name": "linuxscript",
+            "comment": "",
+            "value": ""
+        },
+        {
+            "name": "scriptgroovy",
+            "comment": "",
+            "value": "#PS Module to install\n$Module = 'Logic.Monitor'\n\n#Check if module is currently installed\n$Installed = Get-Module -ListAvailable -Name $Module\n\n#If installed check if version is up to date\nIf($Installed){\n    If ($Installed -is [Array]) {\n        $InstalledVersion = $Installed[0].Version\n    }\n    Else {\n        $InstalledVersion = $Installed.Version\n        If(!$InstalledVersion){\n            #Should not be possible, but even so just return if module is not detected\n            return\n        }\n    }\n    \n    # Lookup the latest version Online\n    $Online = Find-Module -Name $Module -Repository PSGallery -ErrorAction Stop\n    $OnlineVersion = $Online.Version \n    \n        # Compare the versions\n    If ([System.Version]$OnlineVersion -gt [System.Version]$InstalledVersion) {    \n        # Uninstall the old version\n        Try{\n            Uninstall-Module -Name $Module -Force -Verbose:$False -ErrorAction Stop\n            $Installed = Install-Module -Name $Module -Force -AllowClobber -Verbose:$False  -ErrorAction Stop\n\n            Write-Host \"auto.logic.monitor.installed=true\"\n            Write-Host \"auto.logic.monitor.version=$($Installed.Version)\"\n        }\n        Catch{\n            Write-Host \"auto.logic.monitor.installed=false\"\n            Write-Host \"auto.logic.monitor.error=$_\"\n        }\n    }\n    Else{\n        Write-Host \"auto.logic.monitor.installed=true\"\n        Write-Host \"auto.logic.monitor.version=$InstalledVersion\"\n    }\n}\n#Install latest version since not detected\nElse{\n    Try{\n        $Installed = Install-Module -Name $Module -Force -AllowClobber -Verbose:$False -ErrorAction Stop\n\n        Write-Host \"auto.logic.monitor.installed=true\"\n        Write-Host \"auto.logic.monitor.version=$($Installed.Version)\"\n    }\n    Catch{\n        Write-Host \"auto.logic.monitor.installed=false\"\n        Write-Host \"auto.logic.monitor.error=$_\"\n    }\n}"
+        },
+        {
+            "name": "scripttype",
+            "comment": "embed",
+            "value": "powerShell"
+        },
+        {
+            "name": "windowscmdline",
+            "comment": "",
+            "value": ""
+        },
+        {
+            "name": "windowsscript",
+            "comment": "",
+            "value": ""
+        }
+    ],
+    "version": 1682102909,
+    "tags": "",
+    "auditVersion": 0,
+    "name": "addPSModule_Logic.Monitor",
+    "id": 279,
+    "group": ""
+}

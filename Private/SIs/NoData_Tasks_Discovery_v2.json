@@ -1,0 +1,65 @@
+{
+    "scheduleOption": 0,
+    "metadata": {
+        "currentUuid": "xurD55MvT_WPdlUlwGS3Ig",
+        "originalUuid": "xurD55MvT_WPdlUlwGS3Ig",
+        "authorCompanyUuid": "5d1de56c-12dc-11e6-8dbd-0a8c30e38697",
+        "registryVersion": "1.0.0",
+        "checksum": "a836286582f27c2e4642b9ea6b3e583f"
+    },
+    "dataType": 0,
+    "description": "Lists task types per resource as a new auto.property.\nCreated by Antony Hawkins, LogicMonitor.",
+    "appliesTo": "system.collectorId > 0",
+    "technology": "",
+    "type": 5,
+    "params": [
+        {
+            "name": "linuxcmdline",
+            "comment": "",
+            "value": ""
+        },
+        {
+            "name": "linuxscript",
+            "comment": "",
+            "value": ""
+        },
+        {
+            "name": "scriptgroovy",
+            "comment": "",
+            "value": "/*******************************************************************************\n * © 2007-2022 - LogicMonitor, Inc. All rights reserved.\n * Script written by Antony Hawkins.\n * PropertySource script to (effectively) do Active Discovery\n ******************************************************************************/\n\nimport com.santaba.agent.debugger.TlistTask\n\n/*\n Script to discover tasks being run against the resource.\n Creates a taskTypesList property which forms the instances for the batchscript collection\n  and for comparison in the 'all tasks' DataSource.\n This is because during collection, !tlist may return nothing just after collector restart.\n*/\n\n// Set debug=true to print debug outputs. Leave =false for normal operation.\ndebug = false;\n\nhostname = hostProps.get('system.hostname');\n\ntry\n{\n\toutputList = [];\n\n\tTlistTask debug = new TlistTask('!tlist h=' + hostname + ' summary=true');\n\t\n\tdebug.run()\n\tdebug.awaitFinish()\n\tdebugOutput = debug.output\n\n\tdebugPrinter(debugOutput);\n\n\tregexMatcher = /^\\s*(\\S+)\\s+(\\S+)\\s+(\\d+)/;\n\tdebugOutput.eachLine()\n\t{ line ->\n\t\tif(line =~ regexMatcher)\n\t\t{\n\t\t\tsourceType = (line =~ regexMatcher)[0][1];\n\t\t\tsourceCollector = (line =~ regexMatcher)[0][2];\n\n\t\t\t// There is no point including EventSources here, because !tlist doesn't tell you if\n\t\t\t//  they're working or not anyway (only !tdetail gives this level of detail and we aren't\n\t\t\t//  about to do that for all of however many there might be)\n\t\t\t// There is also no point splitting ConfigSources and DataSources, as the !tlist used in the\n\t\t\t//  detailed collection method doesn't indicate any difference.\n\t\t\tif(sourceType != 'EventSource')\n\t\t\t{\n\t\t\t\toutputList << sourceCollector;\t\t\t\n\t\t\t}\n\t\t}\n\t}\n\n\tdebugPrinter(outputList);\n\n\tprintln 'auto.taskTypesList.v2=' + outputList.join(',')\n}\ncatch (e)\n{\n\t// Something went wrong... Return non-zero to avoid removing existing properties\n\tdebugPrinter(e)\n\treturn 1;\n}\n\nreturn 0;\n\n// ---------------------------------------------------------------------------------------\n// End core logic. Helper functions below.\n// ---------------------------------------------------------------------------------------\n\n\n// ---------------------------------------------------------------------------------------\n// Function to print debug outputs.\ndef debugPrinter(text)\n{\n\t// Just prints debug text, if enabled.\n\tif(debug)\n\t{\n\t\tprintln 'DEBUG: ' + text;\n\t}\n}\n// ---------------------------------------------------------------------------------------"
+        },
+        {
+            "name": "scripttype",
+            "comment": "embed",
+            "value": "embed"
+        },
+        {
+            "name": "windowscmdline",
+            "comment": "",
+            "value": ""
+        },
+        {
+            "name": "windowsscript",
+            "comment": "",
+            "value": ""
+        }
+    ],
+    "version": 1659000225,
+    "tags": "",
+    "auditVersion": 0,
+    "name": "NoData_Tasks_Discovery_v2",
+    "integrationMetadata": {
+        "publishedAtMS": 1659000230344,
+        "authorCompanyUuid": "5d1de56c-12dc-11e6-8dbd-0a8c30e38697",
+        "namespace": "antony",
+        "registryVersion": "1.0.0",
+        "name": "NoData_Tasks_Discovery_v2",
+        "checksum": "a836286582f27c2e4642b9ea6b3e583f",
+        "registryId": "998d3c43-29e8-4ca6-aef7-b0f8b1dcc07b",
+        "locator": "FEDEHY",
+        "lineageId": "xurD55MvT_WPdlUlwGS3Ig",
+        "status": "COMMUNITY"
+    },
+    "id": 254,
+    "group": "NoDataMonitoring"
+}
