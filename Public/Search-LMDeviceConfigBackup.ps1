@@ -17,7 +17,7 @@ Function Search-LMDeviceConfigBackup {
     Process{
         $Results = @()
         Foreach ($device in $ConfigBackups){
-            $SearchResults = $device.configContent.Split(“`n”) | Select-String -Pattern $SearchPattern -Context 0,0 | Select-Object Line,LineNumber
+            $SearchResults = $device.configContent.Split("`n") | Select-String -Pattern $SearchPattern -Context 0,0 | Select-Object Line,LineNumber
             If($SearchResults){
                 $ResultCount = ($SearchResults | Measure-Object).Count
                 Write-LMHost "Found $ResultCount search results matching pattern ($SearchPattern) for device: $($device.deviceDisplayName)"
