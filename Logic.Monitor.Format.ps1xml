@@ -54,6 +54,77 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.DedupeList-->
+      <View>
+         <Name>LogicMonitorDedupeList</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.DedupeList</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>duplicate_deviceId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>duplicate_sysName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>duplicate_hostName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>duplicate_ipList</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>original_deviceId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>original_sysName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>original_hostName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>original_ipList</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>duplicate_reason</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>duplicate_deviceId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>duplicate_sysName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>duplicate_hostName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>duplicate_ipList</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>original_deviceId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>original_sysName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>original_hostName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>original_ipList</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>duplicate_reason</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.ConfigBackup-->
       <View>
          <Name>LogicMonitorConfigBackup</Name>

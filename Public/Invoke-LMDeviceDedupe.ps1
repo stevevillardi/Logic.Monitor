@@ -12,7 +12,9 @@ Function Invoke-LMDeviceDedupe {
 
         [String[]]$IpExclusionList,
 
-        [String[]]$SysNameExclusionList
+        [String[]]$SysNameExclusionList,
+
+        [String[]]$ExcludeDeviceType = @(8) #Exclude K8s resources by default
     )
     #Check if we are logged in and have valid api creds
     Begin {}
@@ -30,6 +32,9 @@ Function Invoke-LMDeviceDedupe {
             Else{
                 $DeviceList = Get-LMDevice
             }
+
+            #Remove excluded device types
+            $DeviceList = $DeviceList | Where-Object {$ExcludeDeviceType -notcontains $_.deviceType}
 
             If($DeviceList){
                 $OrganizedDevicesList = @()
@@ -166,16 +171,20 @@ Function Invoke-LMDeviceDedupe {
                         }
                     }
                 }
-                If($ListDuplicates){
-                    $OutputList
-
-                }
-                ElseIf($RemoveDuplicates){
-                    Foreach($Device in $OutputList){
-                        #Remove duplicate devices
-                        Write-LMHost "Removing device ($($Device.duplicate_deviceId)) $($Device.duplicate_displayName) for reason: $($Device.duplicate_reason)"
-                        Remove-LMDevice -Id $Device.duplicate_deviceId
+                If($OutputList){
+                    If($ListDuplicates){
+                        Return (Add-ObjectTypeInfo -InputObject $OutputList -TypeName "LogicMonitor.DedupeList" )
                     }
+                    ElseIf($RemoveDuplicates){
+                        Foreach($Device in $OutputList){
+                            #Remove duplicate devices
+                            Write-LMHost "Removing device ($($Device.duplicate_deviceId)) $($Device.duplicate_displayName) for reason: $($Device.duplicate_reason)"
+                            Remove-LMDevice -Id $Device.duplicate_deviceId
+                        }
+                    }
+                }
+                Else{
+                    Write-LMHost "No duplicates detected based on set parameters."
                 }
             }
         }

@@ -366,6 +366,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 ## 4.2.1
 ###### Update Commands/Bug Fixes:
 **Search-LMDeviceConfigBackup**: Fix issue loading previous release on windows due to encoding bug in Search-LMDeviceConfigBackup
+**Invoke-LMDeviceDedupe**: Added support for exluding certain device types from dedupe processing, by default K8s resources are excluded.
 
 ## 4.2
 ###### Feature Updates:
