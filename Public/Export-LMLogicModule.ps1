@@ -138,7 +138,7 @@ Function Export-LMLogicModule {
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers -OutFile $ExportPath
+                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] -OutFile $ExportPath
 
                 Write-LMHost "Successfully downloaded LogicModule id ($LogicModuleId) of type $Type"
                 Return

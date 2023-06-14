@@ -58,7 +58,7 @@ Function Get-LMWebsiteData {
             $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
             #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
+            $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
             Return $Response
         
         }

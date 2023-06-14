@@ -17,9 +17,14 @@ Function Resolve-LMException {
     ELse {
         Switch ($LMException.Exception.GetType().FullName) {
             { "System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException" } {
-                $HttpException = ($LMException.ErrorDetails.Message | ConvertFrom-Json).errorMessage
-                If (!$HttpException) {
-                    $HttpException = ($LMException.ErrorDetails.Message | ConvertFrom-Json).message
+                Try{
+                    $HttpException = ($LMException.ErrorDetails.Message | ConvertFrom-Json -ErrorAction SilentlyContinue).errorMessage
+                    If (!$HttpException) {
+                        $HttpException = ($LMException.ErrorDetails.Message | ConvertFrom-Json -ErrorAction Stop).message
+                    }
+                }
+                Catch{
+                    $HttpException = $LMException.ErrorDetails.Message
                 }
                 $HttpStatusCode = $LMException.Exception.Response.StatusCode.value__
                 #Output to null so ErrorAction works as expected

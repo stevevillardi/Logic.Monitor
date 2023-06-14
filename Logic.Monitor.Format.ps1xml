@@ -266,6 +266,47 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.AppliesToFunction-->
+      <View>
+         <Name>LogicMonitorAppliesToFunction</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.AppliesToFunction</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>code</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>code</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.CollectorGroup-->
       <View>
          <Name>LogicMonitorCollectorGroup</Name>

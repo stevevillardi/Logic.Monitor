@@ -29,7 +29,7 @@ Function New-LMAlertNote {
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
     
                 #Issue request
-                $Response = Invoke-WebRequest -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
+                $Response = Invoke-WebRequest -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
     
                 If($Response.StatusCode -eq 200){
                     Write-LMHost "Successfully updated note for alert id(s): $Ids" -ForegroundColor Green

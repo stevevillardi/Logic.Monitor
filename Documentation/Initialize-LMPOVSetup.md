@@ -23,8 +23,8 @@ Initialize-LMPOVSetup [-Website <String>] [-WebsiteHttpType <String>] [-PortalMe
 ### All
 ```
 Initialize-LMPOVSetup [-Website <String>] [-WebsiteHttpType <String>] [-PortalMetricsAPIUsername <String>]
- [-LogsAPIUsername <String>] [-LMContainerAPIUsername <String>] [-WindowsLMLogsEventChannels <String>]
- [-RunAll] [<CommonParameters>]
+ [-LogsAPIUsername <String>] [-LMContainerAPIUsername <String>] [-IncludeDefaults]
+ [-WindowsLMLogsEventChannels <String>] [-RunAll] [<CommonParameters>]
 ```
 
 ### PostPOV-Readonly
@@ -57,6 +57,21 @@ PS C:\> {{ Add example code here }}
 ```yaml
 Type: SwitchParameter
 Parameter Sets: Individual
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IncludeDefaults
+{{ Fill IncludeDefaults Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Individual, All
 Aliases:
 
 Required: False
@@ -173,21 +188,6 @@ Accept wildcard characters: False
 
 ### -SetupCollectorServiceInsight
 {{ Fill SetupCollectorServiceInsight Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Individual
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IncludeDefaults
-{{ Fill IncludeDefaults Description }}
 
 ```yaml
 Type: SwitchParameter

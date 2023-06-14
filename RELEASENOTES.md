@@ -1,4 +1,89 @@
 # Previous module release notes
+## 4.2.1
+###### Update Commands/Bug Fixes:
+**Search-LMDeviceConfigBackup**: Fix issue loading previous release on windows due to encoding bug in Search-LMDeviceConfigBackup
+**Invoke-LMDeviceDedupe**: Added support for exluding certain device types from dedupe processing, by default K8s resources are excluded.
+
+## 4.2
+###### Feature Updates:
+**Improved Filter functionality**: The -Filter parameter has been overhauled to provide more options and flexibility in generating more complex server side filtering options. Previously -Filter only took in a hashtable of properties to perform an equal comparison against, this was very limited compared to the additional filtering options available in LM APIv3. As a result of the update you can now use the following operators when construction the filter string. Additionally the old hashtable method of filtering is still supported for backwards compatibility but may be removed in a future update:
+
+| Operator      | Description           |
+|---------------|-------------          |
+|-eq	        |Equal                  |
+|-ne            |Not equal              |
+|-gt	        |Greater than           |
+|-lt	        |Less than              |
+|-ge            |Greater than or equal  |
+|-le            |Less than or equal     |
+|-contains	    |Contain                |
+|-notcontains   |Does not contain       |
+|-and	        |Comparison *and* operator   |
+|-or            |Comparison *or* operator   |
+
+**Notes**: When creating your own custom filters, consider the following items:
+
+**Text values**: Enclose the text in single quotation marks (for example, 'Value' or 'Value with spaces'):
+
+```powershell
+-Filter "displayName -eq 'MyNameHere'"
+```
+
+**Variables**: Enclose variables that need to be expanded in single quotation marks:
+
+```powershell
+-Filter "username -eq '$User'"
+```
+
+**Integer values**: You don't need to enclose integers (for example, 500). You can often enclose integers in single quotation marks but is not required:
+
+```powershell
+-Filter "id -eq 7"
+```
+
+**System values**: Enclose system values (for example, \$true, \$false, or \$null) in single quotation marks:
+
+```powershell
+-Filter "disableAlerting -eq '$true'"
+```
+
+**Field names**: Field names in the LM API are case sensitive, ensure you use the proper casing when creating a custom filter (ex displayName). Using incorrect casing can result in unexpected results being returned. Also reference LM APIv3 swagger guide for details on which fields are support for filtering
+
+Additional Filter Examples:
+```powershell
+#Device Hostname contains UDM and aleting is disabled
+Get-LMDevice -Filter "disableAlerting -eq '$true' -and name -contains 'UDM'"
+
+#User email address either contains steve or is null
+Get-LMUser -Filter "email -contains 'steve' -or email -ne '$null'"
+
+#Get active alerts where the instance name is Kubernetes_Scheduler and the Alert Rule is labeled Critical
+Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Critical'"
+```
+
+
+###### Update Commands/Bug Fixes:
+- **Initalize-LMPOVSetup**: Added additional switch **-IncludeDefaults** that adds some additional configuration changes common in POV. By default these changes are not included with the **-RunAll** switch so it needs to be specified in addition to **-RunAll** if you want them included in the setup process:
+  - Change alert threshold defaults for SSL_Certificates to only alert for non self signed certs out of box.
+  - Import the following LogicModules:
+      - Microsoft_Windows_Services_AD (DS)
+      - LogicMonitor_Collector_Configurations (CS)
+      - NoData_Metrics (DS)
+      - NoData_Tasks_By_Type_v2 (DS)
+      - NoData_Tasks_Overall_v2 (DS)
+      - NoData_Tasks_Discovery_v2 (PS)
+- **Set-LMDatasource**: Fix regression bug preventing use of -AppliesTo parameter.
+
+###### New Commands:
+ - The following commands have been added in this release, see documentaiton for usage details:
+    - **Get-LMNetscanGroup**
+    - **Set-LMNetscanGroup**
+    - **Remove-LMNetscanGroup**
+    - **New-LMNetscanGroup**
+    - **Set-LMCollectorGroup**
+    - **Remove-LMCollectorGroup**
+    - **New-LMCollectorGroup**
+
 ## 4.1.1
 ###### Update Commands/Bug Fixes:
 - **Initalize-LMPOVSetup**: Fixed LM Logs datasource issue with importing an older core module that has collection issues. If you are using the POV setup command make sure you use this updated version for all new POVs. For existing POVs to ensure you have the latest core module for Logs either manually update the datasource using the LM Exchange/Repository or by running the bellow command:

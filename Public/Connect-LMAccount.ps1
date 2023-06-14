@@ -23,6 +23,9 @@ This will list all cached account for you to pick from. This parameter is option
 .PARAMETER CachedAccountName
 Name of cached account you wish to connect to. This parameter is optional and can be used in place of UseCachedCredential
 
+.PARAMETER SessionSync
+Use session sync capability instead of api key
+
 .PARAMETER DisableConsoleLogging
 Disables on stdout messages from displaying for any subsequent commands are run. Useful when building scripted logicmodules and you want to suppress unwanted output. Console logging is enabled by default.
 
@@ -62,6 +65,7 @@ Function Connect-LMAccount {
 
         [Parameter(Mandatory, ParameterSetName = 'LMv1')]
         [Parameter(Mandatory, ParameterSetName = 'Bearer')]
+        [Parameter(Mandatory, ParameterSetName = 'SessionSync')]
         [String]$AccountName,
 
         [Parameter(ParameterSetName = 'Cached')]
@@ -69,6 +73,9 @@ Function Connect-LMAccount {
 
         [Parameter(ParameterSetName = 'Cached')]
         [String]$CachedAccountName,
+
+        [Parameter(ParameterSetName = 'SessionSync')]
+        [Switch]$SessionSync,
 
         [Switch]$DisableConsoleLogging
     )
@@ -81,11 +88,11 @@ Function Connect-LMAccount {
     If ($UseCachedCredential -or $CachedAccountName) {
 
         Try {
-            $ExistingVault = Get-SecretInfo -Name Logic.Monitor -WarningAction Stop
+            $ExistingVault = Get-SecretVault -Name Logic.Monitor -ErrorAction Stop
             Write-Host "Existing vault Logic.Monitor already exists, skipping creation" -ForegroundColor Yellow
         }
         Catch {
-            If($_.Exception.Message -like "*There are currently no extension vaults registered*") {
+            If($_.Exception.Message -like "*Vault Logic.Monitor does not exist in registry*") {
                 Write-Host "Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor" -ForegroundColor Yellow
                 Register-SecretVault -Name Logic.Monitor -ModuleName Microsoft.PowerShell.SecretStore
                 Get-SecretStoreConfiguration | Out-Null
@@ -150,19 +157,22 @@ Function Connect-LMAccount {
             If($CachedAccountSecrets){
                 Write-Host "Selection Number | Portal Name"
                 Foreach ($Credential in $CachedAccountSecrets) {
-                    Write-Host "$i)     $($Credential.Name)"
+                    If($Credential.Name -notlike "*LMSessionSync*"){
+                        Write-Host "$i)     $($Credential.Name)"
+                    }
                     $i++
                 }
                 $StoredCredentialIndex = Read-Host -Prompt "Enter the number for the cached credential you wish to use"
                 If ($CachedAccountSecrets[$StoredCredentialIndex]) {
                     $AccountName = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Portal"]
+                    $CachedAccountName = $CachedAccountSecrets[$StoredCredentialIndex].Name
                     $AccessId = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Id"]
                     $Type = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Type"]
                     If($AccessId){
-                        [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $AccountName -AsPlainText | ConvertTo-SecureString
+                        [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                     }
                     Else{
-                        [SecureString]$BearerToken = Get-Secret -Vault "Logic.Monitor" -Name $AccountName -AsPlainText | ConvertTo-SecureString
+                        [SecureString]$BearerToken = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                     }
                 }
                 Else {
@@ -181,6 +191,17 @@ Function Connect-LMAccount {
             #Convert to secure string
             [SecureString]$AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force
             $Type = "LMv1"
+        }
+        ElseIf($PsCmdlet.ParameterSetName -eq "SessionSync"){
+            $Session = Get-LMSession -AccountName $AccountName
+            If($Session){
+                $AccessId     = $Session.jSessionID #Session Id
+                $AccessKey    = $Session.token #CSRF Token
+                $Type = "SessionSync"
+            }
+            Else{
+                throw "Unable to validate session sync info for: $AccountName"
+            }
         }
         Else{
             #Convert to secure string
@@ -203,10 +224,10 @@ Function Connect-LMAccount {
         Logging = !$DisableConsoleLogging.IsPresent
         Type = $Type
     }
-
+    
     #Check for newer version of Logic.Monitor module
     Update-LogicMonitorModule -CheckOnly
-
+    
     #Bearer token warning banner
     If($Type -eq "Bearer"){
         Write-LMHost "[WARN]: Please note that while usage of Bearer tokens in this module is supported, not all  LM v3 API endpoints currently support both LMv1 and Bearer authentication methods. If you encounter authentication issues try using an LMv1 token instead." -ForegroundColor Yellow
@@ -222,6 +243,7 @@ Function Connect-LMAccount {
         Else{
             $ApiInfo = Get-LMAPIToken -Filter "accessId -eq '$AccessId'" -ErrorAction SilentlyContinue
         }
+
         If ($ApiInfo) {
             $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
             Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) using account ($($ApiInfo.adminName) via $Type Token) with assigned roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
@@ -252,9 +274,9 @@ Function Connect-LMAccount {
         }
         Catch{
 
-            throw "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
             #Clear credential object from environment
             Remove-Variable LMAuth -Scope Script -ErrorAction SilentlyContinue
+            throw "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
         }
         Return
     }

@@ -32,7 +32,7 @@ Function Remove-LMWebsite {
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
+                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
                 Write-LMHost "Successfully removed id ($Id)" -ForegroundColor Green
 
                 Return

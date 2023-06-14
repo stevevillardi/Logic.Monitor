@@ -27,7 +27,7 @@ Function Import-LMExchangeModule {
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
+                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
                 Write-LMHost "Successfully imported LM Exchange module id: $LMExchangeId"
 
                 Return

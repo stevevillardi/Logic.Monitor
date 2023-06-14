@@ -11,6 +11,7 @@ Function Get-LMAppliesToFunction {
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
+        [ValidateRange(1,1000)]
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
@@ -44,12 +45,12 @@ Function Get-LMAppliesToFunction {
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
+                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AppliesToFunction" )
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -68,7 +69,7 @@ Function Get-LMAppliesToFunction {
                 }
             }
         }
-        Return $Results
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.AppliesToFunction" )
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

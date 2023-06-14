@@ -97,6 +97,46 @@ foreach($group in $groups){
 }
 ```
 
+#### Export list of VM instances discovered for a vcenter resource and output inventory report
+
+```powershell
+$Device = Get-LMDevice -DisplayName "vcenter01.villardi.local"
+$DataSource = Get-LMDeviceDatasourceList -id $Device.id | Where-Object {$_.dataSourceName -eq "VMware_vCenter_VMPerformance"}
+$Instances = Get-LMDeviceDatasourceInstance -DatasourceId $Datasource.datasourceId -DeviceId $Device.id
+
+$Results = @()
+Foreach ($VM in $Instances){
+    $Results += [PSCustomObject]@{
+        VirtualMachine = $VM.name.split("VMware_vCenter_VMPerformance-")[1]
+        Host = $VM.autoProperties[$VM.autoProperties.name.IndexOf("auto.runtime.host")].value
+        Cluster = $VM.autoProperties[$VM.autoProperties.name.IndexOf("auto.cluster")].value
+        NumOfCPUs = $VM.autoProperties[$VM.autoProperties.name.IndexOf("auto.hardware.num_cpu")].value
+        NumOfCoresPerSocket = $VM.autoProperties[$VM.autoProperties.name.IndexOf("auto.hardware.num_cores_per_socket")].value
+        MemoryMb = $VM.autoProperties[$VM.autoProperties.name.IndexOf("auto.hardware.memory_mb")].value
+        MemoryGb = $VM.autoProperties[$VM.autoProperties.name.IndexOf("auto.hardware.memory_mb")].value / 1024
+        GuestOS = $VM.autoProperties[$VM.autoProperties.name.IndexOf("auto.guest.guest_os_full_name")].value
+    }
+}
+
+$Results
+```
+
+#### Set instance properties for a network device to override port speed
+```powershell
+#Get device details by hostname value
+$Device = Get-LMDevice -Name "192.168.1.4"
+
+#Pull datasource and instance details
+$DataSource = Get-LMDeviceDatasourceList -id $Device.id | Where-Object {$_.dataSourceName -eq "SNMP_Network_Interfaces"}
+$Instances = Get-LMDeviceDatasourceInstance -DatasourceId $Datasource.datasourceId -DeviceId $Device.id
+
+#Find instance needing to be updated
+$eth0 = $Instances | Where-Object {$_.name -like "*eth0*"}
+
+#Update instance with required props
+Set-LMDeviceDatasourceInstance -DeviceId $Device.id -DatasourceId $DataSource.datasourceid -InstanceId $eth0.id -Properties @{"out_speed"=25;"in_speed"=500}
+```
+
 #### Remove a group of devices from a device group but do not delete them from LM
 
 ```powershell

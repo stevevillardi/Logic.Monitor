@@ -35,7 +35,7 @@ Function Remove-LMAPIToken {
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers
+                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
                 Write-LMHost "Successfully removed id ($APITokenId)" -ForegroundColor Green
                 
                 Return

@@ -10,6 +10,7 @@ Function Get-LMDeviceInstanceList {
 
         [Object]$Filter,
 
+        [ValidateRange(1,1000)]
         [Int]$BatchSize = 1000,
 
         [Boolean]$CountOnly
@@ -51,7 +52,7 @@ Function Get-LMDeviceInstanceList {
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
     
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers
+                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #If looking for count only just return total
                 If ($CountOnly) {

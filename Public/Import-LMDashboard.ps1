@@ -78,12 +78,12 @@ Function Import-LMDashboard {
                     $Headers = @{"Authorization"="token $GithubAccessToken"}
                 }
                 $Uri = "https://api.github.com/repos/$GithubUserRepo/git/trees/master?recursive=1"
-                $RepoData = (Invoke-RestMethod -Uri $Uri -Headers $Headers).tree | Where-Object {$_.Path -like "*.json" -and $_.Path -notlike "Packages/LogicMonitor_Dashboards*"} | Select-Object path,url
+                $RepoData = (Invoke-RestMethod -Uri $Uri -Headers $Headers[0] -WebSession $Headers[1]).tree | Where-Object {$_.Path -like "*.json" -and $_.Path -notlike "Packages/LogicMonitor_Dashboards*"} | Select-Object path,url
                 If($RepoData){
                     $TotalItems = ($RepoData | Measure-Object).Count
                     Write-LMHost "Found $TotalItems JSON files from Github repo ($GithubUserRepo)"
                     Foreach ($Item in $RepoData){
-                        $EncodedDash = (Invoke-RestMethod -Uri $Item.url -Headers $Headers).content
+                        $EncodedDash = (Invoke-RestMethod -Uri $Item.url -Headers $Headers[0] -WebSession $Headers[1]).content
                         $DashboardList += @{
                             file = [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String($EncodedDash)) | ConvertFrom-Json
                             path = [System.IO.Path]::GetDirectoryName($Item.path)
@@ -199,7 +199,7 @@ Function Import-LMDashboard {
                     $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
         
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Body $Data
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
                     Write-LMHost "Successfully imported dashboard: $($Dashboard.file.name)"
     
                     $Results += (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Dashboard" )

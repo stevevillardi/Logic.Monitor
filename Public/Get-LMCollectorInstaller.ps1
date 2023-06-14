@@ -47,7 +47,7 @@ Function Get-LMCollectorInstaller {
             $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
             #Issue request
-            Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers -OutFile $DownloadPath
+            Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] -OutFile $DownloadPath
             
             Return $DownloadPath
 

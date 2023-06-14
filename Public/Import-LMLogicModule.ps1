@@ -47,7 +47,7 @@ Function Import-LMLogicModule {
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{file = $File }
+                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{file = $File }
                 Write-LMHost "Successfully imported LogicModule of type: $($Response.items.type)"
 
                 Return

@@ -23,6 +23,11 @@ Connect-LMAccount -AccessId <String> -AccessKey <String> -AccountName <String> [
 Connect-LMAccount -BearerToken <String> -AccountName <String> [-DisableConsoleLogging] [<CommonParameters>]
 ```
 
+### SessionSync
+```
+Connect-LMAccount -AccountName <String> [-SessionSync] [-DisableConsoleLogging] [<CommonParameters>]
+```
+
 ### Cached
 ```
 Connect-LMAccount [-UseCachedCredential] [-CachedAccountName <String>] [-DisableConsoleLogging]
@@ -102,7 +107,7 @@ The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain
 
 ```yaml
 Type: String
-Parameter Sets: LMv1, Bearer
+Parameter Sets: LMv1, Bearer, SessionSync
 Aliases:
 
 Required: True
@@ -140,6 +145,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SessionSync
+Use session sync capability instead of api key
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: SessionSync
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

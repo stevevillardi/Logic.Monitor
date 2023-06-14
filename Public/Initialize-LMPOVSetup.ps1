@@ -221,7 +221,7 @@ Function Initialize-LMPOVSetup {
                         Write-Host "[INFO]: Successfully created service insight resource (LogicMonitor: Collector Health)"
                         #Upload SI datasource from xml
                         Try{
-                            $SIDatasource = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/Logic.Monitor/main/Private/SIs/LogicMonitor_Collector_Health.xml").Content
+                            $SIDatasource = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/Logic.Monitor/main/Private/SIs/LogicMonitor_Collector_Health.xml" -UseBasicParsing).Content
                             Import-LMLogicModule -File $SIDatasource -Type datasource -ErrorAction Stop
                         }
                         Catch{

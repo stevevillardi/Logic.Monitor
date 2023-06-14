@@ -35,7 +35,7 @@ Function Set-LMPortalLogo {
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{filename = $FileRaw;name="file" }
+                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{filename = $FileRaw;name="file" }
                 Write-LMHost "Successfully imported loginLogo $([IO.Path]::GetFileName($LogoPath)) of type: $($Response.items.type)"
 
                 #Build header and uri
@@ -46,7 +46,7 @@ Function Set-LMPortalLogo {
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers -Form @{filename = $FileRaw;name="file" }
+                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{filename = $FileRaw;name="file" }
                 Write-LMHost "Successfully imported companyLogo $([IO.Path]::GetFileName($LogoPath)) of type: $($Response.items.type)"
 
                 Return

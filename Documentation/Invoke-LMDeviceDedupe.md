@@ -15,13 +15,13 @@ schema: 2.0.0
 ### List
 ```
 Invoke-LMDeviceDedupe [-ListDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+ [-SysNameExclusionList <String[]>] [-ExcludeDeviceType <String[]>] [<CommonParameters>]
 ```
 
 ### Remove
 ```
 Invoke-LMDeviceDedupe [-RemoveDuplicates] [-DeviceGroupId <String>] [-IpExclusionList <String[]>]
- [-SysNameExclusionList <String[]>] [<CommonParameters>]
+ [-SysNameExclusionList <String[]>] [-ExcludeDeviceType <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,6 +43,21 @@ PS C:\> {{ Add example code here }}
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ExcludeDeviceType
+{{ Fill ExcludeDeviceType Description }}
+
+```yaml
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
