@@ -24,6 +24,9 @@ if(!(Get-Module Microsoft.PowerShell.SecretManagement -ListAvailable)){
 if(!(Get-Module Microsoft.PowerShell.SecretStore -ListAvailable)){
     Install-Module Microsoft.PowerShell.SecretStore -Force -Confirm:$false
 }
+if(!(Get-Module Pode -ListAvailable)){
+    Install-Module Pode -Force -Confirm:$false
+}
 
 $manifestContent = (Get-Content -Path $manifestPath -Raw) -replace '<ModuleVersion>', $buildVersion
 
