@@ -468,6 +468,7 @@ Function Initialize-LMPOVSetup {
                 Write-Host "[INFO]: Importing MTTR dashboard from repo."
                 $CheckPortalDevice = Get-LMDevice -Name $DeviceName
                 If($CheckPortalDevice){
+                    Set-LMDevice -Id $CheckPortalDevice.Id -Properties @{"mttr.period"=7}
                     $MTTRRootFolder = (Get-LMDashboardGroup -Name "LogicMonitor").Id
                     If($MTTRRootFolder){
                         Try{
