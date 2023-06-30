@@ -437,7 +437,7 @@ Function Initialize-LMPOVSetup {
                     @{
                         name = "LogicMonitor_Portal_Alert_Statistics.xml"
                         type = "datasource"
-                        repo = "LogicMonitor-Dashboards/main/MTTR/LogicMonitor_Device_Alert_Statistics.xml"
+                        repo = "LogicMonitor-Dashboards/main/MTTR"
                     }
                 )
                 Foreach($Module in $ModuleList){
