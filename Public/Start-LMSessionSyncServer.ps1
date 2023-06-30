@@ -129,6 +129,7 @@ Function Start-LMSessionSyncServer {
                         Write-Error "Unable to clear session details for $($Session.Metadata["Portal"]): $_"
                     }
                 }
+                Disconnect-LMAccount
             }
         }
     }

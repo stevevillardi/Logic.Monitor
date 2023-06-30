@@ -1,4 +1,11 @@
 # Previous module release notes
+
+## 4.3
+###### New Commands:
+**New/Set/Remove-LMAppliesToFunction**: Added Create,Update and Delete commands for AppliesToFunctions.
+
+**Set-LMCollectorConfig**: Added command to make bulk config changes for each of the supported collector configs (agent,wrapper,website,sbproxy and watchdog) in addition to changing collector sizes. Also added in support for modifying common config changes like timeouts, threadpool, lmlogs and netflow parameters. Any collector that is targeted with this command will be restart upon config update in order to apply the updated configuration so use caution when using this command.
+
 ## 4.2.1
 ###### Update Commands/Bug Fixes:
 **Search-LMDeviceConfigBackup**: Fix issue loading previous release on windows due to encoding bug in Search-LMDeviceConfigBackup

@@ -1,7 +1,7 @@
 
 Function Initialize-LMPOVSetup {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Individual')]
     Param (
         [Parameter(ParameterSetName = 'All')]
         [Parameter(ParameterSetName = 'Individual')]
@@ -118,85 +118,6 @@ Function Initialize-LMPOVSetup {
                     }
                     Else{
                         Write-Host "[WARN]: No previous role info found for user $($User.username), skipping role revert for user." -ForegroundColor Yellow
-                    }
-                }
-            }
-
-            #Setup common default options/imports
-            If($IncludeDefaults){
-                #Set SSL_Cert DS to only alert on non self signed certs
-                $SSLDatasourceName = "SSL_Certificates"
-                $SSLDatasource = Get-LMDatasource -name $SSLDatasourceName
-                If($SSLDatasource){
-                    If($SSLDatasource.dataPoints.name.IndexOf("Alerting_DaysRemainingIfNotSelfSigned") -ne 1 -and $SSLDatasource.dataPoints.name.IndexOf("DaysRemaining") -ne 1){
-                        Try{
-                            $SSLDatasource.dataPoints[$SSLDatasource.dataPoints.name.IndexOf("Alerting_DaysRemainingIfNotSelfSigned")].alertExpr = "< 28 7 2"
-                            $SSLDatasource.dataPoints[$SSLDatasource.dataPoints.name.IndexOf("DaysRemaining")].alertExpr = $null
-                            $SSLResult = Set-LMDatasource -Id $SSLDatasource.id -Datapoints $SSLDatasource.datapoints -ErrorAction Stop
-                            Write-Host "[INFO]: Successfully updated default alert thresholds on LogicModule ($SSLDatasourceName)"
-                        }
-                        Catch{
-                            Write-Host "[ERROR]: Unable to modify default alert thresholds on LogicModule ($SSLDatasourceName): $_" -ForegroundColor Red
-                        }
-                    }
-                    Else{
-                        #Unable to find required datapoints for modification
-                        Write-Host "[ERROR]: Unable to modify default alert thresholds on LogicModule ($SSLDatasourceName), expected datapoints not found" -ForegroundColor Red
-                    }
-                }
-                Else{
-                    #Unable to find SSL_Certificates DS
-                    Write-Host "[ERROR]: Unable to locate LogicModule ($SSLDatasourceName), skipping alert threshold modification" -ForegroundColor Red
-                }
-
-                #Import default DSes
-                $ModuleList = @(
-                    @{
-                        name = "Microsoft_Windows_Services_AD.xml"
-                        type = "datasource"
-                    },
-                    @{
-                        name = "LogicMonitor_Collector_Configurations.xml"
-                        type = "configsource"
-                    },
-                    @{
-                        name = "NoData_Metrics.xml"
-                        type = "datasource"
-                    },
-                    @{
-                        name = "NoData_Tasks_By_Type_v2.xml"
-                        type = "datasource"
-                    },
-                    @{
-                        name = "NoData_Tasks_Overall_v2.xml"
-                        type = "datasource"
-                    },
-                    @{
-                        name = "NoData_Tasks_Discovery_v2.json"
-                        type = "propertyrules"
-                    }
-                )
-                Foreach($Module in $ModuleList){
-                    $ModuleName = $Module.name.Split(".")[0]
-                    $LogicModule = Switch($Module.type){
-                        "datasource" {Get-LMDataSource -name $ModuleName}
-                        "configsource" {Get-LMConfigSource -name $ModuleName}
-                        "propertyrules" {Get-LMPropertySource -name $ModuleName}
-                        default {Get-LMDataSource -name $ModuleName}
-                    }
-                    If(!$LogicModule){                
-                        Try{
-                            $LogicModule = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/Logic.Monitor/main/Private/SIs/$($Module.name)").Content
-                            Import-LMLogicModule -File $LogicModule -Type $Module.type -ErrorAction Stop
-                            Write-Host "[INFO]: Successfully imported $ModuleName datasource"
-                        }
-                        Catch{
-                            #Oops
-                            Write-Host "[ERROR]: Unable to import $ModuleName LogicModule from source: $_" -ForegroundColor Red
-                        }
-                    }
-                    Else{
-                        Write-Host "[INFO]: LogicModule $ModuleName already exists, skipping import" -ForegroundColor Gray
                     }
                 }
             }
@@ -449,6 +370,199 @@ Function Initialize-LMPOVSetup {
                 }
             }
             
+             #Setup common default options/imports
+             If($IncludeDefaults){
+                #Set SSL_Cert DS to only alert on non self signed certs
+                $SSLDatasourceName = "SSL_Certificates"
+                $SSLDatasource = Get-LMDatasource -name $SSLDatasourceName
+                If($SSLDatasource){
+                    If($SSLDatasource.dataPoints.name.IndexOf("Alerting_DaysRemainingIfNotSelfSigned") -ne 1 -and $SSLDatasource.dataPoints.name.IndexOf("DaysRemaining") -ne 1){
+                        Try{
+                            $SSLDatasource.dataPoints[$SSLDatasource.dataPoints.name.IndexOf("Alerting_DaysRemainingIfNotSelfSigned")].alertExpr = "< 28 7 2"
+                            $SSLDatasource.dataPoints[$SSLDatasource.dataPoints.name.IndexOf("DaysRemaining")].alertExpr = $null
+                            $SSLResult = Set-LMDatasource -Id $SSLDatasource.id -Datapoints $SSLDatasource.datapoints -ErrorAction Stop
+                            Write-Host "[INFO]: Successfully updated default alert thresholds on LogicModule ($SSLDatasourceName)"
+                        }
+                        Catch{
+                            Write-Host "[ERROR]: Unable to modify default alert thresholds on LogicModule ($SSLDatasourceName): $_" -ForegroundColor Red
+                        }
+                    }
+                    Else{
+                        #Unable to find required datapoints for modification
+                        Write-Host "[ERROR]: Unable to modify default alert thresholds on LogicModule ($SSLDatasourceName), expected datapoints not found" -ForegroundColor Red
+                    }
+                }
+                Else{
+                    #Unable to find SSL_Certificates DS
+                    Write-Host "[ERROR]: Unable to locate LogicModule ($SSLDatasourceName), skipping alert threshold modification" -ForegroundColor Red
+                }
+
+                #Import default DSes
+                $ModuleList = @(
+                    @{
+                        name = "Microsoft_Windows_Services_AD.xml"
+                        type = "datasource"
+                        repo = "Logic.Monitor/main/Private/SIs"
+                    },
+                    @{
+                        name = "LogicMonitor_Collector_Configurations.xml"
+                        type = "configsource"
+                        repo = "Logic.Monitor/main/Private/SIs"
+                    },
+                    @{
+                        name = "NoData_Metrics.xml"
+                        type = "datasource"
+                        repo = "Logic.Monitor/main/Private/SIs"
+                    },
+                    @{
+                        name = "NoData_Tasks_By_Type_v2.xml"
+                        type = "datasource"
+                        repo = "Logic.Monitor/main/Private/SIs"
+                    },
+                    @{
+                        name = "NoData_Tasks_Overall_v2.xml"
+                        type = "datasource"
+                        repo = "Logic.Monitor/main/Private/SIs"
+                    },
+                    @{
+                        name = "NoData_Tasks_Discovery_v2.json"
+                        type = "propertyrules"
+                        repo = "Logic.Monitor/main/Private/SIs"
+                    },
+                    @{
+                        name = "LogicMonitor_Device_Alert_Statistics.xml"
+                        type = "datasource"
+                        repo = "LogicMonitor-Dashboards/main/MTTR"
+                    },
+                    @{
+                        name = "LogicMonitor_Portal_Alert_Statistics.xml"
+                        type = "datasource"
+                        repo = "LogicMonitor-Dashboards/main/MTTR/LogicMonitor_Device_Alert_Statistics.xml"
+                    }
+                )
+                Foreach($Module in $ModuleList){
+                    $ModuleName = $Module.name.Split(".")[0]
+                    $LogicModule = Switch($Module.type){
+                        "datasource" {Get-LMDataSource -name $ModuleName}
+                        "configsource" {Get-LMConfigSource -name $ModuleName}
+                        "propertyrules" {Get-LMPropertySource -name $ModuleName}
+                        default {Get-LMDataSource -name $ModuleName}
+                    }
+                    If(!$LogicModule){                
+                        Try{
+                            $LogicModule = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/$($Module.repo)/$($Module.name)").Content
+                            Import-LMLogicModule -File $LogicModule -Type $Module.type -ErrorAction Stop
+                            Write-Host "[INFO]: Successfully imported $ModuleName datasource"
+                        }
+                        Catch{
+                            #Oops
+                            Write-Host "[ERROR]: Unable to import $ModuleName LogicModule from source: $_" -ForegroundColor Red
+                        }
+                    }
+                    Else{
+                        Write-Host "[INFO]: LogicModule $ModuleName already exists, skipping import" -ForegroundColor Gray
+                    }
+                }
+                
+                #Deploy MTTR dashboard
+                Write-Host "[INFO]: Importing MTTR dashboard from repo."
+                $CheckPortalDevice = Get-LMDevice -Name $DeviceName
+                If($CheckPortalDevice){
+                    $MTTRRootFolder = (Get-LMDashboardGroup -Name "LogicMonitor").Id
+                    If($MTTRRootFolder){
+                        Try{
+                            $MTTRDashboardFile = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/LogicMonitor-Dashboards/main/MTTR/Mean_Time_To_Resolution(MTTR)_Overview.json").Content
+                            $MTTRDashboard = Get-LMDashboard -Name "Mean Time To Resolution(MTTR) Overview"
+                            If(!$MTTRDashboard){
+                                Import-LMDashboard -File $MTTRDashboardFile -ParentGroupId $MTTRRootFolder
+                            }
+                            Else{
+                                Write-Host "[INFO]: MTTR Dashboard already exists, skipping import" -ForegroundColor Gray
+                            }
+                        }
+                        Catch{
+                            #Oops
+                            Write-Host "[ERROR]: Unable to import MTTR dashboard from source: $_" -ForegroundColor Red
+                        }
+                    }
+                }
+                Else{
+                    Write-Host "[WARN]: Unable to import MTTR dashboard template: PortalMetrics device not found, please deploy before attempting to deploy" -ForegroundColor Yellow
+                }
+
+                #Deploy Dynamic Dashboards
+                $DashboardList = @(
+                    @{
+                        name = "Dynamic_Dashboard_-_Network_Performance.json"
+                        repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
+                    },
+                    @{
+                        name = "Dynamic_Dashboard_-_Windows.json"
+                        repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
+                    },
+                    @{
+                        name = "Dynamic_Dashboard_-_Windows_(Textbox_Selector).json"
+                        repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
+                    },
+                    @{
+                        name = "Dynamic_Dashboard_-_vCenter_VMs.json"
+                        repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
+                    },
+                    @{
+                        name = "Dynamic_Server-at-a-Glance__Linux(SNMP).json"
+                        repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
+                    },
+                    @{
+                        name = "Dynamic_Server-at-a-Glance__Linux(SSH).json"
+                        repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
+                    },
+                    @{
+                        name = "Dynamic_Server-at-a-Glance__Windows.json"
+                        repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
+                    }
+                )
+
+                #Generate API Key and Role
+                $DashboardAPIRoleName = "lm-dynamic-dashboards"
+                $DashboardAPIUserName = "lm_dynamic_dashboards"
+                $DashboardAPIRole = Get-LMRole -Name $DashboardAPIRoleName
+                $DashboardAPIUser = Get-LMUser -Name $DashboardAPIUserName
+                If(!$DashboardAPIRole){
+                    $DashboardAPIRole = New-LMRole -Name $DashboardAPIRoleName -ResourcePermission view -DashboardsPermission manage -Description "Auto provisioned for use with dynamic dashboards"
+                    Write-LMHost "Successfully generated required API role ($DashboardAPIRoleName) for dynamic dashboards"
+                }
+                If(!$DashboardAPIUser){
+                    $DashboardAPIUser = New-LMAPIUser -Username "$DashboardAPIUserName" -note "Auto provisioned for use with dynamic dashboards" -RoleNames @($DashboardAPIRoleName)
+                    Write-LMHost "Successfully generated required API user ($DashboardAPIUserName) for dynamic dashboards"
+                }
+                If($DashboardAPIRole -and $DashboardAPIUser){
+                    $APIToken = New-LMAPIToken -Username $DashboardAPIUserName -Note "Auto provisioned for use with dynamic dashboards"
+                    If($APIToken){
+                        Write-LMHost "Successfully generated required API token for dynamic dashboards for user: $DashboardAPIUserName"
+                    }
+                }
+                Else{
+                    Write-LMHost "Unable to generate required API token for dynamic dashboards, manually update the required tokens to use dynamic dashboards"
+                }
+
+                Write-Host "[INFO]: Importing dynamic dashboards from repo."
+                $DynamicDashboardGroup = (Get-LMDashboardGroup -Name "Dynamic Dashboards").Id
+                If(!$DynamicDashboardGroup){
+                    $DynamicDashboardGroup = (New-LMDashboardGroup -Name "Dynamic Dashboards" -ParentGroupId 1).Id
+                }
+
+                Foreach($Dashboard in $DashboardList){
+                    Try{
+                        $DashboardFile = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/$($Dashboard.repo)/$($Dashboard.name)").Content
+                        $ImportedDashboard = Import-LMDashboard -File $DashboardFile -ReplaceAPITokensOnImport -APIToken $APIToken -ParentGroupId $DynamicDashboardGroup -ErrorAction Stop
+                    }
+                    Catch{
+                        #Oops
+                        Write-Host "[ERROR]: Unable to import $($Dashboard.name) template from source: $_" -ForegroundColor Red
+                    }
+                }
+
+            }
         }
         Else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

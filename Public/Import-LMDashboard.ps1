@@ -1,9 +1,13 @@
 Function Import-LMDashboard {
     [CmdletBinding()]
     Param (
+        [Parameter(Mandatory, ParameterSetName = 'FilePath-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'FilePath-GroupName')]
+        [String]$FilePath,
+
         [Parameter(Mandatory, ParameterSetName = 'File-GroupId')]
         [Parameter(Mandatory, ParameterSetName = 'File-GroupName')]
-        [String]$FilePath,
+        [String]$File,
 
         [Parameter(Mandatory, ParameterSetName = 'Repo-GroupId')]
         [Parameter(Mandatory, ParameterSetName = 'Repo-GroupName')]
@@ -13,15 +17,19 @@ Function Import-LMDashboard {
         [Parameter(ParameterSetName = 'Repo-GroupName')]
         [String]$GithubAccessToken, #Required for large repos, github api is limited to 60 requests per hour when unauthenticated
 
+        [Parameter(Mandatory, ParameterSetName = 'FilePath-GroupId')]
         [Parameter(Mandatory, ParameterSetName = 'File-GroupId')]
         [Parameter(Mandatory, ParameterSetName = 'Repo-GroupId')]
         [String]$ParentGroupId,
 
+        [Parameter(Mandatory, ParameterSetName = 'FilePath-GroupName')]
         [Parameter(Mandatory, ParameterSetName = 'File-GroupName')]
         [Parameter(Mandatory, ParameterSetName = 'Repo-GroupName')]
         [String]$ParentGroupName,
 
         [Switch]$ReplaceAPITokensOnImport,
+
+        $APIToken,
 
         [String]$PrivateUserName = ""
     )
@@ -44,12 +52,12 @@ Function Import-LMDashboard {
                 If((Get-Item $FilePath) -is [System.IO.DirectoryInfo]){
                     $FullPath = (Resolve-Path $FilePath).Path
                     $Files = Get-ChildItem $FullPath -Recurse | Where-Object {([IO.Path]::GetExtension($_.Name) -eq '.json')}
-                    Foreach($File in $Files){
+                    Foreach($F in $Files){
                         #Convert from json into object
-                        $RawFile = Get-Content $File.FullName -Raw | ConvertFrom-Json
+                        $RawFile = Get-Content $F.FullName -Raw | ConvertFrom-Json
                         $DashboardList += @{
                             file = $RawFile
-                            path = $($File.DirectoryName -split $FullPath)[1]
+                            path = $($F.DirectoryName -split $FullPath)[1]
                             parentid = $ParentGroupId
                             parentname = $ParentGroupName
                         }
@@ -69,6 +77,15 @@ Function Import-LMDashboard {
                         parentid = $ParentGroupId
                         parentname = $ParentGroupName
                     }
+                }
+            }
+
+            If($File){
+                $DashboardList += @{
+                    file = $File | ConvertFrom-Json
+                    path = ""
+                    parentid = $ParentGroupId
+                    parentname = $ParentGroupName
                 }
             }
 
@@ -96,7 +113,7 @@ Function Import-LMDashboard {
                 }
             }
     
-            If($ReplaceAPITokensOnImport){
+            If($ReplaceAPITokensOnImport -and !($APIToken)){
                 $DashboardAPIRoleName = "lm-dynamic-dashboards"
                 $DashboardAPIUserName = "lm_dynamic_dashboards"
                 $DashboardAPIRole = Get-LMRole -Name $DashboardAPIRoleName

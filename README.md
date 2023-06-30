@@ -367,9 +367,10 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 # Change List
 
-## 4.3
-###### New Commands:
-**New/Set/Remove-LMAppliesToFunction**: Added Create,Update and Delete commands for AppliesToFunctions.
-**Set-LMCollectorConfig**: Added command to make bulk config changes for each of the supported collector configs (agent,wrapper,website,sbproxy and watchdog) in addition to changing collector sizes. Also added in support for modifying common config changes like timeouts, threadpool, lmlogs and netflow parameters. Any collector that is targeted with this command will be restart upon config update in order to apply the updated configuration so use caution when using this command.
+## 4.3.1
+###### Bug Fixes/Updates:
+**Initialize-LMPOVSetup**: Fixed bug that prevented -IncludeDefaults from being ran independently.
+
+**Import-LMDashboard**: Added -File parameter to allow for import of a dashboard using raw contents (Get-Content) which is useful if your pulling from a repo and want to send the raw file without saving it to disk first.
 
 [Previous Release Notes](RELEASENOTES.md)
