@@ -371,7 +371,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 ## 4.4
 ###### New Features:
-**Get-LMDevice**: Support for Delta API. Although not currently enabled in most portals, when enabled it will allow you to get a delta id returned with you query that you can use for up to 30 minutes to retrieve changed resources. This is helpful when making changes to a number of devices and just getting a returned list of devices that have been updated. New parameters -Delta and -DeltaId have been added for this functionality. This is a beta feature and will be imporved upon once the feature is GA.
+**Get-LMDevice**: Support for Delta API. Although not currently enabled in most portals, when enabled it will allow you to get a delta id returned with your query that you can use for up to 30 minutes to retrieve changed resources. This is helpful when making changes to a number of devices and just getting a returned list of devices that have been updated. New parameters -Delta and -DeltaId have been added for this functionality. This is a beta feature and will be imporved upon once the feature is GA.
 
 ###### New Commands:
 **Get-LMUnmonitoredDevice**: New command to retrieve device listings for resource located in unmonitored devices.
@@ -379,6 +379,8 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 **Set-LMUnmonitoredDevice**: New command to move devices from unmonitored devices into required resource groups.
 
 **Remove-LMUnmonitoredDevice**: New command to delete devices from the unmonitored device list.
+
+**Invoke-LMUserLogoff**: New command to end a user session in the LM portal. Parameter -Usernames takes and array of usernames to logoff the portal. SSO users are bound by their sso settings.
 
 ###### Update Commands:
 **Initialize-LMPOVSetup**: Added checks for dasboard import to skip attempting import if a dashboard is already present.
