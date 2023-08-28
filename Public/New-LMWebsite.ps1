@@ -2,6 +2,12 @@ Function New-LMWebsite {
 
     [CmdletBinding()]
     Param (
+        [Parameter(Mandatory,ParameterSetName="Website")]
+        [Switch]$WebCheck,
+
+        [Parameter(Mandatory,ParameterSetName="Ping")]
+        [Switch]$PingCheck,
+
         [Parameter(Mandatory)]
         [String]$Name,
 
@@ -69,39 +75,48 @@ Function New-LMWebsite {
         [ValidateSet(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)]
         [Nullable[Int]]$PollingInterval,
 
-        [Parameter(Mandatory)]
-        [ValidateSet("pingcheck", "webcheck")]
-        [String]$Type
-
-
+        [Parameter(ParameterSetName="Website")]
+        [String[]]$WebsiteSteps
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
+        If($Webcheck){
+            $Type = "webcheck"
+        }
+        Else{
+            $Type = "pingcheck"
+        }
+
         $Steps = @()
         If ($Type -eq "webcheck") {
-            $Steps += [PSCustomObject]@{
-                useDefaultRoot    = $true
-                url               = ""
-                HTTPVersion       = "1.1"
-                HTTPMethod        = "GET"
-                followRedirection = $true
-                fullpageLoad      = $false
-                requireAuth       = $false
-                matchType         = "plain"
-                path              = ""
-                keyword           = ""
-                invertMatch       = $false
-                statusCode        = ""
-                type              = "config"
-                HTTPBody          = ""
-                postDataEditType  = "raw"
-                HTTPHeaders       = ""
-                auth              = @{
-                    type     = "basic"
-                    domain   = ""
-                    userName = ""
-                    password = ""
+            If($WebsiteSteps){
+                $Steps += $WebsiteSteps
+            }
+            Else{
+                $Steps += [PSCustomObject]@{
+                    useDefaultRoot    = $true
+                    url               = ""
+                    HTTPVersion       = "1.1"
+                    HTTPMethod        = "GET"
+                    HTTPHeaders       = ""
+                    HTTPBody          = ""
+                    followRedirection = $true
+                    fullpageLoad      = $false
+                    requireAuth       = $false
+                    matchType         = "plain"
+                    invertMatch       = $false
+                    path              = ""
+                    keyword           = ""
+                    statusCode        = ""
+                    type              = "config"
+                    postDataEditType  = "raw"
+                    auth              = @{
+                        type     = "basic"
+                        domain   = ""
+                        userName = ""
+                        password = ""
+                    }
                 }
             }
         }

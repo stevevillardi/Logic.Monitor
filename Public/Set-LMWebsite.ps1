@@ -19,26 +19,38 @@ Function Set-LMWebsite {
 
         [Nullable[boolean]]$UseDefaultLocationSetting,
 
+        [Parameter(Mandatory,ParameterSetName="Website")]
         [Nullable[boolean]]$TriggerSSLStatusAlert,
         
+        [Parameter(Mandatory,ParameterSetName="Website")]
         [Nullable[boolean]]$TriggerSSLExpirationAlert,
 
         [String]$GroupId,
 
-        [String]$Hostname,
+        [Parameter(Mandatory,ParameterSetName="Ping")]
+        [String]$PingAddress,
+
+        [Parameter(Mandatory,ParameterSetName="Website")]
+        [String]$WebsiteDomain,
 
         [ValidateSet("http", "https")]
+        [Parameter(Mandatory,ParameterSetName="Website")]
         [String]$HttpType,
 
+        [Parameter(Mandatory,ParameterSetName="Website")]
         [String[]]$SSLAlertThresholds,
         
+        [Parameter(Mandatory,ParameterSetName="Ping")]
         [ValidateSet(5, 10, 15, 20, 30, 60)]
         [Nullable[Int]]$PingCount,
 
+        [Parameter(Mandatory,ParameterSetName="Ping")]
         [Nullable[Int]]$PingTimeout,
 
+        [Parameter(Mandatory,ParameterSetName="Website")]
         [Nullable[Int]]$PageLoadAlertTimeInMS,
 
+        [Parameter(Mandatory,ParameterSetName="Ping")]
         [ValidateSet(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)]
         [Nullable[Int]]$PingPercentNotReceived,
 
@@ -57,9 +69,10 @@ Function Set-LMWebsite {
         [String]$PropertiesMethod = "Replace",
 
         [ValidateSet(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)]
-        [Nullable[Int]]$PollingInterval
+        [Nullable[Int]]$PollingInterval,
 
-
+        [Parameter(ParameterSetName="Website")]
+        [String[]]$WebsiteSteps
     )
 
     Begin{}
@@ -106,7 +119,7 @@ Function Set-LMWebsite {
                     individualAlertLevel        = $IndividualAlertLevel
                     useDefaultAlertSetting      = $UseDefaultAlertSetting
                     useDefaultLocationSetting   = $UseDefaultLocationSetting
-                    host                        = $Hostname
+                    host                        = $PingAddress
                     triggerSSLStatusAlert       = $TriggerSSLStatusAlert
                     triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
                     count                       = $PingCount
@@ -116,7 +129,8 @@ Function Set-LMWebsite {
                     pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
                     alertExpr                   = $alertExpr
                     schema                      = $HttpType
-                    domain                      = $Hostname
+                    domain                      = $WebsiteDomain
+                    steps                       = $WebsiteSteps
 
                 }
 

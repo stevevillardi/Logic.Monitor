@@ -307,6 +307,59 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.UnmonitoredDevice-->
+      <View>
+         <Name>LogicMonitorUnmonitoredDevice</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.UnmonitoredDevice</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>ip</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>dns</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>sysname</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>displayAs</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>deviceType</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>ip</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>dns</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>sysname</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>displayAs</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>deviceType</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.CollectorGroup-->
       <View>
          <Name>LogicMonitorCollectorGroup</Name>

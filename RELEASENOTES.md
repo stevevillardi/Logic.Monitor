@@ -1,4 +1,9 @@
 # Previous module release notes
+## 4.3.1|2
+###### Bug Fixes/Updates:
+**Initialize-LMPOVSetup**: Fixed bug that prevented -IncludeDefaults from being ran independently.
+
+**Import-LMDashboard**: Added -File parameter to allow for import of a dashboard using raw contents (Get-Content) which is useful if your pulling from a repo and want to send the raw file without saving it to disk first.
 
 ## 4.3
 ###### New Commands:

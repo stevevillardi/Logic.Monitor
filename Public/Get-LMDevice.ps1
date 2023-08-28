@@ -23,6 +23,12 @@ An example Filter to get devices with alerting enabled and where the display nam
 .PARAMETER BatchSize
 The return size for each request, this value if not specified defaults to 1000. If a result would return 1001 and items, two requests would be made to return the full set.
 
+.PARAMETER Delta
+Switch used to return a deltaId along with the requested data to use for delta change tracking.
+
+.PARAMETER DeltaId
+The deltaId string for a delta query you want to see changes for.
+
 .EXAMPLE
 Get all devices:
     Get-LMDevice
@@ -58,6 +64,16 @@ Function Get-LMDevice {
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
+        [Parameter(ParameterSetName = 'Filter')]
+        [Parameter(ParameterSetName = 'Name')]
+        [Parameter(ParameterSetName = 'Id')]
+        [Parameter(ParameterSetName = 'DisplayName')]
+        [Parameter(ParameterSetName = 'All')]
+        [Switch]$Delta,
+        
+        [Parameter(ParameterSetName = 'Delta')]
+        [String]$DeltaId,
+
         [ValidateRange(1,1000)]
         [Int]$BatchSize = 1000
     )
@@ -65,10 +81,16 @@ Function Get-LMDevice {
     If ($Script:LMAuth.Valid) {
         
         #Build header and uri
-        $ResourcePath = "/device/devices"
+        If($Delta -or $DeltaId){
+            $ResourcePath = "/device/devices/delta"
+        }
+        Else{
+            $ResourcePath = "/device/devices"
+        }
 
         #Initalize vars
         $QueryParams = ""
+        $DeltaIdResponse = ""
         $Count = 0
         $Done = $false
         $Results = @()
@@ -78,6 +100,7 @@ Function Get-LMDevice {
             #Build query params
             Switch ($PSCmdlet.ParameterSetName) {
                 "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
+                "Delta" { $resourcePath += "/$DeltaId?size=$BatchSize&offset=$Count&" }
                 "Id" { $resourcePath += "/$Id" }
                 "DisplayName" { $QueryParams = "?filter=displayName:`"$DisplayName`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
@@ -88,12 +111,21 @@ Function Get-LMDevice {
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }
             }
+            If($Delta -and $DeltaIdResponse){
+                $QueryParams = $QueryParams + "&deltaId=$DeltaIdResponse"
+            }
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+
+                #Store delta id if delta switch is present
+                If($Response.deltaId -and !$DeltaIdResponse){
+                    $DeltaIdResponse = $Response.deltaId
+                    Write-LMHost -Message "[INFO]: Delta switch detected, for further queries you can use deltaId: $DeltaIdResponse to perform additional delta requests." -ForegroundColor Yellow
+                }
 
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {

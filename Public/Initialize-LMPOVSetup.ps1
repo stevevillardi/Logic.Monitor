@@ -475,7 +475,7 @@ Function Initialize-LMPOVSetup {
                             $MTTRDashboardFile = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/LogicMonitor-Dashboards/main/MTTR/Mean_Time_To_Resolution(MTTR)_Overview.json").Content
                             $MTTRDashboard = Get-LMDashboard -Name "Mean Time To Resolution(MTTR) Overview"
                             If(!$MTTRDashboard){
-                                Import-LMDashboard -File $MTTRDashboardFile -ParentGroupId $MTTRRootFolder
+                                $ImportMTTRDashboard = Import-LMDashboard -File $MTTRDashboardFile -ParentGroupId $MTTRRootFolder
                             }
                             Else{
                                 Write-Host "[INFO]: MTTR Dashboard already exists, skipping import" -ForegroundColor Gray
@@ -555,7 +555,12 @@ Function Initialize-LMPOVSetup {
                 Foreach($Dashboard in $DashboardList){
                     Try{
                         $DashboardFile = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/$($Dashboard.repo)/$($Dashboard.name)").Content
-                        $ImportedDashboard = Import-LMDashboard -File $DashboardFile -ReplaceAPITokensOnImport -APIToken $APIToken -ParentGroupId $DynamicDashboardGroup -ErrorAction Stop
+                        If(!$(Get-LMDashboard -Name $(($DashboardFile | ConvertTo-Json).Name) -GroupId $DynamicDashboardGroup)){
+                            $ImportedDashboard = Import-LMDashboard -File $DashboardFile -ReplaceAPITokensOnImport -APIToken $APIToken -ParentGroupId $DynamicDashboardGroup -ErrorAction Stop
+                        }
+                        Else{
+                            Write-Host "[INFO]: Dashboard $($Dashboard.name) already exists, skipping import" -ForegroundColor Gray
+                        }
                     }
                     Catch{
                         #Oops
