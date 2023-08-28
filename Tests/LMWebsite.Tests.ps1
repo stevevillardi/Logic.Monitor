@@ -6,7 +6,7 @@ Describe 'Website Testing New/Get/Set/Remove' {
     
     Describe 'New-LMWebsite' {
         It 'When given mandatory parameters, returns a created website with matching values' {
-            $Script:NewWebsite = New-LMWebsite -Name "Website.Build.Test" -Type webcheck -WebsiteDomain "example.com" -Description "BuildTest" -Properties @{"testprop"="BuildTest"}
+            $Script:NewWebsite = New-LMWebsite -Name "Website.Build.Test"  -Webcheck -WebsiteDomain "example.com" -Description "BuildTest" -Properties @{"testprop"="BuildTest"}
             $Script:NewWebsite | Should -Not -BeNullOrEmpty
             $Script:NewWebsite.Description | Should -BeExactly "BuildTest"
             $Script:NewWebsite.properties.name.IndexOf("testprop") | Should -Not -BeExactly -1
