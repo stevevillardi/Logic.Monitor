@@ -19,38 +19,38 @@ Function Set-LMWebsite {
 
         [Nullable[boolean]]$UseDefaultLocationSetting,
 
-        [Parameter(Mandatory,ParameterSetName="Website")]
+        [Parameter(ParameterSetName="Website")]
         [Nullable[boolean]]$TriggerSSLStatusAlert,
         
-        [Parameter(Mandatory,ParameterSetName="Website")]
+        [Parameter(ParameterSetName="Website")]
         [Nullable[boolean]]$TriggerSSLExpirationAlert,
 
         [String]$GroupId,
 
-        [Parameter(Mandatory,ParameterSetName="Ping")]
+        [Parameter(ParameterSetName="Ping")]
         [String]$PingAddress,
 
-        [Parameter(Mandatory,ParameterSetName="Website")]
+        [Parameter(ParameterSetName="Website")]
         [String]$WebsiteDomain,
 
         [ValidateSet("http", "https")]
-        [Parameter(Mandatory,ParameterSetName="Website")]
+        [Parameter(ParameterSetName="Website")]
         [String]$HttpType,
 
-        [Parameter(Mandatory,ParameterSetName="Website")]
+        [Parameter(ParameterSetName="Website")]
         [String[]]$SSLAlertThresholds,
         
-        [Parameter(Mandatory,ParameterSetName="Ping")]
+        [Parameter(ParameterSetName="Ping")]
         [ValidateSet(5, 10, 15, 20, 30, 60)]
         [Nullable[Int]]$PingCount,
 
-        [Parameter(Mandatory,ParameterSetName="Ping")]
+        [Parameter(ParameterSetName="Ping")]
         [Nullable[Int]]$PingTimeout,
 
-        [Parameter(Mandatory,ParameterSetName="Website")]
+        [Parameter(ParameterSetName="Website")]
         [Nullable[Int]]$PageLoadAlertTimeInMS,
 
-        [Parameter(Mandatory,ParameterSetName="Ping")]
+        [Parameter(ParameterSetName="Ping")]
         [ValidateSet(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)]
         [Nullable[Int]]$PingPercentNotReceived,
 
