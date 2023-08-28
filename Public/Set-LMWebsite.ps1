@@ -1,6 +1,6 @@
 Function Set-LMWebsite {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName="Website")]
     Param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id,
