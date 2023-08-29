@@ -23,8 +23,8 @@ Function New-LMAlertAck {
                     ackComment  = $Note
                 }
 
-
                 $Data = ($Data | ConvertTo-Json)
+                
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 

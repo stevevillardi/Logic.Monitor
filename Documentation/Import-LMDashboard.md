@@ -12,28 +12,40 @@ schema: 2.0.0
 
 ## SYNTAX
 
-### File-GroupName
+### FilePath-GroupName
 ```
 Import-LMDashboard -FilePath <String> -ParentGroupName <String> [-ReplaceAPITokensOnImport]
+ [-APIToken <Object>] [-PrivateUserName <String>] [<CommonParameters>]
+```
+
+### FilePath-GroupId
+```
+Import-LMDashboard -FilePath <String> -ParentGroupId <String> [-ReplaceAPITokensOnImport] [-APIToken <Object>]
+ [-PrivateUserName <String>] [<CommonParameters>]
+```
+
+### File-GroupName
+```
+Import-LMDashboard -File <String> -ParentGroupName <String> [-ReplaceAPITokensOnImport] [-APIToken <Object>]
  [-PrivateUserName <String>] [<CommonParameters>]
 ```
 
 ### File-GroupId
 ```
-Import-LMDashboard -FilePath <String> -ParentGroupId <String> [-ReplaceAPITokensOnImport]
+Import-LMDashboard -File <String> -ParentGroupId <String> [-ReplaceAPITokensOnImport] [-APIToken <Object>]
  [-PrivateUserName <String>] [<CommonParameters>]
 ```
 
 ### Repo-GroupName
 ```
 Import-LMDashboard -GithubUserRepo <String> [-GithubAccessToken <String>] -ParentGroupName <String>
- [-ReplaceAPITokensOnImport] [-PrivateUserName <String>] [<CommonParameters>]
+ [-ReplaceAPITokensOnImport] [-APIToken <Object>] [-PrivateUserName <String>] [<CommonParameters>]
 ```
 
 ### Repo-GroupId
 ```
 Import-LMDashboard -GithubUserRepo <String> [-GithubAccessToken <String>] -ParentGroupId <String>
- [-ReplaceAPITokensOnImport] [-PrivateUserName <String>] [<CommonParameters>]
+ [-ReplaceAPITokensOnImport] [-APIToken <Object>] [-PrivateUserName <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,12 +62,42 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
+### -APIToken
+{{ Fill APIToken Description }}
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -File
+{{ Fill File Description }}
+
+```yaml
+Type: String
+Parameter Sets: File-GroupName, File-GroupId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -FilePath
 {{ Fill FilePath Description }}
 
 ```yaml
 Type: String
-Parameter Sets: File-GroupName, File-GroupId
+Parameter Sets: FilePath-GroupName, FilePath-GroupId
 Aliases:
 
 Required: True
@@ -100,7 +142,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: File-GroupId, Repo-GroupId
+Parameter Sets: FilePath-GroupId, File-GroupId, Repo-GroupId
 Aliases:
 
 Required: True
@@ -115,7 +157,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: File-GroupName, Repo-GroupName
+Parameter Sets: FilePath-GroupName, File-GroupName, Repo-GroupName
 Aliases:
 
 Required: True

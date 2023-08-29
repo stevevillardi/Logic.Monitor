@@ -14,23 +14,23 @@ schema: 2.0.0
 
 ### Website
 ```
-New-LMWebsite -Name <String> [-IsInternal <Boolean>] [-Description <String>] [-DisableAlerting <Boolean>]
- [-StopMonitoring <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-UseDefaultLocationSetting <Boolean>]
- [-TriggerSSLStatusAlert <Boolean>] [-TriggerSSLExpirationAlert <Boolean>] [-GroupId <String>]
- -WebsiteDomain <String> [-HttpType <String>] [-SSLAlertThresholds <String[]>] [-PageLoadAlertTimeInMS <Int32>]
- [-FailedCount <Int32>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
- [-Properties <Hashtable>] [-PropertiesMethod <String>] [-PollingInterval <Int32>] -Type <String>
- [<CommonParameters>]
+New-LMWebsite [-WebCheck] -Name <String> [-IsInternal <Boolean>] [-Description <String>]
+ [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [-UseDefaultAlertSetting <Boolean>]
+ [-UseDefaultLocationSetting <Boolean>] [-TriggerSSLStatusAlert <Boolean>]
+ [-TriggerSSLExpirationAlert <Boolean>] [-GroupId <String>] -WebsiteDomain <String> [-HttpType <String>]
+ [-SSLAlertThresholds <String[]>] [-PageLoadAlertTimeInMS <Int32>] [-FailedCount <Int32>]
+ [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-Properties <Hashtable>]
+ [-PropertiesMethod <String>] [-PollingInterval <Int32>] [-WebsiteSteps <String[]>] [<CommonParameters>]
 ```
 
 ### Ping
 ```
-New-LMWebsite -Name <String> [-IsInternal <Boolean>] [-Description <String>] [-DisableAlerting <Boolean>]
- [-StopMonitoring <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-UseDefaultLocationSetting <Boolean>]
- [-GroupId <String>] -PingAddress <String> [-PingCount <Int32>] [-PingTimeout <Int32>]
- [-PingPercentNotReceived <Int32>] [-FailedCount <Int32>] [-OverallAlertLevel <String>]
+New-LMWebsite [-PingCheck] -Name <String> [-IsInternal <Boolean>] [-Description <String>]
+ [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [-UseDefaultAlertSetting <Boolean>]
+ [-UseDefaultLocationSetting <Boolean>] [-GroupId <String>] -PingAddress <String> [-PingCount <Int32>]
+ [-PingTimeout <Int32>] [-PingPercentNotReceived <Int32>] [-FailedCount <Int32>] [-OverallAlertLevel <String>]
  [-IndividualAlertLevel <String>] [-Properties <Hashtable>] [-PropertiesMethod <String>]
- [-PollingInterval <Int32>] -Type <String> [<CommonParameters>]
+ [-PollingInterval <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -216,6 +216,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -PingCheck
+{{ Fill PingCheck Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Ping
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -PingCount
 {{ Fill PingCount Description }}
 
@@ -370,22 +385,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-{{ Fill Type Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: pingcheck, webcheck
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -UseDefaultAlertSetting
 {{ Fill UseDefaultAlertSetting Description }}
 
@@ -416,6 +415,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WebCheck
+{{ Fill WebCheck Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Website
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -WebsiteDomain
 {{ Fill WebsiteDomain Description }}
 
@@ -425,6 +439,21 @@ Parameter Sets: Website
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WebsiteSteps
+{{ Fill WebsiteSteps Description }}
+
+```yaml
+Type: String[]
+Parameter Sets: Website
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

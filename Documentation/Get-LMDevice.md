@@ -14,27 +14,32 @@ Get device info from a connected LM portal
 
 ### All (Default)
 ```
-Get-LMDevice [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-Delta] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMDevice [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-Id <Int32>] [-Delta] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### DisplayName
 ```
-Get-LMDevice [-DisplayName <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-DisplayName <String>] [-Delta] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDevice [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-Name <String>] [-Delta] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMDevice [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-Filter <Object>] [-Delta] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Delta
+```
+Get-LMDevice [-DeltaId <String>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -121,6 +126,36 @@ An example Filter to get devices with alerting enabled and where the display nam
 ```yaml
 Type: Object
 Parameter Sets: Filter
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Delta
+Switch used to return a deltaId along with the requested data to use for delta change tracking.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All, Id, DisplayName, Name, Filter
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeltaId
+The deltaId string for a delta query you want to see changes for.
+
+```yaml
+Type: String
+Parameter Sets: Delta
 Aliases:
 
 Required: False

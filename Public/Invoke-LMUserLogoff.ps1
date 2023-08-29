@@ -26,7 +26,7 @@ Function Invoke-LMUserLogoff {
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-                Write-LMHost "Invoke session logoff for username(s): $Usernames." -ForegroundColor green
+                Write-LMHost "Invoke session logoff for username(s): $($Usernames -Join ",")." -ForegroundColor green
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

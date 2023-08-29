@@ -12,15 +12,25 @@ schema: 2.0.0
 
 ## SYNTAX
 
+### Website (Default)
 ```
-Set-LMWebsite [-Id] <String> [[-Name] <String>] [[-IsInternal] <Boolean>] [[-Description] <String>]
- [[-DisableAlerting] <Boolean>] [[-StopMonitoring] <Boolean>] [[-UseDefaultAlertSetting] <Boolean>]
- [[-UseDefaultLocationSetting] <Boolean>] [[-TriggerSSLStatusAlert] <Boolean>]
- [[-TriggerSSLExpirationAlert] <Boolean>] [[-GroupId] <String>] [[-Hostname] <String>] [[-HttpType] <String>]
- [[-SSLAlertThresholds] <String[]>] [[-PingCount] <Int32>] [[-PingTimeout] <Int32>]
- [[-PageLoadAlertTimeInMS] <Int32>] [[-PingPercentNotReceived] <Int32>] [[-FailedCount] <Int32>]
- [[-OverallAlertLevel] <String>] [[-IndividualAlertLevel] <String>] [[-Properties] <Hashtable>]
- [[-PropertiesMethod] <String>] [[-PollingInterval] <Int32>] [<CommonParameters>]
+Set-LMWebsite -Id <String> [-Name <String>] [-IsInternal <Boolean>] [-Description <String>]
+ [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [-UseDefaultAlertSetting <Boolean>]
+ [-UseDefaultLocationSetting <Boolean>] [-TriggerSSLStatusAlert <Boolean>]
+ [-TriggerSSLExpirationAlert <Boolean>] [-GroupId <String>] [-WebsiteDomain <String>] [-HttpType <String>]
+ [-SSLAlertThresholds <String[]>] [-PageLoadAlertTimeInMS <Int32>] [-FailedCount <Int32>]
+ [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-Properties <Hashtable>]
+ [-PropertiesMethod <String>] [-PollingInterval <Int32>] [-WebsiteSteps <String[]>] [<CommonParameters>]
+```
+
+### Ping
+```
+Set-LMWebsite -Id <String> [-Name <String>] [-IsInternal <Boolean>] [-Description <String>]
+ [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [-UseDefaultAlertSetting <Boolean>]
+ [-UseDefaultLocationSetting <Boolean>] [-GroupId <String>] [-PingAddress <String>] [-PingCount <Int32>]
+ [-PingTimeout <Int32>] [-PingPercentNotReceived <Int32>] [-FailedCount <Int32>] [-OverallAlertLevel <String>]
+ [-IndividualAlertLevel <String>] [-Properties <Hashtable>] [-PropertiesMethod <String>]
+ [-PollingInterval <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,7 +56,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -61,7 +71,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -77,7 +87,7 @@ Aliases:
 Accepted values: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 30, 60
 
 Required: False
-Position: 18
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -92,22 +102,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 10
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Hostname
-{{ Fill Hostname Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 11
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -118,12 +113,12 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Website
 Aliases:
 Accepted values: http, https
 
 Required: False
-Position: 12
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -138,7 +133,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
@@ -154,7 +149,7 @@ Aliases:
 Accepted values: warn, error, critical
 
 Required: False
-Position: 20
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -169,7 +164,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -184,7 +179,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -200,7 +195,7 @@ Aliases:
 Accepted values: warn, error, critical
 
 Required: False
-Position: 19
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -211,11 +206,26 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Website
 Aliases:
 
 Required: False
-Position: 16
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PingAddress
+{{ Fill PingAddress Description }}
+
+```yaml
+Type: String
+Parameter Sets: Ping
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -226,12 +236,12 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Ping
 Aliases:
 Accepted values: 5, 10, 15, 20, 30, 60
 
 Required: False
-Position: 14
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -242,12 +252,12 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Ping
 Aliases:
 Accepted values: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
 
 Required: False
-Position: 17
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -258,11 +268,11 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Ping
 Aliases:
 
 Required: False
-Position: 15
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -278,7 +288,7 @@ Aliases:
 Accepted values: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 
 Required: False
-Position: 23
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -293,7 +303,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 21
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -309,7 +319,7 @@ Aliases:
 Accepted values: Add, Replace, Refresh
 
 Required: False
-Position: 22
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -320,11 +330,11 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String[]
-Parameter Sets: (All)
+Parameter Sets: Website
 Aliases:
 
 Required: False
-Position: 13
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -339,7 +349,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -350,11 +360,11 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Boolean
-Parameter Sets: (All)
+Parameter Sets: Website
 Aliases:
 
 Required: False
-Position: 9
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -365,11 +375,11 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Boolean
-Parameter Sets: (All)
+Parameter Sets: Website
 Aliases:
 
 Required: False
-Position: 8
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -384,7 +394,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 6
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -399,7 +409,37 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 7
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WebsiteDomain
+{{ Fill WebsiteDomain Description }}
+
+```yaml
+Type: String
+Parameter Sets: Website
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WebsiteSteps
+{{ Fill WebsiteSteps Description }}
+
+```yaml
+Type: String[]
+Parameter Sets: Website
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

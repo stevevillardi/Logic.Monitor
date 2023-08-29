@@ -42,7 +42,7 @@ Function Set-LMAPIToken {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if (-not $Data[$_]) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
 
                 If ($Status) {
                     $Data.status = $(If ($Status -eq "active") { 2 }Else { 1 })
