@@ -27,10 +27,15 @@ When starting a new POV there is often a checklist of items that need to be done
 ##### Optional Parameters
 
 **-Website** : The name of the website to use for webcheck creation (example.com) (*Required when using RunAll parameter*)
+
 **-WebstieHttpType** : Protocol to use for webcheck (http or https). Defaults to **https** if not specified
+
 **-PortalMetricsAPIUsername** : The name to use for creation of the API User. Defaults to **lm_api** if not specified.
+
 **-LogsAPIUsername** : The name to use for creation of the LM Logs API User. Defaults to **lm_logs** if not specified.
+
 **-LMContainerAPIUsername** : The name to use for creation of the LM Container API User. Defaults to **lm_container** if not specified.
+
 **-WindowsLMLogsEventChannels**: Comma seperated list of windows event channel to setup for ingestions. Defaults to **Application,System** if not specified.
 
 **Notes:** This utility should be ran after the customer has deployed their first collector so we can corectly provision the portal metrics resource
