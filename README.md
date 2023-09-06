@@ -296,6 +296,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Get-LMPortalInfo
 - Get-LMUsageMetrics
 - Set-LMPortalInfo
+- Set-LMNewUserMessage
 
 #### Push Metrics (Ingest API)
 - New-LMPushMetricDataPoint
@@ -333,6 +334,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Set-LMRole*
 - Remove-LMUser*
 - Remove-LMRole*
+- Invoke-LMUserLogoff
 
 #### Websites
 
@@ -369,29 +371,16 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 # Change List
 
-## 4.4
-###### New Features:
-**Get-LMDevice**: Support for Delta API. Although not currently enabled in most portals, when enabled it will allow you to get a delta id returned with your query that you can use for up to 30 minutes to retrieve changed resources. This is helpful when making changes to a number of devices and just getting a returned list of devices that have been updated. New parameters -Delta and -DeltaId have been added for this functionality. This is a beta feature and will be improved upon once the feature is GA.
-
+## 4.4.1
 ###### New Commands:
-**Get-LMUnmonitoredDevice**: New command to retrieve device listings for resource located in unmonitored devices.
-
-**Set-LMUnmonitoredDevice**: New command to move devices from unmonitored devices into required resource groups.
-
-**Remove-LMUnmonitoredDevice**: New command to delete devices from the unmonitored device list.
-
-**Invoke-LMUserLogoff**: New command to end a user session in the LM portal. Parameter -Usernames takes and array of usernames to logoff the portal. SSO users are bound by their sso settings.
+**Set-LMNewUserMessage**: New command to update the new user welcome message that is sent out when new users are created in the portal.
 
 ###### Update Commands:
-**Initialize-LMPOVSetup**: Added checks for dasboard import to skip attempting import if a dashboard is already present.
+**Initialize-LMPOVSetup**: Added updating the new user message tempalte as part of IncludeDefaults.
 
-**New/Set-LMWebsite**: Seperated out Wbecheck and Pingcheck parameter sets to make it easier to see which parameters are required for each type of check. Also added a parameter *-WebsiteSteps* that takes an array of steps to include in new or existing webchecks. See the step schema for how this object should be constructed. 
-
-```
-https://www.logicmonitor.com/swagger-ui-master/api-v3/lm-sdkv3-docs.html#api-Websites-addWebsite
-```
+**New-LMUser**: Made *-Password* parameter optional. If no password is provided a randomly generated password will be assigned to the new user.
 
 ###### Bug Fixes/Updates:
-**Set-LMUser**: Fixed bug that prevented setting boolean flags to false.
+**Set-LMPortalLogo**: Temporaily removed from module, POST encoding changes for that endpoint have made this current cmdlet fail to work correctly. Will bring back in a future update
 
 [Previous Release Notes](RELEASENOTES.md)

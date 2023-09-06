@@ -372,6 +372,20 @@ Function Initialize-LMPOVSetup {
             
              #Setup common default options/imports
              If($IncludeDefaults){
+                #Setup new user welcome message
+                $MessageSubject = "LogicMonitor Account Created - (##USER##)"
+                #Message Template
+                $MessageTemplate = "PCFET0NUWVBFIEhUTUwgUFVCTElDICItLy9XM0MvL0RURCBIVE1MIDQuMDEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvVFIvaHRtbDQvc3RyaWN0LmR0ZCI+PEhUTUw+PEhFQUQ+PFRJVExFPjwvVElUTEU+PC9IRUFEPjxCT0RZPjx0YWJsZSBib3JkZXI9IjAiIGNlbGxwYWRkaW5nPSI1IiBjZWxsc3BhY2luZz0iNSIgc3R5bGU9ImhlaWdodDo0MDBweDsgd2lkdGg6NTUwcHgiPgoJPHRib2R5PgoJCTx0cj4KCQkJPHRkPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTNweCI+QSBMb2dpY01vbml0b3IgYWNjb3VudCBoYXMgYmVlbiBjcmVhdGVkIGZvciB5b3UuIEhlcmUmIzM5O3Mgd2hhdCB5b3UgbmVlZCB0byBrbm93IHRvIGdldCBzdGFydGVkOjwvc3Bhbj4KCQkJPGRpdj48YnIgLz4KCQkJPHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxM3B4Ij5Mb2dnaW5nIGluOjwvc3Bhbj4KCQkJPHVsPgoJCQkJPGxpPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTNweCI+WW91IGNhbiBsb2cgaW4gdG8geW91ciBhY2NvdW50IGF0Jm5ic3A7PGEgaHJlZj0iaHR0cDovLyMjQ09NUEFOWSMjIyNET01BSU4jIy8iIHRhcmdldD0iX2JsYW5rIj4jI0NPTVBBTlkjIyMjRE9NQUlOIyM8L2E+PC9zcGFuPjwvbGk+CgkJCQk8bGk+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxM3B4Ij5Zb3UgbXVzdCBsb2cgaW4gd2l0aCB0aGUgdXNlciAmcXVvdDs8c3Ryb25nPiMjVVNFUiMjPC9zdHJvbmc+JnF1b3Q7IGFuZCB0aGUgcGFzc3dvcmQgY3JlYXRlZCZuYnNwO2ZvciB5b3VyIHVzZXIgYWNjb3VudDwvc3Bhbj48L2xpPgoJCQk8L3VsPgoKCQkJPHA+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxM3B4Ij48c3Ryb25nPk5vdGU6PC9zdHJvbmc+Jm5ic3A7SXQgaXMgcG9zc2libGUgdGhpcyBhY2NvdW50IHdhcyBnZW5lcmF0ZWQgYnkgeW91ciBMb2dpY01vbml0b3IgYWRtaW5pc3RhdG9yLCBpZiB5b3UgZG8gbm90IGtub3cgdGhlIHBhc3N3b3JkLCB5b3UgY2FuIHJlc2V0IHRoZSBwYXNzd29yZCBieSB2aXNpdGluZzogPGEgaHJlZj0iaHR0cDovLyMjQ09NUEFOWSMjIyNET01BSU4jIy8iIHRhcmdldD0iX2JsYW5rIj4jI0NPTVBBTlkjIyMjRE9NQUlOIyM8L2E+Jm5ic3A7YW5kIGNob29zaW5nICZxdW90OzxzdHJvbmc+SSBmb3Jnb3QgbXkgcGFzc3dvcmQ8L3N0cm9uZz4mcXVvdDs8L3NwYW4+PC9wPgoJCQk8L2Rpdj4KCgkJCTxkaXY+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxM3B4Ij5MZWFybmluZyBhYm91dCBMb2dpY01vbml0b3I6PC9zcGFuPgoKCQkJPHVsPgoJCQkJPGxpPgoJCQkJPHA+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxM3B4Ij5Mb2cgaW50byB5b3VyIHBvcnRhbCBhbmQgY2xpY2sgdGhlIFRyYWluaW5nIGxpbmsgaW4gdGhlIHVwcGVyIHJpZ2h0IGhhbmQgY29ybmVyLiBZb3Ugd2lsbCBmaW5kIGEgJnF1b3Q7R2V0dGluZyBTdGFydGVkIHdpdGggTG9naWNNb25pdG9yJnF1b3Q7IGNvdXJzZSB0aGVyZSB0byBoZWxwIHlvdSBiZWdpbiB5b3VyIExvZ2ljTW9uaXRvciBqb3VybmV5PC9zcGFuPjwvcD4KCQkJCTwvbGk+CgkJCQk8bGk+CgkJCQk8cD48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEzcHgiPlJlYWQgb3VyIDxhIGhyZWY9Imh0dHBzOi8vd3d3LmxvZ2ljbW9uaXRvci5jb20vc3VwcG9ydC9nZXR0aW5nLXN0YXJ0ZWQvaS1qdXN0LXNpZ25lZC11cC1mb3ItbG9naWNtb25pdG9yLW5vdy13aGF0LzEtYWJvdXQtdGhlLWxvZ2ljbW9uaXRvci1zb2x1dGlvbi8iPkdldHRpbmcgU3RhcnRlZCBHdWlkZTwvYT48L3NwYW4+PC9wPgoJCQkJPC9saT4KCQkJCTxsaT4KCQkJCTxwPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTNweCI+U2lnbiB1cCBmb3IgYSA8YSBocmVmPSJodHRwczovL3d3dy5sb2dpY21vbml0b3IuY29tL2xpdmUtdHJhaW5pbmctd2ViaW5hcnMvIj53ZWJpbmFyPC9hPiBvciByZXZpZXcgb3VyIDxhIGhyZWY9Imh0dHBzOi8vd3d3LmxvZ2ljbW9uaXRvci5jb20vYWNhZGVteS8iPm90aGVyIGF2YWlsYWJsZSByZXNvdXJjZXM8L2E+Jm5ic3A7PC9zcGFuPiZuYnNwOzwvcD4KCQkJCTwvbGk+CgkJCQk8bGk+CgkJCQk8cD48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEzcHgiPkNoZWNrIG91dCBvdXIgPGEgaHJlZj0iaHR0cHM6Ly93d3cubG9naWNtb25pdG9yLmNvbS9zdXBwb3J0LyI+c3VwcG9ydCBjZW50ZXI8L2E+PC9zcGFuPjwvcD4KCQkJCTwvbGk+CgkJCQk8bGk+CgkJCQk8cD48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEzcHgiPlN1YnNjcmliZSB0byBvdXIgPGEgaHJlZj0iaHR0cHM6Ly93d3cubG9naWNtb25pdG9yLmNvbS9yZWxlYXNlLW5vdGVzLyI+cmVsZWFzZSBub3RlczwvYT48L3NwYW4+PC9wPgoJCQkJPC9saT4KCQkJPC91bD4KCQkJPC9kaXY+CgoJCQk8ZGl2PjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTNweCI+SWYgeW91IG5lZWQgaGVscDo8L3NwYW4+CgoJCQk8dWw+CgkJCQk8bGk+CgkJCQk8cD48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEzcHgiPkNvbnRhY3QgPGEgaHJlZj0iaHR0cHM6Ly9zdXBwb3J0LmxvZ2ljbW9uaXRvci5jb20vaGMvZW4tdXMvcmVxdWVzdHMvbmV3LyI+c3VwcG9ydDwvYT48L3NwYW4+PC9wPgoJCQkJPC9saT4KCQkJCTxsaT4KCQkJCTxwPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTNweCI+U2lnbiB1cCBmb3IgYSA8YSBocmVmPSJodHRwczovL3d3dy5sb2dpY21vbml0b3IuY29tL3N1cHBvcnQvY2VydGlmaWNhdGlvbi9sb2dpY21vbml0b3ItY2VydGlmaWNhdGlvbi1wcm9ncmFtcy8iPmNlcnRpZmljYXRpb24gY291cnNlPC9hPiBvciBmaW5kIGEgY2VydGlmaWVkIGluZGl2aWR1YWwgd2l0aGluIHlvdXIgY29tcGFueTwvc3Bhbj48L3A+CgkJCQk8L2xpPgoJCQk8L3VsPgoJCQk8L2Rpdj4KCgkJCTxkaXY+PGJyIC8+CgkJCTxzcGFuIHN0eWxlPSJmb250LXNpemU6MTNweCI+SGFwcHkgTW9uaXRvcmluZyE8L3NwYW4+PGJyIC8+CgkJCTxzcGFuIHN0eWxlPSJmb250LXNpemU6MTNweCI+VGhlIExvZ2ljTW9uaXRvciB0ZWFtPC9zcGFuPjwvZGl2PgoJCQk8L3RkPgoJCTwvdHI+Cgk8L3Rib2R5Pgo8L3RhYmxlPgo8L0JPRFk+PC9IVE1MPg=="
+                $MessageTemplate = [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String($MessageTemplate))
+
+                Try{
+                    $MessageResult = Set-LMNewUserMessage -MessageBody $MessageTemplate -MessageSubject $MessageSubject -ErrorAction Stop
+                    Write-Host "[INFO]: Successfully updated new user welcome email template"
+                }
+                Catch{
+                    Write-Host "[ERROR]: Unable to modify new user welcome email template: $_" -ForegroundColor Red
+                }
+
                 #Set SSL_Cert DS to only alert on non self signed certs
                 $SSLDatasourceName = "SSL_Certificates"
                 $SSLDatasource = Get-LMDatasource -name $SSLDatasourceName
@@ -468,7 +482,7 @@ Function Initialize-LMPOVSetup {
                 Write-Host "[INFO]: Importing MTTR dashboard from repo."
                 $CheckPortalDevice = Get-LMDevice -Name $DeviceName
                 If($CheckPortalDevice){
-                    Set-LMDevice -Id $CheckPortalDevice.Id -Properties @{"mttr.period"=7}
+                    Set-LMDevice -Id $CheckPortalDevice.Id -Properties @{"mttr.period"=7} | Out-Null
                     $MTTRRootFolder = (Get-LMDashboardGroup -Name "LogicMonitor").Id
                     If($MTTRRootFolder){
                         Try{
@@ -555,7 +569,7 @@ Function Initialize-LMPOVSetup {
                 Foreach($Dashboard in $DashboardList){
                     Try{
                         $DashboardFile = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/$($Dashboard.repo)/$($Dashboard.name)").Content
-                        If(!$(Get-LMDashboard -Name $(($DashboardFile | ConvertTo-Json).Name) -GroupId $DynamicDashboardGroup)){
+                        If(!$(Get-LMDashboard -Name $(($DashboardFile | ConvertTo-Json).Name))){
                             $ImportedDashboard = Import-LMDashboard -File $DashboardFile -ReplaceAPITokensOnImport -APIToken $APIToken -ParentGroupId $DynamicDashboardGroup -ErrorAction Stop
                         }
                         Else{

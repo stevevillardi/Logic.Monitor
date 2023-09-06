@@ -10,7 +10,6 @@ Function New-LMUser {
 
         [Boolean]$AcceptEULA = $false,
 
-        [Parameter(Mandatory)]
         [String]$Password,
 
         [String[]]$UserGroups,
@@ -98,6 +97,13 @@ Function New-LMUser {
                 $ViewPermission[$View] = $true
             }
         }
+
+        #Auto generate password if not provided
+        $AutoGeneratePassword = $False
+        If(!$Password){
+            $Password = New-LMRandomCred
+            $AutoGeneratePassword = $True
+        }
         
         #Build header and uri
         $ResourcePath = "/setting/admins"
@@ -134,6 +140,9 @@ Function New-LMUser {
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+            If($AutoGeneratePassword){
+                Write-LMHost "[INFO]: Auto generated password assigned to $Username`: $Password" -ForegroundColor Yellow
+            }
 
             Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
         }

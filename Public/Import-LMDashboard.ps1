@@ -145,7 +145,7 @@ Function Import-LMDashboard {
                            $KeyIndex = $Dashboard.file.widgetTokens.name.toLower().IndexOf("apikey")
                            $Dashboard.file.widgetTokens[$KeyIndex].value = $APIToken.accessKey
                         }
-                        If($Dashboard.file.widgetTokens.name -contains "apiId"){
+                        If($Dashboard.file.widgetTokens.name -contains "apiID"){
                             $IdIndex = $Dashboard.file.widgetTokens.name.toLower().IndexOf("apiid")
                             $Dashboard.file.widgetTokens[$IdIndex].value = $APIToken.accessId
                         }
@@ -212,6 +212,7 @@ Function Import-LMDashboard {
                 
                 Try {
                     $Data = ($Data | ConvertTo-Json -Depth 10)
+
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
         
