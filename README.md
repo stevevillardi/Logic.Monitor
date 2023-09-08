@@ -396,7 +396,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 
 ```powershell
-#Example usage for setting SDT at the device level
+#Example usage New-LMDeviceSDT
 #OneTime SDT window
 New-LMDeviceSDT -DeviceId 2798 -StartDate (Get-Date) -EndDate (Get-Date).AddHours(12) -Comment "Quick Reboot"
 
@@ -412,7 +412,13 @@ New-LMDeviceSDT -DeviceId 2798 -StartHour 12 -StartMinute 0  -EndHour 12 -EndMin
 #Monthly 30-minute SDT window on the 1st Monday of every month
 New-LMDeviceSDT -DeviceId 2798 -StartHour 12 -StartMinute 0  -EndHour 12 -EndMinute 30  -WeekDay Monday -WeekOfMonth First -Comment "Patch Window"
 
+#Example usage Set-LMSDT
+#Update SDT to the 5th day of the month
+Set-LMSDT -id HG_77 -DayOfMonth 5 -Comment "New Patch Window (5th of each month)"
 
+#Example usage Remove-LMSDT
+#Update SDT to the 5th day of the month
+Remove-LMSDT -id HG_77
 ```
 
 ###### Updated Commands:
