@@ -1,4 +1,16 @@
 # Previous module release notes
+## 4.4.1
+###### New Commands:
+**Set-LMNewUserMessage**: New command to update the new user welcome message that is sent out when new users are created in the portal.
+
+###### Update Commands:
+**Initialize-LMPOVSetup**: Added updating the new user message tempalte as part of IncludeDefaults.
+
+**New-LMUser**: Made *-Password* parameter optional. If no password is provided a randomly generated password will be assigned to the new user.
+
+###### Bug Fixes/Updates:
+**Set-LMPortalLogo**: Temporaily removed from module, POST encoding changes for that endpoint have made this current cmdlet fail to work correctly. Will bring back in a future update
+
 ## 4.4
 ###### New Features:
 **Get-LMDevice**: Support for Delta API. Although not currently enabled in most portals, when enabled it will allow you to get a delta id returned with your query that you can use for up to 30 minutes to retrieve changed resources. This is helpful when making changes to a number of devices and just getting a returned list of devices that have been updated. New parameters -Delta and -DeltaId have been added for this functionality. This is a beta feature and will be improved upon once the feature is GA.

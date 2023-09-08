@@ -55,7 +55,7 @@ Function Get-LMDeviceSDT {
                 #Stop looping if single device, no need to continue
                 If (![bool]$Response.psobject.Properties["total"]) {
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.SDT" )
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -74,7 +74,7 @@ Function Get-LMDeviceSDT {
                 }
             }
         }
-        Return $Results
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.SDT" )
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

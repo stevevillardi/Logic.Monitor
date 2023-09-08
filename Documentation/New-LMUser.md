@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-New-LMUser [-Username] <String> [-Email] <String> [[-AcceptEULA] <Boolean>] [-Password] <String>
+New-LMUser [-Username] <String> [-Email] <String> [[-AcceptEULA] <Boolean>] [[-Password] <String>]
  [[-UserGroups] <String[]>] [[-FirstName] <String>] [[-LastName] <String>] [[-ForcePasswordChange] <Boolean>]
  [[-Phone] <String>] [[-Note] <String>] [[-RoleNames] <String[]>] [[-SmsEmail] <String>]
  [[-SmsEmailFormat] <String>] [[-Status] <String>] [[-Timezone] <String>] [[-TwoFAEnabled] <Boolean>]
@@ -132,7 +132,7 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 3
 Default value: None
 Accept pipeline input: False

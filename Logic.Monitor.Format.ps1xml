@@ -54,6 +54,65 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.SDT-->
+      <View>
+         <Name>LogicMonitorSDT</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.SDT</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>sdtType</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>type</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>duration</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>startDateTimeOnLocal</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>endDateTimeOnLocal</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>comment</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>sdtType</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>type</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>duration</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>startDateTimeOnLocal</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>endDateTimeOnLocal</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>comment</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.DedupeList-->
       <View>
          <Name>LogicMonitorDedupeList</Name>

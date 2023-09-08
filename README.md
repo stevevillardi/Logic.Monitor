@@ -317,6 +317,15 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Get-LMRepositoryLogicModules
 - Import-LMRepositoryLogicModules*
 
+#### SDT (Scheduled Down Time)
+- Get-LMSDT
+- Set-LMSDT*
+- Remove-LMSDT*
+- New-LMDeviceSDT
+- New-LMDeviceGroupSDT
+- New-LMDeviceDatasourceSDT
+- New-LMDeviceDatasourceInstanceSDT
+
 #### Topology (Beta)
 
 - Get-LMTopologyMap
@@ -371,16 +380,20 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 # Change List
 
-## 4.4.1
+## 4.5
 ###### New Commands:
-**Set-LMNewUserMessage**: New command to update the new user welcome message that is sent out when new users are created in the portal.
+**New-LMDeviceSDT**: New command to create device level SDT. Supports oneTime, daily, weekly, monthly and dayOfMonth occurances.
+**New-LMDeviceGroupSDT**: New command to create device group level SDT. Supports oneTime, daily, weekly, monthly and dayOfMonth occurances.
+**New-LMDeviceDatasourceSDT**: New command to create a datasource level SDT for a targeted device. Supports oneTime, daily, weekly, monthly and dayOfMonth occurances.
+**New-LMDeviceDatasourceInstanceSDT**: New command to create an instance level SDT for a targeted device. Supports oneTime, daily, weekly, monthly and dayOfMonth occurances.
 
-###### Update Commands:
-**Initialize-LMPOVSetup**: Added updating the new user message tempalte as part of IncludeDefaults.
+**Set-LMSDT**: New command to manage existing scheduled SDT windows. Supports pipeline input from Get-LMSDT, Get-LMDeviceSDT and Get-LMDeviceGroupSDT.
 
-**New-LMUser**: Made *-Password* parameter optional. If no password is provided a randomly generated password will be assigned to the new user.
+**Remove-LMSDT**: New command to delete scheduled SDT windows. Supports pipeline input from Get-LMSDT, Get-LMDeviceSDT and Get-LMDeviceGroupSDT.
 
-###### Bug Fixes/Updates:
-**Set-LMPortalLogo**: Temporaily removed from module, POST encoding changes for that endpoint have made this current cmdlet fail to work correctly. Will bring back in a future update
+###### Updated Commands:
+**Get-SDT**: Added custom object typing for returned results.
+**Get-LMDeviceSDT**: Added custom object typing for returned results.
+**Get-LMDeviceGroupSDT**: Added custom object typing for returned results.
 
 [Previous Release Notes](RELEASENOTES.md)
