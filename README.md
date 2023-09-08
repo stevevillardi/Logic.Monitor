@@ -382,10 +382,10 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 ## 4.5
 ###### New Commands:
-**New-LMDeviceSDT**: New command to create device level SDT. Supports oneTime, daily, weekly, monthly and dayOfMonth occurances.
-**New-LMDeviceGroupSDT**: New command to create device group level SDT. Supports oneTime, daily, weekly, monthly and dayOfMonth occurances.
-**New-LMDeviceDatasourceSDT**: New command to create a datasource level SDT for a targeted device. Supports oneTime, daily, weekly, monthly and dayOfMonth occurances.
-**New-LMDeviceDatasourceInstanceSDT**: New command to create an instance level SDT for a targeted device. Supports oneTime, daily, weekly, monthly and dayOfMonth occurances.
+**New-LMDeviceSDT**: New command to create device level SDT. Supports oneTime, daily, weekly, monthly and dayOfMonth occurrences.
+**New-LMDeviceGroupSDT**: New command to create device group level SDT. Supports oneTime, daily, weekly, monthly and dayOfMonth occurrences.
+**New-LMDeviceDatasourceSDT**: New command to create a datasource level SDT for a targeted device. Supports oneTime, daily, weekly, monthly and dayOfMonth occurrences.
+**New-LMDeviceDatasourceInstanceSDT**: New command to create an instance level SDT for a targeted device. Supports oneTime, daily, weekly, monthly and dayOfMonth occurrences.
 
 **Set-LMSDT**: New command to manage existing scheduled SDT windows. Supports pipeline input from Get-LMSDT, Get-LMDeviceSDT and Get-LMDeviceGroupSDT.
 
