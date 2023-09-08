@@ -394,6 +394,27 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 **Remove-LMSDT**: New command to delete scheduled SDT windows. Supports pipeline input from Get-LMSDT, Get-LMDeviceSDT and Get-LMDeviceGroupSDT.
 
+
+```powershell
+#Example usage for setting SDT at the device level
+#OneTime SDT window
+New-LMDeviceSDT -DeviceId 2798 -StartDate (Get-Date) -EndDate (Get-Date).AddHours(12) -Comment "Quick Reboot"
+
+#Daily 30-minute SDT window from 12:00 to 12:30
+New-LMDeviceSDT -DeviceId 2798 -DeviceId 2798  -StartHour 12 -StartMinute 0  -EndHour 12 -EndMinute 30 -Comment "Daily Reboot"
+
+#Weekly 30-minute SDT window every Monday
+New-LMDeviceSDT -DeviceId 2798 -StartHour 12 -StartMinute 0  -EndHour 12 -EndMinute 30  -WeekDay Monday -Comment "Patch Window"
+
+#Monthly 30-minute SDT window every 1st day of the month
+New-LMDeviceSDT -DeviceId 2798 -StartHour 12 -StartMinute 0  -EndHour 12 -EndMinute 30 -DayOfMonth 1 -Comment "Patch Window"
+
+#Monthly 30-minute SDT window on the 1st Monday of every month
+New-LMDeviceSDT -DeviceId 2798 -StartHour 12 -StartMinute 0  -EndHour 12 -EndMinute 30  -WeekDay Monday -WeekOfMonth First -Comment "Patch Window"
+
+
+```
+
 ###### Updated Commands:
 **Get-SDT**: Added custom object typing for returned results.
 
