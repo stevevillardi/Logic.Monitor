@@ -61,7 +61,7 @@ Function Set-LMSDT {
             $Data.Add('endMinute',$EndMinute)
             $Data.Add('weekDay',$WeekDay)
             $Data.Add('monthDay',$DayOfMonth)
-            $Data.Add('WeekOfMonth',$WeekOfMonth)
+            $Data.Add('weekOfMonth',$WeekOfMonth)
 
             If($StartDate){
                 $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds

@@ -104,7 +104,7 @@ Function New-LMDeviceSDT {
             }
             $DeviceId = $LookupResult
         }
-        
+
         Switch -Wildcard ($PSCmdlet.ParameterSetName){
             "OneTime-Device*" {$Occurance = "oneTime"}
             "Daily-Device*" {$Occurance = "daily"}
@@ -173,7 +173,7 @@ Function New-LMDeviceSDT {
                     $Data.Add('endHour',$EndHour)
                     $Data.Add('endMinute',$EndMinute)
                     $Data.Add('weekDay',$WeekDay)
-                    $Data.Add('WeekOfMonth',$WeekOfMonth)
+                    $Data.Add('weekOfMonth',$WeekOfMonth)
                } 
 
                default {}
