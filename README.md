@@ -381,7 +381,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 # Change List
 
-## 4.5
+## 4.5.1
 ###### New Commands:
 **Get-LMIntegrationLogs**: New command to search and view integration request/response logs for alert integrations.
 
