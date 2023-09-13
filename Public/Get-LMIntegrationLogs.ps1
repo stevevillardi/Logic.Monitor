@@ -1,4 +1,4 @@
-Function Get-LMAuditLogs {
+Function Get-LMIntegrationLogs {
 
     [CmdletBinding(DefaultParameterSetName = 'Range')]
     Param (
@@ -24,7 +24,7 @@ Function Get-LMAuditLogs {
     If ($Script:LMAuth.Valid) {
         
         #Build header and uri
-        $ResourcePath = "/setting/accesslogs"
+        $ResourcePath = "/setting/integrations/auditlogs"
 
         #Initalize vars
         $QueryParams = ""
@@ -55,15 +55,16 @@ Function Get-LMAuditLogs {
         While (!$Done) {
             #Build query params
             Switch ($PSCmdlet.ParameterSetName) {
-                "Range" { $QueryParams = "?filter=happenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`"%2C_all~`"*$SearchString*`"&size=$BatchSize&offset=$Count&sort=+happenedOn" }
+                "Range" { $QueryParams = "?filter=successfulResults%3A%22false%22%2CfailedResults%3A%22false%22%2ChappenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`"%2C_all~`"*$SearchString*`"&size=$BatchSize&offset=$Count&sort=+happenedOnMs" }
                 "Id" { $resourcePath += "/$Id" }
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+happenedOn"
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+happenedOnMs"
                 }
             }
+
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
@@ -74,7 +75,7 @@ Function Get-LMAuditLogs {
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AuditLog" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.IntegrationLog" )
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -97,7 +98,7 @@ Function Get-LMAuditLogs {
                 }
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.AuditLog" )
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.IntegrationLog" )
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

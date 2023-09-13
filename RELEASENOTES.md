@@ -1,4 +1,52 @@
 # Previous module release notes
+## 4.5
+###### New Commands:
+**New-LMDeviceSDT**: New command to create device level SDT. Supports oneTime, daily, weekly, monthly and dayOfMonth occurrences.
+
+**New-LMDeviceGroupSDT**: New command to create device group level SDT. Supports oneTime, daily, weekly, monthly and dayOfMonth occurrences.
+
+**New-LMDeviceDatasourceSDT**: New command to create a datasource level SDT for a targeted device. Supports oneTime, daily, weekly, monthly and dayOfMonth occurrences.
+
+**New-LMDeviceDatasourceInstanceSDT**: New command to create an instance level SDT for a targeted device. Supports oneTime, daily, weekly, monthly and dayOfMonth occurrences.
+
+**Set-LMSDT**: New command to manage existing scheduled SDT windows. Supports pipeline input from Get-LMSDT, Get-LMDeviceSDT and Get-LMDeviceGroupSDT.
+
+**Remove-LMSDT**: New command to delete scheduled SDT windows. Supports pipeline input from Get-LMSDT, Get-LMDeviceSDT and Get-LMDeviceGroupSDT.
+
+
+```powershell
+#Example usage New-LMDeviceSDT
+#OneTime SDT window
+New-LMDeviceSDT -DeviceId 2798 -StartDate (Get-Date) -EndDate (Get-Date).AddHours(12) -Comment "Quick Reboot"
+
+#Daily 30-minute SDT window from 12:00 to 12:30
+New-LMDeviceSDT -DeviceId 2798 -DeviceId 2798  -StartHour 12 -StartMinute 0  -EndHour 12 -EndMinute 30 -Comment "Daily Reboot"
+
+#Weekly 30-minute SDT window every Monday
+New-LMDeviceSDT -DeviceId 2798 -StartHour 12 -StartMinute 0  -EndHour 12 -EndMinute 30  -WeekDay Monday -Comment "Patch Window"
+
+#Monthly 30-minute SDT window every 1st day of the month
+New-LMDeviceSDT -DeviceId 2798 -StartHour 12 -StartMinute 0  -EndHour 12 -EndMinute 30 -DayOfMonth 1 -Comment "Patch Window"
+
+#Monthly 30-minute SDT window on the 1st Monday of every month
+New-LMDeviceSDT -DeviceId 2798 -StartHour 12 -StartMinute 0  -EndHour 12 -EndMinute 30  -WeekDay Monday -WeekOfMonth First -Comment "Patch Window"
+
+#Example usage Set-LMSDT
+#Update SDT to the 5th day of the month
+Set-LMSDT -id HG_77 -DayOfMonth 5 -Comment "New Patch Window (5th of each month)"
+
+#Example usage Remove-LMSDT
+#Update SDT to the 5th day of the month
+Remove-LMSDT -id HG_77
+```
+
+###### Updated Commands:
+**Get-SDT**: Added custom object typing for returned results.
+
+**Get-LMDeviceSDT**: Added custom object typing for returned results.
+
+**Get-LMDeviceGroupSDT**: Added custom object typing for returned results.
+
 ## 4.4.1
 ###### New Commands:
 **Set-LMNewUserMessage**: New command to update the new user welcome message that is sent out when new users are created in the portal.
