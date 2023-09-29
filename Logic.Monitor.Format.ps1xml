@@ -1055,6 +1055,59 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.DatasourceGraph-->
+      <View>
+         <Name>LogicMonitorDatasourceGraph</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.DatasourceGraph</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>title</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>displayPrio</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>timeScale</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>aggregated</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>title</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>displayPrio</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>timeScale</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>aggregated</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.NetScan-->
       <View>
          <Name>LogicMonitorNetScan</Name>

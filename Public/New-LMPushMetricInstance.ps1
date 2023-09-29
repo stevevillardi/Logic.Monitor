@@ -3,28 +3,34 @@ Function New-LMPushMetricInstance {
     [CmdletBinding()]
     Param (
         
-        [Array]$InstancesArrary,
+    [System.Collections.Generic.List[object]]$InstancesArrary,
 
         [Parameter(Mandatory)]
         [String]$InstanceName,
 
         [String]$InstanceDisplayName,
 
+        [String]$InstanceDescription,
+
         [Hashtable]$InstanceProperties,
  
         [Parameter(Mandatory)]
-        [Array]$Datapoints
+        [System.Collections.Generic.List[object]]$Datapoints
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
+        If(!$InstancesArrary){
+            $InstancesArrary = [System.Collections.Generic.List[object]]::New()
+        }
 
         #Add new instance to new instances array
-        $InstancesArrary += [PSCustomObject]@{
+        $InstancesArrary.Add([PSCustomObject]@{
             instanceName = $InstanceName
             instanceDisplayName = If($InstanceDisplayName){$InstanceDisplayName}Else{$InstanceName}
             instanceProperties = $InstanceProperties
+            instanceDescription = $InstanceDescription
             dataPoints = $Datapoints
-        }
+        })
 
         Return $InstancesArrary
     }

@@ -58,7 +58,7 @@ Function Set-LMCollectorGroup {
             
                 #Remove empty keys so we dont overwrite them
                 @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-            
+
                 $Data = ($Data | ConvertTo-Json)
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data

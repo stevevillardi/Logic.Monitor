@@ -27,7 +27,7 @@ Function Send-LMPushMetric {
         [String]$DatasourceGroup, #Optional defaults to PushModules
 
         [Parameter(Mandatory)]
-        [Array]$Instances
+        [System.Collections.Generic.List[object]]$Instances
 
     )
     #Check if we are logged in and have valid api creds
@@ -51,17 +51,15 @@ Function Send-LMPushMetric {
                     resourceIds             = $ResourceIds
                     resourceProperties      = $ResourceProperties
                     dataSourceId            = $DatasourceId
-                    dataSource              = $DatasourceName
-                    dataSourceDisplayName   = $DatasourceDisplayName
+                    dataSource              = ($DatasourceName -replace '[#\\;= ]', '_')
+                    dataSourceDisplayName   = ($DatasourceDisplayName -replace '[#\\;=]', '_')
                     dataSourceGroup         = $DatasourceGroup
                     instances               = $Instances
 
                 }
 
-            
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
-            
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "instances") { $Data.Remove($_) } }
                 $Data = ($Data | ConvertTo-Json -Depth 10)
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data

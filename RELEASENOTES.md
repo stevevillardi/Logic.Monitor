@@ -1,4 +1,13 @@
 # Previous module release notes
+## 4.5.1
+###### New Commands:
+**Get-LMIntegrationLogs**: New command to search and view integration request/response logs for alert integrations.
+
+###### Updated Commands:
+**Get-LMAuditLogs**: Added -SearchString parameter to allow for searching for a particular search string without needing to use -Filter.
+
+**Initalize-LMPOVSetup**: Fixed bug due to parameter changes with New-LMWebsite.
+
 ## 4.5
 ###### New Commands:
 **New-LMDeviceSDT**: New command to create device level SDT. Supports oneTime, daily, weekly, monthly and dayOfMonth occurrences.

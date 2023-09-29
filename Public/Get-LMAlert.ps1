@@ -26,7 +26,9 @@ Function Get-LMAlert {
         [String[]]$CustomColumns,
 
         [ValidateRange(1,1000)]
-        [Int]$BatchSize = 1000
+        [Int]$BatchSize = 1000,
+
+        [String]$Sort = "resourceId"
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
@@ -81,12 +83,12 @@ Function Get-LMAlert {
                     }
                 }
                 "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=+resourceId" }
-                "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=+resourceId" }
+                "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+resourceId"
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=$Sort"
                 }
             }
             

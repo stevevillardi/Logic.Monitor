@@ -85,7 +85,7 @@ Function Get-LMDeviceData {
         #Lookup Device Id
         If ($InstanceName) {
 
-            $LookupResult = (Get-LMDeviceDatasourceInstance -Id $DeviceId -HdsId $HdsId | Where-Object { $_.displayName -eq $InstanceName -or $_.name -like "*$InstanceName"}).Id
+            $LookupResult = (Get-LMDeviceDatasourceInstance -DeviceId $DeviceId -HdsId $HdsId | Where-Object { $_.displayName -eq $InstanceName -or $_.name -like "*$InstanceName"}).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
                 return
             }

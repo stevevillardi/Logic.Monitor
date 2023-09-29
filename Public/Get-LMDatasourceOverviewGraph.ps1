@@ -1,17 +1,29 @@
-Function Get-LMDatasource {
+Function Get-LMDatasourceOverviewGraph {
 
-    [CmdletBinding(DefaultParameterSetName = 'All')]
+    [CmdletBinding()]
     Param (
-        [Parameter(ParameterSetName = 'Id')]
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsName')]
         [Int]$Id,
 
-        [Parameter(ParameterSetName = 'Name')]
+        [Parameter(Mandatory,ParameterSetName = 'dsName')]
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsName')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsName')]
+        [Parameter(Mandatory,ParameterSetName = 'Filter-dsName')]
+        [String]$DataSourceName,
+        
+        [Parameter(Mandatory,ParameterSetName = 'dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Filter-dsId')]
+        [String]$DataSourceId,
+        
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Name-dsName')]
         [String]$Name,
-
-        [Parameter(ParameterSetName = 'DisplayName')]
-        [String]$DisplayName,
-
-        [Parameter(ParameterSetName = 'Filter')]
+        
+        [Parameter(Mandatory,ParameterSetName = 'Filter-dsId')]
+        [Parameter(Mandatory,ParameterSetName = 'Filter-dsName')]
         [Object]$Filter,
 
         [ValidateRange(1,1000)]
@@ -19,9 +31,17 @@ Function Get-LMDatasource {
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
+
+        If($DataSourceName){
+            $LookupResult = (Get-LMDatasource -Name $DataSourceName).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $DataSourceName) {
+                Return
+            }
+            $DatasourceId = $LookupResult
+        }
         
         #Build header and uri
-        $ResourcePath = "/setting/datasources"
+        $ResourcePath = "/setting/datasources/$DatasourceId/ographs"
 
         #Initalize vars
         $QueryParams = ""
@@ -32,16 +52,15 @@ Function Get-LMDatasource {
         #Loop through requests 
         While (!$Done) {
             #Build query params
-            Switch ($PSCmdlet.ParameterSetName) {
-                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
+            Switch -Wildcard ($PSCmdlet.ParameterSetName) {
+                "All*" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+displayPrio" }
                 "Id" { $resourcePath += "/$Id" }
-                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
-                "DisplayName" { $QueryParams = "?filter=displayName:`"$DisplayName`"&size=$BatchSize&offset=$Count&sort=+id" }
+                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+displayPrio" }
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+displayPrio"
                 }
             }
             Try {
@@ -54,7 +73,7 @@ Function Get-LMDatasource {
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Datasource")
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DatasourceGraph")
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -73,7 +92,7 @@ Function Get-LMDatasource {
                 }
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Datasource")
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DatasourceGraph")
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
