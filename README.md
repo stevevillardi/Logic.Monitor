@@ -200,6 +200,10 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 #### Datasources/LogicModules
 
 - Get-LMDatasource
+- Get-LMDatasourceGraph
+- New-LMDatasourceGraph
+- Get-LMDatasourceOverviewGraph
+- New-LMDatasourceOverviewGraph
 - Set-LMDatasource*
 - Get-LMDatasourceAssociatedDevices
 - Get-LMDatasourceUpdateHistory
@@ -369,13 +373,15 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Set-LMWebsiteGroup*
 - Remove-LMWebsiteGroup*
 
-#### Utilities
+#### Utilities (Experimental)
 
 - ConvertTo-LMDynamicGroupFromCategories
 - Export-LMDeviceConfigReport
 - Initialize-LMPOVSetup
 - Import-LMMerakiCloud
 - Invoke-LMDeviceDedupe
+- Build-LMDataModel
+- Submit-LMDataModel
 
 ***Note**: Supports Pipline Input
 
