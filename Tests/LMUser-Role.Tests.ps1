@@ -15,7 +15,7 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
 
     Describe 'New-LMRole' {
         It 'When given mandatory parameters, returns a created role with matching values' {
-            $Script:NewRole = New-LMRole -Name "Role.Build.Test" -Description "BuildNote" 
+            $Script:NewRole = New-LMRole -Name "Role.Build.Test" -Description "BuildNote" -TwoFARequired
             $Script:NewRole | Should -Not -BeNullOrEmpty
             $Script:NewRole.Description | Should -BeLike "BuildNote"
         }
