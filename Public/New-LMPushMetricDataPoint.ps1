@@ -28,7 +28,7 @@ Function New-LMPushMetricDataPoint {
             $DataPointsArray.Add([PSCustomObject]@{
                 dataPointName               = $Datapoint.Name
                 dataPointType               = $DataPointType
-                dataPointDescription        = $Datapoint.Description
+                dataPointDescription        = ($Datapoint.Description -replace '“|”','')
                 dataPointAggregationType    = $DataPointAggregationType
                 percentileValue             = $PercentileValue
                 values                      = @{$(Get-Date -UFormat %s)=$Datapoint.Value}

@@ -53,7 +53,7 @@ Function Submit-LMDataModel{
                 Write-Debug "Processing datapoints for instance $($Instance.Name)."
                 $Datapoints = [System.Collections.Generic.List[object]]::New()
                 Foreach($Datapoint in $Model.Datapoints){
-                    $Value = Generate-LMData -Datapoint $Datapoint -Instance $Instance.Name -SimulationType $Model.SimulationType
+                    $Value = Generate-LMData -Datapoint $Datapoint -Instance $Instance -SimulationType $Model.SimulationType
                     $Datapoints.Add([PSCustomObject]@{
                         Name = $Datapoint.Name
                         Description = $Datapoint.Description
@@ -84,7 +84,7 @@ Function Submit-LMDataModel{
                 $PMGraphs = Get-LMDatasourceGraph -DataSourceId $PMDatasource.Id
                 $PMOverviewGraphs = Get-LMDatasourceOverviewGraph -DataSourceId $PMDatasource.Id
 
-                If(!$PMGraphs -or $ForceGraphProvisioning){
+                If((!$PMGraphs -or $ForceGraphProvisioning) -and $Model.Graphs){
                     Write-Debug "No instance graphs found or force creation specified, importing graph definitions from model."
                     Foreach($Graph in $Model.Graphs){
                         Write-Debug "Importing instance graph $($Graph.Name)."
@@ -95,34 +95,46 @@ Function Submit-LMDataModel{
                             $DPId = $PMDatasource.datapoints[$DPIndex].id
 
                             $Index = $Graph.datapoints.name.IndexOf($DPName)
-                            $Graph.datapoints[$Index].dataPointId = $DPId
-                            $Graph.datapoints[$Index].dataSourceDataPointId = $DPId
+                            If($Index -eq -1){
+                                $Graph.datapoints[$Index].dataPointId = $null
+                                $Graph.datapoints[$Index].dataSourceDataPointId = $null
+                            }
+                            Else{
+                                $Graph.datapoints[$Index].dataPointId = $DPId
+                                $Graph.datapoints[$Index].dataSourceDataPointId = $DPId
+                            }
                         }
                         New-LMDatasourceGraph -RawObject $Graph -DatasourceId $PMDatasource.Id | Out-Null
                     }
                 }
                 Else{
-                    Write-Debug "Existing instance graphs found, skipping importing graph definitions from model."
+                    Write-Debug "Existing instance graphs found or none included with selected model, skipping importing instance graph definitions."
                 }
-                If(!$PMOverviewGraphs -or $ForceGraphProvisioning){
+                If((!$PMOverviewGraphs -or $ForceGraphProvisioning) -and $Model.OverviewGraphs){
                     Write-Debug "No overview graphs found or force creation specified, importing graph definitions from model."
                     Foreach($OverviewGraph in $Model.OverviewGraphs){
                         Write-Debug "Importing overview graph $($OverviewGraph.Name)."
                         #Update datapointIDs in each graph so they match the new push module
                         Foreach($Datapoint in $OverviewGraph.datapoints){
-                            $DPName = $Datapoint.Name
-                            $DPIndex = $PMDatasource.datapoints.dataPointName.IndexOf($DPName)
+                            $DPName = $Datapoint.dataPointName
+                            $DPIndex = $PMDatasource.datapoints.name.IndexOf($DPName)
                             $DPId = $PMDatasource.datapoints[$DPIndex].id
 
                             $Index = $OverviewGraph.datapoints.dataPointName.IndexOf($DPName)
-                            $OverviewGraph.datapoints[$Index].dataPointId = $DPId
-                            $OverviewGraph.datapoints[$Index].dataSourceDataPointId = $DPId
+                            If($Index -eq -1){
+                                $OverviewGraph.datapoints[$Index].dataPointId = $null
+                                $OverviewGraph.datapoints[$Index].dataSourceDataPointId = $null
+                            }
+                            Else{
+                                $OverviewGraph.datapoints[$Index].dataPointId = $DPId
+                                $OverviewGraph.datapoints[$Index].dataSourceDataPointId = $DPId
+                            }
                         }
                         New-LMDatasourceOverviewGraph -RawObject $OverviewGraph -DatasourceId $PMDatasource.Id | Out-Null
                     }
                 }
                 Else{
-                    Write-Debug "Existing overview graphs found, skipping importing graph definitions from model."
+                    Write-Debug "Existing overview graphs found or none included with selected model, skipping importing overview graph definitions."
                 }
             }
             Else{
@@ -144,43 +156,59 @@ Function Generate-LMData {
         $Instance,
         $SimulationType
     )
-    Switch($SimulationType){
-        "replicaiton" {
-            #TODO
+    #If we have instance data from our model, use that instead
+    If($Instance.Data){
+        $FilteredData = $Instance.Data | Where-Object {$_."$($Datapoint.Name)" -ne "No Data"}
+        If($FilteredData){
+            $TotalDPs = ($FilteredData | Measure-Object).Count - 1
+            $ValueIndex = Get-Random -Minimum 0 -Maximum $TotalDPs
+            $Value = $FilteredData[$ValueIndex]."$($Datapoint.Name)"
         }
-        "8to5" {
-            #TODO
+        Else{
+            $Value = 0
         }
-        default {
-            $Value = Switch($Datapoint.MetricType){
-                "Rate" {
-                    Get-Random -Minimum 0 -Maximum 125000
-                }
-                "Percentage" {
-                    Get-Random -Minimum 0 -Maximum 100
-                }
-                "IO-Latency" {
-                    Get-Random -Minimum 0 -Maximum 125000
-                }
-                "SpaceUsage" {
-                    Get-Random -Minimum 0 -Maximum 322122547200
-                }
-                "Status" {
-                    If($Datapoint.MinValue -and $Datapoint.MaxValue){
-                        Get-Random -Minimum $Datapoint.MinValue -Maximum $Datapoint.MaxValue
+        Write-Debug "Generated value of ($Value) for datapoint ($($Instance.Name)-$($Datapoint.Name)) using data provided with the model."
+
+    }
+    Else{
+        Switch($SimulationType){
+            "replicaiton" {
+                #TODO
+            }
+            "8to5" {
+                #TODO
+            }
+            default {
+                $Value = Switch($Datapoint.MetricType){
+                    "Rate" {
+                        Get-Random -Minimum 0 -Maximum 125000
                     }
-                    Else{
-                        Get-Random -Minimum 0 -Maximum 5
+                    "Percentage" {
+                        Get-Random -Minimum 0 -Maximum 100
                     }
-                }
-                Default {
-                    Get-Random -Minimum 0 -Maximum 1000
+                    "IO-Latency" {
+                        Get-Random -Minimum 0 -Maximum 125000
+                    }
+                    "SpaceUsage" {
+                        Get-Random -Minimum 0 -Maximum 322122547200
+                    }
+                    "Status" {
+                        If($Datapoint.MinValue -and $Datapoint.MaxValue){
+                            Get-Random -Minimum $Datapoint.MinValue -Maximum $Datapoint.MaxValue
+                        }
+                        Else{
+                            Get-Random -Minimum 0 -Maximum 5
+                        }
+                    }
+                    Default {
+                        Get-Random -Minimum 0 -Maximum 1000
+                    }
                 }
             }
         }
+        Write-Debug "Generated value of ($Value) for datapoint ($($Instance.Name)-$($Datapoint.Name)) using metric type ($($Datapoint.MetricType)) and model simulation type ($SimulationType)."
     }
 
-    Write-Debug "Generating value of ($Value) for datapoint ($Instance-$($Datapoint.Name)) using metric type ($($Datapoint.MetricType)) and model simulation type ($SimulationType)."
 
     Return $Value
 }

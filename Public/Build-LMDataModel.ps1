@@ -16,7 +16,7 @@ Function Build-LMDataModel {
         [Parameter(Mandatory,ParameterSetName="ModelDatasources")]
         [Int]$InstanceCount = 1,
 
-        [ValidateSet("8to5","random","replication")]
+        [ValidateSet("8to5","random","replication","replay_model")]
         [String]$SimulationType="random",
 
         [Parameter(Mandatory)]
@@ -25,15 +25,28 @@ Function Build-LMDataModel {
         [String]$DeviceDisplayName = $DeviceHostName,
 
         [Parameter(Mandatory,ParameterSetName = 'ModelDevice')]
-        [String]$ModelDeviceHostName
+        [String]$ModelDeviceHostName,
+
+        [Parameter(ParameterSetName = 'ModelDevice')]
+        [Switch]$IncludeModelDeviceData
 
     )
+    #If we have a model deivce make sure we can grab it from the connected portal fist
     If($ModelDeviceHostName){
         $DatasourceNames = [System.Collections.Generic.List[object]]::New()
-        $ModelDevice = Get-LMDevice -Name $ModelDeviceHostName
-        $ModelDeviceDatasources = Get-LMDeviceDatasourceList -id $ModelDevice.Id | Where-Object {$_.instanceNumber -gt 0}
-        $DatasourceNames.AddRange($ModelDeviceDatasources.datasourceName)
+        $ModelDevice = Get-LMDevice -Name $ModelDeviceHostName | Select-Object -First 1
+        If($ModelDevice){
+            $ModelDeviceDatasources = Get-LMDeviceDatasourceList -id $ModelDevice.Id | Where-Object {$_.instanceNumber -gt 0}
+            $DatasourceNames.AddRange($ModelDeviceDatasources.datasourceName)
+        }
+        Else{
+            Write-Error "Unable to locate provided model device ($ModelDeviceHostName), ensure hostname is correct and try again."
+            Return
+        }
     }
+
+    #If set to collect model data override simulation type to replay model
+    If($IncludeModelDeviceData){$SimulationType = "replay_model"}
 
     $DataSourceModels = [System.Collections.Generic.List[object]]::New()
     #Loop through each provided DSName to generate models
@@ -101,10 +114,10 @@ Function Build-LMDataModel {
                 $ModelInstances = Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceInfo.Id -DeviceId $ModelDevice.Id
                 Write-Debug "Datasource $($Datasource.name) is being model after device $($ModelDevice.DisplayName) , adding up to 10 instances from pool of $(($ModelInstances | Measure-Object).Count) existing instance(s) to data model export."
                 If($($ModelInstances | Measure-Object).Count -gt 1){
-                    $Instances.AddRange($(Generate-Instances -ModelInstance -InstanceList $ModelInstances[0..10] -Datasource $DatasourceDefenition))
+                    $Instances.AddRange($(Generate-Instances -ModelInstance -InstanceList $ModelInstances[0..10] -Datasource $DatasourceDefenition -IncludeModelData:$IncludeModelDeviceData -ModelDeviceHostName $ModelDeviceHostName))
                 }
                 Else{
-                    $Instances.Add($(Generate-Instances -ModelInstance -InstanceList $ModelInstances -Datasource $DatasourceDefenition))
+                    $Instances.Add($(Generate-Instances -ModelInstance -InstanceList $ModelInstances -Datasource $DatasourceDefenition -IncludeModelData:$IncludeModelDeviceData -ModelDeviceHostName $ModelDeviceHostName))
                 }
             }
     
@@ -152,6 +165,10 @@ Function Generate-Instances {
 
         [Int]$InstanceCount,
 
+        [Boolean]$IncludeModelData,
+
+        [String]$ModelDeviceHostName,
+
         $Datasource
     )
 
@@ -165,6 +182,7 @@ Function Generate-Instances {
             DisplayName     = ($Datasource.displayName -replace '[#\\/;=]', '_')
             Description     = ""
             Type            = "SingleInstance"
+            Data            = @()
         })
 
         Return $Instances
@@ -174,11 +192,26 @@ Function Generate-Instances {
         #Add generated instance to instance list
         Write-Debug "Instances found for export: ($(($InstanceList[0..9].Name -Join ","))...)"
         Foreach($Instance in $InstanceList){
+
+            If($IncludeModelData){
+                Write-Debug "Extracting last 24 hours of model device data for instance ($($Instance.name))"
+                $Data = [System.Collections.Generic.List[object]]::New()
+                $InstanceData = Get-LMDeviceData -DeviceName $ModelDeviceHostName -DatasourceName $Datasource.name -InstanceName $Instance.name -StartDate (Get-Date).AddHours(-24) -EndDate (Get-Date)
+                If($InstanceData){
+                    $DataCount = ($InstanceData | Measure-Object).Count
+                    Write-Debug "Added $DataCount time series metrics to data model for ($($Instance.name))"
+                    $Data.AddRange($InstanceData)
+                }
+                Else{
+                    Write-Debug "No recent instance data found for ($($Instance.name))"
+                }
+            }
             $Instances.Add([PSCustomObject]@{
                 Name            = (($Instance.name -replace '[#\\/;=]', '_') -replace '[\[\]{}]','')
                 DisplayName     = If($Instance.displayName){(($Instance.displayName -replace '[#\\/;=]', '_') -replace '[\[\]{}]','')}Else{(($Datasource.displayName -replace '[#\\/;=]', '_'))}
                 Description     = $Instance.description
                 Type            = "DeviceModeled"
+                Data            = $Data
             })
         }
 
@@ -218,6 +251,7 @@ Function Generate-Instances {
                 DisplayName     = ($DisplayName -replace '[#\\;=]', '_')
                 Description     = $Description
                 Type            = $Type
+                Data            = @()
             })
         }
     }
