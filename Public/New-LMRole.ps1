@@ -24,7 +24,7 @@ Function New-LMRole {
 
         [Parameter(ParameterSetName = 'Default')]
         [Parameter(ParameterSetName = 'Custom')]
-        [Switch]$TwoFARequired,
+        [Boolean]$TwoFARequired = $true,
 
         [Parameter(ParameterSetName = 'Default')]
         [Parameter(ParameterSetName = 'Custom')]
@@ -286,7 +286,7 @@ Function New-LMRole {
                 name            = $Name
                 requireEULA      = $RequireEULA.IsPresent 
                 roleGroupId     = $RoleGroupId
-                twoFARequired   = $TwoFARequired.IsPresent
+                twoFARequired   = $TwoFARequired
                 privileges      = If($CustomPrivilegesObject){$CustomPrivilegesObject}Else{$Privileges}
             }
 
