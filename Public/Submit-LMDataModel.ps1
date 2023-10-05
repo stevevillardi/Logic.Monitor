@@ -67,7 +67,7 @@ Function Submit-LMDataModel{
             #Submit PushMetric to portal
             $DeviceHostName = $Model.DeviceHostName
             $DeviceDisplayName = $Model.DeviceDisplayName
-            $DatasourceGroup = ""
+            $DatasourceGroup =  $Model.$DatasourceGroupName
             $DatasourceDisplayName = $Model.Datasource.displayName
             $DatasourceName = $Model.Datasource.Name.Replace("-","") + "_" + $($DeviceDisplayName -replace ("\.","_")) + $DatasourceSuffix
             $ResourceIds = @{"system.hostname"=$DeviceHostName;"system.displayname"=$DeviceDisplayName}

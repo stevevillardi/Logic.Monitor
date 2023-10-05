@@ -1,5 +1,6 @@
 Function Build-LMDataModel {
     [CmdletBinding(DefaultParameterSetName="ModelDatasources")]
+    [OutputType([System.Collections.Generic.List[object]])]
     Param(
         [Parameter(Mandatory,ParameterSetName="ModelDatasources")]
         [System.Collections.Generic.List[object]]$DatasourceNames,
@@ -60,11 +61,12 @@ Function Build-LMDataModel {
             #Extract what we need from the source datasource to use as basis for modeling
             $DatasourceDefenition = $Datasource | Select-Object description,tags,name,displayName,collectInterval,hasMultiInstances
             $Datapoints = $Datasource.datapoints
-    
+            $DatasourceGroupName = $Datasource.groupName
+
             #Estimate datapoint type for model generation
             $DatapointDefenition = [System.Collections.Generic.List[object]]::New()
             Foreach ($Datapoint in $Datapoints){
-                $MetricType = Estimate-MetricType -Datapoint $Datapoint.name
+                $MetricType = Resolve-MetricType -Datapoint $Datapoint.name
                 If($Datapoint.postProcessorMethod -eq "expression"){
                     $Type = "complex"
                     $ComplexDatapointFormula = $Datapoint.postProcessorParam
@@ -73,9 +75,9 @@ Function Build-LMDataModel {
                     $Type = "standard"
                     $ComplexDatapointFormula = "N/A"
                 }
-    
+
                 Write-Debug "Detected $Type datapoint $($Datapoint.name) matching metric type: $MetricType"
-    
+
                 $DatapointDefenition.Add([PSCustomObject]@{
                     Name                    = $Datapoint.name
                     MaxValue                = $Datapoint.maxValue
@@ -90,41 +92,43 @@ Function Build-LMDataModel {
                     MetricType              = $MetricType
                 })
             }
-    
+
             #Get Graph settings we will need to model our PushMetric DS after
             If($ReplicateModuleGraphs){
                 Write-Debug "Exporting existing datasource overview graph defenition(s) for model export."
                 $DatasourceGraphModel  = Get-LMDatasourceGraph -DatasourceName $Datasource.Name | Select-Object -ExcludeProperty id
-        
+
                 Write-Debug "Exporting existing datasource instance graph defenition(s) for model export."
                 $DatasourceOverviewGraphModel = Get-LMDatasourceOverviewGraph -DatasourceName $Datasource.Name | Select-Object -ExcludeProperty id
             }
-    
+
             #Generate Instances if not specified
             $Instances = [System.Collections.Generic.List[object]]::New()
             If($GenerateInstances -and [Boolean]$Datasource.hasMultiInstances){
                 Write-Debug "Generating $InstanceCount instance(s) for data model export."
-                $Instances.AddRange($(Generate-Instances -InstanceCount $InstanceCount -Datasource $DatasourceDefenition))
+                $Instances.AddRange($(Build-Instance -InstanceCount $InstanceCount -Datasource $DatasourceDefenition))
             }
             ElseIf($GenerateInstances){
                 Write-Debug "Datasource $($Datasource.name) not enabled for multiple instances, default instance creation to single instance for data model export."
-                $Instances.Add($(Generate-Instances -SingleInstance -Datasource $DatasourceDefenition))
+                $Instances.Add($(Build-Instance -SingleInstance -Datasource $DatasourceDefenition))
             }
             ElseIf($ModelDeviceHostName -and $ModelDeviceDatasources){
                 $ModelInstances = Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceInfo.Id -DeviceId $ModelDevice.Id
                 Write-Debug "Datasource $($Datasource.name) is being model after device $($ModelDevice.DisplayName) , adding up to 10 instances from pool of $(($ModelInstances | Measure-Object).Count) existing instance(s) to data model export."
                 If($($ModelInstances | Measure-Object).Count -gt 1){
-                    $Instances.AddRange($(Generate-Instances -ModelInstance -InstanceList $ModelInstances[0..10] -Datasource $DatasourceDefenition -IncludeModelData:$IncludeModelDeviceData -ModelDeviceHostName $ModelDeviceHostName))
+                    $Instances.AddRange($(Build-Instance -ModelInstance -InstanceList $ModelInstances[0..10] -Datasource $DatasourceDefenition -IncludeModelData:$IncludeModelDeviceData -ModelDeviceHostName $ModelDeviceHostName))
                 }
                 Else{
-                    $Instances.Add($(Generate-Instances -ModelInstance -InstanceList $ModelInstances -Datasource $DatasourceDefenition -IncludeModelData:$IncludeModelDeviceData -ModelDeviceHostName $ModelDeviceHostName))
+                    $Instances.Add($(Build-Instance -ModelInstance -InstanceList $ModelInstances -Datasource $DatasourceDefenition -IncludeModelData:$IncludeModelDeviceData -ModelDeviceHostName $ModelDeviceHostName))
                 }
             }
-    
+
             #Combine our model info together for export
             $DataSourceModel = [PSCustomObject]@{
                 DeviceHostName = $DeviceHostName
                 DeviceDisplayName = $DeviceDisplayName
+                DatasourceName = $DatasourceName
+                DatasourceGroupName = $DatasourceGroupName
                 SimulationType = $SimulationType
                 Instances = $Instances
                 Datasource = $DatasourceDefenition
@@ -139,7 +143,7 @@ Function Build-LMDataModel {
     Return $DataSourceModels
 }
 
-Function Estimate-MetricType {
+Function Resolve-MetricType {
     Param(
         [Parameter(Mandatory)]
         [Object]$Datapoint
@@ -155,7 +159,7 @@ Function Estimate-MetricType {
     }
 }
 
-Function Generate-Instances {
+Function Build-Instance {
     Param(
         [Switch]$SingleInstance,
 
@@ -173,7 +177,7 @@ Function Generate-Instances {
     )
 
     $Instances = [System.Collections.Generic.List[object]]::New()
-    
+
     #If single instance just return datasource name as instance
     If($SingleInstance){
         Write-Debug "Single instance datasource detected, skipping instance generation usings datasource name as instance"
@@ -193,9 +197,9 @@ Function Generate-Instances {
         Write-Debug "Instances found for export: ($(($InstanceList[0..9].Name -Join ","))...)"
         Foreach($Instance in $InstanceList){
 
+            $Data = [System.Collections.Generic.List[object]]::New()
             If($IncludeModelData){
                 Write-Debug "Extracting last 24 hours of model device data for instance ($($Instance.name))"
-                $Data = [System.Collections.Generic.List[object]]::New()
                 $InstanceData = Get-LMDeviceData -DeviceName $ModelDeviceHostName -DatasourceName $Datasource.name -InstanceName $Instance.name -StartDate (Get-Date).AddHours(-24) -EndDate (Get-Date)
                 If($InstanceData){
                     $DataCount = ($InstanceData | Measure-Object).Count
@@ -208,7 +212,7 @@ Function Generate-Instances {
             }
             $Instances.Add([PSCustomObject]@{
                 Name            = (($Instance.name -replace '[#\\/;=]', '_') -replace '[\[\]{}]','')
-                DisplayName     = If($Instance.displayName){(($Instance.displayName -replace '[#\\/;=]', '_') -replace '[\[\]{}]','')}Else{(($Datasource.displayName -replace '[#\\/;=]', '_'))}
+                DisplayName     = If($Instance.displayName){(($Instance.displayName -replace '[#\\;=]', '_') -replace '[\[\]{}]','')}Else{(($Datasource.displayName -replace '[#\\;=]', '_'))}
                 Description     = $Instance.description
                 Type            = "DeviceModeled"
                 Data            = $Data
@@ -237,14 +241,14 @@ Function Generate-Instances {
             $Type = "Unknown"
         }
         Write-Debug "Datasource instance type detected as $Type, using type for instance generation"
-    
+
         #For multiple instances loop through and generate insance types
         For (($i = 1); $i -le $InstanceCount; $i++){
             #Generate instance name based on tags and dp names
             $Name = $Type + '{0:d2}' -f $i
             $DisplayName = $Type + '{0:d2}' -f $i
             $Description = ""
-    
+
             #Add generated instance to instance list
             $Instances.Add([PSCustomObject]@{
                 Name            = ($Name -replace '[#\\;=]', '_')
