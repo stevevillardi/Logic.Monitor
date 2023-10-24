@@ -387,19 +387,8 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 # Change List
 
-## 4.5.2
-###### New Commands:
-**Get-LMDatasourceGraph**: New command to search and view datasource graph definitions.
-**Get-LMDatasourceOverviewGraph**: New command to search and view datasource overview graph definitions.
-**New-LMDatasourceGraph**: New command create new datasource graph definitions. Currently limited to supplying the full body as an object, will be improved upon in the future.
-**New-LMDatasourceOverviewGraph**: New command create new datasource overviewgraph definitions. Currently limited to supplying the full body as an object, will be improved upon in the future.
-
-###### Updated Commands:
-**Get-LMAlert**: Made the sort option a parameter, defaults to sorting by resourceId if not specified.
-**Get-LMDatasource**: Output is now formated based on existing object type LogicMonitor.Datasource.
-**Get-LMDeviceData**: Fixed bug causing parameter set error when attempting to use instancename as a parameter.
-
-**New-LMPushMetricDataPoint**: Added datapoint description as an added output, this required changing the -Datapoints variable from a HashTable to an Object. Datapoint object schema should include @{Name,Description,Value}.
-**Send-LMPushMetric**: Fix bug that allowed invalid datasource characters to be passed to the ingest API.
+## 4.5.4
+###### Updates:
+- Minor bug fix release, no specific set of updates.
 
 [Previous Release Notes](RELEASENOTES.md)
