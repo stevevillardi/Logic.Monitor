@@ -446,12 +446,17 @@ Function Initialize-LMPOVSetup {
                     @{
                         name = "LogicMonitor_Device_Alert_Statistics.xml"
                         type = "datasource"
-                        repo = "LogicMonitor-Dashboards/main/MTTR"
+                        repo = "LogicMonitor-Dashboards/main/Suites/Alert%20Duration"
+                    },
+                    @{
+                        name = "LogicMonitor_Portal_Alert_Statistics_Cache.xml"
+                        type = "datasource"
+                        repo = "LogicMonitor-Dashboards/main/Suites/Alert%20Duration"
                     },
                     @{
                         name = "LogicMonitor_Portal_Alert_Statistics.xml"
                         type = "datasource"
-                        repo = "LogicMonitor-Dashboards/main/MTTR"
+                        repo = "LogicMonitor-Dashboards/main/Suites/Alert%20Duration"
                     }
                 )
                 Foreach($Module in $ModuleList){
@@ -478,31 +483,31 @@ Function Initialize-LMPOVSetup {
                     }
                 }
                 
-                #Deploy MTTR dashboard
-                Write-Host "[INFO]: Importing MTTR dashboard from repo."
+                #Deploy AlertDuration dashboard
+                Write-Host "[INFO]: Importing Alert Duration Analysis Dashboard from repo."
                 $CheckPortalDevice = Get-LMDevice -Name $DeviceName
                 If($CheckPortalDevice){
-                    Set-LMDevice -Id $CheckPortalDevice.Id -Properties @{"mttr.period"=7} | Out-Null
-                    $MTTRRootFolder = (Get-LMDashboardGroup -Name "LogicMonitor").Id
-                    If($MTTRRootFolder){
+                    Set-LMDevice -Id $CheckPortalDevice.Id -Properties @{"alert.duration.period"=7} | Out-Null
+                    $AlertDurationRootFolder = (Get-LMDashboardGroup -Name "LogicMonitor").Id
+                    If($AlertDurationRootFolder){
                         Try{
-                            $MTTRDashboardFile = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/LogicMonitor-Dashboards/main/MTTR/Mean_Time_To_Resolution(MTTR)_Overview.json").Content
-                            $MTTRDashboard = Get-LMDashboard -Name "Mean Time To Resolution(MTTR) Overview"
-                            If(!$MTTRDashboard){
-                                $ImportMTTRDashboard = Import-LMDashboard -File $MTTRDashboardFile -ParentGroupId $MTTRRootFolder
+                            $AlertDurationDashboardFile = (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/stevevillardi/LogicMonitor-Dashboards/main/Suites/Alert%20Duration/Alert_Duration_Overview.json").Content
+                            $AlertDurationDashboard = Get-LMDashboard -Name "Alert Duration Overview"
+                            If(!$AlertDurationDashboard){
+                                $ImportAlertDurationDashboard = Import-LMDashboard -File $AlertDurationDashboardFile -ParentGroupId $AlertDurationRootFolder
                             }
                             Else{
-                                Write-Host "[INFO]: MTTR Dashboard already exists, skipping import" -ForegroundColor Gray
+                                Write-Host "[INFO]: Alert Duration Analysis Dashboard already exists, skipping import" -ForegroundColor Gray
                             }
                         }
                         Catch{
                             #Oops
-                            Write-Host "[ERROR]: Unable to import MTTR dashboard from source: $_" -ForegroundColor Red
+                            Write-Host "[ERROR]: Unable to import Alert Duration Analysis dashboard from source: $_" -ForegroundColor Red
                         }
                     }
                 }
                 Else{
-                    Write-Host "[WARN]: Unable to import MTTR dashboard template: PortalMetrics device not found, please deploy before attempting to deploy" -ForegroundColor Yellow
+                    Write-Host "[WARN]: Unable to import Alert Duration Analysis dashboard template: PortalMetrics device not found, please deploy before attempting to deploy" -ForegroundColor Yellow
                 }
 
                 #Deploy Dynamic Dashboards
@@ -519,10 +524,10 @@ Function Initialize-LMPOVSetup {
                         name = "Dynamic_Dashboard_-_Windows_(Textbox_Selector).json"
                         repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
                     },
-                    @{
-                        name = "Dynamic_Dashboard_-_vCenter_VMs.json"
-                        repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
-                    },
+                    # @{
+                    #     name = "Dynamic_Dashboard_-_vCenter_VMs.json"
+                    #     repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
+                    # },
                     @{
                         name = "Dynamic_Server-at-a-Glance__Linux(SNMP).json"
                         repo = "LogicMonitor-Dashboards/main/Dynamic%20Dashboards"
