@@ -487,7 +487,7 @@ Function Initialize-LMPOVSetup {
                 Write-Host "[INFO]: Importing Alert Duration Analysis Dashboard from repo."
                 $CheckPortalDevice = Get-LMDevice -Name $DeviceName
                 If($CheckPortalDevice){
-                    Set-LMDevice -Id $CheckPortalDevice.Id -Properties @{"alert.duration.period"=7} | Out-Null
+                    Set-LMDevice -Id $CheckPortalDevice.Id -Properties @{"alert.analysis.period"=7} | Out-Null
                     $AlertDurationRootFolder = (Get-LMDashboardGroup -Name "LogicMonitor").Id
                     If($AlertDurationRootFolder){
                         Try{
