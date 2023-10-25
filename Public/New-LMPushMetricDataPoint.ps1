@@ -31,7 +31,7 @@ Function New-LMPushMetricDataPoint {
                 dataPointDescription        = ($Datapoint.Description -replace '“|”','')
                 dataPointAggregationType    = $DataPointAggregationType
                 percentileValue             = $PercentileValue
-                values                      = @{$(Get-Date -UFormat %s)=$Datapoint.Value}
+                values                      = @{$((Get-Date -UFormat %s).Split(".")[0])=$Datapoint.Value}
             })
         }
             
