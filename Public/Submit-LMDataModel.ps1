@@ -6,7 +6,7 @@ Function Submit-LMDataModel{
             If(Test-Json $_ -ErrorAction SilentlyContinue){$TestObject = $_ | ConvertFrom-Json -Depth 10}
             Else{ $TestObject = $_}
 
-            $RequiredProperties= @("DeviceHostName","DeviceDisplayName","SimulationType","Instances","Datasource","Datapoints","OverviewGraphs","Graphs")
+            $RequiredProperties= @("Datasources","Properties","DisplayName","HostName","SimulationType")
             $Members= Get-Member -InputObject $TestObject -MemberType NoteProperty
             If($Members){
                 $MissingProperties= Compare-Object -ReferenceObject $Members.Name -DifferenceObject $RequiredProperties -PassThru | Where-Object {$_.SideIndicator -eq "=>"}
@@ -25,7 +25,13 @@ Function Submit-LMDataModel{
 
         [Switch]$ForceGraphProvisioning
     )
-    Begin{}
+    Begin{
+        #Check if we are logged in and have valid api creds
+        If ($Script:LMAuth.Type -ne "Bearer") {
+            Write-Error "Push Metrics API only supports Bearer Token auth, please re-connect using a valid bearer token."
+        }
+        return
+    }
     Process{
         #Silently try to convert from JSON incase supplied object is loaded from a JSON file
         If($ModelJson){
@@ -33,18 +39,18 @@ Function Submit-LMDataModel{
             $ModelObject = $ModelJson | ConvertFrom-Json -Depth 10
         }
         #Loop through models and submit for ingest
-        $ModelCount = ($ModelObject | Measure-Object).Count
+        $ModelCount = ($ModelObject.Datasources | Measure-Object).Count
 
         Write-LMHost "=========================================================================" -ForegroundColor White
-        Write-LMHost "|                           BEGIN PROCESSING                            |" -ForegroundColor White
+        Write-LMHost "|                  BEGIN PROCESSING ($($ModelObject.DisplayName))                  |" -ForegroundColor White
         Write-LMHost "=========================================================================" -ForegroundColor White
         Write-LMHost "Model contains $ModelCount datasource(s) for ingest, beinging processing."
-        Foreach($Model in $ModelObject){
+        Foreach($Model in $ModelObject.Datasources){
             $InstCount = ($Model.Instances | Measure-Object).Count
             $DpCount = ($Model.Datapoints | Measure-Object).Count
             $GCount = ($Model.Graphs | Measure-Object).Count
             $OGCount = ($Model.OverviewGraphs | Measure-Object).Count
-            Write-LMHost "Model loaded for datasource $($Model.Datasource.Name) using device $($Model.DeviceDisplayName) and simulation type $($Model.SimulationType)."
+            Write-LMHost "Model loaded for datasource $($Model.Defenition.Name) using device $($ModelObject.DisplayName) and simulation type $($ModelObject.SimulationType)."
             Write-LMHost "Model contains $InstCount instance(s), each with $DpCount datapoint(s) and $($GCount + $OGCount) graph definition(s)."
 
             #Loop through instances and generate instance and dp objects
@@ -53,7 +59,7 @@ Function Submit-LMDataModel{
                 Write-Debug "Processing datapoints for instance $($Instance.Name)."
                 $Datapoints = [System.Collections.Generic.List[object]]::New()
                 Foreach($Datapoint in $Model.Datapoints){
-                    $Value = Generate-LMData -Datapoint $Datapoint -Instance $Instance -SimulationType $Model.SimulationType
+                    $Value = Generate-LMData -Datapoint $Datapoint -Instance $Instance -SimulationType $ModelObject.SimulationType
                     $Datapoints.Add([PSCustomObject]@{
                         Name = $Datapoint.Name
                         Description = $Datapoint.Description
@@ -61,19 +67,21 @@ Function Submit-LMDataModel{
                     })
                 }
                 $DatapointsArray = New-LMPushMetricDataPoint -Datapoints $Datapoints
-                $InstanceArray.Add($(New-LMPushMetricInstance -Datapoints $DatapointsArray -InstanceName $Instance.Name -InstanceDisplayName $Instance.DisplayName -InstanceDescription $Instance.Description))
+                If($Instance.Properties){$Instance.Properties.PSObject.Properties | ForEach-Object -begin {$InstancePropertyHash=@{}} -process {$InstancePropertyHash."$($_.Name)" = $_.Value}}
+                $InstanceArray.Add($(New-LMPushMetricInstance -Datapoints $DatapointsArray -InstanceName $Instance.Name -InstanceDisplayName $Instance.DisplayName -InstanceDescription $Instance.Description -InstanceProperties $InstancePropertyHash))
             }
 
             #Submit PushMetric to portal
-            $DeviceHostName = $Model.DeviceHostName
-            $DeviceDisplayName = $Model.DeviceDisplayName
-            $DatasourceGroup =  $Model.$DatasourceGroupName
-            $DatasourceDisplayName = $Model.Datasource.displayName
-            $DatasourceName = $Model.Datasource.Name.Replace("-","") + "_" + $($DeviceDisplayName -replace ("\.","_")) + $DatasourceSuffix
+            $DeviceHostName = $ModelObject.HostName
+            $DeviceDisplayName = $ModelObject.DisplayName
+            $DatasourceGroup =  $Model.DatasourceGroupName
+            $DatasourceDisplayName = $Model.Defenition.displayName
+            $DatasourceName = $Model.Defenition.Name.Replace("-","") + $DatasourceSuffix
             $ResourceIds = @{"system.hostname"=$DeviceHostName;"system.displayname"=$DeviceDisplayName}
 
             Write-Debug "Submitting PushMetric to ingest."
-            $Result = Send-LMPushMetric -Instances $InstanceArray -DatasourceGroup $DatasourceGroup -DatasourceDisplayName $DatasourceDisplayName -DatasourceName $DatasourceName -ResourceIds $ResourceIds -NewResourceHostName $DeviceHostName
+            If($ModelObject.Properties){$ModelObject.Properties.PSObject.Properties | ForEach-Object -begin {$DevicePropertyHash=@{}} -process {$DevicePropertyHash."$($_.Name)" = $_.Value}}
+            $Result = Send-LMPushMetric -Instances $InstanceArray -DatasourceGroup $DatasourceGroup -DatasourceDisplayName $DatasourceDisplayName -DatasourceName $DatasourceName -ResourceIds $ResourceIds -ResourceProperties $DevicePropertyHash -NewResourceHostName $DeviceHostName
 
             Write-Debug "PushMetric submitted with status: $($Result.message)  @($($Result.timestamp))"
             #Apply graph definitions if they do not exist yet
@@ -144,7 +152,7 @@ Function Submit-LMDataModel{
     }
     End{
         Write-LMHost "=========================================================================" -ForegroundColor White
-        Write-LMHost "|                            END PROCESSING                             |" -ForegroundColor White
+        Write-LMHost "|                  END PROCESSING ($($ModelObject.DisplayName))                  |" -ForegroundColor White
         Write-LMHost "=========================================================================" -ForegroundColor White
     }
 }
@@ -161,13 +169,16 @@ Function Generate-LMData {
         $FilteredData = $Instance.Data | Where-Object {$_."$($Datapoint.Name)" -ne "No Data"}
         If($FilteredData){
             $TotalDPs = ($FilteredData | Measure-Object).Count - 1
-            $ValueIndex = Get-Random -Minimum 0 -Maximum $TotalDPs
-            $Value = $FilteredData[$ValueIndex]."$($Datapoint.Name)"
+            [Int]$TimeSlice = get-date -Format %H%m
+            $TimePercentage = $TimeSlice/2359
+            $IndexValue = [Math]::Floor([decimal]($TotalDPs * $TimePercentage))
+            $Value = $FilteredData[$IndexValue]."$($Datapoint.Name)"
+            Write-Debug "Generated value of ($Value) for datapoint ($($Instance.Name)-$($Datapoint.Name)) using data provided with the model."
         }
         Else{
             $Value = 0
+            Write-Debug "No instance data found for datapoint ($($Instance.Name)-$($Datapoint.Name)) using value of ($Value) as fallback."
         }
-        Write-Debug "Generated value of ($Value) for datapoint ($($Instance.Name)-$($Datapoint.Name)) using data provided with the model."
 
     }
     Else{

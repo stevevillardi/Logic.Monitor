@@ -227,11 +227,6 @@ Function Connect-LMAccount {
     
     #Check for newer version of Logic.Monitor module
     Update-LogicMonitorModule -CheckOnly
-    
-    #Bearer token warning banner
-    If($Type -eq "Bearer"){
-        Write-LMHost "[WARN]: Please note that while usage of Bearer tokens in this module is supported, not all  LM v3 API endpoints currently support both LMv1 and Bearer authentication methods. If you encounter authentication issues try using an LMv1 token instead." -ForegroundColor Yellow
-    }
 
     Try {
 

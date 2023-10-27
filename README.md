@@ -307,6 +307,8 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - New-LMPushMetricDataPoint
 - New-LMPushMetricInstance
 - Send-LMPushMetric
+- Set-LMPushModuleDeviceProperty
+- Set-LMPushModuleInstanceProperty
 
 #### Recipient Group
 
@@ -387,8 +389,12 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 # Change List
 
-## 4.5.4
-###### Updates:
-- Minor bug fix release, no specific set of updates.
+## 4.5.5
+###### Updated Commands:
+**Connect-LMAccount**: Removed Bearer token header message when connecting using Bearer token. Bearer token is now support as an alternative auth mechanism to LMv1 against LM API v3. Some newer API endpoint such as Push Metrics require Bear token auth and will fail when using LMv1.
+
+###### New Commands:
+**Set-LMPushModuleInstanceProperty**: New command to update/add instance level properties associated with push metrics devices 
+**Set-LMPushModuleDeviceProperty**: New command to update/add device level properties associated with push metrics devices
 
 [Previous Release Notes](RELEASENOTES.md)

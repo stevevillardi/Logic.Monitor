@@ -29,6 +29,12 @@ Function Build-LMDataModel {
         [String]$ModelDeviceHostName,
 
         [Parameter(ParameterSetName = 'ModelDevice')]
+        [Switch]$IncludeModelDeviceProperties,
+
+        [Parameter(ParameterSetName = 'ModelDevice')]
+        [String]$ModelDeviceInstanceCount = 24,
+
+        [Parameter(ParameterSetName = 'ModelDevice')]
         [Switch]$IncludeModelDeviceData
 
     )
@@ -37,6 +43,7 @@ Function Build-LMDataModel {
         $DatasourceNames = [System.Collections.Generic.List[object]]::New()
         $ModelDevice = Get-LMDevice -Name $ModelDeviceHostName | Select-Object -First 1
         If($ModelDevice){
+            Write-Debug "Located model device, using device ($ModelDeviceHostName) as model candidate.(ID: $($ModelDevice.id))"
             $ModelDeviceDatasources = Get-LMDeviceDatasourceList -id $ModelDevice.Id | Where-Object {$_.instanceNumber -gt 0}
             $DatasourceNames.AddRange($ModelDeviceDatasources.datasourceName)
         }
@@ -61,7 +68,7 @@ Function Build-LMDataModel {
             #Extract what we need from the source datasource to use as basis for modeling
             $DatasourceDefenition = $Datasource | Select-Object description,tags,name,displayName,collectInterval,hasMultiInstances
             $Datapoints = $Datasource.datapoints
-            $DatasourceGroupName = $Datasource.groupName
+            $DatasourceGroupName = $Datasource.group
 
             #Estimate datapoint type for model generation
             $DatapointDefenition = [System.Collections.Generic.List[object]]::New()
@@ -114,9 +121,9 @@ Function Build-LMDataModel {
             }
             ElseIf($ModelDeviceHostName -and $ModelDeviceDatasources){
                 $ModelInstances = Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceInfo.Id -DeviceId $ModelDevice.Id
-                Write-Debug "Datasource $($Datasource.name) is being model after device $($ModelDevice.DisplayName) , adding up to 10 instances from pool of $(($ModelInstances | Measure-Object).Count) existing instance(s) to data model export."
+                Write-Debug "Datasource $($Datasource.name) is being model after device $($ModelDevice.DisplayName) , adding up to $ModelDeviceInstanceCount instances from pool of $(($ModelInstances | Measure-Object).Count) existing instance(s) to data model export."
                 If($($ModelInstances | Measure-Object).Count -gt 1){
-                    $Instances.AddRange($(Build-Instance -ModelInstance -InstanceList $ModelInstances[0..10] -Datasource $DatasourceDefenition -IncludeModelData:$IncludeModelDeviceData -ModelDeviceHostName $ModelDeviceHostName))
+                    $Instances.AddRange($(Build-Instance -ModelInstance -InstanceList $($ModelInstances | Sort-Object -Property Id | Select-Object -First $ModelDeviceInstanceCount) -Datasource $DatasourceDefenition -IncludeModelData:$IncludeModelDeviceData -ModelDeviceHostName $ModelDeviceHostName))
                 }
                 Else{
                     $Instances.Add($(Build-Instance -ModelInstance -InstanceList $ModelInstances -Datasource $DatasourceDefenition -IncludeModelData:$IncludeModelDeviceData -ModelDeviceHostName $ModelDeviceHostName))
@@ -125,13 +132,10 @@ Function Build-LMDataModel {
 
             #Combine our model info together for export
             $DataSourceModel = [PSCustomObject]@{
-                DeviceHostName = $DeviceHostName
-                DeviceDisplayName = $DeviceDisplayName
                 DatasourceName = $DatasourceName
                 DatasourceGroupName = $DatasourceGroupName
-                SimulationType = $SimulationType
                 Instances = $Instances
-                Datasource = $DatasourceDefenition
+                Defenition = $DatasourceDefenition
                 Datapoints = $DatapointDefenition
                 OverviewGraphs = $DatasourceOverviewGraphModel
                 Graphs = $DatasourceGraphModel
@@ -140,7 +144,25 @@ Function Build-LMDataModel {
         Write-Debug "Exporting data model ($DatasourceName)."
         $DataSourceModels.Add($DataSourceModel)
     }
-    Return $DataSourceModels
+
+    $PropertiesHash = @{}
+    If($IncludeModelDeviceProperties){
+        $Properties = $($ModelDevice.autoProperties + $ModelDevice.customProperties) | Where-Object {$_.name -notmatch ".pass|.community|.key|.cert|.secret|.user|system.|.id"}
+
+        Foreach ($Prop in $Properties){
+            $Prop.name = "autodiscovery." + $Prop.name.replace("auto.","")
+            $PropertiesHash.Add($Prop.name,$Prop.value)
+        }
+    }
+
+    $DeviceModel = [PSCustomObject]@{
+        HostName = $DeviceHostName
+        DisplayName = $DeviceDisplayName
+        Properties = $PropertiesHash
+        SimulationType = $SimulationType
+        Datasources = $DataSourceModels
+    }
+    Return $DeviceModel
 }
 
 Function Resolve-MetricType {
@@ -182,9 +204,10 @@ Function Build-Instance {
     If($SingleInstance){
         Write-Debug "Single instance datasource detected, skipping instance generation usings datasource name as instance"
         $Instances.Add([PSCustomObject]@{
-            Name            = ($Datasource.name -replace '[#\\/;=]', '_')
+            Name            = ($Datasource.name -replace '[#\\/();=]', '_')
             DisplayName     = ($Datasource.displayName -replace '[#\\/;=]', '_')
             Description     = ""
+            Properties        = @{}
             Type            = "SingleInstance"
             Data            = @()
         })
@@ -196,7 +219,6 @@ Function Build-Instance {
         #Add generated instance to instance list
         Write-Debug "Instances found for export: ($(($InstanceList[0..9].Name -Join ","))...)"
         Foreach($Instance in $InstanceList){
-
             $Data = [System.Collections.Generic.List[object]]::New()
             If($IncludeModelData){
                 Write-Debug "Extracting last 24 hours of model device data for instance ($($Instance.name))"
@@ -210,10 +232,22 @@ Function Build-Instance {
                     Write-Debug "No recent instance data found for ($($Instance.name))"
                 }
             }
+            
+            If($IncludeModelDeviceProperties){
+                $PropertiesHash = @{}
+                $Properties = $($Instance.customProperties + $Instance.autoProperties) | Where-Object {$_.name -notmatch ".pass|.community|.key|.cert|.secret|.user|system.|.id"}
+
+                Foreach ($Prop in $Properties){
+                    $Prop.name = "autodiscovery." + $Prop.name.replace("auto.","")
+                    $PropertiesHash.Add($Prop.name,$Prop.value)
+                }
+            }
+
             $Instances.Add([PSCustomObject]@{
                 Name            = (($Instance.name -replace '[#\\/;=]', '_') -replace '[\[\]{}]','')
                 DisplayName     = If($Instance.displayName){(($Instance.displayName -replace '[#\\;=]', '_') -replace '[\[\]{}]','')}Else{(($Datasource.displayName -replace '[#\\;=]', '_'))}
                 Description     = $Instance.description
+                Properties       = $PropertiesHash
                 Type            = "DeviceModeled"
                 Data            = $Data
             })
@@ -254,6 +288,7 @@ Function Build-Instance {
                 Name            = ($Name -replace '[#\\;=]', '_')
                 DisplayName     = ($DisplayName -replace '[#\\;=]', '_')
                 Description     = $Description
+                Properties        = @{}
                 Type            = $Type
                 Data            = @()
             })
