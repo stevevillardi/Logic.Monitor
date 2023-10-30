@@ -1,4 +1,8 @@
 # Previous module release notes
+## 4.5.4
+###### Updates:
+- Minor bug fix release, no specific set of updates.
+
 ## 4.5.3
 ###### Updated Commands:
 **New-LMUser**: Updated parameter set to require 2fa 

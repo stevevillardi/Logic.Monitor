@@ -1,3 +1,4 @@
+#Requires -Version 7
 Function Submit-LMDataModel{
     [CmdletBinding()]
     Param(
@@ -79,11 +80,11 @@ Function Submit-LMDataModel{
             $DatasourceName = $Model.Defenition.Name.Replace("-","") + $DatasourceSuffix
             $ResourceIds = @{"system.hostname"=$DeviceHostName;"system.displayname"=$DeviceDisplayName}
 
-            Write-Debug "Submitting PushMetric to ingest."
+            Write-LMHost "Submitting PushMetric to ingest."
             If($ModelObject.Properties){$ModelObject.Properties.PSObject.Properties | ForEach-Object -begin {$DevicePropertyHash=@{}} -process {$DevicePropertyHash."$($_.Name)" = $_.Value}}
             $Result = Send-LMPushMetric -Instances $InstanceArray -DatasourceGroup $DatasourceGroup -DatasourceDisplayName $DatasourceDisplayName -DatasourceName $DatasourceName -ResourceIds $ResourceIds -ResourceProperties $DevicePropertyHash -NewResourceHostName $DeviceHostName
 
-            Write-Debug "PushMetric submitted with status: $($Result.message)  @($($Result.timestamp))"
+            Write-LMHost "PushMetric submitted with status: $($Result.message)  @($($Result.timestamp))"
             #Apply graph definitions if they do not exist yet
             Write-Debug "Checking if datasource $DatasourceName has been created yet"
             $PMDatasource = Get-LMDatasource -Name $DatasourceName
@@ -168,11 +169,16 @@ Function Generate-LMData {
     If($Instance.Data){
         $FilteredData = $Instance.Data | Where-Object {$_."$($Datapoint.Name)" -ne "No Data"}
         If($FilteredData){
+
             $TotalDPs = ($FilteredData | Measure-Object).Count - 1
-            [Int]$TimeSlice = get-date -Format %H%m
+            $Variance = 5 #Introduce some variation into slected index so we dont have as many duplicate polls when the sample size is smaller than 100
+            [Int]$TimeSlice = Get-Date -Format %Hmm 
             $TimePercentage = $TimeSlice/2359
-            $IndexValue = [Math]::Floor([decimal]($TotalDPs * $TimePercentage))
+            $IndexValue = [Math]::Floor($(Get-Random -Minimum $([decimal]($TotalDPs * $TimePercentage) - $Variance) -Maximum $([decimal]($TotalDPs * $TimePercentage) + $Variance)))
+            If($IndexValue -ge $TotalDPs){$IndexValue = -1} #If we go out of index, set to last item
+            If($IndexValue -lt 0){$IndexValue = -0} #If we go our of index set to first item
             $Value = $FilteredData[$IndexValue]."$($Datapoint.Name)"
+
             Write-Debug "Generated value of ($Value) for datapoint ($($Instance.Name)-$($Datapoint.Name)) using data provided with the model."
         }
         Else{

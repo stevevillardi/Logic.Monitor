@@ -1,3 +1,4 @@
+#Requires -Version 7
 Function Build-LMDataModel {
     [CmdletBinding(DefaultParameterSetName="ModelDatasources")]
     [OutputType([System.Collections.Generic.List[object]])]
