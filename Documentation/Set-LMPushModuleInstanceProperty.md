@@ -5,17 +5,23 @@ online version:
 schema: 2.0.0
 ---
 
-# New-LMPushMetricDataPoint
+# Set-LMPushModuleInstanceProperty
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
+### Id (Default)
 ```
-New-LMPushMetricDataPoint [[-DataPointsArray] <System.Collections.Generic.List`1[System.Object]>]
- [-DataPoints] <System.Collections.Generic.List`1[System.Object]> [[-DataPointType] <String>]
- [[-DataPointAggregationType] <String>] [[-PercentileValue] <Int32>] [<CommonParameters>]
+Set-LMPushModuleInstanceProperty -DeviceId <Int32> -DataSourceName <String> -InstanceName <String>
+ -PropertyName <String> -PropertyValue <String> [<CommonParameters>]
+```
+
+### Name
+```
+Set-LMPushModuleInstanceProperty -DeviceName <String> -DataSourceName <String> -InstanceName <String>
+ -PropertyName <String> -PropertyValue <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,78 +38,91 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DataPointAggregationType
-{{ Fill DataPointAggregationType Description }}
+### -DataSourceName
+{{ Fill DataSourceName Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: min, max, avg, sum, none, percentile
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DataPointType
-{{ Fill DataPointType Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: counter, derive, gauge
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DataPoints
-{{ Fill DataPoints Description }}
-
-```yaml
-Type: System.Collections.Generic.List`1[System.Object]
 Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DataPointsArray
-{{ Fill DataPointsArray Description }}
-
-```yaml
-Type: System.Collections.Generic.List`1[System.Object]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PercentileValue
-{{ Fill PercentileValue Description }}
+### -DeviceId
+{{ Fill DeviceId Description }}
 
 ```yaml
 Type: Int32
+Parameter Sets: Id
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceName
+{{ Fill DeviceName Description }}
+
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceName
+{{ Fill InstanceName Description }}
+
+```yaml
+Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: 4
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PropertyName
+{{ Fill PropertyName Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PropertyValue
+{{ Fill PropertyValue Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

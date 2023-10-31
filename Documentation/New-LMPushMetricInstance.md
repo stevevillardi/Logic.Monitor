@@ -13,8 +13,9 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-New-LMPushMetricInstance [[-InstancesArrary] <Array>] [-InstanceName] <String>
- [[-InstanceDisplayName] <String>] [[-InstanceProperties] <Hashtable>] [-Datapoints] <Array>
+New-LMPushMetricInstance [[-InstancesArrary] <System.Collections.Generic.List`1[System.Object]>]
+ [-InstanceName] <String> [[-InstanceDisplayName] <String>] [[-InstanceDescription] <String>]
+ [[-InstanceProperties] <Hashtable>] [-Datapoints] <System.Collections.Generic.List`1[System.Object]>
  [<CommonParameters>]
 ```
 
@@ -36,12 +37,27 @@ PS C:\> {{ Add example code here }}
 {{ Fill Datapoints Description }}
 
 ```yaml
-Type: Array
+Type: System.Collections.Generic.List`1[System.Object]
 Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 4
+Position: 5
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceDescription
+{{ Fill InstanceDescription Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -86,7 +102,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -96,7 +112,7 @@ Accept wildcard characters: False
 {{ Fill InstancesArrary Description }}
 
 ```yaml
-Type: Array
+Type: System.Collections.Generic.List`1[System.Object]
 Parameter Sets: (All)
 Aliases:
 

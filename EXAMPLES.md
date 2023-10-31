@@ -314,12 +314,6 @@ Export-LMDeviceConfigBackup -DeviceGroupId 654 | Search-LMDeviceConfigBackup -Se
 Export-LMDeviceConfigBackup -DeviceGroupId 654 -Path device-configs.csv
 ```
 
-#### Generate an html report showing delta changes for a set of device configurations over the last 30 days
-```powershell
-Export-LMDeviceConfigReport -DeviceGroupId 654 -Path device-configs.html -DaysBack 30
-```
-
-
 #### Ingest PushMetrics 
 ###### Note: PushMetrics must be enabled for the LM Portal
 ```powershell

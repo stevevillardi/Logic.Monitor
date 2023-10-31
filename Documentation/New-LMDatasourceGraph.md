@@ -5,15 +5,21 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMUnmonitoredDevices
+# New-LMDatasourceGraph
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
+### dsId
 ```
-Get-LMUnmonitoredDevices [[-Filter] <Object>] [[-BatchSize] <Int32>] [<CommonParameters>]
+New-LMDatasourceGraph -RawObject <Object> -DatasourceId <Object> [<CommonParameters>]
+```
+
+### dsName
+```
+New-LMDatasourceGraph -RawObject <Object> -DatasourceName <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,31 +36,46 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -DatasourceId
+{{ Fill DatasourceId Description }}
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
+Type: Object
+Parameter Sets: dsId
 Aliases:
 
-Required: False
-Position: 1
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Filter
-{{ Fill Filter Description }}
+### -DatasourceName
+{{ Fill DatasourceName Description }}
+
+```yaml
+Type: Object
+Parameter Sets: dsName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RawObject
+{{ Fill RawObject Description }}
 
 ```yaml
 Type: Object
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: 0
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

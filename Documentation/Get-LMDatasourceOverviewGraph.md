@@ -5,27 +5,52 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMAuditLogs
+# Get-LMDatasourceOverviewGraph
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### Range (Default)
+### Id-dsName
 ```
-Get-LMAuditLogs [-SearchString <String>] [-StartDate <DateTime>] [-EndDate <DateTime>] [-BatchSize <Int32>]
+Get-LMDatasourceOverviewGraph -Id <Int32> -DataSourceName <String> [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Id-dsId
+```
+Get-LMDatasourceOverviewGraph -Id <Int32> -DataSourceId <String> [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Filter-dsName
+```
+Get-LMDatasourceOverviewGraph -DataSourceName <String> -Filter <Object> [-BatchSize <Int32>]
  [<CommonParameters>]
 ```
 
-### Id
+### Name-dsName
 ```
-Get-LMAuditLogs [-Id <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasourceOverviewGraph -DataSourceName <String> -Name <String> [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
-### Filter
+### dsName
 ```
-Get-LMAuditLogs [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasourceOverviewGraph -DataSourceName <String> [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Filter-dsId
+```
+Get-LMDatasourceOverviewGraph -DataSourceId <String> -Filter <Object> [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Name-dsId
+```
+Get-LMDatasourceOverviewGraph -DataSourceId <String> -Name <String> [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### dsId
+```
+Get-LMDatasourceOverviewGraph -DataSourceId <String> [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,15 +82,30 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -EndDate
-{{ Fill EndDate Description }}
+### -DataSourceId
+{{ Fill DataSourceId Description }}
 
 ```yaml
-Type: DateTime
-Parameter Sets: Range
+Type: String
+Parameter Sets: Id-dsId, Filter-dsId, Name-dsId, dsId
 Aliases:
 
-Required: False
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DataSourceName
+{{ Fill DataSourceName Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id-dsName, Filter-dsName, Name-dsName, dsName
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -77,10 +117,10 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Object
-Parameter Sets: Filter
+Parameter Sets: Filter-dsName, Filter-dsId
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -91,41 +131,26 @@ Accept wildcard characters: False
 {{ Fill Id Description }}
 
 ```yaml
-Type: String
-Parameter Sets: Id
+Type: Int32
+Parameter Sets: Id-dsName, Id-dsId
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SearchString
-{{ Fill SearchString Description }}
+### -Name
+{{ Fill Name Description }}
 
 ```yaml
 Type: String
-Parameter Sets: Range
+Parameter Sets: Name-dsName, Name-dsId
 Aliases:
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StartDate
-{{ Fill StartDate Description }}
-
-```yaml
-Type: DateTime
-Parameter Sets: Range
-Aliases:
-
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

@@ -21,4 +21,7 @@ Function Write-LMHost {
             Write-Host $Message
         }
     }
+    Else{
+        Write-Host $Message
+    }
 }

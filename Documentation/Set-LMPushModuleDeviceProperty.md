@@ -5,15 +5,22 @@ online version:
 schema: 2.0.0
 ---
 
-# Search-LMDeviceConfigBackup
+# Set-LMPushModuleDeviceProperty
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
+### Id (Default)
 ```
-Search-LMDeviceConfigBackup [-ConfigBackups] <Object[]> [-SearchPattern] <Regex> [<CommonParameters>]
+Set-LMPushModuleDeviceProperty -Id <Int32> -PropertyName <String> -PropertyValue <String> [<CommonParameters>]
+```
+
+### Name
+```
+Set-LMPushModuleDeviceProperty -Name <String> -PropertyName <String> -PropertyValue <String>
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,31 +37,61 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -ConfigBackups
-{{ Fill ConfigBackups Description }}
+### -Id
+{{ Fill Id Description }}
 
 ```yaml
-Type: Object[]
-Parameter Sets: (All)
+Type: Int32
+Parameter Sets: Id
 Aliases:
 
 Required: True
-Position: 0
+Position: Named
 Default value: None
-Accept pipeline input: True (ByValue)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SearchPattern
-{{ Fill SearchPattern Description }}
+### -Name
+{{ Fill Name Description }}
 
 ```yaml
-Type: Regex
+Type: String
+Parameter Sets: Name
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PropertyName
+{{ Fill PropertyName Description }}
+
+```yaml
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PropertyValue
+{{ Fill PropertyValue Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -65,7 +102,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Object[]
+### None
 ## OUTPUTS
 
 ### System.Object

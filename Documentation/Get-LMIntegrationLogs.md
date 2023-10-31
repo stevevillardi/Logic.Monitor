@@ -5,17 +5,27 @@ online version:
 schema: 2.0.0
 ---
 
-# New-LMPushMetricDataPoint
+# Get-LMIntegrationLogs
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
+### Range (Default)
 ```
-New-LMPushMetricDataPoint [[-DataPointsArray] <System.Collections.Generic.List`1[System.Object]>]
- [-DataPoints] <System.Collections.Generic.List`1[System.Object]> [[-DataPointType] <String>]
- [[-DataPointAggregationType] <String>] [[-PercentileValue] <Int32>] [<CommonParameters>]
+Get-LMIntegrationLogs [-SearchString <String>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+ [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Id
+```
+Get-LMIntegrationLogs [-Id <String>] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
+### Filter
+```
+Get-LMIntegrationLogs [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,70 +42,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -DataPointAggregationType
-{{ Fill DataPointAggregationType Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: min, max, avg, sum, none, percentile
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DataPointType
-{{ Fill DataPointType Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: counter, derive, gauge
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DataPoints
-{{ Fill DataPoints Description }}
-
-```yaml
-Type: System.Collections.Generic.List`1[System.Object]
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DataPointsArray
-{{ Fill DataPointsArray Description }}
-
-```yaml
-Type: System.Collections.Generic.List`1[System.Object]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PercentileValue
-{{ Fill PercentileValue Description }}
+### -BatchSize
+{{ Fill BatchSize Description }}
 
 ```yaml
 Type: Int32
@@ -103,7 +51,82 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EndDate
+{{ Fill EndDate Description }}
+
+```yaml
+Type: DateTime
+Parameter Sets: Range
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Filter
+{{ Fill Filter Description }}
+
+```yaml
+Type: Object
+Parameter Sets: Filter
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+{{ Fill Id Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SearchString
+{{ Fill SearchString Description }}
+
+```yaml
+Type: String
+Parameter Sets: Range
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StartDate
+{{ Fill StartDate Description }}
+
+```yaml
+Type: DateTime
+Parameter Sets: Range
+Aliases:
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

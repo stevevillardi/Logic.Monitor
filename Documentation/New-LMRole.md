@@ -15,7 +15,7 @@ schema: 2.0.0
 ### Default (Default)
 ```
 New-LMRole -Name <String> [-CustomHelpLabel <String>] [-CustomHelpURL <String>] [-Description <String>]
- [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>] [-DashboardsPermission <String>]
+ [-RequireEULA] [-TwoFARequired <Boolean>] [-RoleGroupId <String>] [-DashboardsPermission <String>]
  [-ResourcePermission <String>] [-LogsPermission <String>] [-WebsitesPermission <String>]
  [-SavedMapsPermission <String>] [-ReportsPermission <String>] [-SettingsPermission <String>]
  [-CreatePrivateDashboards] [-AllowWidgetSharing] [-ConfigTabRequiresManagePermission] [-AllowedToViewMapsTab]
@@ -26,7 +26,7 @@ New-LMRole -Name <String> [-CustomHelpLabel <String>] [-CustomHelpURL <String>] 
 ### Custom
 ```
 New-LMRole -Name <String> [-CustomHelpLabel <String>] [-CustomHelpURL <String>] [-Description <String>]
- [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>] -CustomPrivilegesObject <PSObject>
+ [-RequireEULA] [-TwoFARequired <Boolean>] [-RoleGroupId <String>] -CustomPrivilegesObject <PSObject>
  [<CommonParameters>]
 ```
 
@@ -339,7 +339,7 @@ Accept wildcard characters: False
 {{ Fill TwoFARequired Description }}
 
 ```yaml
-Type: SwitchParameter
+Type: Boolean
 Parameter Sets: (All)
 Aliases:
 

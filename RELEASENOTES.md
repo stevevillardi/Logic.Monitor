@@ -1,4 +1,14 @@
 # Previous module release notes
+## 4.5.5-7
+- Rollback module changes breaking module on PS versions other than 7.
+
+###### Updated Commands:
+**Connect-LMAccount**: Removed Bearer token header message when connecting using Bearer token. Bearer token is now support as an alternative auth mechanism to LMv1 against LM API v3. Some newer API endpoint such as Push Metrics require Bear token auth and will fail when using LMv1.
+
+###### New Commands:
+**Set-LMPushModuleInstanceProperty**: New command to update/add instance level properties associated with push metrics devices 
+**Set-LMPushModuleDeviceProperty**: New command to update/add device level properties associated with push metrics devices
+
 ## 4.5.4
 ###### Updates:
 - Minor bug fix release, no specific set of updates.

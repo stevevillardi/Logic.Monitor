@@ -5,15 +5,21 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-LMPortalLogo
+# New-LMDatasourceOverviewGraph
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
+### dsId
 ```
-Set-LMPortalLogo [[-LogoPath] <String>] [<CommonParameters>]
+New-LMDatasourceOverviewGraph -RawObject <Object> -DatasourceId <Object> [<CommonParameters>]
+```
+
+### dsName
+```
+New-LMDatasourceOverviewGraph -RawObject <Object> -DatasourceName <Object> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,16 +36,46 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -LogoPath
-{{ Fill LogoPath Description }}
+### -DatasourceId
+{{ Fill DatasourceId Description }}
 
 ```yaml
-Type: String
+Type: Object
+Parameter Sets: dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DatasourceName
+{{ Fill DatasourceName Description }}
+
+```yaml
+Type: Object
+Parameter Sets: dsName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RawObject
+{{ Fill RawObject Description }}
+
+```yaml
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: 0
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

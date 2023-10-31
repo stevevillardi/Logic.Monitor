@@ -51,7 +51,7 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    RequiredModules    = @('PSWriteHTML','Microsoft.PowerShell.SecretManagement','Microsoft.PowerShell.SecretStore','Pode')
+    RequiredModules    = @('Microsoft.PowerShell.SecretManagement','Microsoft.PowerShell.SecretStore')
 
     # Assemblies that must be loaded prior to importing this module
     RequiredAssemblies = @()

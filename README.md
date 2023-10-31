@@ -123,7 +123,6 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 - [Code Snippet Library](EXAMPLES.md)
 - [Command Documentation](/Documentation)
-- [Utilities Documentation](/Documentation/Utilities)
 
 # Available Commands
 
@@ -232,7 +231,6 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Get-LMDeviceDatasourceList
 - Get-LMDeviceEventsourceList
 - Get-LMDeviceInstanceList
-- Search-LMDeviceConfigBackup*
 - Export-LMDeviceConfigBackup
 - Get-LMDeviceConfigSourceData
 - New-LMDevice
@@ -375,7 +373,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Set-LMWebsiteGroup*
 - Remove-LMWebsiteGroup*
 
-#### Utilities (Experimental)
+#### Utilities (Moved to Logic.Monitor.SE module)
 
 - ConvertTo-LMDynamicGroupFromCategories
 - Export-LMDeviceConfigReport
@@ -384,17 +382,14 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Invoke-LMDeviceDedupe
 - Build-LMDataModel
 - Submit-LMDataModel
+- Search-LMDeviceConfigBackup*
 
 ***Note**: Supports Pipline Input
 
 # Change List
 
-## 4.5.5
-###### Updated Commands:
-**Connect-LMAccount**: Removed Bearer token header message when connecting using Bearer token. Bearer token is now support as an alternative auth mechanism to LMv1 against LM API v3. Some newer API endpoint such as Push Metrics require Bear token auth and will fail when using LMv1.
-
-###### New Commands:
-**Set-LMPushModuleInstanceProperty**: New command to update/add instance level properties associated with push metrics devices 
-**Set-LMPushModuleDeviceProperty**: New command to update/add device level properties associated with push metrics devices
+## 4.6
+###### Module Updates Commands:
+- This version of the Logic.Monitor module performs a bunch of house keeping. I have removed all the PowerShell cmdlets that were previously listed as "utility" cmdlets and moved them over to a seperate PS package (Logic.Monitor.SE) as they were not really applicable outside interal LM use cases. The reason for this migration was to reduce the conflicts caused by changes introduced by these commands. Going foward Logic.Monitor will only contain API related cmdlets and all 'utility' based modules will be supported under the Logic.Monitor.SE package. This will allow for more frequent updates to the SE module while ensuring their are minimal impacting changes to functionality for customers that rely on this module for automation purposes. This change will also allow me to reduce the list of required modules to just the  **Microsoft's SecretManagement** modules for storing cached credentials.
 
 [Previous Release Notes](RELEASENOTES.md)

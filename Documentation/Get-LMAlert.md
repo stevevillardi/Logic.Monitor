@@ -15,25 +15,25 @@ Get LM Alert in bulk or by id.
 ### All (Default)
 ```
 Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-BatchSize <Int32>]
- [<CommonParameters>]
+ [-Sort <String>] [<CommonParameters>]
 ```
 
 ### Range
 ```
 Get-LMAlert [-StartDate <DateTime>] [-EndDate <DateTime>] [-Severity <String>] [-Type <String>]
- [-ClearedAlerts <Boolean>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-ClearedAlerts <Boolean>] [-BatchSize <Int32>] [-Sort <String>] [<CommonParameters>]
 ```
 
 ### Id
 ```
 Get-LMAlert -Id <String> [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>]
- [-CustomColumns <String[]>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-CustomColumns <String[]>] [-BatchSize <Int32>] [-Sort <String>] [<CommonParameters>]
 ```
 
 ### Filter
 ```
 Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-Filter <Object>]
- [-BatchSize <Int32>] [<CommonParameters>]
+ [-BatchSize <Int32>] [-Sort <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -155,6 +155,21 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 Accepted values: *, Warning, Error, Critical
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Sort
+{{ Fill Sort Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named

@@ -16,14 +16,14 @@ schema: 2.0.0
 ```
 Send-LMPushMetric [-NewResourceHostName <String>] [-NewResourceDescription <String>] -ResourceIds <Hashtable>
  [-ResourceProperties <Hashtable>] -DatasourceName <String> [-DatasourceDisplayName <String>]
- [-DatasourceGroup <String>] -Instances <Array> [<CommonParameters>]
+ [-DatasourceGroup <String>] -Instances <System.Collections.Generic.List`1[System.Object]> [<CommonParameters>]
 ```
 
 ### Create-DatasourceId
 ```
 Send-LMPushMetric [-NewResourceHostName <String>] [-NewResourceDescription <String>] -ResourceIds <Hashtable>
  [-ResourceProperties <Hashtable>] -DatasourceId <String> [-DatasourceDisplayName <String>]
- [-DatasourceGroup <String>] -Instances <Array> [<CommonParameters>]
+ [-DatasourceGroup <String>] -Instances <System.Collections.Generic.List`1[System.Object]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -104,7 +104,7 @@ Accept wildcard characters: False
 {{ Fill Instances Description }}
 
 ```yaml
-Type: Array
+Type: System.Collections.Generic.List`1[System.Object]
 Parameter Sets: (All)
 Aliases:
 
