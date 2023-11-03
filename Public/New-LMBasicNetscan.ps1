@@ -1,4 +1,4 @@
-Function New-LMNetScan {
+Function New-LMBasicNetScan {
 
     [CmdletBinding()]
     Param (
@@ -110,7 +110,7 @@ Function New-LMNetScan {
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return $Response
+                (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem
