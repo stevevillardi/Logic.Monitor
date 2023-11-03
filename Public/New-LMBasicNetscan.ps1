@@ -125,3 +125,5 @@ Function New-LMBasicNetScan {
     }
     End {}
 }
+
+New-Alias -Name New-LMNetScan -Value New-LMBasicNetScan
