@@ -1,4 +1,4 @@
-Function New-LMBasicNetScan {
+Function New-LMNetScan {
 
     [CmdletBinding()]
     Param (
@@ -125,5 +125,3 @@ Function New-LMBasicNetScan {
     }
     End {}
 }
-
-New-Alias -Name New-LMNetScan -Value New-LMBasicNetScan
