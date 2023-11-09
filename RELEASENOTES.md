@@ -1,4 +1,12 @@
 # Previous module release notes
+## 4.6.1
+###### Module Updates:
+**New-LMEnhancedNetscan**: New cmdlet to create enhanced scripted netscans. 
+
+## 4.6
+###### Module Updates:
+- This version of the Logic.Monitor module performs a bunch of house keeping. I have removed all the PowerShell cmdlets that were previously listed as "utility" cmdlets and moved them over to a separate PS package (Logic.Monitor.SE) as they were not really applicable outside internal LM use cases. The reason for this migration was to reduce the conflicts caused by changes introduced by these commands. Going forward Logic.Monitor will only contain API related cmdlets and all 'utility' based modules will be supported under the Logic.Monitor.SE package. This will allow for more frequent updates to the SE module while ensuring their are minimal impacting changes to functionality for customers that rely on this module for automation purposes. This change will also allow me to reduce the list of required modules to just the  **Microsoft's SecretManagement** modules for storing cached credentials.
+
 ## 4.5.5-7
 - Rollback module changes breaking module on PS versions other than 7.
 

@@ -14,38 +14,26 @@ schema: 2.0.0
 
 ### Name-dsName
 ```
-Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <String> -Name <String> -HdsiId <String>
+Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <String> -Name <String> -InstanceName <String>
  [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
-Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <String> -Id <Int32> -HdsiId <String>
+Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <String> -Id <Int32> -InstanceName <String>
  [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
-Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Name <String> -HdsiId <String>
+Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Name <String> -InstanceName <String>
  [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
-Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Id <Int32> -HdsiId <String>
+Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Id <Int32> -InstanceName <String>
  [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
-```
-
-### Id-HdsId
-```
-Get-LMDeviceDatasourceInstanceAlertSetting -Id <Int32> -HdsId <String> -HdsiId <String> [-Filter <Object>]
- [-BatchSize <Int32>] [<CommonParameters>]
-```
-
-### Name-HdsId
-```
-Get-LMDeviceDatasourceInstanceAlertSetting -Name <String> -HdsId <String> -HdsiId <String> [-Filter <Object>]
- [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -122,42 +110,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -HdsId
-{{ Fill HdsId Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-HdsId, Name-HdsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -HdsiId
-{{ Fill HdsiId Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
 {{ Fill Id Description }}
 
 ```yaml
 Type: Int32
-Parameter Sets: Id-dsName, Id-dsId, Id-HdsId
+Parameter Sets: Id-dsName, Id-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceName
+{{ Fill InstanceName Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -172,7 +145,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: Name-dsName, Name-dsId, Name-HdsId
+Parameter Sets: Name-dsName, Name-dsId
 Aliases:
 
 Required: True

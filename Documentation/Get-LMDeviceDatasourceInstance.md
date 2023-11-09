@@ -36,18 +36,6 @@ Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> [-Filter 
  [<CommonParameters>]
 ```
 
-### Id-HdsId
-```
-Get-LMDeviceDatasourceInstance -DeviceId <Int32> -HdsId <String> [-Filter <Object>] [-BatchSize <Int32>]
- [<CommonParameters>]
-```
-
-### Name-HdsId
-```
-Get-LMDeviceDatasourceInstance -DeviceName <String> -HdsId <String> [-Filter <Object>] [-BatchSize <Int32>]
- [<CommonParameters>]
-```
-
 ## DESCRIPTION
 {{ Fill in the Description }}
 
@@ -112,7 +100,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: Int32
-Parameter Sets: Id-dsName, Id-dsId, Id-HdsId
+Parameter Sets: Id-dsName, Id-dsId
 Aliases:
 
 Required: True
@@ -127,7 +115,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: Name-dsName, Name-dsId, Name-HdsId
+Parameter Sets: Name-dsName, Name-dsId
 Aliases:
 
 Required: True
@@ -146,21 +134,6 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -HdsId
-{{ Fill HdsId Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-HdsId, Name-HdsId
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

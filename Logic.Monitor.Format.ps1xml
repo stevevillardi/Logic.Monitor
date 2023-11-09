@@ -54,6 +54,112 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.DeviceGroupDatasource-->
+      <View>
+         <Name>LogicMonitorDeviceGroupDatasource</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.DeviceGroupDatasource</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>dataSourceId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>dataSourceDisplayName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>dataSourceName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>deviceGroupId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>stopMonitoring</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>disableAlerting</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>dataSourceId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>dataSourceDisplayName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>dataSourceName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>deviceGroupId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>stopMonitoring</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>disableAlerting</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.DeviceGroupDatasourceAlertSetting-->
+      <View>
+         <Name>LogicMonitorDeviceGroupDatasourceAlertSetting</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.DeviceGroupDatasourceAlertSetting</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>dataPointId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>dataPointName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>dataPointDescription</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>disableAlerting</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>alertExpr</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>globalAlertExpr</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>dataPointId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>dataPointName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>dataPointDescription</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>disableAlerting</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>alertExpr</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>globalAlertExpr</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.SDT-->
       <View>
          <Name>LogicMonitorSDT</Name>
@@ -864,6 +970,9 @@
                   <Label>dataPointDescription</Label>
                </TableColumnHeader>
                <TableColumnHeader>
+                  <Label>alertExpr</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
                   <Label>globalAlertExpr</Label>
                </TableColumnHeader>
                <TableColumnHeader>
@@ -884,6 +993,9 @@
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>dataPointDescription</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>alertExpr</PropertyName>
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>globalAlertExpr</PropertyName>

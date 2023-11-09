@@ -227,7 +227,8 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Get-LMDeviceData
 - Get-LMDeviceDatasourceInstance
 - Get-LMDeviceDatasourceInstanceGroup
-- Get-LMDeviceDatasourceInstanceAlertSettings
+- Get-LMDeviceDatasourceInstanceAlertSetting
+- Set-LMDeviceDatasourceInstanceAlertSetting
 - Get-LMDeviceDatasourceList
 - Get-LMDeviceEventsourceList
 - Get-LMDeviceInstanceList
@@ -252,13 +253,15 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Get-LMDeviceGroupSDT
 - Get-LMDeviceGroupSDTHistory
 - Get-LMDeviceGroupAlerts*
-- Get-LMDeviceGroupAlertSettings*
+- Get-LMDeviceGroupDatasourceAlertSetting
+- Get-LMDeviceGroupDatasourceList
 - Get-LMDeviceGroupDevices
 - Get-LMDeviceGroupGroups
 - Get-LMDeviceGroupProperty
 - New-LMDeviceGroup
 - New-LMDeviceGroupProperty
 - Set-LMDeviceGroup*
+- Set-LMDeviceGroupDatasourceAlertSetting
 - Remove-LMDeviceGroup*
 
 #### Escalation Chain
@@ -388,12 +391,32 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 # Change List
 
-## 4.6.1
-###### Module Updates:
-**New-LMEnhancedNetscan**: New cmdlet to create enhanced scripted netscans. 
+## 4.6.2
+###### New Commands:
+**Get-LMDeviceGroupDatasourceAlertSetting**: New cmdlet to retrieve alert settings for datasources associated with resources that are a member of a device group. Useful for looking up datasource ids and datapoint info so you can modify group level alert settings using Set-LMDeviceGroupDatasourceAlertSetting.
+**Set-LMDeviceGroupDatasourceAlertSetting**: New cmdlet to set group level alert settings for datasources associated with resources that are a member of a device group. 
 
-## 4.6
-###### Module Updates:
-- This version of the Logic.Monitor module performs a bunch of house keeping. I have removed all the PowerShell cmdlets that were previously listed as "utility" cmdlets and moved them over to a separate PS package (Logic.Monitor.SE) as they were not really applicable outside internal LM use cases. The reason for this migration was to reduce the conflicts caused by changes introduced by these commands. Going forward Logic.Monitor will only contain API related cmdlets and all 'utility' based modules will be supported under the Logic.Monitor.SE package. This will allow for more frequent updates to the SE module while ensuring their are minimal impacting changes to functionality for customers that rely on this module for automation purposes. This change will also allow me to reduce the list of required modules to just the  **Microsoft's SecretManagement** modules for storing cached credentials.
+**Get-LMDeviceGroupDatasourceList**: New cmdlet to list out datasource info for all datasources assocaited with a specified device group.
 
+**Get-LMDeviceDatasourceInstanceAlertSetting**: New cmdlet to retrieve alert settings for datasources instances associated with a resource. Useful for looking up datasource ids and datapoint info so you can modify device/instance level alert settings using Set-LMDeviceDatasourceInstanceAlertSetting.
+**Set-LMDeviceDatasourceInstanceAlertSetting**: New cmdlet to set device/instance level alert settings for datasources associated with a resource. 
+
+###### Example Usage:
+**Note:** Below examples use names to reference portal objects. You should use IDs where possible to avoid exsessive look ups when chaning configurations in bulk.
+```powershell
+#Get list of datasources associated with devices that are a member of the Villa Villardi resource group
+Get-LMDeviceGroupDatasourceList -Name "Villa Villardi"
+
+#Get alert seetings for HTTPS datasource at the Villa Villardi resource group level
+Get-LMDeviceGroupDatasourceAlertSetting -Name "Villa Villardi" -DatasourceName "HTTPS"
+
+#Disable alerting at the resource group level for the HTTPS -> status datapoint for all resources in Villa Villardi resource group
+Set-LMDeviceGroupDatasourceAlertSetting -Name "Villa Villardi" -DatasourceName "HTTPS" -DatapointName Status -DisableAlerting $true
+
+#Get device instance alert settings info for datasource NoData_Tasks_By_Type_v2 where the instance name is ping
+Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName NoData_Tasks_By_Type_v2 -Name 127.0.0.1 -InstanceName ping
+
+#Set device instance alert setting to alert when instance ping has a datapoint named taskCount that has a value > 100 generate a warning
+Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceName NoData_Tasks_By_Type_v2 -Name 127.0.0.1 -InstanceName ping -DatapointName taskCount -AlertExpression "> 100"
+```
 [Previous Release Notes](RELEASENOTES.md)
