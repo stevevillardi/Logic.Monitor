@@ -391,6 +391,10 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 # Change List
 
+## 4.6.3
+###### Bug Fix:
+**Get-LMDeviceData**: Fix parameterset used to lookup HsdId when calling Get-LMDeviceDatasourceInstance.
+
 ## 4.6.2
 ###### New Commands:
 **Get-LMDeviceGroupDatasourceAlertSetting**: New cmdlet to retrieve alert settings for datasources associated with resources that are a member of a device group. Useful for looking up datasource ids and datapoint info so you can modify group level alert settings using Set-LMDeviceGroupDatasourceAlertSetting.
