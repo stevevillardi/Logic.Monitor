@@ -168,11 +168,15 @@ Function Connect-LMAccount {
                     $CachedAccountName = $CachedAccountSecrets[$StoredCredentialIndex].Name
                     $AccessId = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Id"]
                     $Type = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Type"]
-                    If($AccessId){
+                    If($Type -eq "LMv1"){
                         [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                     }
-                    Else{
+                    ElseIf($Type -eq "Bearer"){
                         [SecureString]$BearerToken = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
+                    }
+                    Else{
+                        Write-Error "Invalid credential type detected for selection: $Type"
+                        Return
                     }
                 }
                 Else {
