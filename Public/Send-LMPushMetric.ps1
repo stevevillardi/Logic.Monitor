@@ -51,7 +51,7 @@ Function Send-LMPushMetric {
                     resourceIds             = $ResourceIds
                     resourceProperties      = $ResourceProperties
                     dataSourceId            = $DatasourceId
-                    dataSource              = ($DatasourceName -replace '[#\\;= ]', '_')
+                    dataSource              = ($DatasourceName -replace '[#\\;=]', '_')
                     dataSourceDisplayName   = ($DatasourceDisplayName -replace '[#\\;=]', '_')
                     dataSourceGroup         = $DatasourceGroup
                     instances               = $Instances
