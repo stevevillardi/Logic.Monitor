@@ -1,4 +1,41 @@
 # Previous module release notes
+## 4.6.4
+###### Bug Fix:
+**Send-LMPushMetric**: Fix bug causing spaces to be replaced as underscores when submitting datasource names.
+
+## 4.6.3
+###### Bug Fix:
+**Get-LMDeviceData**: Fix parameterset used to lookup HsdId when calling Get-LMDeviceDatasourceInstance.
+
+## 4.6.2
+###### New Commands:
+**Get-LMDeviceGroupDatasourceAlertSetting**: New cmdlet to retrieve alert settings for datasources associated with resources that are a member of a device group. Useful for looking up datasource ids and datapoint info so you can modify group level alert settings using Set-LMDeviceGroupDatasourceAlertSetting.
+**Set-LMDeviceGroupDatasourceAlertSetting**: New cmdlet to set group level alert settings for datasources associated with resources that are a member of a device group. 
+
+**Get-LMDeviceGroupDatasourceList**: New cmdlet to list out datasource info for all datasources assocaited with a specified device group.
+
+**Get-LMDeviceDatasourceInstanceAlertSetting**: New cmdlet to retrieve alert settings for datasources instances associated with a resource. Useful for looking up datasource ids and datapoint info so you can modify device/instance level alert settings using Set-LMDeviceDatasourceInstanceAlertSetting.
+**Set-LMDeviceDatasourceInstanceAlertSetting**: New cmdlet to set device/instance level alert settings for datasources associated with a resource. 
+
+###### Example Usage:
+**Note:** Below examples use names to reference portal objects. You should use IDs where possible to avoid exsessive look ups when chaning configurations in bulk.
+```powershell
+#Get list of datasources associated with devices that are a member of the Villa Villardi resource group
+Get-LMDeviceGroupDatasourceList -Name "Villa Villardi"
+
+#Get alert seetings for HTTPS datasource at the Villa Villardi resource group level
+Get-LMDeviceGroupDatasourceAlertSetting -Name "Villa Villardi" -DatasourceName "HTTPS"
+
+#Disable alerting at the resource group level for the HTTPS -> status datapoint for all resources in Villa Villardi resource group
+Set-LMDeviceGroupDatasourceAlertSetting -Name "Villa Villardi" -DatasourceName "HTTPS" -DatapointName Status -DisableAlerting $true
+
+#Get device instance alert settings info for datasource NoData_Tasks_By_Type_v2 where the instance name is ping
+Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName NoData_Tasks_By_Type_v2 -Name 127.0.0.1 -InstanceName ping
+
+#Set device instance alert setting to alert when instance ping has a datapoint named taskCount that has a value > 100 generate a warning
+Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceName NoData_Tasks_By_Type_v2 -Name 127.0.0.1 -InstanceName ping -DatapointName taskCount -AlertExpression "> 100"
+```
+
 ## 4.6.1
 ###### Module Updates:
 **New-LMEnhancedNetscan**: New cmdlet to create enhanced scripted netscans. 
