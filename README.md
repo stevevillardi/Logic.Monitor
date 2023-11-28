@@ -1,5 +1,5 @@
 [![Build PSGallery Release](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/main.yml/badge.svg)](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/main.yml)\
-[![Test Current Build on PowerShell Core](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/test.yml/badge.svg)](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/test.yml)
+[![Test Current Build on PowerShell Core](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/test.yml/badge.svg)](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/test.yml)\
 [![Test Current Build on Windows Powershell 5.1](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/test-win.yml/badge.svg)](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/test-win.yml)
 
 # General
