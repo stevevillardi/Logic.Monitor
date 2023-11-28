@@ -58,9 +58,12 @@ Function Invoke-LMDeviceConfigSourceCollection {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
-                Write-LMHost "Scheduled Config collection task for device id: $Id." -ForegroundColor green
+                
+                Return "Scheduled Config collection task for device id: $Id."
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

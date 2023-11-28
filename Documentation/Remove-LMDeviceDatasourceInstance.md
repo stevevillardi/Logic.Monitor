@@ -14,26 +14,26 @@ schema: 2.0.0
 
 ### Name-dsName
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceName <String> -WildValue <String>
- [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceName <String> [-WildValue <String>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceId <Int32> -WildValue <String>
- [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceId <Int32> [-WildValue <String>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceName <String> -WildValue <String>
- [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceName <String> [-WildValue <String>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> -WildValue <String>
- [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> [-WildValue <String>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -49,6 +49,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -DatasourceId
 {{ Fill DatasourceId Description }}
@@ -134,6 +149,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -WildValue
 {{ Fill WildValue Description }}
 
@@ -142,7 +172,7 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)

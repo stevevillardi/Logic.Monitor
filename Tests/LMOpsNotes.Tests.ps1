@@ -57,7 +57,7 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMOpsNote' {
         It 'When given an id, remove the opsnote from logic monitor' {
-            { Remove-LMOpsNote -Id $Script:NewOpsNote.Id -ErrorAction Stop } | Should -Not -Throw
+            { Remove-LMOpsNote -Id $Script:NewOpsNote.Id -ErrorAction Stop -Confirm:$false } | Should -Not -Throw
         }
     }
     

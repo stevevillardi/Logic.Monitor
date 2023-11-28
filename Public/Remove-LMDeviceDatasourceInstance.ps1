@@ -1,6 +1,6 @@
 Function Remove-LMDeviceDatasourceInstance {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
@@ -18,8 +18,8 @@ Function Remove-LMDeviceDatasourceInstance {
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [String]$DeviceName,
 
-        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [String]$WildValue
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [String]$WildValue = $null
 
     )
 
@@ -47,7 +47,7 @@ Function Remove-LMDeviceDatasourceInstance {
             }
 
             #Lookup Wildcard Id
-            $InstanceId = (Get-LMDeviceDataSourceInstance -DeviceId $DeviceId -HdsId $HdsId | Where-Object { $_.wildValue -eq $WildValue } | Select-Object -First 1).Id
+            $InstanceId = (Get-LMDeviceDataSourceInstance -DeviceId $DeviceId -DatasourceId $DatasourceId | Where-Object { $_.wildValue -eq $WildValue } | Select-Object -First 1).Id
             If (!$InstanceId) {
                 Write-Error "Unable to find assocaited datasource instance with wildcard value: $WildValue, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device"
                 return
@@ -56,16 +56,33 @@ Function Remove-LMDeviceDatasourceInstance {
             #Build header and uri
             $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$InstanceId"
 
-            Try {
+            If($PSItem){
+                $Message = "DeviceDisplayName: $($PSItem.deviceDisplayName) | DatasourceName: $($PSItem.name) | WildValue: $($PSItem.wildValue)"
+            }
+            ElseIf($DatasourceName -and $DeviceName){
+                $Message = "DeviceName: $DeviceName | DatasourceName: $DatasourceName | WildValue: $WildValue"
+            }
+            Else{
+                $Message = "DeviceId: $DeviceId | DatasourceId: $DatasourceId | WildValue: $WildValue"
+            }
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+            Try {
+                If ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance")) {                    
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+    
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                Write-LMHost "Successfully removed id ($InstanceId)" -ForegroundColor Green
-
-                Return 
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
+                    
+                    $Result = [PSCustomObject]@{
+                        InstanceId = $InstanceId
+                        Message = "Successfully removed ($Message)"
+                    }
+                    
+                    Return $Result
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

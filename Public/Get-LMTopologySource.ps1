@@ -43,14 +43,18 @@ Function Get-LMTopologySource {
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
-    
+                    
+                
+                
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogicModule")
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Topologysource")
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -69,7 +73,7 @@ Function Get-LMTopologySource {
                 }
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LogicModule")
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Topologysource")
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

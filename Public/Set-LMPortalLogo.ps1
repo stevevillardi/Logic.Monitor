@@ -40,7 +40,9 @@
 #                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $FileRaw
 #                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
-#                 #Issue request
+#                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
 #                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form $FormData
 #                 Write-LMHost "Successfully imported loginLogo $([IO.Path]::GetFileName($LogoPath)) of type: $($Response.items.type)"
 
@@ -51,7 +53,9 @@
 #                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $FileRaw
 #                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
-#                 #Issue request
+#                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
 #                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form $FormData
 #                 Write-LMHost "Successfully imported companyLogo $([IO.Path]::GetFileName($LogoPath)) of type: $($Response.items.type)"
 

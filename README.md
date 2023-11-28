@@ -124,7 +124,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - [Code Snippet Library](EXAMPLES.md)
 - [Command Documentation](/Documentation)
 
-# Available Commands
+# Available Commands ( over 168 to date)
 
 #### Account Connectivity
 
@@ -204,10 +204,16 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Get-LMDatasourceOverviewGraph
 - New-LMDatasourceOverviewGraph
 - Set-LMDatasource*
+- Set-LMTopologysource*
+- Set-LMPropertysource*
+- Set-LMConfigsource*
 - Get-LMDatasourceAssociatedDevices
 - Get-LMDatasourceUpdateHistory
 - Get-LMDatasourceMetadata
 - Remove-LMDatasource*
+- Remove-LMConfigsource*
+- Remove-LMTopologysource*
+- Remove-LMPropertysource*
 - Get-LMEventSource
 - Get-LMPropertySource
 - Get-LMTopologySource
@@ -376,24 +382,93 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Set-LMWebsiteGroup*
 - Remove-LMWebsiteGroup*
 
-#### Utilities (Moved to Logic.Monitor.SE module)
-
-- ConvertTo-LMDynamicGroupFromCategories
-- Export-LMDeviceConfigReport
-- Initialize-LMPOVSetup
-- Import-LMMerakiCloud
-- Invoke-LMDeviceDedupe
-- Build-LMDataModel
-- Submit-LMDataModel
-- Search-LMDeviceConfigBackup*
-
 ***Note**: Supports Pipline Input
 
 # Change List
 
-## 4.6.5
-###### Bug Fix:
-**Get-LMDeviceData**: Fix bug causing instance lookup to fail when instance names contain certain characters.
-**Connect-LMAccount**: Fix bug causing -UseCachedCredential to fail when attempting to connect with a cached BearerToken.
+## 5.0
+###### New features/Breaking changes:
+**Support for -WhatIf parameter on destructive cmdlets**:
+- All destructive cmdlets (*Remove-LM<cmdletName>*) now support the *-WhatIf* parameter to allow for validation of execution without actually deleting anything. With -WhatIf, PowerShell will run your cmdlet in its entirety without executing the actions of the cmdlet so no changes occur. It displays a listing of actions to be performed against the affected objects in the console window. In a subsequent release, support for -WhatIf will be extended to modification cmdlets(Set-LM* | Send-LM*).
+
+```powershell
+Get-LMDevice -Id 123  | Remove-LMDevice -WhatIf
+# What if: Performing the operation "Remove Device" on target "Id: 123 | Name: 127.0.0.1".
+```
+
+**Support for -Confirm parameter on destructive cmdlets**:
+- All destructive cmdlets (*Remove-LM<cmdletName>*) now support the -Confirm parameter. The Confirm switch instructs the cmdlet to which it is applied to stop processing before any changes are made. The default value of the Confirm switch is $true when not specified. When true the cmdlet prompts you to acknowledge each action before it continues. When you use the Confirm switch, you can step through changes to objects to make sure that changes are made only to the specific objects that you want to change. This functionality is useful when you apply changes to many objects and want precise control over the operation of the Shell. A confirmation prompt is displayed for each object before the Shell modifies the object. **Note**: Since this is a breaking change please ensure any scripted automations that leverage destructive cmdlets are updated prior to updating to this version. Simply updating any existing removal cmdlets with *-Confirm:$false* is all that is needed to mitigate this new behavior.
+
+```powershell
+Get-LMDevice -Id 123  | Remove-LMDevice
+
+# Confirm
+# Are you sure you want to perform this action?
+# Performing the operation "Remove Device" on target "Id: 123 | Name: 127.0.0.1".
+# [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
+```
+
+**Support for -Debug parameter on all cmdlets**:
+- All cmdlets that make REST API calls now support the -Debug parameter. Debug will show all rest calls made during the cmdlet execution along with header and payload details to make troubleshooting easier and to allow for easier viewing of what endpoint are used within each cmdlet.
+
+```powershell
+Get-LMDevice -Id 123  -Debug
+# DEBUG: Invoked Command: Get-LMDevice
+# DEBUG: Bound Parameters: [Id:123] [Debug:True]
+# DEBUG: Invoked URL: https://<portal>.logicmonitor.com/santaba/rest/device/devices/123
+# DEBUG: Request Headers: [Authorization:LMv1 xxxxxxxx...] [Content-Type:application/json] [X-Version:3]
+
+# id  name      displayName            description currentCollectorId hostStatus
+# --  ----      -----------            ----------- ------------------ ----------
+# 123 127.0.0.1 lm-coll.villardi.local             8                  NORMAL
+```
+
+**Write-LMHost deprecation**:
+- Write-LMHost was a helper function introduced early on in this modules development to allow for flexible control when writing to the console. In version 5.0 and later this helper function has been deprecated and will be removed entirely in a future version. Cmdlets that leveraged Write-LMHost has been replaced with native Write-Host and/or Write-Output cmdlets where applicable. Any cmdlets that previously did not produce any output (ex. Removal-LM* and Invoke-LM*) but simply wrote to the console will now return their status as output which can used for validation in scripting or suppressed entirely be redirecting output to Out-Null.
+
+```powershell
+Remove-LMDevicedatasourceinstance -deviceid 123 -DatasourceId 37 -Wildvalue $null -Confirm:$false
+
+# InstanceId Message
+# ---------- -------
+#  106997159 Successfully removed (DeviceId: 123 | DatasourceId: 37 | WildValue: )
+```
+
+**Support for clearing values with Set-LMx cmdlets**:
+- Historically Set-LMx cmdlets allowed you to modify details about an object but did not allow you to reset/null values that had already been set. Most parameters that accept [String] datatypes will now allow you to pass null values where accetped by the api. Example use case would be removing a description from a resource or a link on a user role.
+
+```powershell
+Set-LMDevice -id 123 -Description "hello world"
+
+# id  name      displayName            description currentCollectorId hostStatus
+# --  ----      -----------            ----------- ------------------ ----------
+# 123 127.0.0.1 lm-coll.villardi.local hello world 8                  NORMAL
+
+Set-LMDevice -id 123 -Description $null
+
+# id  name      displayName            description currentCollectorId hostStatus
+# --  ----      -----------            ----------- ------------------ ----------
+# 123 127.0.0.1 lm-coll.villardi.local             8                  NORMAL
+```
+
+###### New-Cmdlets:
+**Remove-LMConfigsource**:
+- Support removal of specfied configsources from connected portal.
+**Remove-LMPropertysource**:
+- Support removal of specfied propertyrules from connected portal.
+**Remove-LMTopologysource**:
+- Support removal of specfied topologysources from connected portal.
+
+**Set-LMConfigsource**:
+- Support modification of specfied configsources from connected portal.
+**Set-LMPropertysource**:
+- Support modification of specfied propertyrules from connected portal.
+**Set-LMTopologysource**:
+- Support modification of specfied topologysources from connected portal.
+
+###### Updated-Cmdlets:
+**Connect-LMAccount**:
+- Added check for new releases of SE modules if installed.
+- Added *-AutoUpdateModuleVersion* switch parameter to allow for auto upgrading of installed Logic.Monitor modules if a new version is detected. The default behavior is to simply notify that a new version is available.
 
 [Previous Release Notes](RELEASENOTES.md)

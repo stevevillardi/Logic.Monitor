@@ -98,7 +98,7 @@ Function Import-LMDashboard {
                 $RepoData = (Invoke-RestMethod -Uri $Uri -Headers $Headers[0] -WebSession $Headers[1]).tree | Where-Object {$_.Path -like "*.json" -and $_.Path -notlike "Packages/LogicMonitor_Dashboards*"} | Select-Object path,url
                 If($RepoData){
                     $TotalItems = ($RepoData | Measure-Object).Count
-                    Write-LMHost "Found $TotalItems JSON files from Github repo ($GithubUserRepo)"
+                    Write-LMHost "[INFO]: Found $TotalItems JSON files from Github repo ($GithubUserRepo)"
                     Foreach ($Item in $RepoData){
                         $EncodedDash = (Invoke-RestMethod -Uri $Item.url -Headers $Headers[0] -WebSession $Headers[1]).content
                         $DashboardList += @{
@@ -108,7 +108,7 @@ Function Import-LMDashboard {
                             parentname = $ParentGroupName
                         }
                         
-                        Write-LMHost "Successfully downloaded dashboard ($($Item.path)) from Github repo ($GithubUserRepo)"
+                        Write-LMHost "[INFO]: Successfully downloaded dashboard ($($Item.path)) from Github repo ($GithubUserRepo)"
                     }
                 }
             }
@@ -120,20 +120,20 @@ Function Import-LMDashboard {
                 $DashboardAPIUser = Get-LMUser -Name $DashboardAPIUserName
                 If(!$DashboardAPIRole){
                     $DashboardAPIRole = New-LMRole -Name $DashboardAPIRoleName -ResourcePermission view -DashboardsPermission manage -Description "Auto provisioned for use with dynamic dashboards"
-                    Write-LMHost "Successfully generated required API role ($DashboardAPIRoleName) for dynamic dashboards"
+                    Write-LMHost "[INFO]: Successfully generated required API role ($DashboardAPIRoleName) for dynamic dashboards"
                 }
                 If(!$DashboardAPIUser){
                     $DashboardAPIUser = New-LMAPIUser -Username "$DashboardAPIUserName" -note "Auto provisioned for use with dynamic dashboards" -RoleNames @($DashboardAPIRoleName)
-                    Write-LMHost "Successfully generated required API user ($DashboardAPIUserName) for dynamic dashboards"
+                    Write-LMHost "[INFO]: Successfully generated required API user ($DashboardAPIUserName) for dynamic dashboards"
                 }
                 If($DashboardAPIRole -and $DashboardAPIUser){
                     $APIToken = New-LMAPIToken -Username $DashboardAPIUserName -Note "Auto provisioned for use with dynamic dashboards"
                     If($APIToken){
-                        Write-LMHost "Successfully generated required API token for dynamic dashboards for user: $DashboardAPIUserName"
+                        Write-LMHost "[INFO]: Successfully generated required API token for dynamic dashboards for user: $DashboardAPIUserName"
                     }
                 }
                 Else{
-                    Write-LMHost "Unable to generate required API token for dynamic dashboards, manually update the required tokens to use dynamic dashboards"
+                    Write-LMHost "[WARN]: Unable to generate required API token for dynamic dashboards, manually update the required tokens to use dynamic dashboards" -ForegroundColor Yellow
                 }
             }
 
@@ -162,7 +162,7 @@ Function Import-LMDashboard {
                             $DashboardGroup = Get-LMDashboardGroup -ParentGroupId $ParentGroupId | Where-Object {$_.Name -eq $SubFolders[$Index]}
 
                             If(!$DashboardGroup){
-                                Write-LMHost "Existing dashboard group not found for $($Subfolders[$Index]) creating new resource group under root group ($ParentGroupName)"
+                                Write-LMHost "[INFO]: Existing dashboard group not found for $($Subfolders[$Index]) creating new resource group under root group ($ParentGroupName)"
                                 $NewDashboardGroup = New-LMDashboardGroup -Name $SubFolders[$Index] -ParentGroupId $ParentGroupId
                                 $Dashboard.parentid = $NewDashboardGroup.id
                                 $Dashboard.parentname = $NewDashboardGroup.name
@@ -179,7 +179,7 @@ Function Import-LMDashboard {
                             If(!$DashboardGroup){
 
                                 $NewDashboardParentGroup = Get-LMDashboardGroup -Name $Subfolders[$Index-1] | Where-Object {$_.fullPath -like "$ParentGroupName*" -or $_.fullPath -eq $Subfolders[$Index-1]}
-                                Write-LMHost "Existing dashboard group not found for $($Subfolders[$Index]) creating new resource group under group ($($NewDashboardParentGroup.Name))"
+                                Write-LMHost "[INFO]: Existing dashboard group not found for $($Subfolders[$Index]) creating new resource group under group ($($NewDashboardParentGroup.Name))"
                                 $NewDashboardGroup = New-LMDashboardGroup -Name $SubFolders[$Index] -ParentGroupId $NewDashboardParentGroup.id
 
                                 $Dashboard.parentid = $NewDashboardGroup.id
@@ -216,15 +216,17 @@ Function Import-LMDashboard {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
         
-                    #Issue request
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-                    Write-LMHost "Successfully imported dashboard: $($Dashboard.file.name)"
+                    Write-Output "Successfully imported dashboard: $($Dashboard.file.name)"
     
                     $Results += (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Dashboard" )
     
                 }
                 Catch [Exception] {
-                    Write-LMHost "Failed to import dashboard: $($Dashboard.file.name)"
+                    Write-Output "Failed to import dashboard: $($Dashboard.file.name)"
                     $Proceed = Resolve-LMException -LMException $PSItem
                     If (!$Proceed) {
                        # Return

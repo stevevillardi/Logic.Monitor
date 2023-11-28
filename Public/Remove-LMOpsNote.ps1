@@ -1,6 +1,6 @@
 Function Remove-LMOpsNote {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id
@@ -14,16 +14,26 @@ Function Remove-LMOpsNote {
             #Build header and uri
             $ResourcePath = "/setting/opsnotes/$Id"
 
+            $Message = "Id: $Id"
+
             #Loop through requests 
             Try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                If ($PSCmdlet.ShouldProcess($Message, "Remove OpsNote")) {                    
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+    
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                Write-LMHost "Successfully removed id ($Id)" -ForegroundColor Green
-
-                Return
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
+                    
+                    $Result = [PSCustomObject]@{
+                        Id = $Id
+                        Message = "Successfully removed ($Message)"
+                    }
+                    
+                    Return $Result
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

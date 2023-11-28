@@ -46,7 +46,7 @@ Describe 'DeviceGroup Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMDeviceGroup' {
         It 'When given an id, remove the group from logic monitor' {
-            { Remove-LMDeviceGroup -Id $Script:NewDeviceGroup.Id -HardDelete $true -ErrorAction Stop } | Should -Not -Throw
+            { Remove-LMDeviceGroup -Id $Script:NewDeviceGroup.Id -HardDelete $true -Confirm:$false -ErrorAction Stop } | Should -Not -Throw
         }
     }
     

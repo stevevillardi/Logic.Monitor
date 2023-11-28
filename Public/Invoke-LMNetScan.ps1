@@ -18,9 +18,12 @@ Function Invoke-LMNetScan {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
     
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-                Write-LMHost "Scheduled NetScan task for NetScan id: $Id." -ForegroundColor green
+                
+                Return "Scheduled NetScan task for NetScan id: $Id."
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

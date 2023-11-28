@@ -137,11 +137,12 @@ Function Export-LMLogicModule {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] -OutFile $ExportPath
 
-                Write-LMHost "Successfully downloaded LogicModule id ($LogicModuleId) of type $Type"
-                Return
+                Return "Successfully downloaded LogicModule id ($LogicModuleId) of type $Type"
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

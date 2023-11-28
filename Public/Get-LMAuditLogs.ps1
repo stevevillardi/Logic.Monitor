@@ -36,7 +36,7 @@ Function Get-LMAuditLogs {
         #Convert to epoch, if not set use defaults
         If (!$StartDate) {
             If($PSCmdlet.ParameterSetName -ne "Id"){
-                Write-LMHost "No start date specified, defaulting to last 30 days" -ForegroundColor Yellow
+                Write-LMHost "[WARN]: No start date specified, defaulting to last 30 days" -ForegroundColor Yellow
             }
             [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddDays(-30)).ToUnixTimeSeconds()
         }
@@ -68,6 +68,10 @@ Function Get-LMAuditLogs {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
+                
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
@@ -83,7 +87,7 @@ Function Get-LMAuditLogs {
                     $Results += $Response.Items
                     If ($Count -ge $QueryLimit) {
                         $Done = $true
-                        Write-LMHost "Reached $QueryLimit record query limitation for this endpoint" -ForegroundColor Yellow
+                        Write-LMHost "[WARN]: Reached $QueryLimit record query limitation for this endpoint" -ForegroundColor Yellow
                     }
                     ElseIf ($Count -ge $Total -and $Total -ge 0) {
                         $Done = $true

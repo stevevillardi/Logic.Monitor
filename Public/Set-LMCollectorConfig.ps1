@@ -106,11 +106,11 @@ Function Set-LMCollectorConfig {
             $ConfigArray = $Config.Split([Environment]::NewLine)
             [int[]]$Index = [Linq.Enumerable]::Range(0, $ConfigArray.Count).Where({ param($i) $ConfigArray[$i] -match $ConfLine })
             If(($Index | Measure-Object).Count -eq 1){
-                Write-LMHost "Updating config parameter $ConfLine to value $Value."
+                Write-LMHost "[INFO]: Updating config parameter $ConfLine to value $Value."
                 $ConfigArray[$Index[0]]="$ConfLine=$Value"
             }
             Else{
-                Write-LMHost "Multiple matches found for config parameter $ConfLine, skipping processing."  -ForegroundColor Yellow
+                Write-LMHost "[WARN]: Multiple matches found for config parameter $ConfLine, skipping processing."  -ForegroundColor Yellow
             }
 
             Return ([string]::Join([Environment]::NewLine,$ConfigArray))
@@ -185,16 +185,17 @@ Function Set-LMCollectorConfig {
 
                 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
             
                 $Data = ($Data | ConvertTo-Json)
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-                Write-LMHost "Successfully submitted restart request(jobID:$Response) with updated configurations. Collector will restart once the request has been picked up."
 
                 If($WaitForRestart){
                     $JobStarted = $false
@@ -207,7 +208,7 @@ Function Set-LMCollectorConfig {
     
                         $SubmitResponse = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
                         If($SubmitResponse.errorMessage -eq "The task is still running"){
-                            Write-LMHost "The task is still running..."
+                            Write-LMHost "[INFO]: The task is still running..."
                             Start-Sleep -Seconds 2
                             $Tries++
                         }
@@ -215,10 +216,11 @@ Function Set-LMCollectorConfig {
                             $JobStarted = $true
                         }
                     }
-                    Write-LMHost "Job status code: $($SubmitResponse.jobStatus), Job message: $($SubmitResponse.jobErrmsg)"
-                    Return 
+                    Return "Job status code: $($SubmitResponse.jobStatus), Job message: $($SubmitResponse.jobErrmsg)"
                 }
-                Return
+                Else{
+                    Return "Successfully submitted restart request(jobID:$Response) with updated configurations. Collector will restart once the request has been picked up."
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

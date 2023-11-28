@@ -1,6 +1,6 @@
 Function Remove-LMUnmonitoredDevice {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [String[]]$Ids
@@ -13,19 +13,24 @@ Function Remove-LMUnmonitoredDevice {
             
             #Build header and uri
             $ResourcePath = "/device/unmonitoreddevices/batchdelete"
+
+            $Message = "Id(s): $Ids"
     
             Try {
-                [String[]]$Data = $Ids
-                $Data = ($Data | ConvertTo-Json -AsArray)
-
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                if ($PSCmdlet.ShouldProcess($Message, "Remove Unmonitored Devices")) {                    
+                    [String[]]$Data = $Ids
+                    $Data = ($Data | ConvertTo-Json -AsArray)
+    
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+    
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-                Write-LMHost "Successfully removed requested device(s) from unmonitored devices group." -ForegroundColor Green
-                
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.UnmonitoredDevice" )
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.UnmonitoredDevice" )
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

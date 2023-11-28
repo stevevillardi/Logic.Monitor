@@ -88,6 +88,8 @@ $PoshCommand
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
                 If ($IncludeResult) {
@@ -95,7 +97,7 @@ $PoshCommand
                     While (!$CommandCompleted) {
                         $CommandResult = Get-LMCollectorDebugResult -SessionId $Response.sessionId -Id $Id
                         If ($CommandResult.errorMessage -eq "Agent has fetched the task, waiting for response") {
-                            Write-LMHost "Agent has fetched the task, waiting for response..." -ForegroundColor green
+                            Write-LMHost "[INFO]: Agent has fetched the task, waiting for response..." -ForegroundColor green
                             Start-Sleep -Seconds 5
                         }
                         Else {
@@ -105,8 +107,12 @@ $PoshCommand
                     }
                 }
                 Else {
-                    Write-LMHost "Submitted debug command task under session id $($Response.sessionId) for device id: $($Response.sessionId). Use Get-LMCollectorDebugResult to retrieve response or resubmit request with -IncludeResult" -ForegroundColor green
-                    Return $Response.sessionId
+                    $Result = [PSCustomObject]@{
+                        SessionId   = $Response.sessionId
+                        CollectorId = $Id
+                        Message     = "Submitted debug command task under session id $($Response.sessionId) for collector id: $($Id). Use Get-LMCollectorDebugResult to retrieve response or resubmit request with -IncludeResult"
+                    }
+                    Return $Result
                 }
             }
             Catch [Exception] {

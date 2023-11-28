@@ -37,7 +37,7 @@ Function Format-LMFilter {
                                 '\s+-le\s+' { $FormatedFilter += "<:"}
                                 '\s+-contains\s+' { $FormatedFilter += "~"}
                                 '\s+-notcontains\s+' { $FormatedFilter += "!~"}
-                                default {Write-LMHost "Invalid filter syntax: $Filter" -ForegroundColor Yellow}
+                                default {Write-LMHost "[ERROR]: Invalid filter syntax: $Filter" -ForegroundColor Red}
                             }
                         }
                         Else{
@@ -46,7 +46,7 @@ Function Format-LMFilter {
                     }
                 }
                 Else{
-                    Write-LMHost "Invalid filter syntax: $SingleFilterArray" -ForegroundColor Yellow
+                    Write-LMHost "[ERROR]: Invalid filter syntax: $SingleFilterArray" -ForegroundColor Red
                 }
             }
         }

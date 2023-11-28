@@ -82,13 +82,13 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMUser' {
         It 'When given an id, remove the user from logic monitor' {
-            { Remove-LMUser -Id $Script:NewUser.Id -ErrorAction Stop } | Should -Not -Throw
+            { Remove-LMUser -Id $Script:NewUser.Id -ErrorAction Stop -Confirm:$false } | Should -Not -Throw
         }
     }
 
     Describe 'Remove-LMRole' {
         It 'When given an id, remove the role from logic monitor' {
-            { Remove-LMRole -Id $Script:NewRole.Id -ErrorAction Stop  } | Should -Not -Throw
+            { Remove-LMRole -Id $Script:NewRole.Id -ErrorAction Stop -Confirm:$false  } | Should -Not -Throw
         }
     }
     

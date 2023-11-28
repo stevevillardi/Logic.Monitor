@@ -77,6 +77,8 @@ Function Connect-LMAccount {
         [Parameter(ParameterSetName = 'SessionSync')]
         [Switch]$SessionSync,
 
+        [Switch]$AutoUpdateModuleVersion,
+
         [Switch]$DisableConsoleLogging
     )
 
@@ -89,18 +91,18 @@ Function Connect-LMAccount {
 
         Try {
             $ExistingVault = Get-SecretVault -Name Logic.Monitor -ErrorAction Stop
-            Write-Host "Existing vault Logic.Monitor already exists, skipping creation" -ForegroundColor Yellow
+            Write-Host "[INFO]: Existing vault Logic.Monitor already exists, skipping creation"
         }
         Catch {
             If($_.Exception.Message -like "*Vault Logic.Monitor does not exist in registry*") {
-                Write-Host "Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor" -ForegroundColor Yellow
+                Write-Host "[INFO]: Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor" 
                 Register-SecretVault -Name Logic.Monitor -ModuleName Microsoft.PowerShell.SecretStore
                 Get-SecretStoreConfiguration | Out-Null
             }
         }
         $CredentialPath = Join-Path -Path $Home -ChildPath "Logic.Monitor.json"
         If ((Test-Path -Path $CredentialPath)) {
-            Write-Host "Previous version of cached accounts detected, migrating to secret store..." -ForegroundColor Yellow
+            Write-Host "[INFO]: Previous version of cached accounts detected, migrating to secret store..." 
             $CredentialFile = Get-Content -Path $CredentialPath | ConvertFrom-Json | Sort-Object -Property Modified -Descending
             $MigrationComplete = $true
             Foreach ($Credential in $CredentialFile) {
@@ -112,7 +114,7 @@ Function Connect-LMAccount {
                 }
                 Try{
                     Set-Secret -Name $Credential.Portal -Secret $Credential.Key -Vault Logic.Monitor -Metadata $Metadata -NoClobber
-                    Write-Host "Successfully migrated cached account secret for portal: $($Credential.Portal)" -ForegroundColor Yellow
+                    Write-Host "[INFO]: Successfully migrated cached account secret for portal: $($Credential.Portal)"
                 }
                 Catch{
                     Write-Error $_.Exception.Message
@@ -121,12 +123,12 @@ Function Connect-LMAccount {
             }
             If($MigrationComplete){
                 Remove-Item -Path $CredentialPath -Confirm:$false
-                Write-Host "Successfully migrated cached accounts into secret store, your legacy account cache hes been removed." -ForegroundColor Yellow
+                Write-Host "[INFO]: Successfully migrated cached accounts into secret store, your legacy account cache hes been removed."
             }
             Else{
                 $NewName = Join-Path -Path $Home -ChildPath "Logic.Monitor-Migrated.json"
                 Rename-Item -Path $CredentialPath -Confirm:$false -NewName $NewName
-                Write-Host "Unable to fully migrate cached accounts into secret store, your legacy account cache has been archived at: $NewName. No other attemps will be made to migrate any failed accounts." -ForegroundColor Red
+                Write-Host "[ERROR]: Unable to fully migrate cached accounts into secret store, your legacy account cache has been archived at: $NewName. No other attemps will be made to migrate any failed accounts." -ForegroundColor Red
             }
         }
 
@@ -230,7 +232,12 @@ Function Connect-LMAccount {
     }
     
     #Check for newer version of Logic.Monitor module
-    Update-LogicMonitorModule -CheckOnly
+    If($AutoUpdateModuleVersion){
+        Update-LogicMonitorModule
+    }
+    Else{
+        Update-LogicMonitorModule -CheckOnly
+    }
 
     Try {
 
@@ -245,13 +252,13 @@ Function Connect-LMAccount {
 
         If ($ApiInfo) {
             $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
-            Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) using account ($($ApiInfo.adminName) via $Type Token) with assigned roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
+            Write-LMHost "[INFO]: Connected to LM portal $($PortalInfo.companyDisplayName) using account ($($ApiInfo.adminName) via $Type Token) with assigned roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
             Return
         }
         Else {
             Try{
                 $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
-                Write-LMHost "Connected to LM portal $($PortalInfo.companyDisplayName) via $Type Token - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
+                Write-LMHost "[INFO]: Connected to LM portal $($PortalInfo.companyDisplayName) via $Type Token - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
                 Return
             }
             Catch {
@@ -264,7 +271,7 @@ Function Connect-LMAccount {
             $DeviceInfo = Get-LMDevice -ErrorAction Stop
 
             If($DeviceInfo){
-                Write-LMHost "Connected to LM portal $AccountName via $Type Token with limited permissions, ensure your api token has the necessary rights needed to run desired commands." -ForegroundColor Yellow
+                Write-LMHost "[INFO]: Connected to LM portal $AccountName via $Type Token with limited permissions, ensure your api token has the necessary rights needed to run desired commands." -ForegroundColor Yellow
                 Return
             }
             Else{

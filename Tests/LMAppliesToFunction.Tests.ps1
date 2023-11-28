@@ -43,7 +43,7 @@ Describe 'AppliesToFunction Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMAppliesToFunction' {
         It 'When given an id, remove the AppliesToFunction from logic monitor' {
-            { Remove-LMAppliesToFunction -Id $Script:NewAppliesToFunction.Id -ErrorAction Stop } | Should -Not -Throw
+            { Remove-LMAppliesToFunction -Id $Script:NewAppliesToFunction.Id -Confirm:$false -ErrorAction Stop } | Should -Not -Throw
         }
     }
     

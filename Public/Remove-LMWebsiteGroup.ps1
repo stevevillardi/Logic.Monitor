@@ -1,6 +1,6 @@
 Function Remove-LMWebsiteGroup {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
@@ -32,15 +32,33 @@ Function Remove-LMWebsiteGroup {
             $ResourcePath = "/website/groups/$Id"
             $QueryParams = "?deleteChildren=$deleteChildren"
 
+            If($PSItem){
+                $Message = "Id: $Id | Name: $($PSItem.name)"
+            }
+            ElseIf($Name){
+                $Message = "Id: $Id | Name: $Name"
+            }
+            Else{
+                $Message = "Id: $Id"
+            }
+
             Try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                If ($PSCmdlet.ShouldProcess($Message, "Remove Website Group")) {                    
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+    
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                Write-LMHost "Successfully removed id ($Id)" -ForegroundColor Green
-
-                Return
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
+                    
+                    $Result = [PSCustomObject]@{
+                        Id = $Id
+                        Message = "Successfully removed ($Message)"
+                    }
+                    
+                    Return $Result
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

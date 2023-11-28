@@ -1,8 +1,8 @@
 Function Remove-LMDeviceProperty {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$Id,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
@@ -29,15 +29,30 @@ Function Remove-LMDeviceProperty {
             #Build header and uri
             $ResourcePath = "/device/devices/$Id/properties/$PropertyName"
 
+            If($Name){
+                $Message = "Id: $Id | Name: $Name | Property: $PropertyName"
+            }
+            Else{
+                $Message = "Id: $Id | Property: $PropertyName"
+            }
+
             Try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                If ($PSCmdlet.ShouldProcess($Message, "Remove Device Property")) {                    
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+    
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                Write-LMHost "Successfully removed property $PropertyName from deviceId $Id" -ForegroundColor Green
-
-                Return
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
+                    
+                    $Result = [PSCustomObject]@{
+                        Id = $Id
+                        Message = "Successfully removed ($Message)"
+                    }
+                    
+                    Return $Result
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

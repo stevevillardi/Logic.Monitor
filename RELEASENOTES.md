@@ -1,4 +1,9 @@
 # Previous module release notes
+## 4.6.5
+###### Bug Fix:
+**Get-LMDeviceData**: Fix bug causing instance lookup to fail when instance names contain certain characters.
+**Connect-LMAccount**: Fix bug causing -UseCachedCredential to fail when attempting to connect with a cached BearerToken.
+
 ## 4.6.4
 ###### Bug Fix:
 **Send-LMPushMetric**: Fix bug causing spaces to be replaced as underscores when submitting datasource names.

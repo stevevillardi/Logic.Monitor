@@ -55,7 +55,7 @@ Describe 'Website Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMWebsite' {
         It 'When given an id, remove the device from logic monitor' {
-            { Remove-LMWebsite -Id $Script:NewWebsite.Id -ErrorAction Stop } | Should -Not -Throw
+            { Remove-LMWebsite -Id $Script:NewWebsite.Id -ErrorAction Stop -Confirm:$false } | Should -Not -Throw
         }
     }
     

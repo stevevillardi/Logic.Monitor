@@ -39,7 +39,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMDeviceProperty' {
         It 'When given an id, remove the device property from resource' {
-            { Remove-LMDeviceProperty -Id $Script:NewDevice.Id -PropertyName "newpropname" -ErrorAction Stop } | Should -Not -Throw
+            { Remove-LMDeviceProperty -Id $Script:NewDevice.Id -PropertyName "newpropname" -Confirm:$false -ErrorAction Stop } | Should -Not -Throw
         }
     }
     
@@ -74,7 +74,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMDevice' {
         It 'When given an id, remove the device from logic monitor' {
-            { Remove-LMDevice -Id $Script:NewDevice.Id -HardDelete $true  -ErrorAction Stop} | Should -Not -Throw
+            { Remove-LMDevice -Id $Script:NewDevice.Id -HardDelete $true -Confirm:$false  -ErrorAction Stop} | Should -Not -Throw
         }
     }
     

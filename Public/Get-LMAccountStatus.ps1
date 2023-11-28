@@ -32,7 +32,6 @@ Function Get-LMAccountStatus {
         return $Result
     }
     Else {
-        Write-LMHost "Not currently logged into any LogicMonitor portals."
-        return $null
+        return "Not currently logged into any LogicMonitor portals."
     }
 }

@@ -14,24 +14,26 @@ Connect to a specified LM portal to run commands against
 
 ### LMv1 (Default)
 ```
-Connect-LMAccount -AccessId <String> -AccessKey <String> -AccountName <String> [-DisableConsoleLogging]
- [<CommonParameters>]
+Connect-LMAccount -AccessId <String> -AccessKey <String> -AccountName <String> [-AutoUpdateModuleVersion]
+ [-DisableConsoleLogging] [<CommonParameters>]
 ```
 
 ### Bearer
 ```
-Connect-LMAccount -BearerToken <String> -AccountName <String> [-DisableConsoleLogging] [<CommonParameters>]
+Connect-LMAccount -BearerToken <String> -AccountName <String> [-AutoUpdateModuleVersion]
+ [-DisableConsoleLogging] [<CommonParameters>]
 ```
 
 ### SessionSync
 ```
-Connect-LMAccount -AccountName <String> [-SessionSync] [-DisableConsoleLogging] [<CommonParameters>]
+Connect-LMAccount -AccountName <String> [-SessionSync] [-AutoUpdateModuleVersion] [-DisableConsoleLogging]
+ [<CommonParameters>]
 ```
 
 ### Cached
 ```
-Connect-LMAccount [-UseCachedCredential] [-CachedAccountName <String>] [-DisableConsoleLogging]
- [<CommonParameters>]
+Connect-LMAccount [-UseCachedCredential] [-CachedAccountName <String>] [-AutoUpdateModuleVersion]
+ [-DisableConsoleLogging] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -155,6 +157,21 @@ Use session sync capability instead of api key
 ```yaml
 Type: SwitchParameter
 Parameter Sets: SessionSync
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AutoUpdateModuleVersion
+{{ Fill AutoUpdateModuleVersion Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
 Aliases:
 
 Required: False

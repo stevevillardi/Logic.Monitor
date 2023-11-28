@@ -8,11 +8,14 @@ Function Get-LMAPIToken {
         [Parameter(ParameterSetName = 'Id')]
         [Int]$Id,
 
+        [Parameter(ParameterSetName = 'AccessId')]
+        [String]$AccessId,
+
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
-        [ValidateSet("LMv1", "Bearer")]
-        [String]$Type = "LMv1",
+        [ValidateSet("LMv1", "Bearer", "*")]
+        [String]$Type = "*",
 
         [ValidateRange(1,1000)]
         [Int]$BatchSize = 1000
@@ -39,6 +42,7 @@ Function Get-LMAPIToken {
             Switch ($PSCmdlet.ParameterSetName) {
                 "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
                 "Id" { $QueryParams = "?filter=id:$Id&size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
+                "AccessId" { $QueryParams = "?filter=accessId:`"$AccessId`"&size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
                 "AdminId" { $resourcePath = "/setting/admins/$AdminId/apitokens$BearerParam" }
                 "Filter" {
                     #List of allowed filter props
@@ -50,7 +54,11 @@ Function Get-LMAPIToken {
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+
+                
     
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 

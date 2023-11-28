@@ -25,7 +25,7 @@ Function New-LMAPIUser {
                 $Roles += @{id = $RoleId }
             }
             Else {
-                Write-LMHost "Unable to locate user role named $Role, it will be skipped" -ForegroundColor Yellow
+                Write-LMHost "[WARN]: Unable to locate user role named $Role, it will be skipped" -ForegroundColor Yellow
             }
         }
 
@@ -71,6 +71,8 @@ Function New-LMAPIUser {
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data

@@ -1,16 +1,19 @@
 Function Remove-LMAPIToken {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$UserId,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$UserName,
 
-        [Parameter(Mandatory)]
-        [Int]$APITokenId
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName, ParameterSetName = 'AccessId')]
+        [String]$AccessId,
 
+        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Name')]
+        [Int]$APITokenId
     )
 
     Begin{}
@@ -26,19 +29,43 @@ Function Remove-LMAPIToken {
                 }
                 $UserId = $LookupResult
             }
+
+            If($AccessId){
+                $LookupResult = (Get-LMAPIToken -AccessId $AccessId)
+                If (Test-LookupResult -Result $LookupResult -LookupString $AccessId) {
+                    return
+                }
+                $UserId = $LookupResult.adminId
+                $APITokenId = $LookupResult.id
+            }
             
             #Build header and uri
             $ResourcePath = "/setting/admins/$UserId/apitokens/$APITokenId"
 
+            If($PSItem){
+                $Message = "Id: $APITokenId | AccessId: $($PSItem.accessId)| AdminName:$($PSItem.adminName)"
+            }
+            Else{
+                $Message = "Id: $APITokenId"
+            }
+
             Try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                if ($PSCmdlet.ShouldProcess($Message, "Remove API Token")) {                    
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+    
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                Write-LMHost "Successfully removed id ($APITokenId)" -ForegroundColor Green
-                
-                Return
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
+                    
+                    $Result = [PSCustomObject]@{
+                        Id = $APITokenId
+                        Message = "Successfully removed ($Message)"
+                    }
+                    
+                    Return $Result
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

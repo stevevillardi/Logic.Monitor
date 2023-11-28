@@ -117,6 +117,10 @@ Function Get-LMDevice {
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                
+                
+                
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
@@ -124,7 +128,7 @@ Function Get-LMDevice {
                 #Store delta id if delta switch is present
                 If($Response.deltaId -and !$DeltaIdResponse){
                     $DeltaIdResponse = $Response.deltaId
-                    Write-LMHost -Message "[INFO]: Delta switch detected, for further queries you can use deltaId: $DeltaIdResponse to perform additional delta requests." -ForegroundColor Yellow
+                    Write-LMHost "[INFO]: Delta switch detected, for further queries you can use deltaId: $DeltaIdResponse to perform additional delta requests." -ForegroundColor Yellow
                 }
 
                 #Stop looping if single device, no need to continue

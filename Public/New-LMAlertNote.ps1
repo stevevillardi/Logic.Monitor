@@ -28,11 +28,13 @@ Function New-LMAlertNote {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
     
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
                 #Issue request
                 $Response = Invoke-WebRequest -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
     
                 If($Response.StatusCode -eq 200){
-                    Write-LMHost "Successfully updated note for alert id(s): $Ids" -ForegroundColor Green
+                    Return "Successfully updated note for alert id(s): $Ids"
                 }
             }
             Catch [Exception] {

@@ -59,11 +59,13 @@ Function Send-LMLogMessage {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Entries
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath
 
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Entries
+
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Entries
 
                 If ($Response.success -eq $true) {
-                    Write-LMHost "Message accepted successfully"
+                    Write-Output "Message accepted successfully @($Timestamp)"
                 }
                 Else {
                     Write-Error -Message "$($Response.errors.code): $($Response.errors.error)"

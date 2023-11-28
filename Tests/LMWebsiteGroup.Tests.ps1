@@ -45,7 +45,7 @@ Describe 'WebsiteGroup Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMWebsiteGroup' {
         It 'When given an id, remove the group from logic monitor' {
-            { Remove-LMWebsiteGroup -Id $Script:NewWebsiteGroup.Id -ErrorAction Stop } | Should -Not -Throw
+            { Remove-LMWebsiteGroup -Id $Script:NewWebsiteGroup.Id -ErrorAction Stop -Confirm:$false } | Should -Not -Throw
         }
     }
     

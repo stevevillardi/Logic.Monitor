@@ -27,6 +27,11 @@ Get-LMAPIToken [-AdminId <Int32>] [-Type <String>] [-BatchSize <Int32>] [<Common
 Get-LMAPIToken [-Id <Int32>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
 ```
 
+### AccessId
+```
+Get-LMAPIToken [-AccessId <String>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
+```
+
 ### Filter
 ```
 Get-LMAPIToken [-Filter <Object>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
@@ -45,6 +50,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -AccessId
+{{ Fill AccessId Description }}
+
+```yaml
+Type: String
+Parameter Sets: AccessId
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -AdminId
 {{ Fill AdminId Description }}
@@ -113,7 +133,7 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: LMv1, Bearer
+Accepted values: LMv1, Bearer, *
 
 Required: False
 Position: Named

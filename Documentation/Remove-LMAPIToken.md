@@ -14,12 +14,17 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Remove-LMAPIToken -UserId <Int32> -APITokenId <Int32> [<CommonParameters>]
+Remove-LMAPIToken -UserId <Int32> -APITokenId <Int32> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Remove-LMAPIToken -UserName <String> -APITokenId <Int32> [<CommonParameters>]
+Remove-LMAPIToken -UserName <String> -APITokenId <Int32> [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### AccessId
+```
+Remove-LMAPIToken -AccessId <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,10 +46,40 @@ PS C:\> {{ Add example code here }}
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AccessId
+{{ Fill AccessId Description }}
+
+```yaml
+Type: String
+Parameter Sets: AccessId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -62,7 +97,7 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -75,6 +110,21 @@ Parameter Sets: Name
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

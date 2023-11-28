@@ -41,11 +41,11 @@ Function New-LMCachedAccount {
 
     Try {
         $ExistingVault = Get-SecretInfo -Name Logic.Monitor -WarningAction Stop
-        Write-Host "Existing vault Logic.Monitor already exists, skipping creation"
+        Write-Host "[INFO]: Existing vault Logic.Monitor already exists, skipping creation"
     }
     Catch {
         If($_.Exception.Message -like "*There are currently no extension vaults registered*") {
-            Write-Host "Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor"
+            Write-Host "[INFO]: Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor"
             Register-SecretVault -Name Logic.Monitor -ModuleName Microsoft.PowerShell.SecretStore
             Get-SecretStoreConfiguration | Out-Null
         }
@@ -73,7 +73,7 @@ Function New-LMCachedAccount {
     }
     Try{
         Set-Secret -Name $CachedAccountName -Secret $Secret -Vault Logic.Monitor -Metadata $Metadata -NoClobber:$(!$OverwriteExisting)
-        Write-Host "Successfully created cached account ($CachedAccountName) secret for portal: $AccountName"
+        Write-Host "[INFO]: Successfully created cached account ($CachedAccountName) secret for portal: $AccountName"
     }
     Catch{
         Write-Error $_.Exception.Message

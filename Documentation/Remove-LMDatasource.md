@@ -14,17 +14,17 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Remove-LMDatasource -Id <Int32> [<CommonParameters>]
+Remove-LMDatasource -Id <Int32> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Remove-LMDatasource -Name <String> [<CommonParameters>]
+Remove-LMDatasource -Name <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### DisplayName
 ```
-Remove-LMDatasource -DisplayName <String> [<CommonParameters>]
+Remove-LMDatasource -DisplayName <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -40,6 +40,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -DisplayName
 {{ Fill DisplayName Description }}
@@ -80,6 +95,21 @@ Parameter Sets: Name
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
