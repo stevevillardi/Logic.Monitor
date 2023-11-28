@@ -42,6 +42,8 @@ jobs:
             PreferredCollectorId="8"
           }
 
+          Write-Host "Powershell version: $PSVersionTable.PSVersion"
+
           $Container = New-PesterContainer -Path ./Tests/ -Data $Data
           $Result = Invoke-Pester -Container $Container -Output Detailed -PassThru
 
