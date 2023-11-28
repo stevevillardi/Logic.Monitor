@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Test Current Build
+name: Test Current Build on Windows Powershell 5.1
 
 # Controls when the workflow will run
 on:
@@ -17,11 +17,11 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   test-build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     environment: test
     steps:
       - uses: actions/checkout@v3
-      - name: Build and Test
+      - name: Build and Test 5.1
       # API key generated in PSGallery
         env:
           LM_ACCESS_ID: ${{ secrets.LM_ACCESS_ID }}
@@ -29,7 +29,7 @@ jobs:
           LM_PORTAL: ${{ secrets.LM_PORTAL }}
           LM_BEARER_TOKEN: ${{ secrets.LM_BEARER_TOKEN }}
           BUILD_VERSION: 9.9.9
-        shell: pwsh
+        shell: powershell
         run: |
           ./Build.ps1
 
@@ -48,5 +48,5 @@ jobs:
           #Write OpsNote to test portal indicating test status
           Connect-LMAccount -AccessId $env:LM_ACCESS_ID -AccessKey $env:LM_ACCESS_KEY -AccountName $env:LM_PORTAL -DisableConsoleLogging
           $TimeNow = Get-Date -UFormat %m%d%Y-%H%M
-          $OpsNote = New-LMOpsNote -Note "Github test build submitted on $TimeNow - $($Result.Result)" -Tags @("GithubActions","TestPipeline-Core")
+          $OpsNote = New-LMOpsNote -Note "Github test build submitted on $TimeNow - $($Result.Result)" -Tags @("GithubActions","TestPipeline-Win5.1")
 
