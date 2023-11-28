@@ -5,7 +5,7 @@
 
 Windows PowerShell module for accessing the LogicMonitor REST API.
 
-NOTE: This is a personal project and is not an offically supported LogicMonitor integration. If an official LM PS module if of interest I suggest entering your feedback within your LM portal so interest can be recored. Any bugs/issues with this module should be reported via a submitted issue within the Logic.Monitor repo along with any feature requests.
+NOTE: This is a personal project and is not an offically supported LogicMonitor integration. If an official LM PS module is of interest I suggest entering your feedback within your LM portal so interest can be recored. Any bugs/issues with this module should be reported via a submitted issue within the Logic.Monitor repo along with any feature requests.
 
 This project is also published in the PowerShell Gallery at https://www.powershellgallery.com/packages/Logic.Monitor/.
 
