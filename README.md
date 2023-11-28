@@ -453,18 +453,18 @@ Set-LMDevice -id 123 -Description $null
 
 ###### New-Cmdlets:
 **Remove-LMConfigsource**:
-- Support removal of specfied configsources from connected portal.
+- Support removal of specified configsources from connected portal.
 **Remove-LMPropertysource**:
-- Support removal of specfied propertyrules from connected portal.
+- Support removal of specified propertyrules from connected portal.
 **Remove-LMTopologysource**:
-- Support removal of specfied topologysources from connected portal.
+- Support removal of specified topologysources from connected portal.
 
 **Set-LMConfigsource**:
-- Support modification of specfied configsources from connected portal.
+- Support modification of specified configsources from connected portal.
 **Set-LMPropertysource**:
-- Support modification of specfied propertyrules from connected portal.
+- Support modification of specified propertyrules from connected portal.
 **Set-LMTopologysource**:
-- Support modification of specfied topologysources from connected portal.
+- Support modification of specified topologysources from connected portal.
 
 ###### Updated-Cmdlets:
 **Connect-LMAccount**:
