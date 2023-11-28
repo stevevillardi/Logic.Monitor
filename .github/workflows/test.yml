@@ -42,7 +42,8 @@ jobs:
             PreferredCollectorId="8"
           }
 
-          Write-Host "Powershell version: $PSVersionTable.PSVersion"
+          $Version = $PSVersionTable.PSVersion
+          Write-Host "Powershell version: $Version"
 
           $Container = New-PesterContainer -Path ./Tests/ -Data $Data
           $Result = Invoke-Pester -Container $Container -Output Detailed -PassThru
@@ -50,5 +51,5 @@ jobs:
           #Write OpsNote to test portal indicating test status
           Connect-LMAccount -AccessId $env:LM_ACCESS_ID -AccessKey $env:LM_ACCESS_KEY -AccountName $env:LM_PORTAL -DisableConsoleLogging
           $TimeNow = Get-Date -UFormat %m%d%Y-%H%M
-          $OpsNote = New-LMOpsNote -Note "Github test build submitted on $TimeNow - $($Result.Result)" -Tags @("GithubActions","TestPipeline-Core")
+          $OpsNote = New-LMOpsNote -Note "Github test build submitted on $TimeNow - $($Result.Result)" -Tags @("GithubActions","TestPipeline-Core","PSVersion-$Version")
 
