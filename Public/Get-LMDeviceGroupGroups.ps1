@@ -59,7 +59,7 @@ Function Get-LMDeviceGroupGroups {
                 #Stop looping if single device, no need to continue
                 If (![bool]$Response.psobject.Properties["total"]) {
                     $Done = $true
-                    Return $Response
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -78,7 +78,7 @@ Function Get-LMDeviceGroupGroups {
                 }
             }
         }
-        Return $Results
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DeviceGroup" )
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

@@ -1,15 +1,10 @@
-Function Set-LMNetscanGroup {
+Function New-LMReportGroup {
 
     [CmdletBinding()]
     Param (
 
-        [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
-        [Int]$Id,
-
-        [Parameter(ParameterSetName = 'Name')]
+        [Parameter(Mandatory)]
         [String]$Name,
-
-        [String]$NewName,
 
         [String]$Description
 
@@ -17,39 +12,37 @@ Function Set-LMNetscanGroup {
     #Check if we are logged in and have valid api creds
     Begin {}
     Process {
-        
         If ($Script:LMAuth.Valid) {
-            #Lookup Netscan Group Id
-            If ($Name) {
-                $LookupResult = (Get-LMNetScanGroup -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
-                    return
-                }
-                $Id = $LookupResult
-            }
 
+            #Build custom props hashtable
+            $customProperties = @()
+            If ($Properties) {
+                Foreach ($Key in $Properties.Keys) {
+                    $customProperties += @{name = $Key; value = $Properties[$Key] }
+                }
+            }
+                    
             #Build header and uri
-            $ResourcePath = "/setting/netscans/groups/$Id"
+            $ResourcePath = "/report/groups"
 
             Try {
                 $Data = @{
                     description                         = $Description
-                    name                                = $NewName
+                    name                                = $Name
                 }
 
             
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
             
                 $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
                 Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScanGroup" )
             }

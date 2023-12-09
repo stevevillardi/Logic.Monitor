@@ -1,4 +1,4 @@
-Function Set-LMNetscanGroup {
+Function Set-LMReportGroup {
 
     [CmdletBinding()]
     Param (
@@ -17,19 +17,18 @@ Function Set-LMNetscanGroup {
     #Check if we are logged in and have valid api creds
     Begin {}
     Process {
-        
         If ($Script:LMAuth.Valid) {
-            #Lookup Netscan Group Id
+            #Lookup Group Id
             If ($Name) {
-                $LookupResult = (Get-LMNetScanGroup -Name $Name).Id
+                $LookupResult = (Get-LMReportGroup -Name $Name).Id
                 If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
-
+                    
             #Build header and uri
-            $ResourcePath = "/setting/netscans/groups/$Id"
+            $ResourcePath = "/report/groups/$Id"
 
             Try {
                 $Data = @{
