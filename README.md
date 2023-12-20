@@ -390,7 +390,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 # Change List
 
-## 5.0
+## 5.0.1
 ###### New cmdlets:
 **New-LMReportGroup**:
 - Create new report group and set a description
@@ -398,5 +398,16 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 - Update existing report group. Accepts pipeline input.
 **New-LMReportGroup**:
 - Delete specified report group. Accepts pipeline input.
+
+###### Updated cmdlets:
+**New-LMWebsite**:
+- Add support for specifying checkpoints when creating webchecks.
+**Set-LMX Commands**:
+- Add support for -WhatIf parameter
+
+###### Bug Fixes:
+**Get-LMDeviceAlertSettings**:
+- Fix bug causing pipeline process to not work correctly
+
 
 [Previous Release Notes](RELEASENOTES.md)
