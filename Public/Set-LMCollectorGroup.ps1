@@ -1,6 +1,6 @@
 Function Set-LMCollectorGroup {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
     Param (
 
         [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
@@ -23,16 +23,15 @@ Function Set-LMCollectorGroup {
     #Check if we are logged in and have valid api creds
     Begin {}
     Process {
-        #Lookup Collector Name
-        If ($Name) {
-            $LookupResult = (Get-LMCollectorGroup -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
-                return
-            }
-            $Id = $LookupResult
-        }
-
         If ($Script:LMAuth.Valid) {
+            #Lookup Collector Name
+            If ($Name) {
+                $LookupResult = (Get-LMCollectorGroup -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                    return
+                }
+                $Id = $LookupResult
+            }
 
             #Build custom props hashtable
             $customProperties = @()
@@ -44,6 +43,16 @@ Function Set-LMCollectorGroup {
                     
             #Build header and uri
             $ResourcePath = "/setting/collector/groups/$Id"
+
+            If($PSItem){
+                $Message = "Id: $Id | Name: $($PSItem.name) | Description: $($PSItem.description)"
+            }
+            ElseIf($Name){
+                $Message = "Id: $Id | Name: $Name)"
+            }
+            Else{
+                $Message = "Id: $Id"
+            }
 
             Try {
                 $Data = @{
@@ -61,15 +70,17 @@ Function Set-LMCollectorGroup {
 
                 $Data = ($Data | ConvertTo-Json)
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                If ($PSCmdlet.ShouldProcess($Message, "Set Collector Group")) {  
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.CollectorGroup" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.CollectorGroup" )
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

@@ -79,7 +79,11 @@ Function Connect-LMAccount {
 
         [Switch]$AutoUpdateModuleVersion,
 
-        [Switch]$DisableConsoleLogging
+        [Switch]$DisableConsoleLogging,
+
+        [Switch]$SkipVersionCheck,
+
+        [Switch]$SkipCredValidation
     )
 
     #Autoload web assembly if on older version of powershell
@@ -232,58 +236,62 @@ Function Connect-LMAccount {
     }
     
     #Check for newer version of Logic.Monitor module
-    If($AutoUpdateModuleVersion){
+    If($AutoUpdateModuleVersion -and !$SkipVersionCheck){
         Update-LogicMonitorModule
     }
-    Else{
+    ElseIf(!$SkipVersionCheck){
         Update-LogicMonitorModule -CheckOnly
     }
 
-    Try {
-
-        #Collect portal info and api username and roles
-        If($Type -eq "Bearer"){
-            $Token = [System.Net.NetworkCredential]::new("", $BearerToken).Password
-            $ApiInfo = Get-LMAPIToken -Type Bearer -ErrorAction SilentlyContinue | Where-Object {$_.accessKey -like "$($Token.Substring(0,20))*"}
-        }
-        Else{
-            $ApiInfo = Get-LMAPIToken -Filter "accessId -eq '$AccessId'" -ErrorAction SilentlyContinue
-        }
-
-        If ($ApiInfo) {
-            $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
-            Write-LMHost "[INFO]: Connected to LM portal $($PortalInfo.companyDisplayName) using account ($($ApiInfo.adminName) via $Type Token) with assigned roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
-            Return
-        }
-        Else {
-            Try{
-                $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
-                Write-LMHost "[INFO]: Connected to LM portal $($PortalInfo.companyDisplayName) via $Type Token - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
-                Return
-            }
-            Catch {
-                throw "Unable to validate API token info"
-            }
-        }
-    }
-    Catch {
-        Try{
-            $DeviceInfo = Get-LMDevice -ErrorAction Stop
-
-            If($DeviceInfo){
-                Write-LMHost "[INFO]: Connected to LM portal $AccountName via $Type Token with limited permissions, ensure your api token has the necessary rights needed to run desired commands." -ForegroundColor Yellow
-                Return
+    If(!$SkipCredValidation){
+        Try {
+            #Collect portal info and api username and roles
+            If($Type -eq "Bearer"){
+                $Token = [System.Net.NetworkCredential]::new("", $BearerToken).Password
+                $ApiInfo = Get-LMAPIToken -Type Bearer -ErrorAction SilentlyContinue | Where-Object {$_.accessKey -like "$($Token.Substring(0,20))*"}
             }
             Else{
-                throw "Unable to verify api token permission levels, ensure api token has rights to view all/select resources or at minimum view access for Account Information"
+                $ApiInfo = Get-LMAPIToken -Filter "accessId -eq '$AccessId'" -ErrorAction SilentlyContinue
+            }
+    
+            If ($ApiInfo) {
+                $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
+                Write-LMHost "[INFO]: Connected to LM portal $($PortalInfo.companyDisplayName) using account ($($ApiInfo.adminName) via $Type Token) with assigned roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
+                Return
+            }
+            Else {
+                Try{
+                    $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
+                    Write-LMHost "[INFO]: Connected to LM portal $($PortalInfo.companyDisplayName) via $Type Token - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." -ForegroundColor Green
+                    Return
+                }
+                Catch {
+                    throw "Unable to validate API token info"
+                }
             }
         }
-        Catch{
-
-            #Clear credential object from environment
-            Remove-Variable LMAuth -Scope Script -ErrorAction SilentlyContinue
-            throw "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
+        Catch {
+            Try{
+                $DeviceInfo = Get-LMDevice -ErrorAction Stop
+    
+                If($DeviceInfo){
+                    Write-LMHost "[INFO]: Connected to LM portal $AccountName via $Type Token with limited permissions, ensure your api token has the necessary rights needed to run desired commands." -ForegroundColor Yellow
+                    Return
+                }
+                Else{
+                    throw "Unable to verify api token permission levels, ensure api token has rights to view all/select resources or at minimum view access for Account Information"
+                }
+            }
+            Catch{
+    
+                #Clear credential object from environment
+                Remove-Variable LMAuth -Scope Script -ErrorAction SilentlyContinue
+                throw "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
+            }
+            Return
         }
-        Return
+    }
+    Else{
+        Write-LMHost "[INFO]: Skipping validation of credentials, connected to LM portal $AccountName via $Type, ensure your api token has the necessary rights needed to run desired commands." -ForegroundColor Yellow
     }
 }
