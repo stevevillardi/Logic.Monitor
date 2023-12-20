@@ -1,6 +1,6 @@
 Function Set-LMDevice {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -60,6 +60,16 @@ Function Set-LMDevice {
             #Build header and uri
             $ResourcePath = "/device/devices/$Id"
 
+            If($PSItem){
+                $Message = "Id: $Id | Name: $($PSItem.name) | DisplayName: $($PSItem.displayName)"
+            }
+            ElseIf($Name){
+                $Message = "Id: $Id | Name: $Name"
+            }
+            Else{
+                $Message = "Id: $Id"
+            }
+
             Try {
                 $Data = @{
                     name                      = $NewName
@@ -82,15 +92,17 @@ Function Set-LMDevice {
             
                 $Data = ($Data | ConvertTo-Json)
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+                If ($PSCmdlet.ShouldProcess($Message, "Set Device")) { 
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

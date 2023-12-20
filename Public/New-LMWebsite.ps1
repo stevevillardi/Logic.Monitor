@@ -54,6 +54,9 @@ Function New-LMWebsite {
         [Parameter(ParameterSetName="Website")]
         [Nullable[Int]]$PageLoadAlertTimeInMS,
 
+        [Parameter(ParameterSetName="Website")]
+        [Nullable[boolean]]$IgnoreSSL,
+
         [Parameter(ParameterSetName="Ping")]
         [ValidateSet(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)]
         [Nullable[Int]]$PingPercentNotReceived,
@@ -76,7 +79,10 @@ Function New-LMWebsite {
         [Nullable[Int]]$PollingInterval,
 
         [Parameter(ParameterSetName="Website")]
-        [String[]]$WebsiteSteps
+        [Object[]]$WebsiteSteps,
+
+        [Parameter(ParameterSetName="Website")]
+        [Object[]]$CheckPoints
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
@@ -88,10 +94,11 @@ Function New-LMWebsite {
             $Type = "pingcheck"
         }
 
+        
         $Steps = @()
         If ($Type -eq "webcheck") {
             If($WebsiteSteps){
-                $Steps += $WebsiteSteps
+                $Steps = $WebsiteSteps
             }
             Else{
                 $Steps += [PSCustomObject]@{
@@ -120,7 +127,7 @@ Function New-LMWebsite {
                 }
             }
         }
-
+        
         #Build custom props hashtable
         $customProperties = @()
         If ($Properties) {
@@ -128,16 +135,16 @@ Function New-LMWebsite {
                 $customProperties += @{name = $Key; value = $Properties[$Key] }
             }
         }
-                
+        
         #Build header and uri
         $ResourcePath = "/website/websites"
-
+        
         Try {
             $AlertExp = ""
             If ($SSLAlertThresholds) {
                 $AlertExp = "< " + $SSLAlertThresholds -join " "
             }
-
+            
             $Data = @{
                 name                        = $Name
                 description                 = $Description
@@ -155,6 +162,7 @@ Function New-LMWebsite {
                 triggerSSLStatusAlert       = $TriggerSSLStatusAlert
                 triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
                 count                       = $PingCount
+                ignoreSSL                   = $IgnoreSSL
                 percentPktsNotReceiveInTime = $PingPercentNotReceived
                 timeoutInMSPktsNotReceive   = $PingTimeout
                 transition                  = $FailedCount
@@ -165,18 +173,27 @@ Function New-LMWebsite {
                 type                        = $Type
                 steps                       = $Steps
             }
+            
+            If($CheckPoints){
+                $TestLocations = [PSCustomObject]@{
+                    all = $true
+                    smgIds = @()
+                    collectorIds = @($CheckPoints.smgId.GetEnumerator() | Foreach-Object {If($_ -ne 0){[Int]$_}})
+                }
 
+                $Data.checkpoints  = $CheckPoints
+                $Data.testLocation = $TestLocations
+            }
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "steps") { $Data.Remove($_) } }
-        
+            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "testLocation" -and $_ -ne "steps" -and  $_ -ne "checkpoints") { $Data.Remove($_) } }
             $Data = ($Data | ConvertTo-Json -Depth 5)
-
+            
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+            #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
             Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )

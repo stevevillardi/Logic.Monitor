@@ -1,6 +1,6 @@
 Function Set-LMConfigsource {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -18,7 +18,7 @@ Function Set-LMConfigsource {
 
         [String]$TechNotes,
 
-        [ValidateSet("3600","14400","28800","86000")]
+        [ValidateSet("3600","14400","28800","86400")]
         [String]$PollingIntervalInSeconds, #In Seconds
 
         [PSCustomObject]$ConfigChecks #Should be the full datapoints object from the output of Get-LMDatasource
@@ -31,7 +31,7 @@ Function Set-LMConfigsource {
 
             #Lookup ParentGroupName
             If ($Name) {
-                $LookupResult = (Get-LMDatasource -Name $Name).Id
+                $LookupResult = (Get-LMConfigSource -Name $Name).Id
                 If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
@@ -39,7 +39,17 @@ Function Set-LMConfigsource {
             }
                     
             #Build header and uri
-            $ResourcePath = "/setting/datasources/$Id"
+            $ResourcePath = "/setting/configsources/$Id"
+
+            If($PSItem){
+                $Message = "Id: $Id | Name: $($PSItem.name) | DisplayName: $($PSItem.displayName)"
+            }
+            ElseIf($Name){
+                $Message = "Id: $Id | Name: $Name"
+            }
+            Else{
+                $Message = "Id: $Id"
+            }
 
             Try {
                 $Data = @{
@@ -57,15 +67,17 @@ Function Set-LMConfigsource {
             
                 $Data = ($Data | ConvertTo-Json)
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?forceUniqueIdentifier=true"
+                If ($PSCmdlet.ShouldProcess($Message, "Set Configsource")) {  
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?forceUniqueIdentifier=true"
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Datasource" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Datasource" )
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

@@ -1,13 +1,13 @@
 Function Set-LMAppliesToFunction {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$Name,
 
         [String]$NewName,
 
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id',ValueFromPipelineByPropertyName)]
         [String]$Id,
 
         [String]$Description,
@@ -31,6 +31,13 @@ Function Set-LMAppliesToFunction {
         #Build header and uri
         $ResourcePath = "/setting/functions/$Id"
 
+        If($PSItem){
+            $Message = "Id: $Id | Name: $($PSItem.name)"
+        }
+        Else{
+            $Message = "Id: $Id"
+        }
+
         Try {
             $Data = @{
                 name                                = $NewName
@@ -43,15 +50,17 @@ Function Set-LMAppliesToFunction {
 
             $Data = ($Data | ConvertTo-Json)
 
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+            If ($PSCmdlet.ShouldProcess($Message, "Set AppliesTo Function")) {  
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AppliesToFunction" )
+                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AppliesToFunction" )
+            }
         }
         Catch [Exception] {
             $Proceed = Resolve-LMException -LMException $PSItem

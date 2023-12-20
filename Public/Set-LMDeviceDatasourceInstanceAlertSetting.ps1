@@ -1,6 +1,6 @@
 Function Set-LMDeviceDatasourceInstanceAlertSetting {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
@@ -12,10 +12,12 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
+        [Alias("DeviceId")]
         [Int]$Id,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+        [Alias("DeviceName")]
         [String]$Name,
 
         [Parameter(Mandatory)]
@@ -98,6 +100,8 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
             #Build header and uri
             $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$HdsiId/alertsettings/$DatapointId"
 
+            $Message = "Id: $Id | hostDatasourceId: $HdsId | datapointId: $DatapointId"
+
             Try {
                 $Data = @{
                     disableAlerting      = $DisableAlerting
@@ -113,15 +117,17 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
                 @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "alertExpr" -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
 
                 $Data = ($Data | ConvertTo-Json)
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                If ($PSCmdlet.ShouldProcess($Message, "Set Device Datasource Instance Alert Setting")) { 
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AlertSetting" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AlertSetting" )
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

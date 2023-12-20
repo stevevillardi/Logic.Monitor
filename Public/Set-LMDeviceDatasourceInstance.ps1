@@ -1,6 +1,6 @@
 Function Set-LMDeviceDatasourceInstance {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
     Param (
         [String]$DisplayName,
         
@@ -63,8 +63,6 @@ Function Set-LMDeviceDatasourceInstance {
                 $HdsId = $LookupResult
             }
 
-
-
             #Build custom props hashtable
             $customProperties = @()
             If ($Properties) {
@@ -75,6 +73,16 @@ Function Set-LMDeviceDatasourceInstance {
             
             #Build header and uri
             $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$instanceId"
+
+            If($PSItem){
+                $Message = "deviceDisplayName: $($PSItem.deviceDisplayName) | instanceId: $($PSItem.id) | instanceName: $($PSItem.name)"
+            }
+            ElseIf($DeviceName){
+                $Message = "deviceDisplayName: $DeviceName | instanceId: $InstanceId"
+            }
+            Else{
+                $Message = "instanceId: $InstanceId | deviceId: $DeviceId"
+            }
 
             Try {
                 $Data = @{
@@ -93,15 +101,17 @@ Function Set-LMDeviceDatasourceInstance {
 
                 $Data = ($Data | ConvertTo-Json)
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                If ($PSCmdlet.ShouldProcess($Message, "Set Device Datasource Instance")) { 
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceDatasourceInstance" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceDatasourceInstance" )
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem
