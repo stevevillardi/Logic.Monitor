@@ -5,6 +5,9 @@ Function Get-LMCollectorVersions {
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
+        [Parameter(ParameterSetName = 'Top')]
+        [Switch]$TopVersions,
+
         [ValidateRange(1,1000)]
         [Int]$BatchSize = 1000
     )
@@ -25,6 +28,7 @@ Function Get-LMCollectorVersions {
             #Build query params
             Switch ($PSCmdlet.ParameterSetName) {
                 "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
+                "Top" { $QueryParams = "?topVersions=true&size=$BatchSize&offset=$Count&sort=+id" }
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
