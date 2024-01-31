@@ -70,7 +70,7 @@ Function Invoke-LMActiveDiscovery {
                 #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
                     
-                    Return "Scheduled Active Discovery task for device id: $device."
+                    Write-Host "Scheduled Active Discovery task for device id: $device."
                 }
                 Catch [Exception] {
                     $Proceed = Resolve-LMException -LMException $PSItem
