@@ -1,4 +1,23 @@
 # Previous module release notes
+## 5.0.1
+###### New cmdlets:
+**New-LMReportGroup**:
+- Create new report group and set a description
+**Set-LMReportGroup**:
+- Update existing report group. Accepts pipeline input.
+**New-LMReportGroup**:
+- Delete specified report group. Accepts pipeline input.
+
+###### Updated cmdlets:
+**New-LMWebsite**:
+- Add support for specifying checkpoints when creating webchecks.
+**Set-LMX Commands**:
+- Add support for -WhatIf parameter
+
+###### Bug Fixes:
+**Get-LMDeviceAlertSettings**:
+- Fix bug causing pipeline process to not work correctly
+
 ## 5.0
 ###### New features/Breaking changes:
 **Support for -WhatIf parameter on destructive cmdlets**:
