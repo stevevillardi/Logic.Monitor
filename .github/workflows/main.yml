@@ -32,9 +32,8 @@ jobs:
           $GithubReleaseMessage = @'
           ${{github.event.release.body}}
           '@
-          $GithubReleaseMessage = $GithubReleaseMessage.Replace("`n","\n").Replace("`"","\`"").Replace("**","*").Replace("    -",">").Replace("- ","• ").Replace("#","")
+          $GithubReleaseMessage = $GithubReleaseMessage.Replace("`n","\n").Replace("`"","\`"").Replace("**","*").Replace("    -",">").Replace("- ","• ").Replace("#","").Replace("`r","")
           "githubReleaseMessage=$GithubReleaseMessage" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          Write-Output $env:GITHUB_OUTPUT
   push_to_slack:
     needs: publish_to_gallery
     runs-on: ubuntu-latest
