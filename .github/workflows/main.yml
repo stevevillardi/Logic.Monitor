@@ -27,6 +27,8 @@ jobs:
         run: |
           ./Build.ps1
           Publish-Module -path ./ -NuGetApiKey $env:NUGET_API_KEY -SkipAutomaticTags -Verbose
+          $GithubReleaseMessage = ${{github.event.release.body}}.Replace("`n","\n").Replace("`"","\`"").Replace("**","*").Replace("    -",">").Replace("- ","• ").Replace("#","")
+          $Env:GITHUB_OUTPUT = Write-Output "GithubReleaseMessage=$($GithubReleaseMessage)"
   push-to-slack:
     runs-on: ubuntu-latest
     environment: publish
@@ -72,7 +74,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{github.event.release.body}}"
+                    "text": "${{ steps.psgallery-publish.outputs.GithubReleaseMessage }}"
                   },
                   "accessory": {
                     "type": "button",
