@@ -33,6 +33,7 @@ jobs:
           $GithubReleaseMessage = $GithubReleaseMessage.Replace("`n","\n").Replace("`"","\`"").Replace("**","*").Replace("    -",">").Replace("- ","• ").Replace("#","")
           $Env:GITHUB_OUTPUT = Write-Output "GithubReleaseMessage=$($GithubReleaseMessage)"
   push-to-slack:
+    needs: publish-to-gallery
     runs-on: ubuntu-latest
     environment: publish
     steps:
