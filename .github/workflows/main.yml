@@ -31,7 +31,7 @@ jobs:
           ${{github.event.release.body}}
           '@
           $GithubReleaseMessage = $GithubReleaseMessage.Replace("`n","\n").Replace("`"","\`"").Replace("**","*").Replace("    -",">").Replace("- ","• ").Replace("#","")
-          $Env:GITHUB_OUTPUT = Write-Output "GithubReleaseMessage=$($GithubReleaseMessage)"
+          echo ""GithubReleaseMessage=$GithubReleaseMessage" >> $env:GITHUB_OUTPUT
   push-to-slack:
     needs: publish-to-gallery
     runs-on: ubuntu-latest
