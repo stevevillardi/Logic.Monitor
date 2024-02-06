@@ -78,7 +78,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{needs.psgallery_publish.outputs.GithubReleaseMessage }}"
+                    "text": "${{needs.publish-to-gallery.outputs.GithubReleaseMessage }}"
                   },
                   "accessory": {
                     "type": "button",
