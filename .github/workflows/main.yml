@@ -16,6 +16,8 @@ jobs:
   publish_to_gallery:
     runs-on: ubuntu-latest
     environment: publish
+    outputs: 
+      githubReleaseMessage: ${{steps.psgallery_publish.outputs.githubReleaseMessage}}
     steps:
       - uses: actions/checkout@v4
       - name: Build and publish
@@ -31,7 +33,7 @@ jobs:
           ${{github.event.release.body}}
           '@
           $GithubReleaseMessage = $GithubReleaseMessage.Replace("`n","\n").Replace("`"","\`"").Replace("**","*").Replace("    -",">").Replace("- ","• ").Replace("#","")
-          "GithubReleaseMessage=$GithubReleaseMessage" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "githubReleaseMessage=$GithubReleaseMessage" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
   push_to_slack:
     needs: publish_to_gallery
     runs-on: ubuntu-latest
@@ -42,7 +44,7 @@ jobs:
         id: slack-post
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK   
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         with:
           payload: |
             {
@@ -78,7 +80,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{needs.publish_to_gallery.outputs.GithubReleaseMessage}}"
+                    "text": "${{needs.publish_to_gallery.outputs.githubReleaseMessage}}"
                   },
                   "accessory": {
                     "type": "button",
