@@ -1,4 +1,11 @@
 # Previous module release notes
+## 5.0.2
+###### Bug Fixes:
+**Get-LMCollectorVersions**:
+- Added -Top parameter to only return current versions of LM Collector.
+**Invoke-LMActiveDiscovery**:
+- Fixed bug causing targeted groups to only execute for the first device in the list.
+
 ## 5.0.1
 ###### New cmdlets:
 **New-LMReportGroup**:

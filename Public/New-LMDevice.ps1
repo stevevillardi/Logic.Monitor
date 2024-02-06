@@ -32,7 +32,11 @@ Function New-LMDevice {
 
         [Nullable[Int]]$NetflowCollectorGroupId,
 
-        [Nullable[Int]]$NetflowCollectorId
+        [Nullable[Int]]$NetflowCollectorId,
+
+        [Nullable[Int]]$LogCollectorGroupId,
+
+        [Nullable[Int]]$LogCollectorId
     )
     #Check if we are logged in and have valid api creds
     Begin {}
@@ -65,6 +69,8 @@ Function New-LMDevice {
                     link                      = $Link
                     netflowCollectorGroupId   = $NetflowCollectorGroupId
                     netflowCollectorId        = $NetflowCollectorId
+                    logCollectorGroupId       = $LogCollectorGroupId
+                    logCollectorId            = $LogCollectorId
                     hostGroupIds              = $HostGroupIds -join ","
                 }
 
