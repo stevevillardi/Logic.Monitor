@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build and publish
-        id: psgallery-publish
+        id: psgallery_publish
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
           BUILD_VERSION: ${{github.ref_name}}
@@ -77,7 +77,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "${{ steps.psgallery-publish.outputs.GithubReleaseMessage }}"
+                    "text": "${{ steps.psgallery_publish.outputs.GithubReleaseMessage }}"
                   },
                   "accessory": {
                     "type": "button",
