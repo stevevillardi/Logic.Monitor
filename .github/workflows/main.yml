@@ -25,8 +25,8 @@ jobs:
           BUILD_VERSION: ${{github.ref_name}}
         shell: pwsh
         run: |
-          ./Build.ps1
-          Publish-Module -path ./ -NuGetApiKey $env:NUGET_API_KEY -SkipAutomaticTags -Verbose
+          #./Build.ps1
+          #Publish-Module -path ./ -NuGetApiKey $env:NUGET_API_KEY -SkipAutomaticTags -Verbose
           $GithubReleaseMessage = ${{github.event.release.body}}.Replace("`n","\n").Replace("`"","\`"").Replace("**","*").Replace("    -",">").Replace("- ","• ").Replace("#","")
           $Env:GITHUB_OUTPUT = Write-Output "GithubReleaseMessage=$($GithubReleaseMessage)"
   push-to-slack:
