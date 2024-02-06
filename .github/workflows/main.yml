@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: publish
     steps:
+      - uses: actions/checkout@v4
       - name: Build and publish
         id: psgallery-publish
-        uses: actions/checkout@v3
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
           BUILD_VERSION: ${{github.ref_name}}
@@ -27,9 +27,16 @@ jobs:
         run: |
           ./Build.ps1
           Publish-Module -path ./ -NuGetApiKey $env:NUGET_API_KEY -SkipAutomaticTags -Verbose
+  push-to-slack:
+    runs-on: ubuntu-latest
+    environment: publish
+    steps:
       - name: Send custom JSON data to Slack workflow
-        id: slack-post
         uses: slackapi/slack-github-action@v1.25.0
+        id: slack-post
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK   
         with:
           payload: |
             {
@@ -108,6 +115,3 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK   

@@ -20,7 +20,7 @@ jobs:
     runs-on: windows-latest
     environment: test
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build and Test 5.1
       # API key generated in PSGallery
         env:
