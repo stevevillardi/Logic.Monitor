@@ -395,27 +395,33 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 # Change List
 
 ## 5.1
-###### Updated Cmdlets:
-**New-LMDevice**:
-- Added support for *LogCollectorGroupId* and *LogCollectorId*.
-**Set-LMDevice**:
-- Added support for *LogCollectorGroupId* and *LogCollectorId*.
-**Get-LMReport**:
-- Added output format for report objects.
-**Get-LMDeviceGroup**:
-- Added pipeline processing for Id.
+### Updated Cmdlets:
+- **New-LMDevice**:
+  - Added support for *LogCollectorGroupId* and *LogCollectorId*.
 
-###### New Cmdlets:
-**Remove-LMReport**:
-- Delete a specified report by name or id.
-**Copy-LMDashboard**:
-- Clone a dashboard by specifying an existing dashboard within an LM portal.
-**Copy-LMReport**:
-- Clone a report by specifying an existing report within an LM portal.
-**Copy-LMDevice**:
-- Clone a device/resource by specifying an existing device/resource. Note: If the device is assigned masked custom properties, they must be updated after cloning as the values for those properties cannot be retrieved by the LM API.
+- **Set-LMDevice**:
+  - Added support for *LogCollectorGroupId* and *LogCollectorId*.
 
-###### New Cmdlets Usage Examples:
+- **Get-LMReport**:
+  - Added output format for report objects.
+
+- **Get-LMDeviceGroup**:
+  - Added pipeline processing for Id.
+
+### New Cmdlets:
+- **Remove-LMReport**:
+   - Delete a specified report by name or id.
+
+- **Copy-LMDashboard**:
+  - Clone a dashboard by specifying an existing dashboard within an LM portal.
+
+- **Copy-LMReport**:
+  - Clone a report by specifying an existing report within an LM portal.
+
+- **Copy-LMDevice**:
+  - Clone a device/resource by specifying an existing device/resource. Note: If the device is assigned masked custom properties, they must be updated after cloning as the values for those properties cannot be retrieved by the LM API.
+
+### New Cmdlets Usage Examples:
 ```powershell
 #Create a new device using device id 123 as a reference
 Copy-LMDevice -Name newdevice.example.com -DisplayName newdevice -DeviceObject $(Get-LMDevice -id 123)
