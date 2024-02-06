@@ -41,7 +41,7 @@ Function Get-LMDeviceGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
-        [Parameter(ParameterSetName = 'Id')]
+        [Parameter(ParameterSetName = 'Id',ValueFromPipeline)]
         [Int]$Id,
 
         [Parameter(ParameterSetName = 'Name')]
@@ -54,67 +54,71 @@ Function Get-LMDeviceGroup {
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
-        #Build header and uri
-        $ResourcePath = "/device/groups"
+    Begin {}
+    Process {
+        If ($Script:LMAuth.Valid) {
+            
+            #Build header and uri
+            $ResourcePath = "/device/groups"
 
-        #Initalize vars
-        $QueryParams = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
+            #Initalize vars
+            $QueryParams = ""
+            $Count = 0
+            $Done = $false
+            $Results = @()
 
-        #Loop through requests 
-        While (!$Done) {
-            #Build query params
-            Switch ($PSCmdlet.ParameterSetName) {
-                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
-                "Id" { $resourcePath += "/$Id" }
-                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
-                "Filter" {
-                    #List of allowed filter props
-                    $PropList = @()
-                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+            #Loop through requests 
+            While (!$Done) {
+                #Build query params
+                Switch ($PSCmdlet.ParameterSetName) {
+                    "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
+                    "Id" { $resourcePath += "/$Id" }
+                    "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
+                    "Filter" {
+                        #List of allowed filter props
+                        $PropList = @()
+                        $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                        $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                    }
                 }
-            }
-            Try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                Try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                        
                     
-                
-                
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+                    
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
-                #Stop looping if single device, no need to continue
-                If ($PSCmdlet.ParameterSetName -eq "Id") {
-                    $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
-                }
-                #Check result size and if needed loop again
-                Else {
-                    [Int]$Total = $Response.Total
-                    [Int]$Count += ($Response.Items | Measure-Object).Count
-                    $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                    #Stop looping if single device, no need to continue
+                    If ($PSCmdlet.ParameterSetName -eq "Id") {
                         $Done = $true
+                        Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
+                    }
+                    #Check result size and if needed loop again
+                    Else {
+                        [Int]$Total = $Response.Total
+                        [Int]$Count += ($Response.Items | Measure-Object).Count
+                        $Results += $Response.Items
+                        If ($Count -ge $Total) {
+                            $Done = $true
+                        }
+                    }
+                }
+                Catch [Exception] {
+                    $Proceed = Resolve-LMException -LMException $PSItem
+                    If (!$Proceed) {
+                        Return
                     }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
-            }
+            Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DeviceGroup" )
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DeviceGroup" )
+        Else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+        }
     }
-    Else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
-    }
+    End{}
 }

@@ -17,13 +17,97 @@ jobs:
     runs-on: ubuntu-latest
     environment: publish
     steps:
-      - uses: actions/checkout@v3
       - name: Build and publish
-      # API key generated in PSGallery
+        id: psgallery-publish
+        uses: actions/checkout@v3
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
           BUILD_VERSION: ${{github.ref_name}}
         shell: pwsh
         run: |
           ./Build.ps1
-          Publish-Module -path ./ -NuGetApiKey $env:NUGET_API_KEY -SkipAutomaticTags -Verbose          
+          Publish-Module -path ./ -NuGetApiKey $env:NUGET_API_KEY -SkipAutomaticTags -Verbose
+      - name: Send custom JSON data to Slack workflow
+        id: slack-post
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":party-lm-bug: Logic.Monitor PowerShell Module Release (${{github.event.release.tag_name}})  :party-lm-bug:"
+                  }
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "text": "*${{github.event.release.published_at}}*  | Logic.Monitor Update Announcements",
+                      "type": "mrkdwn"
+                    }
+                  ]
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":powershell-core: Release Notes :powershell-core:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{github.event.release.body}}"
+                  },
+                  "accessory": {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "Full/Previous Release Notes"
+                    },
+                    "url": "https://github.com/stevevillardi/Logic.Monitor/releases"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":rocket: How to get the latest version :rocket:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "```Update-Module -Name Logic.Monitor -Force```"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": ":pushpin: Do you have a feature request or bug report? <https://github.com/stevevillardi/Logic.Monitor/issues|Submit a Github Issue>."
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK   

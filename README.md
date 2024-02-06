@@ -189,6 +189,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 #### Dashboards
 
 - Get-LMDashboard
+- Copy-LMDashboard
 - Get-LMDashboardGroup
 - Get-LMDashboardWidget
 - Remove-LMDashboard*
@@ -225,6 +226,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 #### Devices
 
+- Copy-LMDevice
 - Get-LMDevice
 - Get-LMDeviceSDT
 - Get-LMDeviceSDTHistory
@@ -256,7 +258,7 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 #### Device Groups
 
-- Get-LMDeviceGroup
+- Get-LMDeviceGroup*
 - Get-LMDeviceGroupSDT
 - Get-LMDeviceGroupSDTHistory
 - Get-LMDeviceGroupAlerts*
@@ -324,11 +326,13 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 #### Reports
 
+- Copy-LMReport
 - Get-LMReport
 - Get-LMReportGroup
 - New-LMReportGroup
 - Set-LMReportGroup*
 - Remove-LMReportGroup*
+- Remove-LMReport*
 
 #### Repository (LogicModules)
 
@@ -390,24 +394,38 @@ New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 
 # Change List
 
-## 5.0.1
-###### New cmdlets:
-**New-LMReportGroup**:
-- Create new report group and set a description
-**Set-LMReportGroup**:
-- Update existing report group. Accepts pipeline input.
-**New-LMReportGroup**:
-- Delete specified report group. Accepts pipeline input.
+## 5.1
+###### Updated Cmdlets:
+**New-LMDevice**:
+- Added support for *LogCollectorGroupId* and *LogCollectorId*.
+**Set-LMDevice**:
+- Added support for *LogCollectorGroupId* and *LogCollectorId*.
+**Get-LMReport**:
+- Added output format for report objects.
+**Get-LMDeviceGroup**:
+- Added pipeline processing for Id.
 
-###### Updated cmdlets:
-**New-LMWebsite**:
-- Add support for specifying checkpoints when creating webchecks.
-**Set-LMX Commands**:
-- Add support for -WhatIf parameter
+###### New Cmdlets:
+**Remove-LMReport**:
+- Delete a specified report by name or id.
+**Copy-LMDashboard**:
+- Clone a dashboard by specifying an existing dashboard within an LM portal.
+**Copy-LMReport**:
+- Clone a report by specifying an existing report within an LM portal.
+**Copy-LMDevice**:
+- Clone a device/resource by specifying an existing device/resource. Note: If the device is assigned masked custom properties, they must be updated after cloning as the values for those properties cannot be retrieved by the LM API.
 
-###### Bug Fixes:
-**Get-LMDeviceAlertSettings**:
-- Fix bug causing pipeline process to not work correctly
+###### New Cmdlets Usage Examples:
+```powershell
+#Create a new device using device id 123 as a reference
+Copy-LMDevice -Name newdevice.example.com -DisplayName newdevice -DeviceObject $(Get-LMDevice -id 123)
 
+#Clone an existing dashboard with id 25 but place it in a different group with a new description
+Copy-LMDashboard -Name NewClonedDashboard -DasbhaordId 25 -ParentGroupId 2 -Description "New Cloned Dashboard"
+
+#Clone an existing report with id 75 and change the report group it belongs to
+Copy-LMReport -Name NewReport -Description "New Description" -ParentGroupId 3 -ReportObject $(Get-LMReport -Id 75)
+
+```
 
 [Previous Release Notes](RELEASENOTES.md)
