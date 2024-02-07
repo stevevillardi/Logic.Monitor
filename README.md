@@ -118,6 +118,61 @@ Generate new API Token:
 New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 ```
 
+**Usinf the -Filter parameter**: The -Filter parameter has been overhauled to provide more options and flexibility in generating more complex server side filtering options. Previously -Filter only took in a hashtable of properties to perform an equal comparison against, this was very limited compared to the additional filtering options available in LM APIv3. As a result of the update **4.2** you can now use the following operators when construction the filter string. Additionally the old hashtable method of filtering is still supported for backwards compatibility but may be removed in a future update:
+
+| Operator      | Description           |
+|---------------|-------------          |
+|-eq	        |Equal                  |
+|-ne            |Not equal              |
+|-gt	        |Greater than           |
+|-lt	        |Less than              |
+|-ge            |Greater than or equal  |
+|-le            |Less than or equal     |
+|-contains	    |Contain                |
+|-notcontains   |Does not contain       |
+|-and	        |Comparison *and* operator   |
+|-or            |Comparison *or* operator   |
+
+**Notes**: When creating your own custom filters, consider the following items:
+
+**Text values**: Enclose the text in single quotation marks (for example, 'Value' or 'Value with spaces'):
+
+```powershell
+-Filter "displayName -eq 'MyNameHere'"
+```
+
+**Variables**: Enclose variables that need to be expanded in single quotation marks:
+
+```powershell
+-Filter "username -eq '$User'"
+```
+
+**Integer values**: You don't need to enclose integers (for example, 500). You can often enclose integers in single quotation marks but is not required:
+
+```powershell
+-Filter "id -eq 7"
+```
+
+**System values**: Enclose system values (for example, \$true, \$false, or \$null) in single quotation marks:
+
+```powershell
+-Filter "disableAlerting -eq '$true'"
+```
+
+**Field names**: Field names in the LM API are case sensitive, ensure you use the proper casing when creating a custom filter (ex displayName). Using incorrect casing can result in unexpected results being returned. Also reference LM APIv3 swagger guide for details on which fields are supported for filtering.
+
+Additional Filter Examples:
+```powershell
+#Device Hostname contains UDM and aleting is disabled
+Get-LMDevice -Filter "disableAlerting -eq '$true' -and name -contains 'UDM'"
+
+#User email address either contains steve or is null
+Get-LMUser -Filter "email -contains 'steve' -or email -ne '$null'"
+
+#Get active alerts where the instance name is Kubernetes_Scheduler and the Alert Rule is labeled Critical
+Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Critical'"
+```
+
 **Note:** Using the -Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
 
 # Additional Code Examples and Documentation

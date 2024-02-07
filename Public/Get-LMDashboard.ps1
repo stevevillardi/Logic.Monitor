@@ -14,6 +14,9 @@ Function Get-LMDashboard {
         [Parameter(ParameterSetName = 'GroupName')]
         [String]$GroupName,
 
+        [Parameter(ParameterSetName = 'SubGroups')]
+        [String]$GroupPathSearchString,
+
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
@@ -41,6 +44,7 @@ Function Get-LMDashboard {
                 "Id" { $resourcePath += "/$Id" }
                 "GroupId" { $QueryParams = "?filter=groupId:`"$GroupId`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "GroupName" { $QueryParams = "?filter=groupName:`"$GroupName`"&size=$BatchSize&offset=$Count&sort=+id" }
+                "SubGroups" { $QueryParams = "?filter=groupFullPath~`"$GroupPathSearchString`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "Filter" {
                     #List of allowed filter props
