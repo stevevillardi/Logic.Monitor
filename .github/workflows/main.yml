@@ -32,7 +32,7 @@ jobs:
           $GithubReleaseMessage = @'
           ${{github.event.release.body}}
           '@
-          $GithubReleaseMessage = $GithubReleaseMessage.Replace("`n","\n").Replace("`"","\`"").Replace("**","*").Replace("    -",">").Replace("- ","• ").Replace("#","").Replace("`r","")
+          $GithubReleaseMessage = $GithubReleaseMessage.Replace("`n","\n").Replace("`"","\`"").Replace("**","*").Replace("  - ",">").Replace("- ","• ").Replace("###","").Replace("##","").Replace("powershell","").Replace("`r","")
           "githubReleaseMessage=$GithubReleaseMessage" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
   push_to_slack:
     needs: publish_to_gallery
@@ -81,14 +81,45 @@ jobs:
                   "text": {
                     "type": "mrkdwn",
                     "text": "${{needs.publish_to_gallery.outputs.githubReleaseMessage}}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Logic.Monitor* Release Notes"
                   },
                   "accessory": {
                     "type": "button",
                     "text": {
                       "type": "plain_text",
-                      "text": "Full/Previous Release Notes"
+                      "text": "Release Notes",
+                      "emoji": true
                     },
-                    "url": "https://github.com/stevevillardi/Logic.Monitor/releases"
+                    "value": "click_me_123",
+                    "url": "https://github.com/stevevillardi/Logic.Monitor/releases",
+                    "action_id": "button-action"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Logic.Monitor.SE* Toolkit Release Notes:"
+                  },
+                  "accessory": {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "Release Notes",
+                      "emoji": true
+                    },
+                    "value": "click_me_123",
+                    "url": "https://github.com/stevevillardi/Logic.Monitor.SE/releases",
+                    "action_id": "button-action"
                   }
                 },
                 {
