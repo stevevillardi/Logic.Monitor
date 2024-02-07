@@ -118,7 +118,8 @@ Generate new API Token:
 New-LMAPIToken -Username jdoe@example.com -Note "Used for K8s"
 ```
 
-**Usinf the -Filter parameter**: The -Filter parameter has been overhauled to provide more options and flexibility in generating more complex server side filtering options. Previously -Filter only took in a hashtable of properties to perform an equal comparison against, this was very limited compared to the additional filtering options available in LM APIv3. As a result of the update **4.2** you can now use the following operators when construction the filter string. Additionally the old hashtable method of filtering is still supported for backwards compatibility but may be removed in a future update:
+##### **Using the -Filter parameter**: 
+The -Filter parameter has been overhauled to provide more options and flexibility in generating more complex server side filtering options. Previously -Filter only took in a hashtable of properties to perform an equal comparison against, this was very limited compared to the additional filtering options available in LM APIv3. As a result of the update **4.2** you can now use the following operators when construction the filter string. Additionally the old hashtable method of filtering is still supported for backwards compatibility but may be removed in a future update:
 
 | Operator      | Description           |
 |---------------|-------------          |
