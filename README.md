@@ -450,43 +450,23 @@ Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Crit
 
 # Change List
 
-## 5.1
+## 5.1.1
 ### Updated Cmdlets:
-- **New-LMDevice**:
-  - Added support for *LogCollectorGroupId* and *LogCollectorId*.
+- **Get-LMDevice**:
+  - Support for Delta queries is now GA. Using the -Filter, -Name or -DisplayName parameters along with -Delta will allow you to reterieve a Delta token which can be supplied to future API calls to only return resources that have changed since the last API call. The token is good for 30minutes before a new one will need to be regenerated.
 
-- **Set-LMDevice**:
-  - Added support for *LogCollectorGroupId* and *LogCollectorId*.
-
-- **Get-LMReport**:
-  - Added output format for report objects.
+  - Initial EA support for advanced property filters. This is the first release with support for advanced property filters, please report any bugs or feature requests through the github issues page.
 
 - **Get-LMDeviceGroup**:
-  - Added pipeline processing for Id.
+  - Initial EA support for advanced property filters. This is the first release with support for advanced property filters, please report any bugs or feature requests through the github issues page.
 
-### New Cmdlets:
-- **Remove-LMReport**:
-   - Delete a specified report by name or id.
-
-- **Copy-LMDashboard**:
-  - Clone a dashboard by specifying an existing dashboard within an LM portal.
-
-- **Copy-LMReport**:
-  - Clone a report by specifying an existing report within an LM portal.
-
-- **Copy-LMDevice**:
-  - Clone a device/resource by specifying an existing device/resource. Note: If the device is assigned masked custom properties, they must be updated after cloning as the values for those properties cannot be retrieved by the LM API.
-
-### New Cmdlets Usage Examples:
+### Cmdlets Usage Examples:
 ```powershell
-#Create a new device using device id 123 as a reference
-Copy-LMDevice -Name newdevice.example.com -DisplayName newdevice -DeviceObject $(Get-LMDevice -id 123)
+#Get all devices that start with LM* and return a Delta token with them
+Get-LMDevice -Name "LM*" -Delta
 
-#Clone an existing dashboard with id 25 but place it in a different group with a new description
-Copy-LMDashboard -Name NewClonedDashboard -DasbhaordId 25 -ParentGroupId 2 -Description "New Cloned Dashboard"
-
-#Clone an existing report with id 75 and change the report group it belongs to
-Copy-LMReport -Name NewReport -Description "New Description" -ParentGroupId 3 -ReportObject $(Get-LMReport -Id 75)
+#Get list of devices that have been modified since the delta token has been generated
+Get-LMDevice -DeltaId "<DeltaToken from previous command>"
 
 ```
 

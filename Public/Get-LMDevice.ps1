@@ -66,7 +66,6 @@ Function Get-LMDevice {
 
         [Parameter(ParameterSetName = 'Filter')]
         [Parameter(ParameterSetName = 'Name')]
-        [Parameter(ParameterSetName = 'Id')]
         [Parameter(ParameterSetName = 'DisplayName')]
         [Parameter(ParameterSetName = 'All')]
         [Switch]$Delta,
@@ -100,7 +99,7 @@ Function Get-LMDevice {
             #Build query params
             Switch ($PSCmdlet.ParameterSetName) {
                 "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
-                "Delta" { $resourcePath += "/$DeltaId?size=$BatchSize&offset=$Count&" }
+                "Delta" { $resourcePath += "/$DeltaId" ; $QueryParams = "?size=$BatchSize&offset=$Count" }
                 "Id" { $resourcePath += "/$Id" }
                 "DisplayName" { $QueryParams = "?filter=displayName:`"$DisplayName`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
