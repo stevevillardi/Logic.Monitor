@@ -143,7 +143,17 @@ Function New-LMUser {
                 #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
             If($AutoGeneratePassword){
+                If(!$global:LMUserData){
+                    $UserData = New-Object System.Collections.ArrayList
+                    $UserData.Add([PSCustomObject]@{"Username"=$Username;"Temp_Password"=$Password}) | Out-Null
+                    New-Variable -Name LMUserData -Scope global -Value $UserData
+                }
+                Else{
+                    $global:LMUserData.Add([PSCustomObject]@{"Username"=$Username;"Temp_Password"=$Password}) | Out-Null
+                }
+                
                 Write-LMHost "[INFO]: Auto generated password assigned to $Username`: $Password" -ForegroundColor Yellow
+                Write-LMHost "[INFO]: Auto generated passwords are also stored in a reference variable called `$LMUserData" -ForegroundColor Yellow
             }
 
             Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )

@@ -127,7 +127,8 @@ Function Get-LMDevice {
                 #Store delta id if delta switch is present
                 If($Response.deltaId -and !$DeltaIdResponse){
                     $DeltaIdResponse = $Response.deltaId
-                    Write-LMHost "[INFO]: Delta switch detected, for further queries you can use deltaId: $DeltaIdResponse to perform additional delta requests." -ForegroundColor Yellow
+                    Write-LMHost "[INFO]: Delta switch detected, for further queries you can use deltaId: $DeltaIdResponse to perform additional delta requests. This variable can be accessed by referencing the `$LMDeltaId " -ForegroundColor Yellow
+                    Set-Variable -Name "LMDeltaId" -Value $DeltaIdResponse -Scope global
                 }
 
                 #Stop looping if single device, no need to continue

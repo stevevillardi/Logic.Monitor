@@ -450,24 +450,22 @@ Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Crit
 
 # Change List
 
-## 5.1.1
+## 5.1.2
 ### Updated Cmdlets:
 - **Get-LMDevice**:
-  - Support for Delta queries is now GA. Using the -Filter, -Name or -DisplayName parameters along with -Delta will allow you to reterieve a Delta token which can be supplied to future API calls to only return resources that have changed since the last API call. The token is good for 30minutes before a new one will need to be regenerated.
+  - When using the -Delta switch, in addition to the result output a variable called $LMDeltaId will also be set to allow for programatic retrieval of the DeltaId. Disconnecting from a portal will clear this variable.
 
-  - Initial EA support for advanced property filters. This is the first release with support for advanced property filters, please report any bugs or feature requests through the github issues page.
+- **New-LMUser**:
+  - When letting the user creation process generate a temp password the result will be stored in a output variable called $LMUserData to allow for programatic access to the temp credentials used to create an account. Disconnecting from a portal will clear this variable.
 
-### Cmdlets Usage Examples:
-```powershell
-#Get all devices that start with LM* and return a Delta token with them
-Get-LMDevice -Name "LM*" -Delta
+- **Disconnect-LMAccount**:
+  - Add support for clearing LMDeltaId and LMUserdata variables upon disconnect from a portal.
 
-#Get list of devices that have been modified since the delta token has been generated
-Get-LMDevice -DeltaId "<DeltaToken from previous command>"
+- **Get-LMTopologyMap**:
+  - Added custom TopologyMap object to XML format list for cleaner output results
 
-#Use advanced filter to filer based on property value
-Get-LMDevice -Filter "customProperties -eq $('{"name":"testy","value":"mctestface"}' | ConvertTo-Json) -and systemProperties -eq $('{"name":"system.deviceId","value":"123"}' | ConvertTo-Json)"
+- **Get-LMTopologyMapData**:
+  - Added custom TopologyMapData object to XML format list for cleaner output results
 
-```
 
 [Previous Release Notes](RELEASENOTES.md)

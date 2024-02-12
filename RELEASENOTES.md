@@ -1,4 +1,24 @@
 # Previous module release notes
+## 5.1.1
+### Updated Cmdlets:
+- **Get-LMDevice**:
+  - Support for Delta queries is now GA. Using the -Filter, -Name or -DisplayName parameters along with -Delta will allow you to reterieve a Delta token which can be supplied to future API calls to only return resources that have changed since the last API call. The token is good for 30minutes before a new one will need to be regenerated.
+
+  - Initial EA support for advanced property filters. This is the first release with support for advanced property filters, please report any bugs or feature requests through the github issues page.
+
+### Cmdlets Usage Examples:
+```powershell
+#Get all devices that start with LM* and return a Delta token with them
+Get-LMDevice -Name "LM*" -Delta
+
+#Get list of devices that have been modified since the delta token has been generated
+Get-LMDevice -DeltaId "<DeltaToken from previous command>"
+
+#Use advanced filter to filer based on property value
+Get-LMDevice -Filter "customProperties -eq $('{"name":"testy","value":"mctestface"}' | ConvertTo-Json) -and systemProperties -eq $('{"name":"system.deviceId","value":"123"}' | ConvertTo-Json)"
+
+```
+
 ## 5.1
 ### Updated Cmdlets:
 - **New-LMDevice**:
