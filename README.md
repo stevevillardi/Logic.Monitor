@@ -450,22 +450,15 @@ Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Crit
 
 # Change List
 
-## 5.1.2
+## 5.1.3
 ### Updated Cmdlets:
-- **Get-LMDevice**:
-  - When using the -Delta switch, in addition to the result output a variable called $LMDeltaId will also be set to allow for programatic retrieval of the DeltaId. Disconnecting from a portal will clear this variable.
+- **New-LMRole**:
+  - Update cmdlet to support provisioning new LMX RBAC permissions.
 
-- **New-LMUser**:
-  - When letting the user creation process generate a temp password the result will be stored in a output variable called $LMUserData to allow for programatic access to the temp credentials used to create an account. Disconnecting from a portal will clear this variable.
+- **Set-LMRole**:
+  - Update cmdlet to support provisioning new LMX RBAC permissions.
 
-- **Disconnect-LMAccount**:
-  - Add support for clearing LMDeltaId and LMUserdata variables upon disconnect from a portal.
-
-- **Get-LMTopologyMap**:
-  - Added custom TopologyMap object to XML format list for cleaner output results
-
-- **Get-LMTopologyMapData**:
-  - Added custom TopologyMapData object to XML format list for cleaner output results
-
+- **Invoke-LMActiveDiscovery**:
+  - Added pipeline support for device id. You can now pipe results cmdlets that return device objects directly to this command.
 
 [Previous Release Notes](RELEASENOTES.md)

@@ -1,4 +1,21 @@
 # Previous module release notes
+## 5.1.2
+### Updated Cmdlets:
+- **Get-LMDevice**:
+  - When using the -Delta switch, in addition to the result output a variable called $LMDeltaId will also be set to allow for programatic retrieval of the DeltaId. Disconnecting from a portal will clear this variable.
+
+- **New-LMUser**:
+  - When letting the user creation process generate a temp password the result will be stored in a output variable called $LMUserData to allow for programatic access to the temp credentials used to create an account. Disconnecting from a portal will clear this variable.
+
+- **Disconnect-LMAccount**:
+  - Add support for clearing LMDeltaId and LMUserdata variables upon disconnect from a portal.
+
+- **Get-LMTopologyMap**:
+  - Added custom TopologyMap object to XML format list for cleaner output results
+
+- **Get-LMTopologyMapData**:
+  - Added custom TopologyMapData object to XML format list for cleaner output results
+
 ## 5.1.1
 ### Updated Cmdlets:
 - **Get-LMDevice**:
