@@ -55,6 +55,14 @@ Function New-LMRole {
         [String]$ReportsPermission = "none",
 
         [Parameter(ParameterSetName = 'Default')]
+        [ValidateSet("view","manage","commit","publish","none")]
+        [String]$LMXToolBoxPermission = "none",
+        
+        [Parameter(ParameterSetName = 'Default')]
+        [ValidateSet("view","install","none")]
+        [String]$LMXPermission = "none",
+
+        [Parameter(ParameterSetName = 'Default')]
         [ValidateSet("view", "manage","none","manage-collectors","view-collectors")]
         [String]$SettingsPermission = "none",
 
@@ -143,6 +151,24 @@ Function New-LMRole {
                     objectType = "dashboard_group"
                     operation = "write"
                     subOperation = ""
+                }
+            }
+
+            If($LMXToolBoxPermission){
+                $Privileges += [PSCustomObject]@{
+                    objectId = "allinstalledmodules"
+                    objectName = "All installed modules"
+                    objectType = "module"
+                    operation = $LMXToolBoxPermission
+                }
+            }
+
+            If($LMXPermission){
+                $Privileges += [PSCustomObject]@{
+                    objectId = "All exchange modules"
+                    objectName = "private"
+                    objectType = "module"
+                    operation = $LMXPermission
                 }
             }
 

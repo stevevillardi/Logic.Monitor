@@ -5,6 +5,13 @@ $buildVersion = $env:BUILD_VERSION
 $manifestPath = "./Logic.Monitor.psd1"
 $publicFuncFolderPath = './Public'
 
+$ps1xmlFiles = Get-ChildItem -Path ./ -Filter *.ps1xml
+foreach ($ps1xml in $ps1xmlFiles) {
+  [xml]$xml = Get-Content -Path $ps1xml.FullName
+  $null = $xml.Schemas.Add($null, 'https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Format.xsd')
+  $null = $xml.Schemas.Add($null, 'https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/Schemas/Types.xsd')
+  $xml.Validate( { throw "File '$($ps1xml.Name)' schema error: $($_.Message)" })
+}
 
 if (!(Get-PackageProvider | Where-Object { $_.Name -eq 'NuGet' })) {
     Install-PackageProvider -Name NuGet -force | Out-Null
