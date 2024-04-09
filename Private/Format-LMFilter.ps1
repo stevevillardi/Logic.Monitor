@@ -1,3 +1,35 @@
+<#
+.SYNOPSIS
+Formats the LogicMonitor filter for API requests.
+
+.DESCRIPTION
+The Format-LMFilter function is used to format the LogicMonitor filter for API requests. It takes an input filter object and an optional list of properties to include in the formatted filter. The function supports both legacy and new filter formats.
+
+.PARAMETER Filter
+The input filter object. It can be a hashtable or a string.
+
+.PARAMETER PropList
+An optional list of properties to include in the formatted filter. The default value is an array containing the following properties: "name", "id", "status", "severity", "startEpoch", "endEpoch", "cleared", "resourceTemplateName", "monitorObjectName", "customProperties", "systemProperties", "autoProperties", "displayName".
+
+.OUTPUTS
+The formatted filter string.
+
+.EXAMPLE
+$filter = @{
+    name = "MyMonitor"
+    status = "active"
+}
+$formattedFilter = Format-LMFilter -Filter $filter
+Write-Host $formattedFilter
+# Output: name:"MyMonitor",status:"active"
+
+.EXAMPLE
+$filter = "name -eq 'MyMonitor' -and status -eq 'active'"
+$formattedFilter = Format-LMFilter -Filter $filter
+Write-Host $formattedFilter
+# Output: name:"MyMonitor",status:"active"
+#>
+
 Function Format-LMFilter {
     [CmdletBinding()]
     Param (

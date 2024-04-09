@@ -1,3 +1,22 @@
+<#
+.SYNOPSIS
+Generates a random password with the specified length.
+
+.DESCRIPTION
+The New-LMRandomCred function generates a random password using a specified length. It uses a set of valid password characters and a cryptographic random number generator to ensure the password is secure.
+
+.PARAMETER Length
+The length of the password to generate. The default value is 25.
+
+.EXAMPLE
+PS> New-LMRandomCred -Length 12
+Generates a random password with a length of 12 characters.
+
+.OUTPUTS
+System.String
+A randomly generated password.
+
+#>
 Function New-LMRandomCred {
 
     [CmdletBinding()]
