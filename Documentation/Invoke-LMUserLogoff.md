@@ -8,30 +8,31 @@ schema: 2.0.0
 # Invoke-LMUserLogoff
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Invokes a session logoff for one or more users in Logic Monitor.
 
 ## SYNTAX
 
 ```
-Invoke-LMUserLogoff [-Usernames] <String[]> [<CommonParameters>]
+Invoke-LMUserLogoff [-Usernames] <String[]> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Invoke-LMUserLogoff function is used to log off one or more users from a Logic Monitor session.
+It checks if the user is logged in and has valid API credentials before making the logoff request.
+If the user is not logged in, an error message is displayed.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Invoke-LMUserLogoff -Usernames "user1", "user2"
+Invokes a session logoff for the users "user1" and "user2" in Logic Monitor.
+```
 
 ## PARAMETERS
 
 ### -Usernames
-{{ Fill Usernames Description }}
+Specifies an array of usernames for which the session logoff needs to be invoked.
 
 ```yaml
 Type: String[]
@@ -39,7 +40,22 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -50,10 +66,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

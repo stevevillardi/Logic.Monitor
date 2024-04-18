@@ -14,12 +14,13 @@ schema: 2.0.0
 
 ### All (Default)
 ```
-Get-LMWebsiteCheckpoint [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsiteCheckpoint [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMWebsiteCheckpoint [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsiteCheckpoint [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -58,6 +59,21 @@ Accept wildcard characters: False
 Type: Object
 Parameter Sets: Filter
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

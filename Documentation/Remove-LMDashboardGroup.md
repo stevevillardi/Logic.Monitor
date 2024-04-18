@@ -8,33 +8,88 @@ schema: 2.0.0
 # Remove-LMDashboardGroup
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Removes a LogicMonitor dashboard group.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Remove-LMDashboardGroup -Id <Int32> [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDashboardGroup -Id <Int32> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Remove-LMDashboardGroup -Name <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDashboardGroup -Name <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Remove-LMDashboardGroup function removes a LogicMonitor dashboard group based on the specified Id or Name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Remove-LMDashboardGroup -Id 123
+Removes the dashboard group with Id 123.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Remove-LMDashboardGroup -Name "MyDashboardGroup"
+Removes the dashboard group with the name "MyDashboardGroup".
+```
 
 ## PARAMETERS
+
+### -Id
+The Id of the dashboard group to remove.
+This parameter is mandatory when using the 'Id' parameter set.
+
+```yaml
+Type: Int32
+Parameter Sets: Id
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the dashboard group to remove.
+This parameter is mandatory when using the 'Name' parameter set.
+
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Confirm
 Prompts you for confirmation before running the cmdlet.
@@ -51,43 +106,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: Int32
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases: wi
+Aliases: proga
 
 Required: False
 Position: Named
@@ -101,10 +126,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None.
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

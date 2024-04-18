@@ -8,92 +8,71 @@ schema: 2.0.0
 # Import-LMDashboard
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Imports LogicMonitor dashboards from various sources.
 
 ## SYNTAX
 
 ### FilePath-GroupName
 ```
 Import-LMDashboard -FilePath <String> -ParentGroupName <String> [-ReplaceAPITokensOnImport]
- [-APIToken <Object>] [-PrivateUserName <String>] [<CommonParameters>]
+ [-APIToken <Object>] [-PrivateUserName <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### FilePath-GroupId
 ```
 Import-LMDashboard -FilePath <String> -ParentGroupId <String> [-ReplaceAPITokensOnImport] [-APIToken <Object>]
- [-PrivateUserName <String>] [<CommonParameters>]
+ [-PrivateUserName <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### File-GroupName
 ```
 Import-LMDashboard -File <String> -ParentGroupName <String> [-ReplaceAPITokensOnImport] [-APIToken <Object>]
- [-PrivateUserName <String>] [<CommonParameters>]
+ [-PrivateUserName <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### File-GroupId
 ```
 Import-LMDashboard -File <String> -ParentGroupId <String> [-ReplaceAPITokensOnImport] [-APIToken <Object>]
- [-PrivateUserName <String>] [<CommonParameters>]
+ [-PrivateUserName <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Repo-GroupName
 ```
 Import-LMDashboard -GithubUserRepo <String> [-GithubAccessToken <String>] -ParentGroupName <String>
- [-ReplaceAPITokensOnImport] [-APIToken <Object>] [-PrivateUserName <String>] [<CommonParameters>]
+ [-ReplaceAPITokensOnImport] [-APIToken <Object>] [-PrivateUserName <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Repo-GroupId
 ```
 Import-LMDashboard -GithubUserRepo <String> [-GithubAccessToken <String>] -ParentGroupId <String>
- [-ReplaceAPITokensOnImport] [-APIToken <Object>] [-PrivateUserName <String>] [<CommonParameters>]
+ [-ReplaceAPITokensOnImport] [-APIToken <Object>] [-PrivateUserName <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The \`Import-LMDashboard\` function allows you to import LogicMonitor dashboards from different sources, such as local files, GitHub repositories, or LogicMonitor dashboard groups.
+It supports importing dashboards in JSON format.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Import-LMDashboard -FilePath "C:\Dashboards" -ParentGroupId 12345 -ReplaceAPITokensOnImport -APIToken $apiToken
+Imports all JSON dashboard files from the "C:\Dashboards" directory and its subdirectories. The imported dashboards will be placed under the dashboard group with ID 12345. API tokens in the imported dashboards will be replaced with the specified API token.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Import-LMDashboard -GithubUserRepo "username/repo" -ParentGroupName "MyDashboards" -ReplaceAPITokensOnImport -APIToken $apiToken
+Imports JSON dashboard files from the specified GitHub repository. The imported dashboards will be placed under the dashboard group with the name "MyDashboards". API tokens in the imported dashboards will be replaced with the specified API token.
+```
 
 ## PARAMETERS
 
-### -APIToken
-{{ Fill APIToken Description }}
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -File
-{{ Fill File Description }}
-
-```yaml
-Type: String
-Parameter Sets: File-GroupName, File-GroupId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -FilePath
-{{ Fill FilePath Description }}
+Specifies the path to a local file or directory containing the JSON dashboard files to import.
+If a directory is specified, all JSON files within the directory (and its subdirectories) will be imported.
 
 ```yaml
 Type: String
@@ -107,15 +86,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -GithubAccessToken
-{{ Fill GithubAccessToken Description }}
+### -File
+Specifies a single JSON dashboard file to import.
 
 ```yaml
 Type: String
-Parameter Sets: Repo-GroupName, Repo-GroupId
+Parameter Sets: File-GroupName, File-GroupId
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -123,7 +102,7 @@ Accept wildcard characters: False
 ```
 
 ### -GithubUserRepo
-{{ Fill GithubUserRepo Description }}
+Specifies the GitHub repository (in the format "username/repo") from which to import JSON dashboard files.
 
 ```yaml
 Type: String
@@ -137,8 +116,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -GithubAccessToken
+Specifies the GitHub access token to use for authenticated requests.
+This is required for large repositories, as the GitHub API has rate limits for unauthenticated requests.
+
+```yaml
+Type: String
+Parameter Sets: Repo-GroupName, Repo-GroupId
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ParentGroupId
-{{ Fill ParentGroupId Description }}
+Specifies the ID of the parent dashboard group under which the imported dashboards will be placed.
+This parameter is mandatory when importing from a file or GitHub repository.
 
 ```yaml
 Type: String
@@ -153,7 +149,8 @@ Accept wildcard characters: False
 ```
 
 ### -ParentGroupName
-{{ Fill ParentGroupName Description }}
+Specifies the name of the parent dashboard group under which the imported dashboards will be placed.
+This parameter is mandatory when importing from a file or GitHub repository.
 
 ```yaml
 Type: String
@@ -167,8 +164,40 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ReplaceAPITokensOnImport
+Indicates whether to replace API tokens in the imported dashboards with a dynamically generated API token.
+This is useful for managing API access to the dashboards.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -APIToken
+Specifies the API token to use for replacing API tokens in the imported dashboards.
+This parameter is required when \`ReplaceAPITokensOnImport\` is set to \`$true\`.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -PrivateUserName
-{{ Fill PrivateUserName Description }}
+Specifies the username of dashboard owner when creating dashboard as private.
 
 ```yaml
 Type: String
@@ -182,13 +211,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ReplaceAPITokensOnImport
-{{ Fill ReplaceAPITokensOnImport Description }}
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: SwitchParameter
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases:
+Aliases: proga
 
 Required: False
 Position: Named
@@ -202,10 +231,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

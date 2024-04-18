@@ -8,30 +8,30 @@ schema: 2.0.0
 # Import-LMExchangeModule
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Imports an LM Exchange module.
 
 ## SYNTAX
 
 ```
-Import-LMExchangeModule [-LMExchangeId] <String> [<CommonParameters>]
+Import-LMExchangeModule [-LMExchangeId] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Import-LMExchangeModule function is used to import an LM Exchange module into LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Import-LMExchangeModule -LMExchangeId "LM12345"
+Imports the LM Exchange module with the ID "LM12345" into LogicMonitor.
+```
 
 ## PARAMETERS
 
 ### -LMExchangeId
-{{ Fill LMExchangeId Description }}
+The LM Exchange module ID to import.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -39,7 +39,22 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -50,10 +65,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

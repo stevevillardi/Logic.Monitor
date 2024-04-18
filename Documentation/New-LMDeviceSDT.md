@@ -8,86 +8,94 @@ schema: 2.0.0
 # New-LMDeviceSDT
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new Logic Monitor Device Scheduled Down Time (SDT).
 
 ## SYNTAX
 
 ### OneTime-DeviceName
 ```
 New-LMDeviceSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime> -DeviceName <String>
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### OneTime-DeviceId
 ```
 New-LMDeviceSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime> -DeviceId <String>
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Weekly-DeviceId
 ```
 New-LMDeviceSDT -Comment <String> -DeviceId <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -WeekDay <String> [<CommonParameters>]
+ -EndMinute <Int32> -WeekDay <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### MonthlyByWeek-DeviceId
 ```
 New-LMDeviceSDT -Comment <String> -DeviceId <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> [<CommonParameters>]
+ -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Monthly-DeviceId
 ```
 New-LMDeviceSDT -Comment <String> -DeviceId <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -DayOfMonth <Int32> [<CommonParameters>]
+ -EndMinute <Int32> -DayOfMonth <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Daily-DeviceId
 ```
 New-LMDeviceSDT -Comment <String> -DeviceId <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> [<CommonParameters>]
+ -EndMinute <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Weekly-DeviceName
 ```
 New-LMDeviceSDT -Comment <String> -DeviceName <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -WeekDay <String> [<CommonParameters>]
+ -EndMinute <Int32> -WeekDay <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### MonthlyByWeek-DeviceName
 ```
 New-LMDeviceSDT -Comment <String> -DeviceName <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> [<CommonParameters>]
+ -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Monthly-DeviceName
 ```
 New-LMDeviceSDT -Comment <String> -DeviceName <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -DayOfMonth <Int32> [<CommonParameters>]
+ -EndMinute <Int32> -DayOfMonth <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Daily-DeviceName
 ```
 New-LMDeviceSDT -Comment <String> -DeviceName <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> [<CommonParameters>]
+ -EndMinute <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The New-LMDeviceSDT function creates a new SDT for a Logic Monitor device.
+It allows you to specify the comment, start date, end date, timezone, and device ID or device name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+New-LMDeviceSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -DeviceId "12345"
+Creates a one-time SDT for the device with ID "12345" starting from January 1, 2022, 00:00:00 and ending on January 1, 2022, 06:00:00 with the comment "Maintenance window".
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+New-LMDeviceSDT -Comment "Daily maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -DeviceName "Server01"
+Creates a daily recurring SDT for the device with name "Server01" starting from January 1, 2022, 00:00:00 and ending on January 1, 2022, 06:00:00 with the comment "Daily maintenance window".
+```
 
 ## PARAMETERS
 
 ### -Comment
-{{ Fill Comment Description }}
+Specifies the comment for the SDT.
 
 ```yaml
 Type: String
@@ -101,12 +109,29 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DayOfMonth
-{{ Fill DayOfMonth Description }}
+### -StartDate
+Specifies the start date and time for the SDT.
+This parameter is mandatory when using the 'OneTime-DeviceId' or 'OneTime-DeviceName' parameter sets.
 
 ```yaml
-Type: Int32
-Parameter Sets: Monthly-DeviceId, Monthly-DeviceName
+Type: DateTime
+Parameter Sets: OneTime-DeviceName, OneTime-DeviceId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EndDate
+Specifies the end date and time for the SDT.
+This parameter is mandatory when using the 'OneTime-DeviceId' or 'OneTime-DeviceName' parameter sets.
+
+```yaml
+Type: DateTime
+Parameter Sets: OneTime-DeviceName, OneTime-DeviceId
 Aliases:
 
 Required: True
@@ -117,7 +142,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceId
-{{ Fill DeviceId Description }}
+Specifies the ID of the device for which the SDT is being created.
+This parameter is mandatory when using the 'OneTime-DeviceId', 'Daily-DeviceId', 'Monthly-DeviceId', 'MonthlyByWeek-DeviceId', or 'Weekly-DeviceId' parameter sets.
 
 ```yaml
 Type: String
@@ -132,71 +158,12 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceName
-{{ Fill DeviceName Description }}
+Specifies the name of the device for which the SDT is being created.
+This parameter is mandatory when using the 'OneTime-DeviceName', 'Daily-DeviceName', 'Monthly-DeviceName', 'MonthlyByWeek-DeviceName', or 'Weekly-DeviceName' parameter sets.
 
 ```yaml
 Type: String
 Parameter Sets: OneTime-DeviceName, Weekly-DeviceName, MonthlyByWeek-DeviceName, Monthly-DeviceName, Daily-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndDate
-{{ Fill EndDate Description }}
-
-```yaml
-Type: DateTime
-Parameter Sets: OneTime-DeviceName, OneTime-DeviceId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndHour
-{{ Fill EndHour Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Weekly-DeviceId, MonthlyByWeek-DeviceId, Monthly-DeviceId, Daily-DeviceId, Weekly-DeviceName, MonthlyByWeek-DeviceName, Monthly-DeviceName, Daily-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndMinute
-{{ Fill EndMinute Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Weekly-DeviceId, MonthlyByWeek-DeviceId, Monthly-DeviceId, Daily-DeviceId, Weekly-DeviceName, MonthlyByWeek-DeviceName, Monthly-DeviceName, Daily-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StartDate
-{{ Fill StartDate Description }}
-
-```yaml
-Type: DateTime
-Parameter Sets: OneTime-DeviceName, OneTime-DeviceId
 Aliases:
 
 Required: True
@@ -216,7 +183,7 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -231,7 +198,37 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EndHour
+{{ Fill EndHour Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: Weekly-DeviceId, MonthlyByWeek-DeviceId, Monthly-DeviceId, Daily-DeviceId, Weekly-DeviceName, MonthlyByWeek-DeviceName, Monthly-DeviceName, Daily-DeviceName
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EndMinute
+{{ Fill EndMinute Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: Weekly-DeviceId, MonthlyByWeek-DeviceId, Monthly-DeviceId, Daily-DeviceId, Weekly-DeviceName, MonthlyByWeek-DeviceName, Monthly-DeviceName, Daily-DeviceName
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -243,7 +240,6 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Weekly-DeviceId, MonthlyByWeek-DeviceId, Weekly-DeviceName, MonthlyByWeek-DeviceName
 Aliases:
-Accepted values: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
 
 Required: True
 Position: Named
@@ -259,9 +255,38 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: MonthlyByWeek-DeviceId, MonthlyByWeek-DeviceName
 Aliases:
-Accepted values: First, Second, Third, Fourth, Last
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DayOfMonth
+{{ Fill DayOfMonth Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: Monthly-DeviceId, Monthly-DeviceName
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -273,10 +298,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

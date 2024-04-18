@@ -1,3 +1,30 @@
+<#
+.SYNOPSIS
+Removes a LogicMonitor report group.
+
+.DESCRIPTION
+The Remove-LMReportGroup function removes a LogicMonitor report group based on the specified Id or Name. It requires valid API credentials to be logged in.
+
+.PARAMETER Id
+The Id of the report group to remove. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+The name of the report group to remove. This parameter is mandatory when using the 'Name' parameter set.
+
+.EXAMPLE
+Remove-LMReportGroup -Id 123
+Removes the report group with Id 123.
+
+.EXAMPLE
+Remove-LMReportGroup -Name "MyReportGroup"
+Removes the report group with the name "MyReportGroup".
+
+.INPUTS
+You can pipe input to this function.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject. Returns an object with the removed report group Id and a success message.
+#>
 Function Remove-LMReportGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

@@ -1,3 +1,26 @@
+<#
+.SYNOPSIS
+Creates a new datasource graph in LogicMonitor.
+
+.DESCRIPTION
+The New-LMDatasourceGraph function is used to create a new datasource graph in LogicMonitor. It requires the user to be logged in and have valid API credentials.
+
+.PARAMETER RawObject
+Specifies the raw object representing the graph configuration. This object will be converted to JSON format before sending the request to LogicMonitor. Use Get-LMDatasourceGraph to get the raw object representing a graph configuration.
+
+.PARAMETER DatasourceId
+Specifies the ID of the datasource to which the graph will be associated. This parameter is mandatory when using the 'dsId' parameter set.
+
+.PARAMETER DatasourceName
+Specifies the name of the datasource to which the graph will be associated. This parameter is mandatory when using the 'dsName' parameter set.
+
+.EXAMPLE
+New-LMDatasourceGraph -RawObject $graphConfig -DatasourceId 123
+
+.EXAMPLE
+New-LMDatasourceGraph -RawObject $graphConfig -DatasourceName "My Datasource"
+#>
+
 Function New-LMDatasourceGraph {
 
     [CmdletBinding()]
@@ -5,10 +28,10 @@ Function New-LMDatasourceGraph {
         [Parameter(Mandatory)]
         $RawObject,
 
-        [Parameter(Mandatory,ParameterSetName = 'dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'dsId')]
         $DatasourceId,
 
-        [Parameter(Mandatory,ParameterSetName = 'dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'dsName')]
         $DatasourceName
 
     )
@@ -34,7 +57,7 @@ Function New-LMDatasourceGraph {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+            #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
             Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DatasourceGraph" )

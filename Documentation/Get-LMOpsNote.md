@@ -14,22 +14,22 @@ schema: 2.0.0
 
 ### All (Default)
 ```
-Get-LMOpsNote [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMOpsNote [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMOpsNote [-Id <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMOpsNote [-Id <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Tag
 ```
-Get-LMOpsNote [-Tag <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMOpsNote [-Tag <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMOpsNote [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMOpsNote [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -98,6 +98,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Tag
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

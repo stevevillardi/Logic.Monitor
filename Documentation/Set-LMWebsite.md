@@ -20,7 +20,8 @@ Set-LMWebsite -Id <String> [-Name <String>] [-IsInternal <Boolean>] [-Descriptio
  [-TriggerSSLExpirationAlert <Boolean>] [-GroupId <String>] [-WebsiteDomain <String>] [-HttpType <String>]
  [-SSLAlertThresholds <String[]>] [-PageLoadAlertTimeInMS <Int32>] [-FailedCount <Int32>]
  [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-Properties <Hashtable>]
- [-PropertiesMethod <String>] [-PollingInterval <Int32>] [-WebsiteSteps <String[]>] [<CommonParameters>]
+ [-PropertiesMethod <String>] [-PollingInterval <Int32>] [-WebsiteSteps <String[]>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Ping
@@ -30,7 +31,7 @@ Set-LMWebsite -Id <String> [-Name <String>] [-IsInternal <Boolean>] [-Descriptio
  [-UseDefaultLocationSetting <Boolean>] [-GroupId <String>] [-PingAddress <String>] [-PingCount <Int32>]
  [-PingTimeout <Int32>] [-PingPercentNotReceived <Int32>] [-FailedCount <Int32>] [-OverallAlertLevel <String>]
  [-IndividualAlertLevel <String>] [-Properties <Hashtable>] [-PropertiesMethod <String>]
- [-PollingInterval <Int32>] [<CommonParameters>]
+ [-PollingInterval <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -445,12 +446,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### System.String
 ## OUTPUTS
 
 ### System.Object

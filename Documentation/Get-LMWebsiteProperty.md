@@ -14,12 +14,14 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMWebsiteProperty -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsiteProperty -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMWebsiteProperty -Name <String> [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsiteProperty -Name <String> [-Filter <Object>] [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -90,6 +92,21 @@ Parameter Sets: Name
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

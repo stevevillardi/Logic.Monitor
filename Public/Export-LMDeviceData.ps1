@@ -1,3 +1,54 @@
+<#
+.SYNOPSIS
+Exports device data from Logic Monitor.
+
+.DESCRIPTION
+The Export-LMDeviceData function exports device data from Logic Monitor based on the specified parameters. It collects data from the specified devices, their datasources, and their instances within a specified time range. The exported data can be saved in JSON or CSV format.
+
+.PARAMETER DeviceId
+Specifies the ID of the device to export data for. This parameter is mutually exclusive with the DeviceDisplayName, DeviceHostName, DeviceGroupId, and DeviceGroupName parameters.
+
+.PARAMETER DeviceDisplayName
+Specifies the display name of the device to export data for. This parameter is mutually exclusive with the DeviceId, DeviceHostName, DeviceGroupId, and DeviceGroupName parameters.
+
+.PARAMETER DeviceHostName
+Specifies the host name of the device to export data for. This parameter is mutually exclusive with the DeviceId, DeviceDisplayName, DeviceGroupId, and DeviceGroupName parameters.
+
+.PARAMETER DeviceGroupId
+Specifies the ID of the device group to export data for. This parameter is mutually exclusive with the DeviceId, DeviceDisplayName, DeviceHostName, and DeviceGroupName parameters.
+
+.PARAMETER DeviceGroupName
+Specifies the name of the device group to export data for. This parameter is mutually exclusive with the DeviceId, DeviceDisplayName, DeviceHostName, and DeviceGroupId parameters.
+
+.PARAMETER StartDate
+Specifies the start date and time for the data collection. By default, it is set to the current date and time minus 1 hour.
+
+.PARAMETER EndDate
+Specifies the end date and time for the data collection. By default, it is set to the current date and time.
+
+.PARAMETER DatasourceIncludeFilter
+Specifies the filter for including specific datasources. By default, it includes all datasources.
+
+.PARAMETER DatasourceExcludeFilter
+Specifies the filter for excluding specific datasources. By default, no datasources are excluded.
+
+.PARAMETER ExportFormat
+Specifies the format for exporting the data. Valid values are "csv", "json", or "none". By default, it is set to "none".
+
+.PARAMETER ExportPath
+Specifies the path where the exported data will be saved. By default, it is set to the current location.
+
+.EXAMPLE
+Export-LMDeviceData -DeviceId 12345 -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) -ExportFormat json -ExportPath "C:\LMData"
+
+Exports device data for the device with ID 12345, collecting data for the last 7 days and saving it in JSON format at the specified path.
+
+.EXAMPLE
+Export-LMDeviceData -DeviceGroupName "Production Servers" -StartDate (Get-Date).AddHours(-12) -ExportFormat csv
+
+Exports device data for all devices in the "Production Servers" group, collecting data for the last 12 hours and saving it in CSV format at the current location.
+
+#>
 Function Export-LMDeviceData {
 
     [CmdletBinding()]

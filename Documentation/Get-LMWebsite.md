@@ -14,27 +14,27 @@ Get website info from a connected LM portal
 
 ### All (Default)
 ```
-Get-LMWebsite [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsite [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMWebsite [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsite [-Id <Int32>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMWebsite [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsite [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Type
 ```
-Get-LMWebsite [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsite [-Type <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMWebsite [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMWebsite [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -108,8 +108,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A hashtable of additonal filter properties to include with request.
-All properies are treated as if using the equals ":" operator.
+A hashtable of additional filter properties to include with request.
+All properties are treated as if using the equals ":" operator.
 When using multiple filters they are combined as AND conditions.
 
 An example Filter to get websites with type Webcheck that are internal:
@@ -139,6 +139,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: 1000
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -1,3 +1,41 @@
+<#
+.SYNOPSIS
+Retrieves the versions of LogicMonitor collectors available for download.
+
+.DESCRIPTION
+The Get-LMCollectorVersions function retrieves the versions of LogicMonitor collectors based on the specified parameters. It requires a valid API authentication and authorization.
+
+.PARAMETER Filter
+Specifies the filter to apply when retrieving collector versions. Only collector versions that match the specified filter will be returned.
+
+.PARAMETER TopVersions
+Indicates whether to retrieve only the top versions of collector versions.
+
+.PARAMETER BatchSize
+Specifies the number of collector versions to retrieve in each batch. The default value is 1000.
+
+.INPUTS
+None. You cannot pipe objects to Get-LMCollectorVersions.
+
+.OUTPUTS
+System.Object
+Returns an object that contains the retrieved collector versions.
+
+.EXAMPLE
+Get-LMCollectorVersions -Filter "name=Collector1"
+
+This example retrieves the collector versions that have the name "Collector1".
+
+.EXAMPLE
+Get-LMCollectorVersions -TopVersions
+
+This example retrieves only the top versions of collector versions.
+
+.EXAMPLE
+Get-LMCollectorVersions -BatchSize 500
+
+This example retrieves the collector versions in batches of 500.
+#>
 Function Get-LMCollectorVersions {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

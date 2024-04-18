@@ -14,43 +14,45 @@ schema: 2.0.0
 
 ### Default (Default)
 ```
-Set-LMRole [<CommonParameters>]
+Set-LMRole [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-Default
 ```
 Set-LMRole -Id <String> [-NewName <String>] [-CustomHelpLabel <String>] [-CustomHelpURL <String>]
  [-Description <String>] [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>]
- [-DashboardsPermission <String>] [-ResourcePermission <String>] [-LogsPermission <String>]
- [-WebsitesPermission <String>] [-SavedMapsPermission <String>] [-ReportsPermission <String>]
- [-SettingsPermission <String>] [-CreatePrivateDashboards] [-AllowWidgetSharing]
- [-ConfigTabRequiresManagePermission] [-AllowedToViewMapsTab] [-AllowedToManageResourceDashboards]
- [-ViewTraces] [-ViewSupport] [-EnableRemoteSessionForResources] [<CommonParameters>]
+ [-DashboardsPermission <String>] [-ResourcePermission <String>] [-LMXToolBoxPermission <String>]
+ [-LMXPermission <String>] [-LogsPermission <String>] [-WebsitesPermission <String>]
+ [-SavedMapsPermission <String>] [-ReportsPermission <String>] [-SettingsPermission <String>]
+ [-CreatePrivateDashboards] [-AllowWidgetSharing] [-ConfigTabRequiresManagePermission] [-AllowedToViewMapsTab]
+ [-AllowedToManageResourceDashboards] [-ViewTraces] [-ViewSupport] [-EnableRemoteSessionForResources]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-Custom
 ```
 Set-LMRole -Id <String> [-NewName <String>] [-CustomHelpLabel <String>] [-CustomHelpURL <String>]
  [-Description <String>] [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>]
- -CustomPrivilegesObject <PSObject> [<CommonParameters>]
+ -CustomPrivilegesObject <PSObject> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-Default
 ```
 Set-LMRole -Name <String> [-NewName <String>] [-CustomHelpLabel <String>] [-CustomHelpURL <String>]
  [-Description <String>] [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>]
- [-DashboardsPermission <String>] [-ResourcePermission <String>] [-LogsPermission <String>]
- [-WebsitesPermission <String>] [-SavedMapsPermission <String>] [-ReportsPermission <String>]
- [-SettingsPermission <String>] [-CreatePrivateDashboards] [-AllowWidgetSharing]
- [-ConfigTabRequiresManagePermission] [-AllowedToViewMapsTab] [-AllowedToManageResourceDashboards]
- [-ViewTraces] [-ViewSupport] [-EnableRemoteSessionForResources] [<CommonParameters>]
+ [-DashboardsPermission <String>] [-ResourcePermission <String>] [-LMXToolBoxPermission <String>]
+ [-LMXPermission <String>] [-LogsPermission <String>] [-WebsitesPermission <String>]
+ [-SavedMapsPermission <String>] [-ReportsPermission <String>] [-SettingsPermission <String>]
+ [-CreatePrivateDashboards] [-AllowWidgetSharing] [-ConfigTabRequiresManagePermission] [-AllowedToViewMapsTab]
+ [-AllowedToManageResourceDashboards] [-ViewTraces] [-ViewSupport] [-EnableRemoteSessionForResources]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-Custom
 ```
 Set-LMRole -Name <String> [-NewName <String>] [-CustomHelpLabel <String>] [-CustomHelpURL <String>]
  [-Description <String>] [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>]
- -CustomPrivilegesObject <PSObject> [<CommonParameters>]
+ -CustomPrivilegesObject <PSObject> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -245,6 +247,38 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -LMXPermission
+{{ Fill LMXPermission Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Name-Default
+Aliases:
+Accepted values: view, install, none
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LMXToolBoxPermission
+{{ Fill LMXToolBoxPermission Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Name-Default
+Aliases:
+Accepted values: view, manage, commit, publish, none
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -449,12 +483,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### System.String
 ## OUTPUTS
 
 ### System.Object

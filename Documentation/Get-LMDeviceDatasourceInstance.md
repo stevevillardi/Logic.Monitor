@@ -15,25 +15,25 @@ schema: 2.0.0
 ### Name-dsName
 ```
 Get-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceName <String> [-Filter <Object>]
- [-BatchSize <Int32>] [<CommonParameters>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
 Get-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceId <Int32> [-Filter <Object>]
- [-BatchSize <Int32>] [<CommonParameters>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
 Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceName <String> [-Filter <Object>]
- [-BatchSize <Int32>] [<CommonParameters>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
 Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> [-Filter <Object>] [-BatchSize <Int32>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -101,7 +101,7 @@ Accept wildcard characters: False
 ```yaml
 Type: Int32
 Parameter Sets: Id-dsName, Id-dsId
-Aliases:
+Aliases: Id
 
 Required: True
 Position: Named
@@ -116,7 +116,7 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: Name-dsName, Name-dsId
-Aliases:
+Aliases: Name
 
 Required: True
 Position: Named
@@ -132,6 +132,21 @@ Accept wildcard characters: False
 Type: Object
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

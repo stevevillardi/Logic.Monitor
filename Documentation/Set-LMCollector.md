@@ -12,20 +12,22 @@ schema: 2.0.0
 
 ## SYNTAX
 
-### Id
+### Id (Default)
 ```
-Set-LMCollector [-Id <Int32>] [-Description <String>] [-BackupAgentId <Int32>] [-CollectorGroupId <Int32>]
+Set-LMCollector -Id <Int32> [-Description <String>] [-BackupAgentId <Int32>] [-CollectorGroupId <Int32>]
  [-Properties <Hashtable>] [-EnableFailBack <Boolean>] [-EnableFailOverOnCollectorDevice <Boolean>]
  [-EscalatingChainId <Int32>] [-SuppressAlertClear <Boolean>] [-ResendAlertInterval <Int32>]
- [-SpecifiedCollectorDeviceGroupId <Int32>] [<CommonParameters>]
+ [-SpecifiedCollectorDeviceGroupId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Set-LMCollector [-Name <String>] [-Description <String>] [-BackupAgentId <Int32>] [-CollectorGroupId <Int32>]
+Set-LMCollector -Name <String> [-Description <String>] [-BackupAgentId <Int32>] [-CollectorGroupId <Int32>]
  [-Properties <Hashtable>] [-EnableFailBack <Boolean>] [-EnableFailOverOnCollectorDevice <Boolean>]
  [-EscalatingChainId <Int32>] [-SuppressAlertClear <Boolean>] [-ResendAlertInterval <Int32>]
- [-SpecifiedCollectorDeviceGroupId <Int32>] [<CommonParameters>]
+ [-SpecifiedCollectorDeviceGroupId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -64,6 +66,21 @@ Accept wildcard characters: False
 Type: Int32
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -140,7 +157,7 @@ Type: Int32
 Parameter Sets: Id
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -155,7 +172,7 @@ Type: String
 Parameter Sets: Name
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -222,12 +239,43 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### System.Int32
 ## OUTPUTS
 
 ### System.Object

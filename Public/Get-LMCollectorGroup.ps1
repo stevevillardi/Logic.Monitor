@@ -1,3 +1,35 @@
+<#
+.SYNOPSIS
+Retrieves collector groups from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMCollectorGroup function retrieves collector groups from LogicMonitor based on the specified parameters. It supports retrieving collector groups by ID, name, or using a filter. The function uses the LogicMonitor REST API to make the requests.
+
+.PARAMETER Id
+Specifies the ID of the collector group to retrieve. This parameter is mutually exclusive with the Name and Filter parameters.
+
+.PARAMETER Name
+Specifies the name of the collector group to retrieve. This parameter is mutually exclusive with the Id and Filter parameters.
+
+.PARAMETER Filter
+Specifies a filter object to retrieve collector groups based on specific criteria. This parameter is mutually exclusive with the Id and Name parameters.
+
+.PARAMETER BatchSize
+Specifies the number of collector groups to retrieve per request. The default value is 1000.
+
+.EXAMPLE
+Get-LMCollectorGroup -Id 123
+Retrieves the collector group with the specified ID.
+
+.EXAMPLE
+Get-LMCollectorGroup -Name "Group 1"
+Retrieves the collector group with the specified name.
+
+.EXAMPLE
+Get-LMCollectorGroup -Filter @{ Property = "Value" }
+Retrieves collector groups based on the specified filter criteria.
+
+#>
 Function Get-LMCollectorGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

@@ -1,3 +1,49 @@
+<#
+.SYNOPSIS
+Invokes a debug command on a LogicMonitor collector.
+
+.DESCRIPTION
+The Invoke-LMCollectorDebugCommand function is used to send a debug command to a LogicMonitor collector. It supports different parameter sets based on the type of command and the identification method used (ID or name). The function checks if the user is logged in and has valid API credentials before executing the command.
+
+.PARAMETER Id
+Specifies the ID of the collector. This parameter is mandatory for the 'Id-Debug', 'Id-Posh', and 'Id-Groovy' parameter sets.
+
+.PARAMETER Name
+Specifies the name of the collector. This parameter is mandatory for the 'Name-Debug', 'Name-Posh', and 'Name-Groovy' parameter sets.
+
+.PARAMETER DebugCommand
+Specifies the debug command to be executed. This parameter is mandatory for the 'Id-Debug' and 'Name-Debug' parameter sets.
+
+.PARAMETER PoshCommand
+Specifies the PowerShell command to be executed. This parameter is mandatory for the 'Id-Posh' and 'Name-Posh' parameter sets.
+
+.PARAMETER GroovyCommand
+Specifies the Groovy command to be executed. This parameter is mandatory for the 'Id-Groovy' and 'Name-Groovy' parameter sets.
+
+.PARAMETER CommandHostName
+Specifies the host name for the command. This parameter is optional.
+
+.PARAMETER CommandWildValue
+Specifies the wild value for the command. This parameter is optional.
+
+.PARAMETER IncludeResult
+Indicates whether to include the result of the debug command. This parameter is a switch parameter.
+
+.EXAMPLE
+Invoke-LMCollectorDebugCommand -Id 1234 -DebugCommand "!account" -IncludeResult
+Invokes a debug command on the collector with ID 1234 and includes the result.
+
+.EXAMPLE
+Invoke-LMCollectorDebugCommand -Name "CollectorName" -PoshCommand "Write-Host 'Hello, World!'" -IncludeResult
+Invokes a PowerShell command on the collector with the name "CollectorName" and includes the result.
+
+.EXAMPLE
+Invoke-LMCollectorDebugCommand -Id 5678 -GroovyCommand "println 'Hello, World!'" -CommandHostName "Host123"
+Invokes a Groovy command on the collector with ID 5678 and specifies the host name as "Host123".
+
+.NOTES
+LogicMonitor API credentials must be set before running this command. Use the Connect-LMAccount cmdlet to log in and set the credentials.
+#>
 Function Invoke-LMCollectorDebugCommand {
     [CmdletBinding()]
     Param (

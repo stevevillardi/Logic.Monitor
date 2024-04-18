@@ -1,3 +1,28 @@
+<#
+.SYNOPSIS
+Removes cached account information from the Logic.Monitor vault.
+
+.DESCRIPTION
+The Remove-LMCachedAccount function is used to remove cached account information from the Logic.Monitor vault. It provides two parameter sets: 'Single' and 'All'. When using the 'Single' parameter set, you can specify a single cached account to remove. When using the 'All' parameter set, all cached accounts will be removed.
+
+.PARAMETER CachedAccountName
+Specifies the name of the cached account to remove. This parameter is used with the 'Single' parameter set.
+
+.PARAMETER RemoveAllEntries
+Indicates that all cached accounts should be removed. This parameter is used with the 'All' parameter set.
+
+.EXAMPLE
+Remove-LMCachedAccount -CachedAccountName "JohnDoe"
+Removes the cached account with the name "JohnDoe" from the Logic.Monitor vault.
+
+.INPUTS
+You can pipe objects to this function.
+
+.EXAMPLE
+Remove-LMCachedAccount -RemoveAllEntries
+Removes all cached accounts from the Logic.Monitor vault.
+#>
+
 Function Remove-LMCachedAccount {
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact='High')]
     Param (

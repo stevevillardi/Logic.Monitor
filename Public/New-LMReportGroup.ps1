@@ -1,3 +1,25 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor report group.
+
+.DESCRIPTION
+The New-LMReportGroup function creates a new report group in LogicMonitor. It requires the name of the report group as a mandatory parameter and an optional description.
+
+.PARAMETER Name
+The name of the report group. This parameter is mandatory.
+
+.PARAMETER Description
+The description of the report group. This parameter is optional.
+
+.EXAMPLE
+New-LMReportGroup -Name "MyReportGroup" -Description "This is a sample report group"
+
+This example creates a new report group with the name "MyReportGroup" and the description "This is a sample report group".
+
+.NOTES
+This function requires a valid API credential and authentication. Make sure you are logged in before running any commands using Connect-LMAccount.
+
+#>
 Function New-LMReportGroup {
 
     [CmdletBinding()]

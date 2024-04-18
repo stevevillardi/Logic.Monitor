@@ -15,13 +15,13 @@ schema: 2.0.0
 ### Id (Default)
 ```
 Get-LMDeviceGroupDevices -Id <Int32> [-Filter <Object>] [-IncludeSubGroups <Boolean>] [-BatchSize <Int32>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Get-LMDeviceGroupDevices [-Name <String>] [-Filter <Object>] [-IncludeSubGroups <Boolean>] [-BatchSize <Int32>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -105,6 +105,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Name
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

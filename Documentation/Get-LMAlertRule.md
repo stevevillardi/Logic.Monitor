@@ -8,83 +8,55 @@ schema: 2.0.0
 # Get-LMAlertRule
 
 ## SYNOPSIS
-Get list of alert rules in bulk or by id.
+Retrieves LogicMonitor alert rules based on specified parameters.
 
 ## SYNTAX
 
 ### All (Default)
 ```
-Get-LMAlertRule [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAlertRule [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMAlertRule [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAlertRule [-Id <Int32>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMAlertRule [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAlertRule [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMAlertRule [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAlertRule [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Get list of alert rules in bulk or by id.
+The Get-LMAlertRule function retrieves LogicMonitor alert rules based on the specified parameters.
+It supports retrieving alert rules by ID, name, or using a filter.
+The function uses the LogicMonitor REST API to make the requests.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> Get-LMAlertRule -Id 1
+### EXAMPLE 1
+```
+Get-LMAlertRule -Id 123
+Retrieves the alert rule with the specified ID.
 ```
 
-Get alert rule detail for all alerts that start with "Test*".
-
-### Example 2
-```powershell
-PS C:\> Get-LMAlertRule -Name "Test*"
+### EXAMPLE 2
 ```
-
-Get alert rule detail for alert rule id 1.
+Get-LMAlertRule -Name "High CPU Usage"
+Retrieves the alert rule with the specified name.
+```
 
 ## PARAMETERS
 
-### -BatchSize
-Set batch size for the number of results return per api request. Default value is 1000.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-Apply a custom filter to query for alerts rules. Filters are currently treated as exact matches.
-
-```yaml
-Type: Object
-Parameter Sets: Filter
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-Id of the alert rule to return.
+Specifies the ID of the alert rule to retrieve.
+This parameter is mutually exclusive with the Name and Filter parameters.
 
 ```yaml
 Type: Int32
@@ -93,13 +65,14 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Name
-Name of the alert rule to return. Name field accepts wildcards to return multiple rules matching a specified string.
+Specifies the name of the alert rule to retrieve.
+This parameter is mutually exclusive with the Id and Filter parameters.
 
 ```yaml
 Type: String
@@ -113,15 +86,62 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Filter
+Specifies a filter object to retrieve alert rules based on specific criteria.
+This parameter is mutually exclusive with the Id and Name parameters.
+
+```yaml
+Type: Object
+Parameter Sets: Filter
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+Specifies the number of alert rules to retrieve in each request.
+The default value is 1000.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1000
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
+Use Connect-LMAccount to authenticate before running this function.
 
 ## RELATED LINKS

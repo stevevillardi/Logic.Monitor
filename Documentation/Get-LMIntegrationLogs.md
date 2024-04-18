@@ -15,17 +15,19 @@ schema: 2.0.0
 ### Range (Default)
 ```
 Get-LMIntegrationLogs [-SearchString <String>] [-StartDate <DateTime>] [-EndDate <DateTime>]
- [-BatchSize <Int32>] [<CommonParameters>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMIntegrationLogs [-Id <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMIntegrationLogs [-Id <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMIntegrationLogs [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMIntegrationLogs [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -124,6 +126,21 @@ Accept wildcard characters: False
 Type: DateTime
 Parameter Sets: Range
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

@@ -8,102 +8,60 @@ schema: 2.0.0
 # Get-LMAlert
 
 ## SYNOPSIS
-Get LM Alert in bulk or by id.
+Retrieves LogicMonitor alerts based on specified parameters.
 
 ## SYNTAX
 
 ### All (Default)
 ```
 Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-BatchSize <Int32>]
- [-Sort <String>] [<CommonParameters>]
+ [-Sort <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Range
 ```
 Get-LMAlert [-StartDate <DateTime>] [-EndDate <DateTime>] [-Severity <String>] [-Type <String>]
- [-ClearedAlerts <Boolean>] [-BatchSize <Int32>] [-Sort <String>] [<CommonParameters>]
+ [-ClearedAlerts <Boolean>] [-BatchSize <Int32>] [-Sort <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Id
 ```
 Get-LMAlert -Id <String> [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>]
- [-CustomColumns <String[]>] [-BatchSize <Int32>] [-Sort <String>] [<CommonParameters>]
+ [-CustomColumns <String[]>] [-BatchSize <Int32>] [-Sort <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
 Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-Filter <Object>]
- [-BatchSize <Int32>] [-Sort <String>] [<CommonParameters>]
+ [-BatchSize <Int32>] [-Sort <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Get LM Alert in bulk or by id.
+The Get-LMAlert function retrieves LogicMonitor alerts based on the specified parameters.
+It supports filtering alerts by start and end dates, severity, type, cleared status, and custom columns.
+The function makes API requests to the LogicMonitor platform and returns the retrieved alerts.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> Get-LMAlert -StartDate $(Get-Date).AddDays(-1) -EndDate $(Get-Date) -ClearedAlerts $true | Group-Object -Property resourceTemplateName,datapointName | select count, @{N='Name';E={$_.Name.Split(",")[0]}}, @{N='Datapoint';E={$_.Name.Split(",")[1]}} | Sort-Object -Property count -Descending
+### EXAMPLE 1
+```
+Get-LMAlert -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) -Severity "Error" -Type "websiteAlert" -ClearedAlerts $false
+Retrieves all alerts that occurred within the last 7 days, have a severity level of "Error", are of type "websiteAlert", and are not cleared.
 ```
 
-Get all alerts from the last 24 hours.
-
-### Example 2
-```powershell
-PS C:\> Get-LMAlert -Id DS67152170
+### EXAMPLE 2
 ```
-
-Get all details for alert id DS67152170.
+Get-LMAlert -Id "12345" -CustomColumns "Column1", "Column2"
+Retrieves a specific alert with the ID "12345" and includes the custom columns "Column1" and "Column2" in the result.
+```
 
 ## PARAMETERS
 
-### -BatchSize
-Set batch size for the number of results return per api request. Default value is 1000.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ClearedAlerts
-Include cleared alerts in the response.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CustomColumns
-When get an alert by id, you can optionally include custom properties as part of the response
-
-```yaml
-Type: String[]
-Parameter Sets: Id
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndDate
-End date for filtered alert range
+### -StartDate
+Specifies the start date for filtering alerts.
+Only alerts that occurred after this date will be retrieved.
 
 ```yaml
 Type: DateTime
@@ -117,12 +75,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Filter
-Apply a custom filter to query the alerts list. Filters are currently treated as exact matches.
+### -EndDate
+Specifies the end date for filtering alerts.
+Only alerts that occurred before this date will be retrieved.
 
 ```yaml
-Type: Object
-Parameter Sets: Filter
+Type: DateTime
+Parameter Sets: Range
 Aliases:
 
 Required: False
@@ -133,7 +92,7 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Alert Id for the alert you wish the lookup.
+Specifies the ID of a specific alert to retrieve.
 
 ```yaml
 Type: String
@@ -148,23 +107,9 @@ Accept wildcard characters: False
 ```
 
 ### -Severity
-Severity of the alerts to return. By default will search all alerts.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: *, Warning, Error, Critical
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Sort
-{{ Fill Sort Description }}
+Specifies the severity level of alerts to retrieve.
+Valid values are "*", "Warning", "Error", and "Critical".
+The default value is "*".
 
 ```yaml
 Type: String
@@ -173,34 +118,115 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StartDate
-Start date for filtered alert range
-
-```yaml
-Type: DateTime
-Parameter Sets: Range
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
+Default value: *
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Type
-Type of alerts to return. By default will return alerts for all types.
+Specifies the type of alerts to retrieve.
+Valid values are "*", "websiteAlert", "dataSourceAlert", "eventSourceAlert", and "logAlert".
+The default value is "*".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: *, websiteAlert, dataSourceAlert, eventSourceAlert, logAlert
+
+Required: False
+Position: Named
+Default value: *
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ClearedAlerts
+Specifies whether to retrieve cleared alerts.
+If set to $true, cleared alerts will be included in the results.
+If set to $false, only active alerts will be included.
+The default value is $false.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Filter
+Specifies a custom filter object to further refine the alerts to retrieve.
+
+```yaml
+Type: Object
+Parameter Sets: Filter
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CustomColumns
+Specifies an array of custom columns to include in the retrieved alerts.
+
+```yaml
+Type: String[]
+Parameter Sets: Id
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+Specifies the number of alerts to retrieve per API request.
+The default value is 1000.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1000
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Sort
+Specifies the sorting order of the retrieved alerts.
+The default value is "resourceId".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: ResourceId
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named
@@ -214,10 +240,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+This function requires a valid API authentication session.
+Use the Connect-LMAccount function to log in before running this command.
 
 ## RELATED LINKS

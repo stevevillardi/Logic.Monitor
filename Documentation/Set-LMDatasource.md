@@ -16,14 +16,14 @@ schema: 2.0.0
 ```
 Set-LMDatasource -Id <String> [-NewName <String>] [-DisplayName <String>] [-Description <String>]
  [-appliesTo <String>] [-TechNotes <String>] [-PollingIntervalInSeconds <String>] [-Datapoints <PSObject>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Set-LMDatasource -Name <String> [-NewName <String>] [-DisplayName <String>] [-Description <String>]
  [-appliesTo <String>] [-TechNotes <String>] [-PollingIntervalInSeconds <String>] [-Datapoints <PSObject>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -39,6 +39,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Datapoints
 {{ Fill Datapoints Description }}
@@ -160,6 +175,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -appliesTo
 {{ Fill appliesTo Description }}
 
@@ -167,6 +198,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

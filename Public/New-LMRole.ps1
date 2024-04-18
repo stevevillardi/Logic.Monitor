@@ -1,3 +1,91 @@
+<#
+.SYNOPSIS
+    Creates a new Logic Monitor role with specified privileges.
+
+.DESCRIPTION
+    The New-LMRole function creates a new Logic Monitor role with the specified privileges and settings. It allows you to customize various permissions and options for the role.
+
+.PARAMETER Name
+    Specifies the name of the role.
+
+.PARAMETER CustomHelpLabel
+    Specifies a custom label for the help button in the Logic Monitor UI.
+
+.PARAMETER CustomHelpURL
+    Specifies a custom URL for the help button in the Logic Monitor UI.
+
+.PARAMETER Description
+    Specifies a description for the role.
+
+.PARAMETER RequireEULA
+    Indicates whether the user must accept the End User License Agreement (EULA) before using the role.
+
+.PARAMETER TwoFARequired
+    Indicates whether two-factor authentication is required for the role. Default value is $true.
+
+.PARAMETER RoleGroupId
+    Specifies the ID of the role group to which the role belongs. Default value is 1.
+
+.PARAMETER DashboardsPermission
+    Specifies the permission level for dashboards. Valid values are "view", "manage", or "none". Default value is "none".
+
+.PARAMETER ResourcePermission
+    Specifies the permission level for resources. Valid values are "view", "manage", or "none". Default value is "none".
+
+.PARAMETER LogsPermission
+    Specifies the permission level for logs. Valid values are "view", "manage", or "none". Default value is "none".
+
+.PARAMETER WebsitesPermission
+    Specifies the permission level for websites. Valid values are "view", "manage", or "none". Default value is "none".
+
+.PARAMETER SavedMapsPermission
+    Specifies the permission level for saved maps. Valid values are "view", "manage", or "none". Default value is "none".
+
+.PARAMETER ReportsPermission
+    Specifies the permission level for reports. Valid values are "view", "manage", or "none". Default value is "none".
+
+.PARAMETER LMXToolBoxPermission
+    Specifies the permission level for LMX Toolbox. Valid values are "view", "manage", "commit", "publish", or "none". Default value is "none".
+
+.PARAMETER LMXPermission
+    Specifies the permission level for LMX. Valid values are "view", "install", or "none". Default value is "none".
+
+.PARAMETER SettingsPermission
+    Specifies the permission level for settings. Valid values are "view", "manage", "none", "manage-collectors", or "view-collectors". Default value is "none".
+
+.PARAMETER CreatePrivateDashboards
+    Indicates whether the role can create private dashboards.
+
+.PARAMETER AllowWidgetSharing
+    Indicates whether the role can share widgets.
+
+.PARAMETER ConfigTabRequiresManagePermission
+    Indicates whether the role requires manage permission for the Config tab.
+
+.PARAMETER AllowedToViewMapsTab
+    Indicates whether the role can view the Maps tab.
+
+.PARAMETER AllowedToManageResourceDashboards
+    Indicates whether the role can manage resource dashboards.
+
+.PARAMETER ViewTraces
+    Indicates whether the role can view traces.
+
+.PARAMETER ViewSupport
+    Indicates whether the role can view support.
+
+.PARAMETER EnableRemoteSessionForResources
+    Indicates whether the role can enable remote session for resources.
+
+.PARAMETER CustomPrivilegesObject
+    Specifies a custom privileges object for the role.
+
+.EXAMPLE
+    New-LMRole -Name "MyRole" -Description "Custom role with limited permissions" -DashboardsPermission "view" -ResourcePermission "manage"
+
+    This example creates a new Logic Monitor role named "MyRole" with a description and limited permissions for dashboards and resources.
+
+#>
 Function New-LMRole {
 
     [CmdletBinding(DefaultParameterSetName = 'Default')]

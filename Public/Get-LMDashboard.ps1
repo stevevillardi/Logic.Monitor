@@ -1,3 +1,58 @@
+<#
+.SYNOPSIS
+Retrieves LogicMonitor dashboards based on specified parameters.
+
+.DESCRIPTION
+The Get-LMDashboard function retrieves LogicMonitor dashboards based on the specified parameters. It supports filtering by ID, name, group ID, group name, subgroups, and custom filters. The function uses the LogicMonitor REST API to make the requests.
+
+.PARAMETER Id
+Specifies the ID of the dashboard to retrieve.
+
+.PARAMETER Name
+Specifies the name of the dashboard to retrieve.
+
+.PARAMETER GroupId
+Specifies the ID of the group to filter the dashboards by.
+
+.PARAMETER GroupName
+Specifies the name of the group to filter the dashboards by.
+
+.PARAMETER GroupPathSearchString
+Specifies a search string to filter the dashboards by group path.
+
+.PARAMETER Filter
+Specifies a custom filter to apply to the dashboards. The filter should be an object that contains the filter properties.
+
+.PARAMETER BatchSize
+Specifies the number of dashboards to retrieve in each request. The default value is 1000.
+
+.EXAMPLE
+Get-LMDashboard -Id 123
+Retrieves the dashboard with the specified ID.
+
+.EXAMPLE
+Get-LMDashboard -Name "My Dashboard"
+Retrieves the dashboard with the specified name.
+
+.EXAMPLE
+Get-LMDashboard -GroupId 456
+Retrieves the dashboards that belong to the group with the specified ID.
+
+.EXAMPLE
+Get-LMDashboard -GroupName "My Group"
+Retrieves the dashboards that belong to the group with the specified name.
+
+.EXAMPLE
+Get-LMDashboard -GroupPathSearchString "Subgroup"
+Retrieves the dashboards that belong to subgroups matching the specified search string.
+
+.EXAMPLE
+Get-LMDashboard -Filter @{Property1 = "Value1"; Property2 = "Value2"}
+Retrieves the dashboards that match the specified custom filter.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount to authenticate before running this function.
+#>
 Function Get-LMDashboard {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

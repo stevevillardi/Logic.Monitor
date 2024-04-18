@@ -1,3 +1,45 @@
+<#
+.SYNOPSIS
+Creates a new SDT entry for a Logic Monitor device datasource instance.
+
+.DESCRIPTION
+The New-LMDeviceDatasourceInstanceSDT function creates a new SDT entry for an instance of a Logic Monitor device datasource. It allows you to specify various parameters such as comment, start date, end date, timezone, start hour, and start minute.
+
+.PARAMETER Comment
+Specifies the comment for the new instance SDT.
+
+.PARAMETER StartDate
+Specifies the start date for the new instance SDT. This parameter is mandatory when using the 'OneTime' parameter set.
+
+.PARAMETER EndDate
+Specifies the end date for the new instance SDT. This parameter is mandatory when using the 'OneTime' parameter set.
+
+.PARAMETER StartHour
+Specifies the start hour for the new instance SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. The value must be between 0 and 23.
+
+.PARAMETER StartMinute
+Specifies the start minute for the new instance SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. The value must be between 0 and 59.
+
+.EXAMPLE
+New-LMDeviceDatasourceInstanceSDT -Comment "Test SDT Instance" -StartDate (Get-Date) -EndDate (Get-Date).AddDays(7) -StartHour 8 -StartMinute 30 -DeviceDataSourceInstanceId 1234
+Creates a new one-time instance with a comment, start date, end date, start hour, and start minute.
+
+.EXAMPLE
+New-LMDeviceDatasourceInstanceSDT -Comment "Daily SDT Instance" -StartHour 9 -StartMinute 0 -ParameterSet Daily -DeviceDataSourceInstanceId 1234
+Creates a new daily instance with a comment, start hour, and start minute.
+
+.EXAMPLE
+New-LMDeviceDatasourceInstanceSDT -Comment "Monthly SDT Instance" -StartHour 10 -StartMinute 15 -ParameterSet Monthly -DeviceDataSourceInstanceId 1234
+Creates a new monthly instance with a comment, start hour, and start minute.
+
+.EXAMPLE
+New-LMDeviceDatasourceInstanceSDT -Comment "Monthly By Week SDT Instance" -StartHour 11 -StartMinute 30 -ParameterSet MonthlyByWeek -DeviceDataSourceInstanceId 1234
+Creates a new monthly instance with a specific week, comment, start hour, and start minute.
+
+.EXAMPLE
+New-LMDeviceDatasourceInstanceSDT -Comment "Weekly  SDT Instance" -StartHour 12 -StartMinute 45 -ParameterSet Weekly -DeviceDataSourceInstanceId 1234
+Creates a new weekly instance with a comment, start hour, and start minute.
+#>
 Function New-LMDeviceDatasourceInstanceSDT {
 
     [CmdletBinding()]

@@ -1,3 +1,32 @@
+<#
+.SYNOPSIS
+Removes a property source from LogicMonitor.
+
+.DESCRIPTION
+The Remove-LMPropertysource function removes a property source from LogicMonitor. It can remove a property source either by its ID or by its name.
+
+.PARAMETER Id
+Specifies the ID of the property source to be removed. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the name of the property source to be removed. This parameter is mandatory when using the 'Name' parameter set.
+
+.EXAMPLE
+Remove-LMPropertysource -Id 123
+Removes the property source with ID 123.
+
+.EXAMPLE
+Remove-LMPropertysource -Name "MyPropertySource"
+Removes the property source with the name "MyPropertySource".
+
+.INPUTS
+You can pipe input to this function.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject. The function returns an object with the following properties:
+- Id: The ID of the removed property source.
+- Message: A message indicating the success of the removal operation.
+#>
 Function Remove-LMPropertysource {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

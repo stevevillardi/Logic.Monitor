@@ -1,3 +1,36 @@
+<#
+.SYNOPSIS
+Removes a LogicMonitor configsource.
+
+.DESCRIPTION
+The Remove-LMConfigsource function removes a LogicMonitor configsource based on the specified Id or Name. It requires valid API credentials and the user must be logged in before running any commands.
+
+.PARAMETER Id
+Specifies the Id of the configsource to remove. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the Name of the configsource to remove. This parameter is mandatory when using the 'Name' parameter set.
+
+.INPUTS
+You can pipe input to this function.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject
+Returns an object with the following properties:
+- Id: The Id of the removed configsource.
+- Message: A message indicating the success of the removal operation.
+
+.EXAMPLE
+Remove-LMConfigsource -Id 123
+Removes the configsource with Id 123.
+
+.EXAMPLE
+Remove-LMConfigsource -Name "ConfigSource1"
+Removes the configsource with the name "ConfigSource1".
+
+.NOTES
+Please ensure you are logged in before running any commands. Use Connect-LMAccount to login and try again.
+#>
 Function Remove-LMConfigsource {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

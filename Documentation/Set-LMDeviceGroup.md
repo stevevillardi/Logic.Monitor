@@ -16,28 +16,28 @@ schema: 2.0.0
 ```
 Set-LMDeviceGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>] [-AppliesTo <String>]
- [-ParentGroupId <Int32>] [<CommonParameters>]
+ [-ParentGroupId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-ParentGroupName
 ```
 Set-LMDeviceGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>] [-AppliesTo <String>]
- [-ParentGroupName <String>] [<CommonParameters>]
+ [-ParentGroupName <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-ParentGroupName
 ```
 Set-LMDeviceGroup -Name <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>] [-AppliesTo <String>]
- [-ParentGroupName <String>] [<CommonParameters>]
+ [-ParentGroupName <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-ParentGroupId
 ```
 Set-LMDeviceGroup -Name <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>] [-AppliesTo <String>]
- [-ParentGroupId <Int32>] [<CommonParameters>]
+ [-ParentGroupId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -61,6 +61,21 @@ PS C:\> {{ Add example code here }}
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -224,6 +239,37 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 Accepted values: Add, Replace, Refresh
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

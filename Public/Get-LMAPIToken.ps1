@@ -1,3 +1,51 @@
+<#
+.SYNOPSIS
+Retrieves LogicMonitor API tokens based on specified parameters.
+
+.DESCRIPTION
+The Get-LMAPIToken function retrieves LogicMonitor API tokens based on the specified parameters. It supports various parameter sets to filter the tokens based on different criteria such as AdminId, Id, AccessId, and Filter. The function also allows specifying the token type and batch size for pagination.
+
+.PARAMETER AdminId
+Specifies the ID of the admin for which to retrieve API tokens. This parameter is only applicable when using the 'AdminId' parameter set.
+
+.PARAMETER Id
+Specifies the ID of the API token to retrieve. This parameter is only applicable when using the 'Id' parameter set.
+
+.PARAMETER AccessId
+Specifies the access ID of the API token to retrieve. This parameter is only applicable when using the 'AccessId' parameter set.
+
+.PARAMETER Filter
+Specifies a custom filter object to retrieve API tokens based on specific criteria. This parameter is only applicable when using the 'Filter' parameter set.
+
+.PARAMETER Type
+Specifies the type of API token to retrieve. Valid values are 'LMv1', 'Bearer', or '*'. The default value is '*'.
+
+.PARAMETER BatchSize
+Specifies the number of API tokens to retrieve per batch. The default value is 1000.
+
+.EXAMPLE
+Get-LMAPIToken -AdminId 1234
+Retrieves all API tokens associated with the admin ID 1234.
+
+.EXAMPLE
+Get-LMAPIToken -Id 5678
+Retrieves the API token with the ID 5678.
+
+.EXAMPLE
+Get-LMAPIToken -AccessId "abc123"
+Retrieves the API token with the access ID "abc123".
+
+.EXAMPLE
+Get-LMAPIToken -Filter @{ Property1 = "Value1"; Property2 = "Value2" }
+Retrieves API tokens based on the specified custom filter object.
+
+.EXAMPLE
+Get-LMAPIToken -Type "Bearer" -BatchSize 500
+Retrieves API tokens of type 'Bearer' with a batch size of 500.
+
+.NOTES
+This function requires a valid LogicMonitor authentication session. Make sure to log in using the Connect-LMAccount function before running this command.
+#>
 Function Get-LMAPIToken {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

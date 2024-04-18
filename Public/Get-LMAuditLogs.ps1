@@ -1,3 +1,39 @@
+<#
+.SYNOPSIS
+Retrieves audit logs from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMAuditLogs function retrieves audit logs from LogicMonitor based on the specified parameters. It supports retrieving logs by ID, by date range, or by applying filters.
+
+.PARAMETER Id
+Specifies the ID of the audit log to retrieve. This parameter is mutually exclusive with the SearchString, StartDate, EndDate, and Filter parameters.
+
+.PARAMETER SearchString
+Specifies a search string to filter the audit logs. Only logs that contain the specified search string will be returned. This parameter is used in conjunction with the StartDate and EndDate parameters.
+
+.PARAMETER StartDate
+Specifies the start date of the audit logs to retrieve. Only logs that occurred on or after the specified start date will be returned. This parameter is used in conjunction with the SearchString and EndDate parameters.
+
+.PARAMETER EndDate
+Specifies the end date of the audit logs to retrieve. Only logs that occurred on or before the specified end date will be returned. This parameter is used in conjunction with the SearchString and StartDate parameters.
+
+.PARAMETER Filter
+Specifies a filter object to further refine the audit logs to retrieve. This parameter is used in conjunction with the StartDate and EndDate parameters.
+
+.PARAMETER BatchSize
+Specifies the number of audit logs to retrieve per request. The default value is 1000.
+
+.EXAMPLE
+Get-LMAuditLogs -Id "12345"
+Retrieves the audit log with the specified ID.
+
+.EXAMPLE
+Get-LMAuditLogs -SearchString "login" -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date)
+Retrieves audit logs that contain the search string "login" and occurred within the last 7 days.
+
+.NOTES
+This function requires a valid connection to LogicMonitor. Use Connect-LMAccount to establish a connection before running this command.
+#>
 Function Get-LMAuditLogs {
 
     [CmdletBinding(DefaultParameterSetName = 'Range')]

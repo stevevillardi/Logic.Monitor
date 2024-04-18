@@ -1,3 +1,33 @@
+<#
+.SYNOPSIS
+Imports a LogicModule into LogicMonitor.
+
+.DESCRIPTION
+The Import-LMLogicModule function imports a LogicModule into LogicMonitor. It can import the LogicModule from a file path or directly from file data. The LogicModule can be of different types such as datasource, propertyrules, eventsource, topologysource, or configsource.
+
+.PARAMETER FilePath
+Specifies the path of the file containing the LogicModule to import. This parameter is mandatory when using the 'FilePath' parameter set.
+
+.PARAMETER File
+Specifies the file data of the LogicModule to import. This parameter is mandatory when using the 'File' parameter set.
+
+.PARAMETER Type
+Specifies the type of the LogicModule to import. The valid values are 'datasource', 'propertyrules', 'eventsource', 'topologysource', or 'configsource'. The default value is 'datasource'.
+
+.PARAMETER ForceOverwrite
+Indicates whether to overwrite an existing LogicModule with the same name. If set to $true, the existing LogicModule will be overwritten. If set to $false, an error will be thrown if a LogicModule with the same name already exists. The default value is $false.
+
+.EXAMPLE
+Import-LMLogicModule -FilePath "C:\LogicModules\datasource.xml" -Type "datasource" -ForceOverwrite $true
+Imports a datasource LogicModule from the file 'datasource.xml' located in the 'C:\LogicModules' directory. If a LogicModule with the same name already exists, it will be overwritten.
+
+.EXAMPLE
+Import-LMLogicModule -File $fileData -Type "propertyrules"
+Imports a propertyrules LogicModule using the file data provided in the $fileData variable. If a LogicModule with the same name already exists, an error will be thrown.
+
+.NOTES
+This function requires PowerShell version 6.1 or higher to run.
+#>
 Function Import-LMLogicModule {
     [CmdletBinding()]
     Param (
@@ -5,7 +35,7 @@ Function Import-LMLogicModule {
         [String]$FilePath,
 
         [Parameter(Mandatory,ParameterSetName = 'File')]
-        [String]$File,
+        [Object]$File,
         
         [ValidateSet("datasource", "propertyrules", "eventsource", "topologysource", "configsource")]
         [String]$Type = "datasource",

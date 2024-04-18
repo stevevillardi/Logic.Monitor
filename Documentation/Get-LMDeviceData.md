@@ -15,49 +15,57 @@ schema: 2.0.0
 ### dsName-deviceName-instanceId
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceName <String> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### dsName-deviceName-instanceName
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceName <String> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### dsName-deviceId-instanceName
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceId <Int32> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### dsName-deviceId-instanceId
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceId <Int32> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### dsId-deviceName-instanceId
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceName <String> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### dsId-deviceName-instanceName
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceName <String> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### dsId-deviceId-instanceName
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceId <Int32> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### dsId-deviceId-instanceId
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceId <Int32> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -216,6 +224,21 @@ Accept wildcard characters: False
 Type: DateTime
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

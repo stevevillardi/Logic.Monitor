@@ -1,3 +1,32 @@
+<#
+.SYNOPSIS
+Removes a LogicMonitor Netscan.
+
+.DESCRIPTION
+The Remove-LMNetscan function is used to remove a LogicMonitor Netscan. It supports removing a Netscan by either its Id or Name.
+
+.PARAMETER Id
+Specifies the Id of the Netscan to remove. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the Name of the Netscan to remove. This parameter is mandatory when using the 'Name' parameter set.
+
+.EXAMPLE
+Remove-LMNetscan -Id 123
+Removes the Netscan with Id 123.
+
+.EXAMPLE
+Remove-LMNetscan -Name "MyNetscan"
+Removes the Netscan with the name "MyNetscan".
+
+.INPUTS
+You can pipe input to this function.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject. The function returns an object with the following properties:
+- Id: The Id of the removed Netscan.
+- Message: A message indicating the success of the removal operation.
+#>
 Function Remove-LMNetscan {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

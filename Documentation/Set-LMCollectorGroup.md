@@ -15,13 +15,15 @@ schema: 2.0.0
 ### Id
 ```
 Set-LMCollectorGroup [-Id <Int32>] [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
- [-AutoBalance <Boolean>] [-AutoBalanceInstanceCountThreshold <Int32>] [<CommonParameters>]
+ [-AutoBalance <Boolean>] [-AutoBalanceInstanceCountThreshold <Int32>] [-ProgressAction <ActionPreference>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Set-LMCollectorGroup [-Name <String>] [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
- [-AutoBalance <Boolean>] [-AutoBalanceInstanceCountThreshold <Int32>] [<CommonParameters>]
+ [-AutoBalance <Boolean>] [-AutoBalanceInstanceCountThreshold <Int32>] [-ProgressAction <ActionPreference>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -60,6 +62,21 @@ Accept wildcard characters: False
 Type: Int32
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -135,6 +152,37 @@ Accept wildcard characters: False
 Type: Hashtable
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

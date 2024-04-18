@@ -1,3 +1,33 @@
+<#
+.SYNOPSIS
+Removes an AppliesTo function from LogicMonitor.
+
+.DESCRIPTION
+The Remove-LMAppliesToFunction function removes an AppliesTo function from LogicMonitor. It can be used to remove a function either by its name or its ID.
+
+.PARAMETER Name
+Specifies the name of the AppliesTo function to be removed. This parameter is mandatory when using the 'Name' parameter set.
+
+.PARAMETER Id
+Specifies the ID of the AppliesTo function to be removed. This parameter is mandatory when using the 'Id' parameter set. The ID can be obtained using the Get-LMAppliesToFunction cmdlet.
+
+.EXAMPLE
+Remove-LMAppliesToFunction -Name "MyAppliesToFunction"
+Removes the AppliesTo function with the name "MyAppliesToFunction".
+
+.EXAMPLE
+Remove-LMAppliesToFunction -Id 12345
+Removes the AppliesTo function with the ID 12345.
+
+.INPUTS
+None. You cannot pipe input to this function.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject. The function returns an object with the following properties:
+- Id: The ID of the removed AppliesTo function.
+- Message: A message indicating the success of the removal operation.
+
+#>
 Function Remove-LMAppliesToFunction {
 
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact='High')]

@@ -1,3 +1,37 @@
+<#
+.SYNOPSIS
+Retrieves LogicMonitor collectors based on various parameters.
+
+.DESCRIPTION
+The Get-LMCollector function retrieves LogicMonitor collectors based on the specified parameters. It supports filtering by collector ID, collector name, or custom filter. The function uses the LogicMonitor REST API to make the requests.
+
+.PARAMETER Id
+Specifies the ID of the collector to retrieve. This parameter is mutually exclusive with the Name and Filter parameters.
+
+.PARAMETER Name
+Specifies the name of the collector to retrieve. This parameter is mutually exclusive with the Id and Filter parameters.
+
+.PARAMETER Filter
+Specifies a custom filter to retrieve collectors based on specific criteria. This parameter is mutually exclusive with the Id and Name parameters.
+
+.PARAMETER BatchSize
+Specifies the number of collectors to retrieve in each batch. The default value is 1000.
+
+.EXAMPLE
+Get-LMCollector -Id 123
+Retrieves the collector with the specified ID.
+
+.EXAMPLE
+Get-LMCollector -Name "Collector1"
+Retrieves the collector with the specified name.
+
+.EXAMPLE
+Get-LMCollector -Filter @{Property = "Value"}
+Retrieves collectors based on the specified custom filter.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount to authenticate before running this command.
+#>
 Function Get-LMCollector {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -43,8 +77,6 @@ Function Get-LMCollector {
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
-
-                
     
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 

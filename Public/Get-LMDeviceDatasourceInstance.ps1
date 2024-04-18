@@ -12,10 +12,12 @@ Function Get-LMDeviceDatasourceInstance {
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
+        [Alias("Id")]
         [Int]$DeviceId,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+        [Alias("Name")]
         [String]$DeviceName,
 
         [Object]$Filter,

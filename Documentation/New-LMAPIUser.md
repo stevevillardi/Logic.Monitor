@@ -8,34 +8,52 @@ schema: 2.0.0
 # New-LMAPIUser
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new LogicMonitor API user.
 
 ## SYNTAX
 
 ```
 New-LMAPIUser [-Username] <String> [[-UserGroups] <String[]>] [[-Note] <String>] [[-RoleNames] <String[]>]
- [[-Status] <String>] [<CommonParameters>]
+ [[-Status] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The New-LMAPIUser function is used to create a new LogicMonitor API user.
+It requires a username and supports optional parameters such as user groups, a note, role names, and status.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+New-LMAPIUser -Username "john.doe" -UserGroups @("Group1","Group2") -Note "Test user" -RoleNames "admin" -Status "active"
 ```
 
-{{ Add example description here }}
+This example creates a new API user with the username "john.doe", adds the user to "Group1" and "Group2" user groups, adds a note "Test user", assigns the "admin" role, and sets the status to "active".
 
 ## PARAMETERS
 
-### -Note
-{{ Fill Note Description }}
+### -Username
+Specifies the username for the new API user.
+This parameter is mandatory.
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserGroups
+Specifies an array of user groups to which the new API user should be added.
+This parameter is optional.
+
+```yaml
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
@@ -46,11 +64,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RoleNames
-{{ Fill RoleNames Description }}
+### -Note
+Specifies a note for the new API user.
+This parameter is optional.
 
 ```yaml
-Type: String[]
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -61,24 +80,10 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Status
-{{ Fill Status Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: active, suspended
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UserGroups
-{{ Fill UserGroups Description }}
+### -RoleNames
+Specifies an array of role names for the new API user.
+The default value is "readonly".
+This parameter is optional.
 
 ```yaml
 Type: String[]
@@ -86,22 +91,40 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
-Default value: None
+Position: 4
+Default value: @("readonly")
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Username
-{{ Fill Username Description }}
+### -Status
+Specifies the status of the new API user.
+Valid values are "active" and "suspended".
+The default value is "active".
+This parameter is optional.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: 0
+Required: False
+Position: 5
+Default value: Active
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -112,10 +135,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+This function requires a valid API session.
+Make sure to log in using the Connect-LMAccount function before running this command.
 
 ## RELATED LINKS

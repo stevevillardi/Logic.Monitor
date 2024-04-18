@@ -15,13 +15,13 @@ schema: 2.0.0
 ### Id (Default)
 ```
 Get-LMDeviceInstanceList -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [-CountOnly <Boolean>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Get-LMDeviceInstanceList [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>] [-CountOnly <Boolean>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -105,6 +105,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Name
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

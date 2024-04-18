@@ -31,7 +31,7 @@ Export-LMDeviceConfigBackup -DeviceId 1 -Path export-report.csv
 None. You cannot pipe objects to this command.
 
 .LINK
-Module repo: https://github.com/stevevillardi/Logic.Monitor
+Module repo: https://github.com/logicmonitor/lm-powershell-module
 
 .LINK
 PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor

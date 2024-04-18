@@ -8,30 +8,33 @@ schema: 2.0.0
 # Invoke-LMNetScan
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Invokes a NetScan task in LogicMonitor.
 
 ## SYNTAX
 
 ```
-Invoke-LMNetScan [-Id] <String> [<CommonParameters>]
+Invoke-LMNetScan [-Id] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Invoke-LMNetScan function is used to execute a NetScan task in LogicMonitor.
+It checks if the user is logged in and has valid API credentials before making the API call.
+If the user is logged in, it builds the necessary headers and URI, and then issues a GET request to execute the NetScan task.
+If the request is successful, it returns a message indicating that the NetScan task has been scheduled.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Invoke-LMNetScan -Id "12345"
+Schedules the NetScan task with ID "12345" in LogicMonitor.
+```
 
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+The ID of the NetScan task to be executed.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -39,7 +42,22 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -50,10 +68,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

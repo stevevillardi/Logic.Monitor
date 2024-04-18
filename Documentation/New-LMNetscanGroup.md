@@ -8,45 +8,33 @@ schema: 2.0.0
 # New-LMNetscanGroup
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new LogicMonitor Netscan Group.
 
 ## SYNTAX
 
 ```
-New-LMNetscanGroup [-Name] <String> [[-Description] <String>] [<CommonParameters>]
+New-LMNetscanGroup [-Name] <String> [[-Description] <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The New-LMNetscanGroup function is used to create a new Netscan Group in LogicMonitor.
+It requires the Name parameter, which specifies the name of the group, and the optional Description parameter, which provides a description for the group.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+New-LMNetscanGroup -Name "Group1" -Description "This is a sample group"
 ```
 
-{{ Add example description here }}
+This example creates a new Netscan Group with the name "Group1" and the description "This is a sample group".
 
 ## PARAMETERS
 
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Name
-{{ Fill Name Description }}
+Specifies the name of the Netscan Group.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -54,7 +42,38 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+Specifies the description for the Netscan Group.
+This parameter is optional.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -65,10 +84,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

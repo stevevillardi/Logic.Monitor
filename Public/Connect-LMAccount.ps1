@@ -45,7 +45,7 @@ You must run this command before you will be able to execute other commands incl
 None. You cannot pipe objects to this command.
 
 .LINK
-Module repo: https://github.com/stevevillardi/Logic.Monitor
+Module repo: https://github.com/logicmonitor/lm-powershell-module
 
 .LINK
 PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
@@ -236,11 +236,16 @@ Function Connect-LMAccount {
     }
     
     #Check for newer version of Logic.Monitor module
-    If($AutoUpdateModuleVersion -and !$SkipVersionCheck){
-        Update-LogicMonitorModule
+    Try{
+        If($AutoUpdateModuleVersion -and !$SkipVersionCheck){
+            Update-LogicMonitorModule
+        }
+        ElseIf(!$SkipVersionCheck){
+            Update-LogicMonitorModule -CheckOnly
+        }
     }
-    ElseIf(!$SkipVersionCheck){
-        Update-LogicMonitorModule -CheckOnly
+    Catch{
+        Write-Host "[ERROR]: Unable to check for newer version of Logic.Monitor module: $($_.Exception.Message)" -ForegroundColor Red
     }
 
     If(!$SkipCredValidation){

@@ -25,16 +25,21 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
 
         [String]$AlertExpressionNote,
 
+        [Parameter(Mandatory)]
+        [AllowEmptyString()] 
         [String]$AlertExpression, #format for alert expression (01:00 02:00) > -100 timezone=America/New_York
 
+        [Parameter(Mandatory)]
         [ValidateRange(0, 60)]
-        [Int]$AlertClearTransitionInterval = 0,
+        [Int]$AlertClearTransitionInterval,
 
+        [Parameter(Mandatory)]
         [ValidateRange(0, 60)]
-        [Int]$AlertTransitionInterval = 0,
+        [Int]$AlertTransitionInterval,
 
-        [ValidateRange(0, 4)]
-        [Int]$AlertForNoData = 0
+        [Parameter(Mandatory)]
+        [ValidateRange(1, 4)]
+        [Int]$AlertForNoData
 
     )
 

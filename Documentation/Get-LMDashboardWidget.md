@@ -14,32 +14,37 @@ schema: 2.0.0
 
 ### All (Default)
 ```
-Get-LMDashboardWidget [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardWidget [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMDashboardWidget [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardWidget [-Id <Int32>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDashboardWidget [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardWidget [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### DashboardId
 ```
-Get-LMDashboardWidget [-DashboardId <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardWidget [-DashboardId <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### DashboardName
 ```
-Get-LMDashboardWidget [-DashboardName <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardWidget [-DashboardName <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMDashboardWidget [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardWidget [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -138,6 +143,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Name
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

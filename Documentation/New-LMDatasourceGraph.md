@@ -8,36 +8,60 @@ schema: 2.0.0
 # New-LMDatasourceGraph
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new datasource graph in LogicMonitor.
 
 ## SYNTAX
 
 ### dsId
 ```
-New-LMDatasourceGraph -RawObject <Object> -DatasourceId <Object> [<CommonParameters>]
+New-LMDatasourceGraph -RawObject <Object> -DatasourceId <Object> [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### dsName
 ```
-New-LMDatasourceGraph -RawObject <Object> -DatasourceName <Object> [<CommonParameters>]
+New-LMDatasourceGraph -RawObject <Object> -DatasourceName <Object> [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The New-LMDatasourceGraph function is used to create a new datasource graph in LogicMonitor.
+It requires the user to be logged in and have valid API credentials.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+New-LMDatasourceGraph -RawObject $graphConfig -DatasourceId 123
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+New-LMDatasourceGraph -RawObject $graphConfig -DatasourceName "My Datasource"
+```
 
 ## PARAMETERS
 
+### -RawObject
+Specifies the raw object representing the graph configuration.
+This object will be converted to JSON format before sending the request to LogicMonitor.
+Use Get-LMDatasourceGraph to get the raw object representing a graph configuration.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DatasourceId
-{{ Fill DatasourceId Description }}
+Specifies the ID of the datasource to which the graph will be associated.
+This parameter is mandatory when using the 'dsId' parameter set.
 
 ```yaml
 Type: Object
@@ -52,7 +76,8 @@ Accept wildcard characters: False
 ```
 
 ### -DatasourceName
-{{ Fill DatasourceName Description }}
+Specifies the name of the datasource to which the graph will be associated.
+This parameter is mandatory when using the 'dsName' parameter set.
 
 ```yaml
 Type: Object
@@ -66,15 +91,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RawObject
-{{ Fill RawObject Description }}
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: Object
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases:
+Aliases: proga
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -86,10 +111,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

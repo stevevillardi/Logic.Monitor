@@ -14,12 +14,14 @@ schema: 2.0.0
 
 ### Id
 ```
-Set-LMNetscanGroup [-Id <Int32>] [-NewName <String>] [-Description <String>] [<CommonParameters>]
+Set-LMNetscanGroup [-Id <Int32>] [-NewName <String>] [-Description <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Set-LMNetscanGroup [-Name <String>] [-NewName <String>] [-Description <String>] [<CommonParameters>]
+Set-LMNetscanGroup [-Name <String>] [-NewName <String>] [-Description <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -88,6 +90,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

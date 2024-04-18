@@ -8,30 +8,48 @@ schema: 2.0.0
 # Import-LMRepositoryLogicModules
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Imports LogicMonitor repository logic modules.
 
 ## SYNTAX
 
 ```
-Import-LMRepositoryLogicModules [-Type] <String> [-LogicModuleNames] <String[]> [<CommonParameters>]
+Import-LMRepositoryLogicModules [-Type] <String> [-LogicModuleNames] <String[]>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Import-LMRepositoryLogicModules function imports logic modules from the LogicMonitor repository.
+It requires the user to be logged in and have valid API credentials.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Import-LMRepositoryLogicModules -Type "datasources" -LogicModuleNames "DataSource1", "DataSource2"
+Imports the logic modules with the names "DataSource1" and "DataSource2" from the LogicMonitor repository.
+```
 
 ## PARAMETERS
 
+### -Type
+Specifies the type of logic modules to import.
+Valid values are "datasources", "propertyrules", "eventsources", "topologysources", and "configsources".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -LogicModuleNames
-{{ Fill LogicModuleNames Description }}
+Specifies the names of the logic modules to import.
+This parameter accepts an array of strings.
 
 ```yaml
 Type: String[]
@@ -39,23 +57,22 @@ Parameter Sets: (All)
 Aliases: Name
 
 Required: True
-Position: 1
+Position: 2
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Type
-{{ Fill Type Description }}
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: String
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases:
-Accepted values: datasources, propertyrules, eventsources, topologysources, configsources
+Aliases: proga
 
-Required: True
-Position: 0
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -66,10 +83,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

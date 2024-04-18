@@ -8,38 +8,116 @@ schema: 2.0.0
 # Remove-LMDatasource
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Removes a LogicMonitor datasource.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Remove-LMDatasource -Id <Int32> [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDatasource -Id <Int32> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Remove-LMDatasource -Name <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDatasource -Name <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### DisplayName
 ```
-Remove-LMDatasource -DisplayName <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDatasource -DisplayName <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Remove-LMDatasource function removes a LogicMonitor datasource based on the specified parameters.
+It requires the user to be logged in and have valid API credentials.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Remove-LMDatasource -Id 123
+Removes the datasource with the ID 123.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Remove-LMDatasource -Name "MyDatasource"
+Removes the datasource with the name "MyDatasource".
+```
+
+### EXAMPLE 3
+```
+Remove-LMDatasource -DisplayName "My Datasource"
+Removes the datasource with the display name "My Datasource".
+```
 
 ## PARAMETERS
+
+### -Id
+Specifies the ID of the datasource to be removed.
+This parameter is mandatory and can be provided as an integer.
+
+```yaml
+Type: Int32
+Parameter Sets: Id
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Name
+Specifies the name of the datasource to be removed.
+This parameter is mandatory when using the 'Name' parameter set and can be provided as a string.
+
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisplayName
+Specifies the display name of the datasource to be removed.
+This parameter is mandatory when using the 'DisplayName' parameter set and can be provided as a string.
+
+```yaml
+Type: String
+Parameter Sets: DisplayName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Confirm
 Prompts you for confirmation before running the cmdlet.
@@ -56,58 +134,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DisplayName
-{{ Fill DisplayName Description }}
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: String
-Parameter Sets: DisplayName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases: wi
+Aliases: proga
 
 Required: False
 Position: Named
@@ -121,10 +154,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### You can pipe input to this function.
 ## OUTPUTS
 
-### System.Object
+### System.Management.Automation.PSCustomObject
 ## NOTES
 
 ## RELATED LINKS

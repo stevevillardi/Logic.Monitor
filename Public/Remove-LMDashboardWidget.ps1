@@ -1,3 +1,36 @@
+<#
+.SYNOPSIS
+Removes a dashboard widget from Logic Monitor.
+
+.DESCRIPTION
+The Remove-LMDashboardWidget function removes a dashboard widget from Logic Monitor. It can remove a widget either by its ID or by its name.
+
+.PARAMETER Id
+The ID of the widget to be removed. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+The name of the widget to be removed. This parameter is mandatory when using the 'Name' parameter set.
+
+.EXAMPLE
+Remove-LMDashboardWidget -Id 123
+Removes the dashboard widget with ID 123.
+
+.EXAMPLE
+Remove-LMDashboardWidget -Name "Widget Name"
+Removes the dashboard widget with the specified name.
+
+.INPUTS
+You can pipe objects to this function.
+
+.OUTPUTS
+A PSCustomObject representing the result of the removal operation. The object has the following properties:
+- Id: The ID of the removed widget.
+- Message: A message indicating the success of the removal operation.
+
+.NOTES
+This function requires a valid API authentication to Logic Monitor. Make sure to log in using Connect-LMAccount before running this command.
+
+#>
 Function Remove-LMDashboardWidget {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

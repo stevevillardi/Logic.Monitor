@@ -14,22 +14,25 @@ schema: 2.0.0
 
 ### All (Default)
 ```
-Get-LMPropertySource [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMPropertySource [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMPropertySource [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMPropertySource [-Id <Int32>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMPropertySource [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMPropertySource [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMPropertySource [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMPropertySource [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -98,6 +101,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Name
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

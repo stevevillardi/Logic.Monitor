@@ -1,3 +1,27 @@
+<#
+.SYNOPSIS
+Removes a LogicMonitor dashboard group.
+
+.DESCRIPTION
+The Remove-LMDashboardGroup function removes a LogicMonitor dashboard group based on the specified Id or Name.
+
+.PARAMETER Id
+The Id of the dashboard group to remove. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+The name of the dashboard group to remove. This parameter is mandatory when using the 'Name' parameter set.
+
+.EXAMPLE
+Remove-LMDashboardGroup -Id 123
+Removes the dashboard group with Id 123.
+
+.EXAMPLE
+Remove-LMDashboardGroup -Name "MyDashboardGroup"
+Removes the dashboard group with the name "MyDashboardGroup".
+
+.INPUTS
+None.
+#>
 Function Remove-LMDashboardGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

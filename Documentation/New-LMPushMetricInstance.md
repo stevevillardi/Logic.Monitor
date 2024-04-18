@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-LMPushMetricInstance
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new instance of a LogicMonitor push metric.
 
 ## SYNTAX
 
@@ -16,40 +16,57 @@ schema: 2.0.0
 New-LMPushMetricInstance [[-InstancesArrary] <System.Collections.Generic.List`1[System.Object]>]
  [-InstanceName] <String> [[-InstanceDisplayName] <String>] [[-InstanceDescription] <String>]
  [[-InstanceProperties] <Hashtable>] [-Datapoints] <System.Collections.Generic.List`1[System.Object]>
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The New-LMPushMetricInstance function is used to create a new instance of a LogicMonitor push metric.
+It adds the instance to the specified instances array and returns the updated array.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+$instances = New-LMPushMetricInstance -InstancesArrary $instances -InstanceName "Instance1" -InstanceDisplayName "Instance 1" -InstanceDescription "This is instance 1" -InstanceProperties @{Property1 = "Value1"; Property2 = "Value2"} -Datapoints $datapoints
 ```
 
-{{ Add example description here }}
+This example creates a new instance with the specified parameters and adds it to the existing instances array.
 
 ## PARAMETERS
 
-### -Datapoints
-{{ Fill Datapoints Description }}
+### -InstancesArrary
+The array of existing instances to which the new instance will be added.
 
 ```yaml
 Type: System.Collections.Generic.List`1[System.Object]
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: 5
+Required: False
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -InstanceDescription
-{{ Fill InstanceDescription Description }}
+### -InstanceName
+The name of the new instance.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceDisplayName
+The display name of the new instance.
+If not specified, the InstanceName will be used as the display name.
 
 ```yaml
 Type: String
@@ -63,41 +80,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -InstanceDisplayName
-{{ Fill InstanceDisplayName Description }}
+### -InstanceDescription
+The description of the new instance.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -InstanceName
-{{ Fill InstanceName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -InstanceProperties
-{{ Fill InstanceProperties Description }}
-
-```yaml
-Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 
@@ -108,16 +95,47 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -InstancesArrary
-{{ Fill InstancesArrary Description }}
+### -InstanceProperties
+A hashtable containing additional properties for the new instance.
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Datapoints
+The list of datapoints associated with the new instance.
+Datapoints should be the results of the New-LMPushMetricDataPoint function.
 
 ```yaml
 Type: System.Collections.Generic.List`1[System.Object]
 Parameter Sets: (All)
 Aliases:
 
+Required: True
+Position: 6
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
 Required: False
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -128,10 +146,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+Ensure that you are logged in before running any commands by using the Connect-LMAccount cmdlet.
 
 ## RELATED LINKS

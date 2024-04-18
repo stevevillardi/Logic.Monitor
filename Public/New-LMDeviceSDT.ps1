@@ -1,3 +1,34 @@
+<#
+.SYNOPSIS
+Creates a new Logic Monitor Device Scheduled Down Time (SDT).
+
+.DESCRIPTION
+The New-LMDeviceSDT function creates a new SDT for a Logic Monitor device. It allows you to specify the comment, start date, end date, timezone, and device ID or device name.
+
+.PARAMETER Comment
+Specifies the comment for the SDT.
+
+.PARAMETER StartDate
+Specifies the start date and time for the SDT. This parameter is mandatory when using the 'OneTime-DeviceId' or 'OneTime-DeviceName' parameter sets.
+
+.PARAMETER EndDate
+Specifies the end date and time for the SDT. This parameter is mandatory when using the 'OneTime-DeviceId' or 'OneTime-DeviceName' parameter sets.
+
+.PARAMETER DeviceId
+Specifies the ID of the device for which the SDT is being created. This parameter is mandatory when using the 'OneTime-DeviceId', 'Daily-DeviceId', 'Monthly-DeviceId', 'MonthlyByWeek-DeviceId', or 'Weekly-DeviceId' parameter sets.
+
+.PARAMETER DeviceName
+Specifies the name of the device for which the SDT is being created. This parameter is mandatory when using the 'OneTime-DeviceName', 'Daily-DeviceName', 'Monthly-DeviceName', 'MonthlyByWeek-DeviceName', or 'Weekly-DeviceName' parameter sets.
+
+.EXAMPLE
+New-LMDeviceSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -DeviceId "12345"
+Creates a one-time SDT for the device with ID "12345" starting from January 1, 2022, 00:00:00 and ending on January 1, 2022, 06:00:00 with the comment "Maintenance window".
+
+.EXAMPLE
+New-LMDeviceSDT -Comment "Daily maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -DeviceName "Server01"
+Creates a daily recurring SDT for the device with name "Server01" starting from January 1, 2022, 00:00:00 and ending on January 1, 2022, 06:00:00 with the comment "Daily maintenance window".
+
+#>
 Function New-LMDeviceSDT {
 
     [CmdletBinding()]

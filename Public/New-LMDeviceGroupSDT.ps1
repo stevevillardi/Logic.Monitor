@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor Device Group Scheduled Downtime.
+
+.DESCRIPTION
+The New-LMDeviceGroupSDT function creates a new scheduled downtime for a LogicMonitor device group. This allows you to temporarily disable monitoring for a specific group of devices within your LogicMonitor account.
+
+.PARAMETER Comment
+Specifies the comment for the scheduled downtime. This comment will be displayed in the LogicMonitor UI.
+
+.PARAMETER StartDate
+Specifies the start date and time for the scheduled downtime. This parameter is mandatory when using the 'OneTime-DeviceGroupId' or 'OneTime-DeviceGroupName' parameter sets.
+
+.PARAMETER EndDate
+Specifies the end date and time for the scheduled downtime. This parameter is mandatory when using the 'OneTime-DeviceGroupId' or 'OneTime-DeviceGroupName' parameter sets.
+
+.PARAMETER StartHour
+Specifies the start hour for the scheduled downtime. This parameter is mandatory when using the 'Daily-DeviceGroupName', 'Monthly-DeviceGroupName', 'MonthlyByWeek-DeviceGroupName', 'Weekly-DeviceGroupName', 'Daily-DeviceGroupId', 'Monthly-DeviceGroupId', 'MonthlyByWeek-DeviceGroupId', or 'Weekly-DeviceGroupId' parameter sets. The value must be between 0 and 23.
+
+.PARAMETER Timezone
+Specifies the timezone for the scheduled downtime. This parameter is optional. If not specified, the default timezone of the LogicMonitor account will be used. The value must be one of the supported timezones.
+
+.PARAMETER DeviceGroupId
+Specifies the ID of the device group for which the scheduled downtime should be created. This parameter is mandatory when using the 'OneTime-DeviceGroupId', 'Daily-DeviceGroupId', 'Monthly-DeviceGroupId', 'MonthlyByWeek-DeviceGroupId', or 'Weekly-DeviceGroupId' parameter sets.
+
+.PARAMETER DeviceGroupName
+Specifies the name of the device group for which the scheduled downtime should be created. This parameter is mandatory when using the 'OneTime-DeviceGroupName', 'Daily-DeviceGroupName', 'Monthly-DeviceGroupName', 'MonthlyByWeek-DeviceGroupName', or 'Weekly-DeviceGroupName' parameter sets.
+
+.EXAMPLE
+New-LMDeviceGroupSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -StartHour 2 -DeviceGroupName "Production Servers"
+Creates a new scheduled downtime for the "Production Servers" device group, starting from January 1, 2022, 00:00:00 and ending on January 1, 2022, 06:00:00. The scheduled downtime will occur every day at 2 AM.
+
+.EXAMPLE
+New-LMDeviceGroupSDT -Comment "Monthly maintenance" -StartHour 8 -DeviceGroupId 12345 -Monthly
+Creates a new scheduled downtime for the device group with ID 12345, starting at 8 AM. The scheduled downtime will occur every month.
+
+#>
 Function New-LMDeviceGroupSDT {
 
     [CmdletBinding()]

@@ -1,3 +1,66 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor device.
+
+.DESCRIPTION
+The New-LMDevice function creates a new LogicMonitor device with the specified parameters. It sends a POST request to the LogicMonitor API to create the device.
+
+.PARAMETER Name
+The name of the device. This parameter is mandatory.
+
+.PARAMETER DisplayName
+The display name of the device. This parameter is mandatory.
+
+.PARAMETER Description
+The description of the device.
+
+.PARAMETER PreferredCollectorId
+The ID of the preferred collector for the device.
+
+.PARAMETER PreferredCollectorGroupId
+The ID of the preferred collector group for the device.
+
+.PARAMETER AutoBalancedCollectorGroupId
+The ID of the auto-balanced collector group for the device.
+
+.PARAMETER DeviceType
+The type of the device. Default value is 0.
+
+.PARAMETER Properties
+A hashtable of custom properties for the device.
+
+.PARAMETER HostGroupIds
+An array of host group IDs for the device. Dynamic group IDs will be ignored, and the operation will replace all existing groups.
+
+.PARAMETER Link
+The link associated with the device.
+
+.PARAMETER DisableAlerting
+Specifies whether alerting is disabled for the device.
+
+.PARAMETER EnableNetFlow
+Specifies whether NetFlow is enabled for the device.
+
+.PARAMETER NetflowCollectorGroupId
+The ID of the NetFlow collector group for the device.
+
+.PARAMETER NetflowCollectorId
+The ID of the NetFlow collector for the device.
+
+.PARAMETER LogCollectorGroupId
+The ID of the log collector group for the device.
+
+.PARAMETER LogCollectorId
+The ID of the log collector for the device.
+
+.EXAMPLE
+New-LMDevice -Name "Server001" -DisplayName "Server 001" -Description "Web server" -PreferredCollectorId 1234 -HostGroupIds @("Group1", "Group2")
+
+This example creates a new LogicMonitor device with the name "Server001", display name "Server 001", description "Web server", and preferred collector ID 1234. It assigns the device to host groups "Group1" and "Group2".
+
+.NOTES
+This function requires a valid API authentication. Make sure you are logged in before running any commands using Connect-LMAccount.
+#>
 Function New-LMDevice {
 
     [CmdletBinding()]

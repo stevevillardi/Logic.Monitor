@@ -1,3 +1,27 @@
+<#
+.SYNOPSIS
+Invokes a LogicMonitor Cloud Group NetScan task.
+
+.DESCRIPTION
+The Invoke-LMCloudGroupNetScan function is used to schedule a LogicMonitor Cloud Group NetScan task. It requires either the GroupId or GroupName parameter to identify the target device group.
+
+.PARAMETER Id
+Specifies the ID of the target device group. This parameter is mandatory when using the 'GroupId' parameter set.
+
+.PARAMETER Name
+Specifies the name of the target device group. This parameter is mandatory when using the 'GroupName' parameter set.
+
+.EXAMPLE
+Invoke-LMCloudGroupNetScan -Id "12345"
+Schedules a LogicMonitor Cloud Group NetScan task for the device group with the ID "12345".
+
+.EXAMPLE
+Invoke-LMCloudGroupNetScan -Name "MyGroup"
+Schedules a LogicMonitor Cloud Group NetScan task for the device group with the name "MyGroup".
+
+.NOTES
+This function requires a valid LogicMonitor API authentication. Make sure you are logged in before running any commands using the Connect-LMAccount cmdlet. You must target a device gropup that belongs to a cloud account (EC2, etc)
+#>
 Function Invoke-LMCloudGroupNetScan {
 
     [CmdletBinding()]

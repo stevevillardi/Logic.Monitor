@@ -8,51 +8,113 @@ schema: 2.0.0
 # Get-LMAPIToken
 
 ## SYNOPSIS
-Get list of a specifc or list of available API tokens
+Retrieves LogicMonitor API tokens based on specified parameters.
 
 ## SYNTAX
 
 ### All (Default)
 ```
-Get-LMAPIToken [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAPIToken [-Type <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### AdminId
 ```
-Get-LMAPIToken [-AdminId <Int32>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAPIToken [-AdminId <Int32>] [-Type <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMAPIToken [-Id <Int32>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAPIToken [-Id <Int32>] [-Type <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### AccessId
 ```
-Get-LMAPIToken [-AccessId <String>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAPIToken [-AccessId <String>] [-Type <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMAPIToken [-Filter <Object>] [-Type <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMAPIToken [-Filter <Object>] [-Type <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMAPIToken function retrieves LogicMonitor API tokens based on the specified parameters.
+It supports various parameter sets to filter the tokens based on different criteria such as AdminId, Id, AccessId, and Filter.
+The function also allows specifying the token type and batch size for pagination.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Get-LMAPIToken -AdminId 1234
+Retrieves all API tokens associated with the admin ID 1234.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Get-LMAPIToken -Id 5678
+Retrieves the API token with the ID 5678.
+```
+
+### EXAMPLE 3
+```
+Get-LMAPIToken -AccessId "abc123"
+Retrieves the API token with the access ID "abc123".
+```
+
+### EXAMPLE 4
+```
+Get-LMAPIToken -Filter @{ Property1 = "Value1"; Property2 = "Value2" }
+Retrieves API tokens based on the specified custom filter object.
+```
+
+### EXAMPLE 5
+```
+Get-LMAPIToken -Type "Bearer" -BatchSize 500
+Retrieves API tokens of type 'Bearer' with a batch size of 500.
+```
 
 ## PARAMETERS
 
+### -AdminId
+Specifies the ID of the admin for which to retrieve API tokens.
+This parameter is only applicable when using the 'AdminId' parameter set.
+
+```yaml
+Type: Int32
+Parameter Sets: AdminId
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+Specifies the ID of the API token to retrieve.
+This parameter is only applicable when using the 'Id' parameter set.
+
+```yaml
+Type: Int32
+Parameter Sets: Id
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -AccessId
-{{ Fill AccessId Description }}
+Specifies the access ID of the API token to retrieve.
+This parameter is only applicable when using the 'AccessId' parameter set.
 
 ```yaml
 Type: String
@@ -66,38 +128,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -AdminId
-{{ Fill AdminId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: AdminId
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Filter
-{{ Fill Filter Description }}
+Specifies a custom filter object to retrieve API tokens based on specific criteria.
+This parameter is only applicable when using the 'Filter' parameter set.
 
 ```yaml
 Type: Object
@@ -111,29 +144,46 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Id
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Type
-{{ Fill Type Description }}
+Specifies the type of API token to retrieve.
+Valid values are 'LMv1', 'Bearer', or '*'.
+The default value is '*'.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: LMv1, Bearer, *
+
+Required: False
+Position: Named
+Default value: *
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+Specifies the number of API tokens to retrieve per batch.
+The default value is 1000.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1000
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named
@@ -147,10 +197,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+This function requires a valid LogicMonitor authentication session.
+Make sure to log in using the Connect-LMAccount function before running this command.
 
 ## RELATED LINKS

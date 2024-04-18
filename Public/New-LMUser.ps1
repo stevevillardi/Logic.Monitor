@@ -1,3 +1,69 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor user.
+
+.DESCRIPTION
+The New-LMUser function creates a new user in LogicMonitor with the specified parameters.
+
+.PARAMETER Username
+The username of the new user. This parameter is mandatory.
+
+.PARAMETER Email
+The email address of the new user. This parameter is mandatory.
+
+.PARAMETER AcceptEULA
+Specifies whether the user has accepted the End User License Agreement (EULA). The default value is $false.
+
+.PARAMETER Password
+The password for the new user.
+
+.PARAMETER UserGroups
+An array of user group names to which the new user should be added.
+
+.PARAMETER FirstName
+The first name of the new user.
+
+.PARAMETER LastName
+The last name of the new user.
+
+.PARAMETER ForcePasswordChange
+Specifies whether the new user should be forced to change their password on first login. The default value is $true.
+
+.PARAMETER Phone
+The phone number of the new user.
+
+.PARAMETER Note
+A note or description for the new user.
+
+.PARAMETER RoleNames
+An array of role names to assign to the new user. The default value is "readonly".
+
+.PARAMETER SmsEmail
+The SMS email address for the new user.
+
+.PARAMETER SmsEmailFormat
+The format of SMS emails for the new user. Valid values are "sms" and "fulltext". The default value is "sms".
+
+.PARAMETER Status
+The status of the new user. Valid values are "active" and "suspended". The default value is "active".
+
+.PARAMETER Timezone
+The timezone for the new user. Valid values are listed in the function code.
+
+.PARAMETER TwoFAEnabled
+Specifies whether two-factor authentication (2FA) is enabled for the new user. The default value is $false.
+
+.PARAMETER Views
+An array of views that the new user should have access to. Valid values are listed in the function code.
+
+.EXAMPLE
+New-LMUser -Username "john.doe" -Email "john.doe@example.com" -Password "P@ssw0rd" -RoleNames @("admin") -Views @("Dashboards", "Reports")
+
+This example creates a new LogicMonitor user with the username "john.doe", email "john.doe@example.com", password "P@ssw0rd", role "admin", and access to the "Dashboards" and "Reports" views.
+
+.NOTES
+This function requires valid API credentials and a logged-in session in LogicMonitor.
+#>
 Function New-LMUser {
 
     [CmdletBinding()]

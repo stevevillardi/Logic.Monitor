@@ -14,43 +14,50 @@ schema: 2.0.0
 
 ### Id-dsName
 ```
-Get-LMDatasourceOverviewGraph -Id <Int32> -DataSourceName <String> [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasourceOverviewGraph -Id <Int32> -DataSourceName <String> [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
-Get-LMDatasourceOverviewGraph -Id <Int32> -DataSourceId <String> [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasourceOverviewGraph -Id <Int32> -DataSourceId <String> [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Filter-dsName
 ```
 Get-LMDatasourceOverviewGraph -DataSourceName <String> -Filter <Object> [-BatchSize <Int32>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-dsName
 ```
-Get-LMDatasourceOverviewGraph -DataSourceName <String> -Name <String> [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasourceOverviewGraph -DataSourceName <String> -Name <String> [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### dsName
 ```
-Get-LMDatasourceOverviewGraph -DataSourceName <String> [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasourceOverviewGraph -DataSourceName <String> [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Filter-dsId
 ```
-Get-LMDatasourceOverviewGraph -DataSourceId <String> -Filter <Object> [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasourceOverviewGraph -DataSourceId <String> -Filter <Object> [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
-Get-LMDatasourceOverviewGraph -DataSourceId <String> -Name <String> [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasourceOverviewGraph -DataSourceId <String> -Name <String> [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### dsId
 ```
-Get-LMDatasourceOverviewGraph -DataSourceId <String> [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasourceOverviewGraph -DataSourceId <String> [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -151,6 +158,21 @@ Parameter Sets: Name-dsName, Name-dsId
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

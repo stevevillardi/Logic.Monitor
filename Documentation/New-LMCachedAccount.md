@@ -15,17 +15,17 @@ Store a connection to a specified LM portal for use with Connect-LMAccount
 ### LMv1 (Default)
 ```
 New-LMCachedAccount -AccessId <String> -AccessKey <String> -AccountName <String> [-CachedAccountName <String>]
- [-OverwriteExisting <Boolean>] [<CommonParameters>]
+ [-OverwriteExisting <Boolean>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Bearer
 ```
 New-LMCachedAccount -AccountName <String> -BearerToken <String> [-CachedAccountName <String>]
- [-OverwriteExisting <Boolean>] [<CommonParameters>]
+ [-OverwriteExisting <Boolean>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Connect to a specified LM portal which will allow you run the other LM commands assoicated with the Logic.Monitor PS module.
+Connect to a specified LM portal which will allow you run the other LM commands associated with the Logic.Monitor PS module.
 Used in conjunction with Disconnect-LMAccount to close a session previously connected via Connect-LMAccount
 
 ## EXAMPLES
@@ -38,7 +38,7 @@ New-LMCachedAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
 ## PARAMETERS
 
 ### -AccessId
-Access ID from your API credential aquired from the LM Portal
+Access ID from your API credential acquired from the LM Portal
 
 ```yaml
 Type: String
@@ -53,7 +53,7 @@ Accept wildcard characters: False
 ```
 
 ### -AccessKey
-Access Key from your API credential aquired from the LM Portal
+Access Key from your API credential acquired from the LM Portal
 
 ```yaml
 Type: String
@@ -123,6 +123,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

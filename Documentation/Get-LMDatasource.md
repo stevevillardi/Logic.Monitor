@@ -14,27 +14,30 @@ schema: 2.0.0
 
 ### All (Default)
 ```
-Get-LMDatasource [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasource [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMDatasource [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasource [-Id <Int32>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDatasource [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasource [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### DisplayName
 ```
-Get-LMDatasource [-DisplayName <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasource [-DisplayName <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMDatasource [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDatasource [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -118,6 +121,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Name
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

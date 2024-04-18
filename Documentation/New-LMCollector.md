@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-LMCollector
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new LogicMonitor collector.
 
 ## SYNTAX
 
@@ -16,55 +16,42 @@ schema: 2.0.0
 New-LMCollector [-Description] <String> [[-BackupAgentId] <Int32>] [[-CollectorGroupId] <Int32>]
  [[-Properties] <Hashtable>] [[-EnableFailBack] <Boolean>] [[-EnableFailOverOnCollectorDevice] <Boolean>]
  [[-EscalatingChainId] <Int32>] [[-AutoCreateCollectorDevice] <Boolean>] [[-SuppressAlertClear] <Boolean>]
- [[-ResendAlertInterval] <Int32>] [[-SpecifiedCollectorDeviceGroupId] <Int32>] [<CommonParameters>]
+ [[-ResendAlertInterval] <Int32>] [[-SpecifiedCollectorDeviceGroupId] <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The New-LMCollector function is used to create a new collector in LogicMonitor.
+It requires a description for the collector and supports various optional parameters such as BackupAgentId, CollectorGroupId, Properties, EnableFailBack, EnableFailOverOnCollectorDevice, EscalatingChainId, AutoCreateCollectorDevice, SuppressAlertClear, ResendAlertInterval, and SpecifiedCollectorDeviceGroupId.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+New-LMCollector -Description "My Collector" -BackupAgentId 123 -CollectorGroupId 456 -Properties @{ "Key1" = "Value1"; "Key2" = "Value2" }
 ```
 
-{{ Add example description here }}
+This example creates a new collector with the specified description, backup agent ID, collector group ID, and custom properties.
 
 ## PARAMETERS
 
-### -AutoCreateCollectorDevice
-{{ Fill AutoCreateCollectorDevice Description }}
+### -Description
+The description of the collector.
 
 ```yaml
-Type: Boolean
+Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: 7
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BackupAgentId
-{{ Fill BackupAgentId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
+Required: True
 Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CollectorGroupId
-{{ Fill CollectorGroupId Description }}
+### -BackupAgentId
+The ID of the backup agent.
 
 ```yaml
 Type: Int32
@@ -78,26 +65,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Description
-{{ Fill Description Description }}
+### -CollectorGroupId
+The ID of the collector group.
 
 ```yaml
-Type: String
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: 0
+Required: False
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -EnableFailBack
-{{ Fill EnableFailBack Description }}
+### -Properties
+A hashtable of custom properties for the collector.
 
 ```yaml
-Type: Boolean
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 
@@ -108,8 +95,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -EnableFailOverOnCollectorDevice
-{{ Fill EnableFailOverOnCollectorDevice Description }}
+### -EnableFailBack
+Specifies whether failback is enabled for the collector.
 
 ```yaml
 Type: Boolean
@@ -123,11 +110,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -EscalatingChainId
-{{ Fill EscalatingChainId Description }}
+### -EnableFailOverOnCollectorDevice
+Specifies whether failover is enabled on the collector device.
 
 ```yaml
-Type: Int32
+Type: Boolean
 Parameter Sets: (All)
 Aliases:
 
@@ -138,23 +125,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Properties
-{{ Fill Properties Description }}
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResendAlertInterval
-{{ Fill ResendAlertInterval Description }}
+### -EscalatingChainId
+The ID of the escalation chain.
 
 ```yaml
 Type: Int32
@@ -162,29 +134,14 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 9
+Position: 7
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SpecifiedCollectorDeviceGroupId
-{{ Fill SpecifiedCollectorDeviceGroupId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 10
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SuppressAlertClear
-{{ Fill SuppressAlertClear Description }}
+### -AutoCreateCollectorDevice
+Specifies whether to automatically create a collector device.
 
 ```yaml
 Type: Boolean
@@ -198,15 +155,73 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -SuppressAlertClear
+Specifies whether to suppress alert clear.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 9
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ResendAlertInterval
+The interval for resending alerts.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 10
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SpecifiedCollectorDeviceGroupId
+The ID of the specified collector device group.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 11
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

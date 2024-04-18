@@ -8,30 +8,34 @@ schema: 2.0.0
 # New-LMAppliesToFunction
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new LogicMonitor Applies To function.
 
 ## SYNTAX
 
 ```
-New-LMAppliesToFunction [-Name] <String> [[-Description] <String>] [-AppliesTo] <String> [<CommonParameters>]
+New-LMAppliesToFunction [-Name] <String> [[-Description] <String>] [-AppliesTo] <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The New-LMAppliesToFunction function is used to create a new LogicMonitor Applies To function.
+It requires the name and applies to parameters, and optionally accepts a description parameter.
+The function checks if the user is logged in and has valid API credentials before making the API call to create the function.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+New-LMAppliesToFunction -Name "MyFunction" -AppliesTo "isWindows() && isLinux()"
 ```
 
-{{ Add example description here }}
+This example creates a new LogicMonitor Applies To function with the name "MyFunction" and the code "return true".
 
 ## PARAMETERS
 
-### -AppliesTo
-{{ Fill AppliesTo Description }}
+### -Name
+The name of the LogicMonitor Applies To function.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -39,14 +43,15 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 2
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Description
-{{ Fill Description Description }}
+The description of the LogicMonitor Applies To function.
+This parameter is optional.
 
 ```yaml
 Type: String
@@ -54,14 +59,15 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-{{ Fill Name Description }}
+### -AppliesTo
+The code that defines the LogicMonitor Applies To function.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -69,7 +75,22 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -80,10 +101,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

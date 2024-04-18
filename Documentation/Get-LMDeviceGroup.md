@@ -14,22 +14,24 @@ Get device group info from a connected LM portal
 
 ### All (Default)
 ```
-Get-LMDeviceGroup [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceGroup [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMDeviceGroup [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceGroup [-Id <Int32>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceGroup [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceGroup [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMDeviceGroup [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDeviceGroup [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -51,7 +53,7 @@ Get multiple device groups using wildcards:
     Get-LMDeviceGroup -Name "* - Servers"
 
 Get device groups using a custom filter:
-    Get-LMDeviceGroup -Filter @{parentId=1;disableAlerting=$false}
+    Get-LMDeviceGroup -Filter "parentId -eq '1' -and disableAlerting -eq '$false'"
 
 ## PARAMETERS
 
@@ -66,7 +68,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: 0
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -87,11 +89,11 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A hashtable of additonal filter properties to include with request.
-All properies are treated as if using the equals ":" operator.
+A hashtable of additional filter properties to include with request.
+All properties are treated as if using the equals ":" operator.
 When using multiple filters they are combined as AND conditions.
 
-An example Filter to get devices with alerting enabled and where the parent groud id equals 1:
+An example Filter to get devices with alerting enabled and where the parent group id equals 1:
     @{parentId=1;disableAlerting=$false}
 
 ```yaml
@@ -118,6 +120,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: 1000
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -1,3 +1,36 @@
+<#
+.SYNOPSIS
+Removes a LogicMonitor NetScan group.
+
+.DESCRIPTION
+The Remove-LMNetscanGroup function removes a LogicMonitor NetScan group based on the specified ID or name. It requires valid API credentials to be logged in.
+
+.PARAMETER Id
+Specifies the ID of the NetScan group to remove. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the name of the NetScan group to remove. This parameter is mandatory when using the 'Name' parameter set.
+
+.INPUTS
+You can pipe objects to this function.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject
+Returns an object with the following properties:
+- Id: The ID of the removed NetScan group.
+- Message: A message indicating the success of the removal operation.
+
+.EXAMPLE
+Remove-LMNetscanGroup -Id 123
+Removes the NetScan group with ID 123.
+
+.EXAMPLE
+Remove-LMNetscanGroup -Name "MyGroup"
+Removes the NetScan group with the name "MyGroup".
+
+.NOTES
+This function requires valid API credentials to be logged in. Use the Connect-LMAccount function to log in before running any commands.
+#>
 Function Remove-LMNetscanGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

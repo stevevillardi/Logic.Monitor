@@ -1,3 +1,25 @@
+<#
+.SYNOPSIS
+Creates a new datasource overview graph in LogicMonitor.
+
+.DESCRIPTION
+The New-LMDatasourceOverviewGraph function creates a new datasource overview graph in LogicMonitor. It requires the user to be logged in and have valid API credentials.
+
+.PARAMETER RawObject
+The raw object representing the graph configuration. This object will be converted to JSON and sent as the request body. Use Get-LMDatasourceOverviewGraph to get the raw object representing a graph configuration.
+
+.PARAMETER DatasourceId
+The ID of the datasource for which the overview graph is being created. This parameter is mandatory when using the 'dsId' parameter set.
+
+.PARAMETER DatasourceName
+The name of the datasource for which the overview graph is being created. This parameter is mandatory when using the 'dsName' parameter set.
+
+.EXAMPLE
+New-LMDatasourceOverviewGraph -RawObject $graphConfig -DatasourceId 12345
+
+.EXAMPLE
+New-LMDatasourceOverviewGraph -RawObject $graphConfig -DatasourceName "My Datasource"
+#>
 Function New-LMDatasourceOverviewGraph {
 
     [CmdletBinding()]

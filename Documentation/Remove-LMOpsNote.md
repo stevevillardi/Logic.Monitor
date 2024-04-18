@@ -8,27 +8,58 @@ schema: 2.0.0
 # Remove-LMOpsNote
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Removes an OpsNote from LogicMonitor.
 
 ## SYNTAX
 
 ```
-Remove-LMOpsNote -Id <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMOpsNote -Id <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Remove-LMOpsNote function removes an OpsNote from LogicMonitor.
+It requires the user to be logged in and have valid API credentials.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Remove-LMOpsNote -Id "12345"
+Removes the OpsNote with the ID "12345" from LogicMonitor.
 ```
 
-{{ Add example description here }}
-
 ## PARAMETERS
+
+### -Id
+Specifies the ID of the OpsNote to be removed.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Confirm
 Prompts you for confirmation before running the cmdlet.
@@ -45,28 +76,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: String
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
+Aliases: proga
 
 Required: False
 Position: Named
@@ -80,10 +96,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### You can pipe objects to this function.
 ## OUTPUTS
 
-### System.Object
+### System.Management.Automation.PSCustomObject
+### Returns an object with the ID and a success message if the OpsNote is successfully removed.
 ## NOTES
 
 ## RELATED LINKS

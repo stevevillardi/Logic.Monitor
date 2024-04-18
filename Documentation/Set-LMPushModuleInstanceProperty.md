@@ -15,13 +15,13 @@ schema: 2.0.0
 ### Id (Default)
 ```
 Set-LMPushModuleInstanceProperty -DeviceId <Int32> -DataSourceName <String> -InstanceName <String>
- -PropertyName <String> -PropertyValue <String> [<CommonParameters>]
+ -PropertyName <String> -PropertyValue <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Set-LMPushModuleInstanceProperty -DeviceName <String> -DataSourceName <String> -InstanceName <String>
- -PropertyName <String> -PropertyValue <String> [<CommonParameters>]
+ -PropertyName <String> -PropertyValue <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -122,6 +122,21 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

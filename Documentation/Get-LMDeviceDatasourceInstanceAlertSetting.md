@@ -15,25 +15,25 @@ schema: 2.0.0
 ### Name-dsName
 ```
 Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <String> -Name <String> -InstanceName <String>
- [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
 Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <String> -Id <Int32> -InstanceName <String>
- [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
 Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Name <String> -InstanceName <String>
- [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
 Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Id <Int32> -InstanceName <String>
- [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+ [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -149,6 +149,21 @@ Parameter Sets: Name-dsName, Name-dsId
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

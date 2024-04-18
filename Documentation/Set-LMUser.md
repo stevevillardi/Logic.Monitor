@@ -18,7 +18,7 @@ Set-LMUser -Id <String> [-NewUsername <String>] [-Email <String>] [-UserGroups <
  [-AcceptEULA <Boolean>] [-Password <String>] [-FirstName <String>] [-LastName <String>]
  [-ForcePasswordChange <Boolean>] [-Phone <String>] [-Note <String>] [-RoleNames <String[]>]
  [-SmsEmail <String>] [-SmsEmailFormat <String>] [-Status <String>] [-Timezone <String>]
- [-TwoFAEnabled <Boolean>] [-Views <String[]>] [<CommonParameters>]
+ [-TwoFAEnabled <Boolean>] [-Views <String[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Username
@@ -27,7 +27,7 @@ Set-LMUser -Username <String> [-NewUsername <String>] [-Email <String>] [-UserGr
  [-AcceptEULA <Boolean>] [-Password <String>] [-FirstName <String>] [-LastName <String>]
  [-ForcePasswordChange <Boolean>] [-Phone <String>] [-Note <String>] [-RoleNames <String[]>]
  [-SmsEmail <String>] [-SmsEmailFormat <String>] [-Status <String>] [-Timezone <String>]
- [-TwoFAEnabled <Boolean>] [-Views <String[]>] [<CommonParameters>]
+ [-TwoFAEnabled <Boolean>] [-Views <String[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -325,6 +325,21 @@ Type: String[]
 Parameter Sets: (All)
 Aliases:
 Accepted values: Alerts, Dashboards, Logs, Maps, Reports, Resources, Settings, Websites, All
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

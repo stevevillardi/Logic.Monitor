@@ -14,32 +14,35 @@ Get device info from a connected LM portal
 
 ### All (Default)
 ```
-Get-LMDevice [-Delta] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-Delta] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMDevice [-Id <Int32>] [-Delta] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-Id <Int32>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### DisplayName
 ```
-Get-LMDevice [-DisplayName <String>] [-Delta] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-DisplayName <String>] [-Delta] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDevice [-Name <String>] [-Delta] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-Name <String>] [-Delta] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMDevice [-Filter <Object>] [-Delta] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-Filter <Object>] [-Delta] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Delta
 ```
-Get-LMDevice [-DeltaId <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDevice [-DeltaId <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -63,7 +66,7 @@ Get multiple devices using wildcards:
     Get-LMDevice -Name "10.10.*"
 
 Get device/s using a custom filter:
-    Get-LMDevice -Filter @{displayName="corp-*";preferredCollectorId=1}
+    Get-LMDevice -Filter "displayName -eq 'corp-*' -and preferredCollectorId -eq '1'"
 
 ## PARAMETERS
 
@@ -116,8 +119,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A hashtable of additonal filter properties to include with request.
-All properies are treated as if using the equals ":" operator.
+A hashtable of additional filter properties to include with request.
+All properties are treated as if using the equals ":" operator.
 When using multiple filters they are combined as AND conditions.
 
 An example Filter to get devices with alerting enabled and where the display name contains equal.com:
@@ -140,7 +143,7 @@ Switch used to return a deltaId along with the requested data to use for delta c
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: All, Id, DisplayName, Name, Filter
+Parameter Sets: All, DisplayName, Name, Filter
 Aliases:
 
 Required: False
@@ -177,6 +180,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: 1000
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

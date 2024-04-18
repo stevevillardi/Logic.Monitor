@@ -1,3 +1,24 @@
+<#
+.SYNOPSIS
+Removes an OpsNote from LogicMonitor.
+
+.DESCRIPTION
+The Remove-LMOpsNote function removes an OpsNote from LogicMonitor. It requires the user to be logged in and have valid API credentials.
+
+.PARAMETER Id
+Specifies the ID of the OpsNote to be removed.
+
+.EXAMPLE
+Remove-LMOpsNote -Id "12345"
+Removes the OpsNote with the ID "12345" from LogicMonitor.
+
+.INPUTS
+You can pipe objects to this function.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject
+Returns an object with the ID and a success message if the OpsNote is successfully removed.
+#>
 Function Remove-LMOpsNote {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

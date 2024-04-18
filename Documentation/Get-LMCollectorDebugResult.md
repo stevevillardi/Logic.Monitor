@@ -8,36 +8,59 @@ schema: 2.0.0
 # Get-LMCollectorDebugResult
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves the debug result for a LogicMonitor collector.
 
 ## SYNTAX
 
 ### Id
 ```
-Get-LMCollectorDebugResult -SessionId <Int32> -Id <Int32> [<CommonParameters>]
+Get-LMCollectorDebugResult -SessionId <Int32> -Id <Int32> [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMCollectorDebugResult -SessionId <Int32> -Name <String> [<CommonParameters>]
+Get-LMCollectorDebugResult -SessionId <Int32> -Name <String> [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMCollectorDebugResult function retrieves the debug result for a LogicMonitor collector based on the specified session ID, collector ID, or collector name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Get-LMCollectorDebugResult -SessionId 12345 -Id 67890
+Retrieves the debug result for the collector with ID 67890 in the debug session with ID 12345.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Get-LMCollectorDebugResult -SessionId 12345 -Name "Collector1"
+Retrieves the debug result for the collector with name "Collector1" in the debug session with ID 12345.
+```
 
 ## PARAMETERS
 
+### -SessionId
+The session ID of the debug session.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Id
-{{ Fill Id Description }}
+The ID of the collector.
+This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
 Type: Int32
@@ -46,13 +69,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+The name of the collector.
+This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -66,15 +90,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SessionId
-{{ Fill SessionId Description }}
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: Int32
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases:
+Aliases: proga
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -86,10 +110,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
+Use Connect-LMAccount to authenticate before running this command.
 
 ## RELATED LINKS

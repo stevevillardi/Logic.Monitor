@@ -1,3 +1,33 @@
+<#
+.SYNOPSIS
+Removes a LogicMonitor report.
+
+.DESCRIPTION
+The Remove-LMReport function removes a LogicMonitor report based on the specified report ID or name. It requires a valid API authentication and authorization.
+
+.PARAMETER Id
+Specifies the ID of the report to be removed. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the name of the report to be removed. This parameter is mandatory when using the 'Name' parameter set.
+
+.EXAMPLE
+Remove-LMReport -Id 123
+Removes the report with ID 123.
+
+.EXAMPLE
+Remove-LMReport -Name "MyReport"
+Removes the report with the name "MyReport".
+
+.INPUTS
+You can pipe input to this function.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject. Returns an object with the removed report ID and a success message.
+
+.NOTES
+This function requires a valid API authentication and authorization. Use Connect-LMAccount to log in before running this command.
+#>
 Function Remove-LMReport {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

@@ -1,3 +1,17 @@
+<#
+.SYNOPSIS
+Imports an LM Exchange module.
+
+.DESCRIPTION
+The Import-LMExchangeModule function is used to import an LM Exchange module into LogicMonitor.
+
+.PARAMETER LMExchangeId
+The LM Exchange module ID to import. This parameter is mandatory.
+
+.EXAMPLE
+Import-LMExchangeModule -LMExchangeId "LM12345"
+Imports the LM Exchange module with the ID "LM12345" into LogicMonitor.
+#>
 Function Import-LMExchangeModule {
     [CmdletBinding()]
     Param (

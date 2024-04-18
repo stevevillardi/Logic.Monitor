@@ -1,3 +1,42 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor website group.
+
+.DESCRIPTION
+The New-LMWebsiteGroup function creates a new website group in LogicMonitor. It allows you to specify the name, description, properties, and parent group of the website group.
+
+.PARAMETER Name
+The name of the website group. This parameter is mandatory.
+
+.PARAMETER Description
+The description of the website group.
+
+.PARAMETER Properties
+A hashtable of custom properties for the website group.
+
+.PARAMETER DisableAlerting
+Specifies whether to disable alerting for the website group. By default, alerting is enabled.
+
+.PARAMETER StopMonitoring
+Specifies whether to stop monitoring the website group. By default, monitoring is not stopped.
+
+.PARAMETER ParentGroupId
+The ID of the parent group. This parameter is mandatory if the ParentGroupName parameter is not specified.
+
+.PARAMETER ParentGroupName
+The name of the parent group. This parameter is mandatory if the ParentGroupId parameter is not specified.
+
+.EXAMPLE
+New-LMWebsiteGroup -Name "MyWebsiteGroup" -Description "This is my website group" -ParentGroupId 1234
+
+This example creates a new website group with the name "MyWebsiteGroup", description "This is my website group", and parent group ID 1234.
+
+.EXAMPLE
+New-LMWebsiteGroup -Name "MyWebsiteGroup" -Description "This is my website group" -ParentGroupName "ParentGroup"
+
+This example creates a new website group with the name "MyWebsiteGroup", description "This is my website group", and parent group name "ParentGroup".
+
+#>
 Function New-LMWebsiteGroup {
 
     [CmdletBinding()]

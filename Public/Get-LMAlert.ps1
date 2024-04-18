@@ -1,3 +1,51 @@
+<#
+.SYNOPSIS
+Retrieves LogicMonitor alerts based on specified parameters.
+
+.DESCRIPTION
+The Get-LMAlert function retrieves LogicMonitor alerts based on the specified parameters. It supports filtering alerts by start and end dates, severity, type, cleared status, and custom columns. The function makes API requests to the LogicMonitor platform and returns the retrieved alerts.
+
+.PARAMETER StartDate
+Specifies the start date for filtering alerts. Only alerts that occurred after this date will be retrieved.
+
+.PARAMETER EndDate
+Specifies the end date for filtering alerts. Only alerts that occurred before this date will be retrieved.
+
+.PARAMETER Id
+Specifies the ID of a specific alert to retrieve.
+
+.PARAMETER Severity
+Specifies the severity level of alerts to retrieve. Valid values are "*", "Warning", "Error", and "Critical". The default value is "*".
+
+.PARAMETER Type
+Specifies the type of alerts to retrieve. Valid values are "*", "websiteAlert", "dataSourceAlert", "eventSourceAlert", and "logAlert". The default value is "*".
+
+.PARAMETER ClearedAlerts
+Specifies whether to retrieve cleared alerts. If set to $true, cleared alerts will be included in the results. If set to $false, only active alerts will be included. The default value is $false.
+
+.PARAMETER Filter
+Specifies a custom filter object to further refine the alerts to retrieve.
+
+.PARAMETER CustomColumns
+Specifies an array of custom columns to include in the retrieved alerts.
+
+.PARAMETER BatchSize
+Specifies the number of alerts to retrieve per API request. The default value is 1000.
+
+.PARAMETER Sort
+Specifies the sorting order of the retrieved alerts. The default value is "resourceId".
+
+.EXAMPLE
+Get-LMAlert -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) -Severity "Error" -Type "websiteAlert" -ClearedAlerts $false
+Retrieves all alerts that occurred within the last 7 days, have a severity level of "Error", are of type "websiteAlert", and are not cleared.
+
+.EXAMPLE
+Get-LMAlert -Id "12345" -CustomColumns "Column1", "Column2"
+Retrieves a specific alert with the ID "12345" and includes the custom columns "Column1" and "Column2" in the result.
+
+.NOTES
+This function requires a valid API authentication session. Use the Connect-LMAccount function to log in before running this command.
+#>
 Function Get-LMAlert {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

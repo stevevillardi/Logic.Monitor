@@ -8,36 +8,43 @@ schema: 2.0.0
 # Invoke-LMCloudGroupNetScan
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Invokes a LogicMonitor Cloud Group NetScan task.
 
 ## SYNTAX
 
 ### GroupId
 ```
-Invoke-LMCloudGroupNetScan -Id <String> [<CommonParameters>]
+Invoke-LMCloudGroupNetScan -Id <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### GroupName
 ```
-Invoke-LMCloudGroupNetScan -Name <String> [<CommonParameters>]
+Invoke-LMCloudGroupNetScan -Name <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Invoke-LMCloudGroupNetScan function is used to schedule a LogicMonitor Cloud Group NetScan task.
+It requires either the GroupId or GroupName parameter to identify the target device group.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Invoke-LMCloudGroupNetScan -Id "12345"
+Schedules a LogicMonitor Cloud Group NetScan task for the device group with the ID "12345".
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Invoke-LMCloudGroupNetScan -Name "MyGroup"
+Schedules a LogicMonitor Cloud Group NetScan task for the device group with the name "MyGroup".
+```
 
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the target device group.
+This parameter is mandatory when using the 'GroupId' parameter set.
 
 ```yaml
 Type: String
@@ -52,7 +59,8 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the name of the target device group.
+This parameter is mandatory when using the 'GroupName' parameter set.
 
 ```yaml
 Type: String
@@ -66,15 +74,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
+Make sure you are logged in before running any commands using the Connect-LMAccount cmdlet.
+You must target a device gropup that belongs to a cloud account (EC2, etc)
 
 ## RELATED LINKS

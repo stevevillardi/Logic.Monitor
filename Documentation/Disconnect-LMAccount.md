@@ -8,7 +8,7 @@ schema: 2.0.0
 # Disconnect-LMAccount
 
 ## SYNOPSIS
-Disconnect from a previouslly connected LM portal
+Disconnect from a previously connected LM portal
 
 ## SYNTAX
 
@@ -41,8 +41,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 Once disconnect you will need to reconnect to a portal before you will be allowed to run commands again.
 
 ## RELATED LINKS
-
-[Module repo: https://github.com/stevevillardi/Logic.Monitor]()
 
 [PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor]()
 

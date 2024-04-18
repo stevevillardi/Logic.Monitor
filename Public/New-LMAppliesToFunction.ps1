@@ -1,3 +1,24 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor Applies To function.
+
+.DESCRIPTION
+The New-LMAppliesToFunction function is used to create a new LogicMonitor Applies To function. It requires the name and applies to parameters, and optionally accepts a description parameter. The function checks if the user is logged in and has valid API credentials before making the API call to create the function.
+
+.PARAMETER Name
+The name of the LogicMonitor Applies To function. This parameter is mandatory.
+
+.PARAMETER Description
+The description of the LogicMonitor Applies To function. This parameter is optional.
+
+.PARAMETER AppliesTo
+The code that defines the LogicMonitor Applies To function. This parameter is mandatory.
+
+.EXAMPLE
+New-LMAppliesToFunction -Name "MyFunction" -AppliesTo "isWindows() && isLinux()"
+
+This example creates a new LogicMonitor Applies To function with the name "MyFunction" and the code "return true".
+#>
 Function New-LMAppliesToFunction {
 
     [CmdletBinding()]

@@ -1,3 +1,39 @@
+<#
+.SYNOPSIS
+Invokes a configuration collection task for a LogicMonitor device.
+
+.DESCRIPTION
+The Invoke-LMDeviceConfigSourceCollection function is used to schedule a configuration collection task for a LogicMonitor device. It requires the user to be logged in and have valid API credentials.
+
+.PARAMETER DatasourceName
+Specifies the name of the datasource. This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+
+.PARAMETER DatasourceId
+Specifies the ID of the datasource. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+
+.PARAMETER Id
+Specifies the ID of the device. This parameter is mandatory when using the 'Id-dsId', 'Id-dsName', or 'Id-HdsId' parameter sets.
+
+.PARAMETER Name
+Specifies the name of the device. This parameter is mandatory when using the 'Name-dsName', 'Name-dsId', or 'Name-HdsId' parameter sets.
+
+.PARAMETER HdsId
+Specifies the ID of the host datasource. This parameter is mandatory when using the 'Id-HdsId' or 'Name-HdsId' parameter sets.
+
+.PARAMETER InstanceId
+Specifies the ID of the device instance. This parameter is mandatory.
+
+.EXAMPLE
+Invoke-LMDeviceConfigSourceCollection -Name "MyDevice" -DatasourceName "MyDatasource" -InstanceId "12345"
+Schedules a configuration collection task for the device with the name "MyDevice", the datasource with the name "MyDatasource", and the instance with the ID "12345".
+
+.EXAMPLE
+Invoke-LMDeviceConfigSourceCollection -Id 123 -DatasourceId 456 -InstanceId "12345"
+Schedules a configuration collection task for the device with the ID 123, the datasource with the ID 456, and the instance with the ID "12345".
+
+.NOTES
+This function requires the LogicMonitor PowerShell module to be installed.
+#>
 Function Invoke-LMDeviceConfigSourceCollection {
 
     [CmdletBinding()]

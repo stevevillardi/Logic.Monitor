@@ -1,3 +1,53 @@
+<#
+.SYNOPSIS
+Creates a new network scan in LogicMonitor.
+
+.DESCRIPTION
+The New-LMNetScan function is used to create a new network scan in LogicMonitor. It sends a POST request to the LogicMonitor API to create the network scan with the specified parameters.
+
+.PARAMETER CollectorId
+The ID of the collector to use for the network scan. This parameter is mandatory.
+
+.PARAMETER Name
+The name of the network scan. This parameter is mandatory.
+
+.PARAMETER Description
+The description of the network scan.
+
+.PARAMETER ExcludeDuplicateType
+The type of duplicate exclusion to apply. The default value is "1".
+
+.PARAMETER IgnoreSystemIpDuplicates
+Specifies whether to ignore duplicate system IPs. The default value is $false.
+
+.PARAMETER Method
+The method to use for the network scan. Only "nmap" is supported. The default value is "nmap".
+
+.PARAMETER NextStart
+The next start time for the network scan. The default value is "manual".
+
+.PARAMETER NextStartEpoch
+The next start time epoch for the network scan. The default value is "0".
+
+.PARAMETER NetScanGroupId
+The ID of the network scan group to assign the network scan to. The default value is "1".
+
+.PARAMETER SubnetRange
+The subnet range to scan. This parameter is mandatory.
+
+.PARAMETER CredentialGroupId
+The ID of the credential group to use for the network scan.
+
+.PARAMETER CredentialGroupName
+The name of the credential group to use for the network scan.
+
+.PARAMETER ChangeNameToken
+The token to use for changing the name of discovered devices. The default value is "##REVERSEDNS##".
+
+.EXAMPLE
+New-LMNetScan -CollectorId "12345" -Name "MyNetScan" -SubnetRange "192.168.0.0/24"
+Creates a new network scan with the specified collector ID, name, and subnet range.
+#>
 Function New-LMNetScan {
 
     [CmdletBinding()]

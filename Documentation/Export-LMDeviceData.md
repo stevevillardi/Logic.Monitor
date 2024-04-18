@@ -8,7 +8,7 @@ schema: 2.0.0
 # Export-LMDeviceData
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Exports device data from Logic Monitor.
 
 ## SYNTAX
 
@@ -16,83 +16,79 @@ schema: 2.0.0
 ```
 Export-LMDeviceData -DeviceId <Int32> [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-DatasourceIncludeFilter <String>] [-DatasourceExcludeFilter <String>] [-ExportFormat <String>]
- [-ExportPath <String>] [<CommonParameters>]
+ [-ExportPath <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### DeviceDisplayName
 ```
 Export-LMDeviceData -DeviceDisplayName <String> [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-DatasourceIncludeFilter <String>] [-DatasourceExcludeFilter <String>] [-ExportFormat <String>]
- [-ExportPath <String>] [<CommonParameters>]
+ [-ExportPath <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### DeviceHostName
 ```
 Export-LMDeviceData -DeviceHostName <String> [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-DatasourceIncludeFilter <String>] [-DatasourceExcludeFilter <String>] [-ExportFormat <String>]
- [-ExportPath <String>] [<CommonParameters>]
+ [-ExportPath <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### DeviceGroupId
 ```
 Export-LMDeviceData -DeviceGroupId <String> [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-DatasourceIncludeFilter <String>] [-DatasourceExcludeFilter <String>] [-ExportFormat <String>]
- [-ExportPath <String>] [<CommonParameters>]
+ [-ExportPath <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### DeviceGroupName
 ```
 Export-LMDeviceData -DeviceGroupName <String> [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-DatasourceIncludeFilter <String>] [-DatasourceExcludeFilter <String>] [-ExportFormat <String>]
- [-ExportPath <String>] [<CommonParameters>]
+ [-ExportPath <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Export-LMDeviceData function exports device data from Logic Monitor based on the specified parameters.
+It collects data from the specified devices, their datasources, and their instances within a specified time range.
+The exported data can be saved in JSON or CSV format.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Export-LMDeviceData -DeviceId 12345 -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) -ExportFormat json -ExportPath "C:\LMData"
 ```
 
-{{ Add example description here }}
+Exports device data for the device with ID 12345, collecting data for the last 7 days and saving it in JSON format at the specified path.
+
+### EXAMPLE 2
+```
+Export-LMDeviceData -DeviceGroupName "Production Servers" -StartDate (Get-Date).AddHours(-12) -ExportFormat csv
+```
+
+Exports device data for all devices in the "Production Servers" group, collecting data for the last 12 hours and saving it in CSV format at the current location.
 
 ## PARAMETERS
 
-### -DatasourceExcludeFilter
-{{ Fill DatasourceExcludeFilter Description }}
+### -DeviceId
+Specifies the ID of the device to export data for.
+This parameter is mutually exclusive with the DeviceDisplayName, DeviceHostName, DeviceGroupId, and DeviceGroupName parameters.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
+Type: Int32
+Parameter Sets: DeviceId
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DatasourceIncludeFilter
-{{ Fill DatasourceIncludeFilter Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -DeviceDisplayName
-{{ Fill DeviceDisplayName Description }}
+Specifies the display name of the device to export data for.
+This parameter is mutually exclusive with the DeviceId, DeviceHostName, DeviceGroupId, and DeviceGroupName parameters.
 
 ```yaml
 Type: String
@@ -106,8 +102,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DeviceHostName
+Specifies the host name of the device to export data for.
+This parameter is mutually exclusive with the DeviceId, DeviceDisplayName, DeviceGroupId, and DeviceGroupName parameters.
+
+```yaml
+Type: String
+Parameter Sets: DeviceHostName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+Specifies the ID of the device group to export data for.
+This parameter is mutually exclusive with the DeviceId, DeviceDisplayName, DeviceHostName, and DeviceGroupName parameters.
 
 ```yaml
 Type: String
@@ -122,7 +135,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceGroupName
-{{ Fill DeviceGroupName Description }}
+Specifies the name of the device group to export data for.
+This parameter is mutually exclusive with the DeviceId, DeviceDisplayName, DeviceHostName, and DeviceGroupId parameters.
 
 ```yaml
 Type: String
@@ -136,41 +150,60 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DeviceHostName
-{{ Fill DeviceHostName Description }}
+### -StartDate
+Specifies the start date and time for the data collection.
+By default, it is set to the current date and time minus 1 hour.
 
 ```yaml
-Type: String
-Parameter Sets: DeviceHostName
+Type: DateTime
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeviceId
-{{ Fill DeviceId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: DeviceId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
+Default value: (Get-Date).AddHours(-1)
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -EndDate
-{{ Fill EndDate Description }}
+Specifies the end date and time for the data collection.
+By default, it is set to the current date and time.
 
 ```yaml
 Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: (Get-Date)
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DatasourceIncludeFilter
+Specifies the filter for including specific datasources.
+By default, it includes all datasources.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: *
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DatasourceExcludeFilter
+Specifies the filter for excluding specific datasources.
+By default, no datasources are excluded.
+
+```yaml
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -182,13 +215,14 @@ Accept wildcard characters: False
 ```
 
 ### -ExportFormat
-{{ Fill ExportFormat Description }}
+Specifies the format for exporting the data.
+Valid values are "csv", "json", or "none".
+By default, it is set to "none".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: csv, json, none
 
 Required: False
 Position: Named
@@ -198,7 +232,8 @@ Accept wildcard characters: False
 ```
 
 ### -ExportPath
-{{ Fill ExportPath Description }}
+Specifies the path where the exported data will be saved.
+By default, it is set to the current location.
 
 ```yaml
 Type: String
@@ -207,18 +242,18 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: (Get-Location).Path
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -StartDate
-{{ Fill StartDate Description }}
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: DateTime
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases:
+Aliases: proga
 
 Required: False
 Position: Named
@@ -232,10 +267,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

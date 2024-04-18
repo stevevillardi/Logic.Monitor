@@ -1,3 +1,33 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor API user.
+
+.DESCRIPTION
+The New-LMAPIUser function is used to create a new LogicMonitor API user. It requires a username and supports optional parameters such as user groups, a note, role names, and status.
+
+.PARAMETER Username
+Specifies the username for the new API user. This parameter is mandatory.
+
+.PARAMETER UserGroups
+Specifies an array of user groups to which the new API user should be added. This parameter is optional.
+
+.PARAMETER Note
+Specifies a note for the new API user. This parameter is optional.
+
+.PARAMETER RoleNames
+Specifies an array of role names for the new API user. The default value is "readonly". This parameter is optional.
+
+.PARAMETER Status
+Specifies the status of the new API user. Valid values are "active" and "suspended". The default value is "active". This parameter is optional.
+
+.EXAMPLE
+New-LMAPIUser -Username "john.doe" -UserGroups @("Group1","Group2") -Note "Test user" -RoleNames "admin" -Status "active"
+
+This example creates a new API user with the username "john.doe", adds the user to "Group1" and "Group2" user groups, adds a note "Test user", assigns the "admin" role, and sets the status to "active".
+
+.NOTES
+This function requires a valid API session. Make sure to log in using the Connect-LMAccount function before running this command.
+#>
 Function New-LMAPIUser {
 
     [CmdletBinding()]

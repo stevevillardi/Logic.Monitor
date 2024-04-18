@@ -1,3 +1,33 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor collector group.
+
+.DESCRIPTION
+The New-LMCollectorGroup function creates a new collector group in LogicMonitor. It requires a name parameter and supports additional parameters such as description, properties, autoBalance, and autoBalanceInstanceCountThreshold.
+
+.PARAMETER Name
+The name of the collector group. This parameter is mandatory.
+
+.PARAMETER Description
+The description of the collector group.
+
+.PARAMETER Properties
+A hashtable of custom properties for the collector group.
+
+.PARAMETER AutoBalance
+Specifies whether to enable auto-balancing for the collector group. The default value is $false.
+
+.PARAMETER AutoBalanceInstanceCountThreshold
+The threshold for auto-balancing the collector group. The default value is 10000.
+
+.EXAMPLE
+New-LMCollectorGroup -Name "MyCollectorGroup" -Description "This is a new collector group" -Properties @{ "Property1" = "Value1"; "Property2" = "Value2" }
+
+This example creates a new collector group named "MyCollectorGroup" with a description and custom properties.
+
+.NOTES
+For this function to work, you need to be logged in with valid API credentials. Use the Connect-LMAccount function to log in before running this command.
+#>
 Function New-LMCollectorGroup {
 
     [CmdletBinding()]

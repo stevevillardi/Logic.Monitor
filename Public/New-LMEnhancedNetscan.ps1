@@ -1,3 +1,57 @@
+<#
+.SYNOPSIS
+Creates a new enhanced network scan in LogicMonitor.
+
+.DESCRIPTION
+The New-LMEnhancedNetScan function creates a new enhanced network scan in LogicMonitor. It allows you to specify various parameters such as the collector ID, name, net scan group name, custom credentials, filters, description, exclude duplicate type, method, next start, next start epoch, Groovy script, credential group ID, and credential group name.
+
+.PARAMETER CollectorId
+The ID of the collector where the network scan will be executed.
+
+.PARAMETER Name
+The name of the network scan.
+
+.PARAMETER NetScanGroupName
+The name of the net scan group.
+
+.PARAMETER CustomCredentials
+A list of custom credentials to be used for the network scan.
+
+.PARAMETER Filters
+A list of filters to be applied to the network scan.
+
+.PARAMETER Description
+A description of the network scan.
+
+.PARAMETER ExcludeDuplicateType
+The type of duplicates to be excluded. Default value is "1".
+
+.PARAMETER Method
+The method to be used for the network scan. Default value is "enhancedScript".
+
+.PARAMETER NextStart
+The next start time for the network scan. Default value is "manual".
+
+.PARAMETER NextStartEpoch
+The next start epoch for the network scan. Default value is "0".
+
+.PARAMETER GroovyScript
+The Groovy script to be executed during the network scan.
+
+.PARAMETER CredentialGroupId
+The ID of the credential group to be used for the network scan.
+
+.PARAMETER CredentialGroupName
+The name of the credential group to be used for the network scan.
+
+.EXAMPLE
+New-LMEnhancedNetScan -CollectorId "12345" -Name "MyNetScan" -NetScanGroupName "Group1" -CustomCredentials $customCreds -Filters $filters -Description "This is a network scan" -ExcludeDuplicateType "1" -Method "enhancedScript" -NextStart "manual" -NextStartEpoch "0" -GroovyScript "script" -CredentialGroupId "67890" -CredentialGroupName "Group2"
+
+This example creates a new enhanced network scan with the specified parameters.
+
+.NOTES
+For more information about LogicMonitor network scans, refer to the LogicMonitor documentation.
+#>
 Function New-LMEnhancedNetScan {
 
     [CmdletBinding()]

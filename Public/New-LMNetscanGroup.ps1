@@ -1,3 +1,21 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor Netscan Group.
+
+.DESCRIPTION
+The New-LMNetscanGroup function is used to create a new Netscan Group in LogicMonitor. It requires the Name parameter, which specifies the name of the group, and the optional Description parameter, which provides a description for the group.
+
+.PARAMETER Name
+Specifies the name of the Netscan Group. This parameter is mandatory.
+
+.PARAMETER Description
+Specifies the description for the Netscan Group. This parameter is optional.
+
+.EXAMPLE
+New-LMNetscanGroup -Name "Group1" -Description "This is a sample group"
+
+This example creates a new Netscan Group with the name "Group1" and the description "This is a sample group".
+#>
 Function New-LMNetscanGroup {
 
     [CmdletBinding()]

@@ -20,14 +20,14 @@ Set-LMCollectorConfig [-Id <Int32>] [-SnmpThreadPool <Int32>] [-SnmpPduTimeout <
  [-PowerShellSPSEProcessCountMax <Int32>] [-NetflowEnable <Boolean>] [-NbarEnable <Boolean>]
  [-NetflowPorts <String[]>] [-SflowPorts <String[]>] [-LMLogsSyslogEnable <Boolean>]
  [-LMLogsSyslogHostnameFormat <String>] [-LMLogsSyslogPropertyName <String>] [-WaitForRestart]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-Conf
 ```
 Set-LMCollectorConfig [-Id <Int32>] [-CollectorSize <String>] [-CollectorConf <String>] [-SbproxyConf <String>]
  [-WatchdogConf <String>] [-WebsiteConf <String>] [-WrapperConf <String>] [-WaitForRestart]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-SnippetConf
@@ -38,14 +38,14 @@ Set-LMCollectorConfig [-Name <String>] [-SnmpThreadPool <Int32>] [-SnmpPduTimeou
  [-PowerShellSPSEProcessCountMax <Int32>] [-NetflowEnable <Boolean>] [-NbarEnable <Boolean>]
  [-NetflowPorts <String[]>] [-SflowPorts <String[]>] [-LMLogsSyslogEnable <Boolean>]
  [-LMLogsSyslogHostnameFormat <String>] [-LMLogsSyslogPropertyName <String>] [-WaitForRestart]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-Conf
 ```
 Set-LMCollectorConfig [-Name <String>] [-CollectorSize <String>] [-CollectorConf <String>]
  [-SbproxyConf <String>] [-WatchdogConf <String>] [-WebsiteConf <String>] [-WrapperConf <String>]
- [-WaitForRestart] [<CommonParameters>]
+ [-WaitForRestart] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -115,6 +115,21 @@ Type: String
 Parameter Sets: Id-Conf, Name-Conf
 Aliases:
 Accepted values: nano, small, medium, large, extra_large, double_extra_large
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -409,6 +424,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -WrapperConf
 {{ Fill WrapperConf Description }}
 
@@ -416,6 +447,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Id-Conf, Name-Conf
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

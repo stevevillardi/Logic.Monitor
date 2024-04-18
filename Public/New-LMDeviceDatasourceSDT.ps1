@@ -1,5 +1,42 @@
-Function New-LMDeviceDatasourceSDT {
+<#
+.SYNOPSIS
+Creates a new device datasource SDT (Scheduled Downtime) in Logic Monitor.
 
+.DESCRIPTION
+The New-LMDeviceDatasourceSDT function creates a new device datasource SDT (Scheduled Downtime) in Logic Monitor. It allows you to specify the comment, start date and time, end date and time, and the timezone for the SDT.
+
+.PARAMETER Comment
+The comment for the SDT. This parameter is mandatory.
+
+.PARAMETER StartDate
+The start date for the SDT. This parameter is mandatory when using the 'OneTime' parameter set.
+
+.PARAMETER EndDate
+The end date for the SDT. This parameter is mandatory when using the 'OneTime' parameter set.
+
+.PARAMETER StartHour
+The start hour for the SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. Must be a value between 0 and 23.
+
+.PARAMETER StartMinute
+The start minute for the SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. Must be a value between 0 and 59.
+
+.EXAMPLE
+New-LMDeviceDatasourceSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00" -EndDate "2022-01-01 06:00" -StartHour 2 -StartMinute 30 -DeviceDataSourceId 123
+Creates a new one-time device datasource SDT with a comment "Maintenance window" starting on January 1, 2022, at 00:00 and ending on the same day at 06:00.
+
+.EXAMPLE
+New-LMDeviceDatasourceSDT -Comment "Daily maintenance" -StartHour 3 -StartMinute 0 -ParameterSet Daily -DeviceDataSourceId 123
+Creates a new daily device datasource SDT with a comment "Daily maintenance" starting at 03:00.
+
+.EXAMPLE
+New-LMDeviceDatasourceSDT -Comment "Monthly maintenance" -StartHour 8 -StartMinute 30 -ParameterSet Monthly -DeviceDataSourceId 123
+Creates a new monthly device datasource SDT with a comment "Monthly maintenance" starting on the 1st day of each month at 08:30.
+
+.EXAMPLE
+New-LMDeviceDatasourceSDT -Comment "Weekly maintenance" -StartHour 10 -StartMinute 0 -ParameterSet Weekly -DeviceDataSourceId 123
+Creates a new weekly device datasource SDT with a comment "Weekly maintenance" starting every Monday at 10:00.
+#>
+Function New-LMDeviceDatasourceSDT {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory)]

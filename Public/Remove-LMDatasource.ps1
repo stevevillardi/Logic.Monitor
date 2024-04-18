@@ -1,3 +1,37 @@
+<#
+.SYNOPSIS
+Removes a LogicMonitor datasource.
+
+.DESCRIPTION
+The Remove-LMDatasource function removes a LogicMonitor datasource based on the specified parameters. It requires the user to be logged in and have valid API credentials.
+
+.PARAMETER Id
+Specifies the ID of the datasource to be removed. This parameter is mandatory and can be provided as an integer.
+
+.PARAMETER Name
+Specifies the name of the datasource to be removed. This parameter is mandatory when using the 'Name' parameter set and can be provided as a string.
+
+.PARAMETER DisplayName
+Specifies the display name of the datasource to be removed. This parameter is mandatory when using the 'DisplayName' parameter set and can be provided as a string.
+
+.EXAMPLE
+Remove-LMDatasource -Id 123
+Removes the datasource with the ID 123.
+
+.EXAMPLE
+Remove-LMDatasource -Name "MyDatasource"
+Removes the datasource with the name "MyDatasource".
+
+.EXAMPLE
+Remove-LMDatasource -DisplayName "My Datasource"
+Removes the datasource with the display name "My Datasource".
+
+.INPUTS
+You can pipe input to this function.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject
+#>
 Function Remove-LMDatasource {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

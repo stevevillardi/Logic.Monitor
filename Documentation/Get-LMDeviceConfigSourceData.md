@@ -14,19 +14,20 @@ schema: 2.0.0
 
 ### ListDiffs (Default)
 ```
-Get-LMDeviceConfigSourceData -Id <Int32> -HdsId <String> -HdsInsId <String> [<CommonParameters>]
+Get-LMDeviceConfigSourceData -Id <Int32> -HdsId <String> -HdsInsId <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### ConfigId
 ```
 Get-LMDeviceConfigSourceData -Id <Int32> -HdsId <String> -HdsInsId <String> [-ConfigId <String>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### ListConfigs
 ```
 Get-LMDeviceConfigSourceData -Id <Int32> -HdsId <String> -HdsInsId <String> [-LatestConfigOnly]
- [-ConfigType <String>] [<CommonParameters>]
+ [-ConfigType <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -126,6 +127,21 @@ Accept wildcard characters: False
 Type: SwitchParameter
 Parameter Sets: ListConfigs
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

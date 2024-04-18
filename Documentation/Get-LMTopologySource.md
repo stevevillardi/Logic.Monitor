@@ -14,22 +14,25 @@ schema: 2.0.0
 
 ### All (Default)
 ```
-Get-LMTopologySource [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMTopologySource [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMTopologySource [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMTopologySource [-Id <Int32>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMTopologySource [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMTopologySource [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMTopologySource [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMTopologySource [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -98,6 +101,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Name
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

@@ -14,13 +14,15 @@ schema: 2.0.0
 
 ### OneTime (Default)
 ```
-Set-LMSDT -Id <String> [-Comment <String>] [-StartDate <DateTime>] [-EndDate <DateTime>] [<CommonParameters>]
+Set-LMSDT -Id <String> [-Comment <String>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Recurring
 ```
 Set-LMSDT -Id <String> [-Comment <String>] [-StartHour <Int32>] [-StartMinute <Int32>] [-EndHour <Int32>]
- [-EndMinute <Int32>] [-WeekDay <String>] [-WeekOfMonth <String>] [-DayOfMonth <Int32>] [<CommonParameters>]
+ [-EndMinute <Int32>] [-WeekDay <String>] [-WeekOfMonth <String>] [-DayOfMonth <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -196,6 +198,21 @@ Type: String
 Parameter Sets: Recurring
 Aliases:
 Accepted values: First, Second, Third, Fourth, Last
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

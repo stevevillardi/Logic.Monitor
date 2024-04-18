@@ -1,3 +1,33 @@
+<#
+.SYNOPSIS
+Removes a LogicMonitor role.
+
+.DESCRIPTION
+The Remove-LMRole function removes a LogicMonitor role based on the specified Id or Name. It requires a valid API authentication and authorization.
+
+.PARAMETER Id
+The Id of the role to be removed. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+The Name of the role to be removed. This parameter is mandatory when using the 'Name' parameter set.
+
+.EXAMPLE
+Remove-LMRole -Id 123
+Removes the LogicMonitor role with the Id 123.
+
+.EXAMPLE
+Remove-LMRole -Name "Admin"
+Removes the LogicMonitor role with the Name "Admin".
+
+.INPUTS
+None. You cannot pipe objects to this function.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject. Returns an object with the Id and a success message if the role is successfully removed.
+
+.NOTES
+This function requires a valid API authentication and authorization. Use Connect-LMAccount to log in before running this command.
+#>
 Function Remove-LMRole {
 
     [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]

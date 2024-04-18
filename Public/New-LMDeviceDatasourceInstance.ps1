@@ -1,3 +1,54 @@
+<#
+.SYNOPSIS
+Creates a new instance of a LogicMonitor device datasource.
+
+.DESCRIPTION
+The New-LMDeviceDatasourceInstance function creates a new instance of a LogicMonitor device datasource. It requires valid API credentials and a logged-in session.
+
+.PARAMETER DisplayName
+The display name of the new instance.
+
+.PARAMETER WildValue
+The wild value of the new instance.
+
+.PARAMETER WildValue2
+The second wild value of the new instance.
+
+.PARAMETER Description
+The description of the new instance.
+
+.PARAMETER Properties
+A hashtable of custom properties for the new instance.
+
+.PARAMETER StopMonitoring
+Specifies whether to stop monitoring the new instance. Default is $false.
+
+.PARAMETER DisableAlerting
+Specifies whether to disable alerting for the new instance. Default is $false.
+
+.PARAMETER InstanceGroupId
+The ID of the instance group to which the new instance belongs.
+
+.PARAMETER DatasourceName
+The name of the datasource associated with the new instance. Mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+
+.PARAMETER DatasourceId
+The ID of the datasource associated with the new instance. Mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+
+.PARAMETER Id
+The ID of the host device associated with the new instance. Mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
+
+.PARAMETER Name
+The name of the host device associated with the new instance. Mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
+
+.EXAMPLE
+New-LMDeviceDatasourceInstance -DisplayName "Instance 1" -WildValue "Value 1" -Description "This is a new instance" -DatasourceName "DataSource 1" -Name "Host Device 1"
+
+This example creates a new instance of a LogicMonitor device datasource with the specified display name, wild value, description, datasource name, and host device name.
+
+.NOTES
+Please ensure you are logged in before running any commands. Use Connect-LMAccount to login and try again.
+#>
 Function New-LMDeviceDatasourceInstance {
 
     [CmdletBinding()]

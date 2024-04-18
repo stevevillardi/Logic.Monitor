@@ -14,32 +14,37 @@ schema: 2.0.0
 
 ### All (Default)
 ```
-Get-LMDashboardGroup [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardGroup [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMDashboardGroup [-Id <Int32>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardGroup [-Id <Int32>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDashboardGroup [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardGroup [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### ParentId
 ```
-Get-LMDashboardGroup [-ParentGroupId <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardGroup [-ParentGroupId <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### ParentName
 ```
-Get-LMDashboardGroup [-ParentGroupName <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardGroup [-ParentGroupName <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMDashboardGroup [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMDashboardGroup [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -138,6 +143,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: ParentName
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

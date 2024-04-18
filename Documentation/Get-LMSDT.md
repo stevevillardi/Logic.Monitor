@@ -14,22 +14,22 @@ schema: 2.0.0
 
 ### All (Default)
 ```
-Get-LMSDT [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMSDT [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMSDT [-Id <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMSDT [-Id <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMSDT [-Name <String>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMSDT [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMSDT [-Filter <Object>] [-BatchSize <Int32>] [<CommonParameters>]
+Get-LMSDT [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -98,6 +98,21 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: Name
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

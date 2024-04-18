@@ -8,33 +8,112 @@ schema: 2.0.0
 # Remove-LMDevice
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Removes a LogicMonitor device.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Remove-LMDevice -Id <Int32> [-HardDelete <Boolean>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDevice -Id <Int32> [-HardDelete <Boolean>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Remove-LMDevice -Name <String> [-HardDelete <Boolean>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDevice -Name <String> [-HardDelete <Boolean>] [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Remove-LMDevice function removes a LogicMonitor device based on either its ID or name.
+It supports both hard delete and soft delete options.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Remove-LMDevice -Id 12345
+Removes the LogicMonitor device with ID 12345.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Remove-LMDevice -Name "MyDevice"
+Removes the LogicMonitor device with the name "MyDevice".
+```
+
+### EXAMPLE 3
+```
+Remove-LMDevice -Name "MyDevice" -HardDelete $true
+Permanently deletes the LogicMonitor device with the name "MyDevice".
+```
 
 ## PARAMETERS
+
+### -Id
+Specifies the ID of the device to be removed.
+This parameter is mandatory when using the 'Id' parameter set.
+
+```yaml
+Type: Int32
+Parameter Sets: Id
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Name
+Specifies the name of the device to be removed.
+This parameter is mandatory when using the 'Name' parameter set.
+
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HardDelete
+Indicates whether the device should be hard deleted.
+If set to $true, the device will be permanently deleted.
+If set to $false (default), the device will be moved to the Recycle Bin.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Confirm
 Prompts you for confirmation before running the cmdlet.
@@ -51,58 +130,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -HardDelete
-{{ Fill HardDelete Description }}
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: Boolean
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
+Aliases: proga
 
 Required: False
 Position: Named
@@ -116,10 +150,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
+### You can pipe input to this function.
 ## OUTPUTS
 
-### System.Object
+### System.Management.Automation.PSCustomObject. The output object contains the following properties:
+### - Id: The ID of the removed device.
+### - Message: A message indicating the success of the removal operation.
 ## NOTES
 
 ## RELATED LINKS

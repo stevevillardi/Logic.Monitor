@@ -8,51 +8,46 @@ schema: 2.0.0
 # Import-LMLogicModule
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Imports a LogicModule into LogicMonitor.
 
 ## SYNTAX
 
 ### FilePath
 ```
-Import-LMLogicModule -FilePath <String> [-Type <String>] [-ForceOverwrite <Boolean>] [<CommonParameters>]
+Import-LMLogicModule -FilePath <String> [-Type <String>] [-ForceOverwrite <Boolean>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### File
 ```
-Import-LMLogicModule -File <String> [-Type <String>] [-ForceOverwrite <Boolean>] [<CommonParameters>]
+Import-LMLogicModule -File <Object> [-Type <String>] [-ForceOverwrite <Boolean>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Import-LMLogicModule function imports a LogicModule into LogicMonitor.
+It can import the LogicModule from a file path or directly from file data.
+The LogicModule can be of different types such as datasource, propertyrules, eventsource, topologysource, or configsource.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Import-LMLogicModule -FilePath "C:\LogicModules\datasource.xml" -Type "datasource" -ForceOverwrite $true
+Imports a datasource LogicModule from the file 'datasource.xml' located in the 'C:\LogicModules' directory. If a LogicModule with the same name already exists, it will be overwritten.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Import-LMLogicModule -File $fileData -Type "propertyrules"
+Imports a propertyrules LogicModule using the file data provided in the $fileData variable. If a LogicModule with the same name already exists, an error will be thrown.
+```
 
 ## PARAMETERS
 
-### -File
-{{ Fill File Description }}
-
-```yaml
-Type: String
-Parameter Sets: File
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -FilePath
-{{ Fill FilePath Description }}
+Specifies the path of the file containing the LogicModule to import.
+This parameter is mandatory when using the 'FilePath' parameter set.
 
 ```yaml
 Type: String
@@ -66,8 +61,44 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -File
+Specifies the file data of the LogicModule to import.
+This parameter is mandatory when using the 'File' parameter set.
+
+```yaml
+Type: Object
+Parameter Sets: File
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Type
+Specifies the type of the LogicModule to import.
+The valid values are 'datasource', 'propertyrules', 'eventsource', 'topologysource', or 'configsource'.
+The default value is 'datasource'.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: Datasource
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ForceOverwrite
-{{ Fill ForceOverwrite Description }}
+Indicates whether to overwrite an existing LogicModule with the same name.
+If set to $true, the existing LogicModule will be overwritten.
+If set to $false, an error will be thrown if a LogicModule with the same name already exists.
+The default value is $false.
 
 ```yaml
 Type: Boolean
@@ -76,19 +107,18 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Type
-{{ Fill Type Description }}
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: String
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases:
-Accepted values: datasource, propertyrules, eventsource, topologysource, configsource
+Aliases: proga
 
 Required: False
 Position: Named
@@ -102,10 +132,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+This function requires PowerShell version 6.1 or higher to run.
 
 ## RELATED LINKS

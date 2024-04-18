@@ -16,28 +16,28 @@ schema: 2.0.0
 ```
 Set-LMWebsiteGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [-ParentGroupId <Int32>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-ParentGroupName
 ```
 Set-LMWebsiteGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>]
- [-ParentGroupName <String>] [<CommonParameters>]
+ [-ParentGroupName <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-ParentGroupName
 ```
 Set-LMWebsiteGroup -Name <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>]
- [-ParentGroupName <String>] [<CommonParameters>]
+ [-ParentGroupName <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-ParentGroupId
 ```
 Set-LMWebsiteGroup -Name <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-DisableAlerting <Boolean>] [-StopMonitoring <Boolean>] [-ParentGroupId <Int32>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -197,6 +197,21 @@ Accept wildcard characters: False
 Type: Boolean
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

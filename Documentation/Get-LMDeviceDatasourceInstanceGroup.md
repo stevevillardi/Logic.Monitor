@@ -15,37 +15,37 @@ schema: 2.0.0
 ### Name-dsName
 ```
 Get-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Name <String> [-Filter <Object>]
- [-BatchSize <Int32>] [<CommonParameters>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
 Get-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Id <Int32> [-Filter <Object>]
- [-BatchSize <Int32>] [<CommonParameters>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
 Get-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Name <String> [-Filter <Object>]
- [-BatchSize <Int32>] [<CommonParameters>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
 Get-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-HdsId
 ```
 Get-LMDeviceDatasourceInstanceGroup -Id <Int32> -HdsId <String> [-Filter <Object>] [-BatchSize <Int32>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-HdsId
 ```
 Get-LMDeviceDatasourceInstanceGroup -Name <String> -HdsId <String> [-Filter <Object>] [-BatchSize <Int32>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -161,6 +161,21 @@ Parameter Sets: Name-dsName, Name-dsId, Name-HdsId
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

@@ -1,3 +1,108 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor website or ping check.
+
+.DESCRIPTION
+The New-LMWebsite function is used to create a new LogicMonitor website or ping check. It allows you to specify various parameters such as the type of check (website or ping), the name of the check, the description, and other settings related to monitoring and alerting.
+
+.PARAMETER WebCheck
+Specifies that the check type is a website check. This parameter is mutually exclusive with the PingCheck parameter.
+
+.PARAMETER PingCheck
+Specifies that the check type is a ping check. This parameter is mutually exclusive with the WebCheck parameter.
+
+.PARAMETER Name
+Specifies the name of the check.
+
+.PARAMETER IsInternal
+Specifies whether the check is internal or external. By default, it is set to $false.
+
+.PARAMETER Description
+Specifies the description of the check.
+
+.PARAMETER DisableAlerting
+Specifies whether alerting is disabled for the check.
+
+.PARAMETER StopMonitoring
+Specifies whether monitoring is stopped for the check.
+
+.PARAMETER UseDefaultAlertSetting
+Specifies whether to use the default alert settings for the check.
+
+.PARAMETER UseDefaultLocationSetting
+Specifies whether to use the default location settings for the check.
+
+.PARAMETER TriggerSSLStatusAlert
+Specifies whether to trigger an alert when the SSL status of the website check changes.
+
+.PARAMETER TriggerSSLExpirationAlert
+Specifies whether to trigger an alert when the SSL certificate of the website check is about to expire.
+
+.PARAMETER GroupId
+Specifies the ID of the group to which the check belongs.
+
+.PARAMETER PingAddress
+Specifies the address to ping for the ping check.
+
+.PARAMETER WebsiteDomain
+Specifies the domain of the website to check.
+
+.PARAMETER HttpType
+Specifies the HTTP type to use for the website check. The valid values are "http" and "https". The default value is "https".
+
+.PARAMETER SSLAlertThresholds
+Specifies the SSL alert thresholds for the website check.
+
+.PARAMETER PingCount
+Specifies the number of pings to send for the ping check. The valid values are 5, 10, 15, 20, 30, and 60.
+
+.PARAMETER PingTimeout
+Specifies the timeout for the ping check.
+
+.PARAMETER PageLoadAlertTimeInMS
+Specifies the page load alert time in milliseconds for the website check.
+
+.PARAMETER IgnoreSSL
+Specifies whether to ignore SSL errors for the website check.
+
+.PARAMETER PingPercentNotReceived
+Specifies the percentage of packets not received in time for the ping check. The valid values are 10, 20, 30, 40, 50, 60, 70, 80, 90, and 100.
+
+.PARAMETER FailedCount
+Specifies the number of consecutive failed checks required to trigger an alert. The valid values are 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 30, and 60.
+
+.PARAMETER OverallAlertLevel
+Specifies the overall alert level for the check. The valid values are "warn", "error", and "critical".
+
+.PARAMETER IndividualAlertLevel
+Specifies the individual alert level for the check. The valid values are "warn", "error", and "critical".
+
+.PARAMETER Properties
+Specifies additional custom properties for the check.
+
+.PARAMETER PropertiesMethod
+Specifies the method to use for handling custom properties. The valid values are "Add", "Replace", and "Refresh".
+
+.PARAMETER PollingInterval
+Specifies the polling interval for the check.
+
+.PARAMETER WebsiteSteps
+Specifies the steps to perform for the website check.
+
+.PARAMETER CheckPoints
+Specifies the check points for the check.
+
+.EXAMPLE
+New-LMWebsite -WebCheck -Name "Example Website" -WebsiteDomain "example.com" -HttpType "https" -GroupId "12345" -OverallAlertLevel "error" -IndividualAlertLevel "warn"
+
+This example creates a new LogicMonitor website check for the website "example.com" with HTTPS protocol. It assigns the check to the group with ID "12345" and sets the overall alert level to "error" and the individual alert level to "warn".
+
+.EXAMPLE
+New-LMWebsite -PingCheck -Name "Example Ping" -PingAddress "192.168.1.1" -PingCount 5 -PingTimeout 1000 -GroupId "12345" -OverallAlertLevel "warn" -IndividualAlertLevel "warn"
+
+This example creates a new LogicMonitor ping check for the IP address "192.168.1.1". It sends 5 pings with a timeout of 1000 milliseconds. It assigns the check to the group with ID "12345" and sets the overall alert level and individual alert level to "warn".
+
+#>
 Function New-LMWebsite {
 
     [CmdletBinding()]

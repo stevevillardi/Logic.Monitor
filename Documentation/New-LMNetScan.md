@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-LMNetScan
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new network scan in LogicMonitor.
 
 ## SYNTAX
 
@@ -17,146 +17,26 @@ New-LMNetScan [-CollectorId] <String> [-Name] <String> [[-Description] <String>]
  [[-ExcludeDuplicateType] <String>] [[-IgnoreSystemIpDuplicates] <Boolean>] [[-Method] <String>]
  [[-NextStart] <String>] [[-NextStartEpoch] <String>] [[-NetScanGroupId] <String>] [-SubnetRange] <String>
  [[-CredentialGroupId] <String>] [[-CredentialGroupName] <String>] [[-ChangeNameToken] <String>]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The New-LMNetScan function is used to create a new network scan in LogicMonitor.
+It sends a POST request to the LogicMonitor API to create the network scan with the specified parameters.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+New-LMNetScan -CollectorId "12345" -Name "MyNetScan" -SubnetRange "192.168.0.0/24"
+Creates a new network scan with the specified collector ID, name, and subnet range.
+```
 
 ## PARAMETERS
 
-### -ChangeNameToken
-{{ Fill ChangeNameToken Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 12
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -CollectorId
-{{ Fill CollectorId Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CredentialGroupId
-{{ Fill CredentialGroupId Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 10
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CredentialGroupName
-{{ Fill CredentialGroupName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 11
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ExcludeDuplicateType
-{{ Fill ExcludeDuplicateType Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IgnoreSystemIpDuplicates
-{{ Fill IgnoreSystemIpDuplicates Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Method
-{{ Fill Method Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: nmap
-
-Required: False
-Position: 5
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
+The ID of the collector to use for the network scan.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -170,8 +50,24 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NetScanGroupId
-{{ Fill NetScanGroupId Description }}
+### -Name
+The name of the network scan.
+This parameter is mandatory.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+The description of the network scan.
 
 ```yaml
 Type: String
@@ -179,14 +75,48 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 8
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NextStart
-{{ Fill NextStart Description }}
+### -ExcludeDuplicateType
+The type of duplicate exclusion to apply.
+The default value is "1".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 4
+Default value: 1
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IgnoreSystemIpDuplicates
+Specifies whether to ignore duplicate system IPs.
+The default value is $false.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Method
+The method to use for the network scan.
+Only "nmap" is supported.
+The default value is "nmap".
 
 ```yaml
 Type: String
@@ -195,13 +125,14 @@ Aliases:
 
 Required: False
 Position: 6
-Default value: None
+Default value: Nmap
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NextStartEpoch
-{{ Fill NextStartEpoch Description }}
+### -NextStart
+The next start time for the network scan.
+The default value is "manual".
 
 ```yaml
 Type: String
@@ -210,13 +141,46 @@ Aliases:
 
 Required: False
 Position: 7
-Default value: None
+Default value: Manual
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NextStartEpoch
+The next start time epoch for the network scan.
+The default value is "0".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 8
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NetScanGroupId
+The ID of the network scan group to assign the network scan to.
+The default value is "1".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 9
+Default value: 1
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -SubnetRange
-{{ Fill SubnetRange Description }}
+The subnet range to scan.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -224,7 +188,68 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 9
+Position: 10
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CredentialGroupId
+The ID of the credential group to use for the network scan.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 11
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CredentialGroupName
+The name of the credential group to use for the network scan.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 12
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ChangeNameToken
+The token to use for changing the name of discovered devices.
+The default value is "##REVERSEDNS##".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 13
+Default value: ##REVERSEDNS##
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -235,10 +260,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

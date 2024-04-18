@@ -1,3 +1,22 @@
+<#
+.SYNOPSIS
+Imports LogicMonitor repository logic modules.
+
+.DESCRIPTION
+The Import-LMRepositoryLogicModules function imports logic modules from the LogicMonitor repository. It requires the user to be logged in and have valid API credentials.
+
+.PARAMETER Type
+Specifies the type of logic modules to import. Valid values are "datasources", "propertyrules", "eventsources", "topologysources", and "configsources".
+
+.PARAMETER LogicModuleNames
+Specifies the names of the logic modules to import. This parameter accepts an array of strings.
+
+.EXAMPLE
+Import-LMRepositoryLogicModules -Type "datasources" -LogicModuleNames "DataSource1", "DataSource2"
+Imports the logic modules with the names "DataSource1" and "DataSource2" from the LogicMonitor repository.
+
+#>
+
 Function Import-LMRepositoryLogicModules {
 
     [CmdletBinding()]
